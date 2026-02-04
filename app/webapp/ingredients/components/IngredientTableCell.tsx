@@ -58,8 +58,8 @@ export function IngredientPackSizeCell({
   className?: string;
 }) {
   const packSizeUnit = ingredient.pack_size_unit || ingredient.unit || 'GM';
-  const originalUnit = (ingredient as any).original_unit || packSizeUnit;
-  const standardUnit = getStandardUnit(ingredient.unit, (ingredient as any).standard_unit);
+  const originalUnit = ingredient.original_unit || packSizeUnit;
+  const standardUnit = getStandardUnit(ingredient.unit, ingredient.standard_unit);
   const showUnitTooltip = originalUnit && originalUnit !== standardUnit;
 
   return (
@@ -89,7 +89,7 @@ export function IngredientPackSizeCell({
 }
 
 export function IngredientCostCell({ ingredient, displayUnit }: IngredientTableCellProps) {
-  const standardUnit = getStandardUnit(ingredient.unit, (ingredient as any).standard_unit);
+  const standardUnit = getStandardUnit(ingredient.unit, ingredient.standard_unit);
   const convertedCost = convertIngredientCost(
     ingredient.cost_per_unit || 0,
     standardUnit,
@@ -97,7 +97,7 @@ export function IngredientCostCell({ ingredient, displayUnit }: IngredientTableC
     1,
   );
   const originalUnit =
-    (ingredient as any).original_unit || ingredient.pack_size_unit || ingredient.unit || 'GM';
+    ingredient.original_unit || ingredient.pack_size_unit || ingredient.unit || 'GM';
   const showUnitTooltip = originalUnit && originalUnit !== standardUnit;
 
   return (

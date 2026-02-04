@@ -2,11 +2,19 @@
  * Analyze recipe prep details using AI
  */
 
-import type { RecipePrepDetails } from '@/lib/types/prep-lists';
-import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { generateAIResponse } from '@/lib/ai/ai-service';
 import { buildPrepDetailsPrompt, parsePrepDetailsResponse } from '@/lib/ai/prompts/prep-details';
 import { logger } from '@/lib/logger';
+import type { RecipePrepDetails } from '@/lib/types/prep-lists';
+import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
+import type {
+  CutShape,
+  Marination,
+  ParsedPrepDetails,
+  PreCookingStep,
+  Sauce,
+  SpecialTechnique,
+} from './types';
 
 interface AnalyzePrepDetailsParams {
   recipe: Recipe;
@@ -63,60 +71,59 @@ export async function analyzePrepDetails({
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function mapToRecipePrepDetails(recipe: Recipe, parsed: any): RecipePrepDetails {
+function mapToRecipePrepDetails(recipe: Recipe, parsed: ParsedPrepDetails): RecipePrepDetails {
   return {
     recipeId: recipe.id,
     recipeName: recipe.recipe_name,
     prepDetails: [
-      ...parsed.cutShapes.map((cs: any) => ({
+      ...parsed.cutShapes.map((cs: CutShape) => ({
         type: 'cut_shape' as const,
         ingredientName: cs.ingredient,
         description: `${cs.ingredient} - ${cs.shape}${cs.quantity ? ` (${cs.quantity})` : ''}`,
       })),
-      ...parsed.sauces.map((s: any) => ({
+      ...parsed.sauces.map((s: Sauce) => ({
         type: 'sauce' as const,
         description: s.name,
         details: s.instructions,
       })),
-      ...parsed.marinations.map((m: any) => ({
+      ...parsed.marinations.map((m: Marination) => ({
         type: 'marination' as const,
         ingredientName: m.ingredient,
         description: `${m.ingredient} - ${m.method}${m.duration ? ` (${m.duration})` : ''}`,
       })),
-      ...parsed.preCookingSteps.map((pc: any) => ({
+      ...parsed.preCookingSteps.map((pc: PreCookingStep) => ({
         type: 'pre_cooking' as const,
         ingredientName: pc.ingredient,
         description: `${pc.ingredient} - ${pc.step}`,
       })),
-      ...parsed.specialTechniques.map((st: any) => ({
+      ...parsed.specialTechniques.map((st: SpecialTechnique) => ({
         type: 'technique' as const,
         description: st.description,
         details: st.details,
       })),
     ],
-    sauces: parsed.sauces.map((s: any) => ({
+    sauces: parsed.sauces.map((s: Sauce) => ({
       name: s.name,
       ingredients: s.ingredients,
       instructions: s.instructions,
       recipeId: recipe.id,
     })),
-    marinations: parsed.marinations.map((m: any) => ({
+    marinations: parsed.marinations.map((m: Marination) => ({
       ingredient: m.ingredient,
       method: m.method,
       duration: m.duration,
       recipeId: recipe.id,
     })),
-    cutShapes: parsed.cutShapes.map((cs: any) => ({
+    cutShapes: parsed.cutShapes.map((cs: CutShape) => ({
       ingredient: cs.ingredient,
       shape: cs.shape,
       quantity: cs.quantity,
     })),
-    preCookingSteps: parsed.preCookingSteps.map((pc: any) => ({
+    preCookingSteps: parsed.preCookingSteps.map((pc: PreCookingStep) => ({
       ingredient: pc.ingredient,
       step: pc.step,
     })),
-    specialTechniques: parsed.specialTechniques.map((st: any) => ({
+    specialTechniques: parsed.specialTechniques.map((st: SpecialTechnique) => ({
       description: st.description,
       details: st.details,
     })),

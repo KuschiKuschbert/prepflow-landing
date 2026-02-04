@@ -71,8 +71,16 @@ async function performShareRequest(
   return data;
 }
 
+interface BulkShareResult {
+  summary?: {
+    successful: number;
+    failed: number;
+  };
+  error?: string;
+}
+
 function handleShareResponse(
-  result: any,
+  result: BulkShareResult,
   showSuccess: (msg: string) => void,
   showError: (msg: string) => void,
 ) {

@@ -27,6 +27,8 @@ export interface Ingredient {
   pack_price?: number;
   category?: string;
   unit?: string;
+  original_unit?: string;
+  standard_unit?: string;
   cost_per_unit?: number;
   cost_per_unit_as_purchased?: number;
   cost_per_unit_incl_trim?: number;

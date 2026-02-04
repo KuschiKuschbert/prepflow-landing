@@ -1,13 +1,14 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
+import { LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 
 export interface KitchenOperation {
   title: string;
   value: number;
   description: string;
-  icon: any; // Type from Lucide
+  icon: LucideIcon;
   color: string;
   href: string;
   status: 'good' | 'warning' | 'error';

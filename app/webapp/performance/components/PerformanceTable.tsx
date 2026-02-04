@@ -1,8 +1,8 @@
 'use client';
 
-import { memo } from 'react';
-import { usePerformanceTableSort } from '../hooks/usePerformanceTableSort';
 import { PerformanceItem } from '@/lib/types/performance';
+import React, { memo } from 'react';
+import { PerformanceSortField, usePerformanceTableSort } from '../hooks/usePerformanceTableSort';
 import { PerformanceClassificationLegend } from './PerformanceClassificationLegend';
 import { PerformanceTableHeader } from './PerformanceTableHeader';
 import { PerformanceTableMobileCard } from './PerformanceTableMobileCard';
@@ -58,8 +58,8 @@ function DesktopView({
   getSortIcon,
 }: {
   performanceItems: PerformanceItem[];
-  handleColumnSort: any;
-  getSortIcon: any;
+  handleColumnSort: (column: PerformanceSortField) => void;
+  getSortIcon: (column: PerformanceSortField) => React.ReactNode;
 }) {
   return (
     <div className="desktop:block hidden overflow-x-auto">

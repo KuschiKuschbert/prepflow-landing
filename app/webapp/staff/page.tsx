@@ -49,6 +49,7 @@ export default function StaffPage() {
         <div className="p-1">
           <EmployeeForm
             qualificationTypes={qualificationTypes}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onSubmit={async (data: any) => {
               const success = await addStaffMember(data);
               if (success) setIsAddModalOpen(false);

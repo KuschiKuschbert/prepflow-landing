@@ -3,9 +3,9 @@
 import { useLongPress } from '@/app/webapp/ingredients/hooks/useLongPress';
 import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { Recipe, RecipePriceData } from '@/lib/types/recipes';
 import { Check, Edit, Eye, Trash2 } from 'lucide-react';
 import React, { memo } from 'react';
-import { Recipe, RecipePriceData } from '@/lib/types/recipes';
 import { formatRecipeDate } from '../utils/formatDate';
 
 interface RecipeTableRowProps {
@@ -146,7 +146,13 @@ export const RecipeTableRow = memo(RecipeTableRowComponent, (prevProps, nextProp
   );
 });
 
-function SelectCell({ isSelected, recipeName, onSelect }: any) {
+interface SelectCellProps {
+  isSelected: boolean;
+  recipeName: string;
+  onSelect: () => void;
+}
+
+function SelectCell({ isSelected, recipeName, onSelect }: SelectCellProps) {
   return (
     <td
       className="px-6 py-4 text-sm font-medium whitespace-nowrap text-[var(--foreground)]"
@@ -167,7 +173,13 @@ function SelectCell({ isSelected, recipeName, onSelect }: any) {
   );
 }
 
-function PriceCell({ price, isSelectionMode, onClick }: any) {
+interface PriceCellProps {
+  price: number | undefined;
+  isSelectionMode: boolean;
+  onClick: () => void;
+}
+
+function PriceCell({ price, isSelectionMode, onClick }: PriceCellProps) {
   return (
     <td
       className={`px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${!isSelectionMode ? 'cursor-pointer' : ''}`}
@@ -182,6 +194,19 @@ function PriceCell({ price, isSelectionMode, onClick }: any) {
   );
 }
 
+interface MarginCellProps {
+  value: number | undefined;
+  subValue: number | undefined;
+  valuePrefix?: string;
+  valueSuffix?: string;
+  subValuePrefix?: string;
+  subValueSuffix?: string;
+  isSelectionMode: boolean;
+  onClick: () => void;
+  className?: string;
+  valueClassName?: string;
+}
+
 function MarginCell({
   value,
   subValue,
@@ -193,7 +218,7 @@ function MarginCell({
   onClick,
   className = '',
   valueClassName = 'text-[var(--foreground)]',
-}: any) {
+}: MarginCellProps) {
   return (
     <td
       className={`px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${!isSelectionMode ? 'cursor-pointer' : ''} ${className}`}
@@ -219,7 +244,14 @@ function MarginCell({
   );
 }
 
-function ActionsCell({ recipeName, onPreview, onEdit, onDelete }: any) {
+interface ActionsCellProps {
+  recipeName: string;
+  onPreview: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
+}
+
+function ActionsCell({ recipeName, onPreview, onEdit, onDelete }: ActionsCellProps) {
   return (
     <td className="px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)]">
       <div className="flex gap-2" onClick={e => e.stopPropagation()}>

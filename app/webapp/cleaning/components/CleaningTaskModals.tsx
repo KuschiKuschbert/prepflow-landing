@@ -27,19 +27,32 @@ const AreaTasksModal = dynamic(
   },
 );
 
+interface CleaningArea {
+  id: string;
+  area_name: string;
+  description?: string;
+  cleaning_frequency?: string;
+}
+
+interface NewAreaInput {
+  area_name: string;
+  description: string;
+  cleaning_frequency: string;
+}
+
 interface CleaningTaskModalsProps {
   showCreateTask: boolean;
   closeCreateTask: () => void;
   handleTaskCreated: () => void;
   preselectedAreaId?: string;
   showAreaTasks: boolean;
-  selectedArea: any;
+  selectedArea: CleaningArea | null;
   closeAreaTasks: () => void;
   handleTaskUpdate: () => void;
   setShowCreateTask: (areaId?: string) => void;
   showAddArea: boolean;
-  newArea: any;
-  setNewArea: (area: any) => void;
+  newArea: NewAreaInput;
+  setNewArea: (area: NewAreaInput) => void;
   handleAddArea: (e: React.FormEvent) => void;
   setShowAddArea: (show: boolean) => void;
 }

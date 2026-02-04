@@ -1,13 +1,18 @@
 import { SupabaseClient } from '@supabase/supabase-js';
+import { BatchIngredientData, BatchRecipeIngredientRow } from './types';
 
 export async function handleMissingNestedIngredients(
   supabase: SupabaseClient,
-  rows: any[],
-): Promise<any[]> {
-  const missingNested = rows.some((r: any) => !r.ingredients);
+  rows: BatchRecipeIngredientRow[],
+): Promise<BatchRecipeIngredientRow[]> {
+  const missingNested = rows.some((r: BatchRecipeIngredientRow) => !r.ingredients);
   if (missingNested) {
     const uniqueIds = Array.from(
-      new Set(rows.map((r: any) => r.ingredient_id).filter((v: string | undefined) => Boolean(v))),
+      new Set(
+        rows
+          .map((r: BatchRecipeIngredientRow) => r.ingredient_id)
+          .filter((v: string | undefined) => Boolean(v)),
+      ),
     );
     if (uniqueIds.length > 0) {
       const { data: ingRows, error: ingError } = await supabase
@@ -17,13 +22,13 @@ export async function handleMissingNestedIngredients(
         )
         .in('id', uniqueIds);
       if (!ingError && ingRows) {
-        const byId: Record<string, unknown> = {};
-        ingRows.forEach((ir: any) => {
+        const byId: Record<string, BatchIngredientData> = {};
+        (ingRows as BatchIngredientData[]).forEach((ir: BatchIngredientData) => {
           byId[ir.id] = ir;
         });
-        return rows.map((r: any) => ({
+        return rows.map((r: BatchRecipeIngredientRow) => ({
           ...r,
-          ingredients: r.ingredients || (byId[r.ingredient_id] as any | undefined),
+          ingredients: r.ingredients || byId[r.ingredient_id],
         }));
       }
     }

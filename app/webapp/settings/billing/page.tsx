@@ -80,6 +80,7 @@ export default function BillingSettingsPage() {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function SubscriptionDetails({
   subscriptionData,
   isActive,

@@ -98,8 +98,9 @@ export const Button: React.FC<ButtonProps> = ({
   // If href is provided, render as link
   // Note: MagneticButton only works with button elements, not links
   if (href) {
+    // For anchor elements, only pass safe, compatible props
     return (
-      <a href={href} className={classes} aria-label={ariaLabel} {...(props as any)}>
+      <a href={href} className={classes} aria-label={ariaLabel}>
         {buttonContent}
       </a>
     );

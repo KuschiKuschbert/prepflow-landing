@@ -38,7 +38,7 @@ export function IngredientCard({
   onCancelLongPress,
   onEnterSelectionMode,
 }: IngredientCardProps) {
-  const standardUnit = getStandardUnit(ingredient.unit, (ingredient as any).standard_unit);
+  const standardUnit = getStandardUnit(ingredient.unit, ingredient.standard_unit);
   const convertedCost = convertIngredientCost(
     ingredient.cost_per_unit || 0,
     standardUnit,
@@ -46,7 +46,7 @@ export function IngredientCard({
     1,
   );
   const packSizeUnit = ingredient.pack_size_unit || ingredient.unit || 'GM';
-  const originalUnit = (ingredient as any).original_unit || packSizeUnit;
+  const originalUnit = ingredient.original_unit || packSizeUnit;
   const showUnitTooltip = originalUnit && originalUnit !== standardUnit;
   const isLowStock =
     ingredient.min_stock_level &&

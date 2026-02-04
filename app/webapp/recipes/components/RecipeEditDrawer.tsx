@@ -1,13 +1,13 @@
 'use client';
-import { COGSCalculation } from '@/lib/types/cogs';
 import { RecipeEditFooter } from '@/app/webapp/recipes/components/RecipeEditDrawer/components/RecipeEditFooter';
 import { EditDrawer } from '@/components/ui/EditDrawer';
 import { useNotification } from '@/contexts/NotificationContext';
 import { useAutosave } from '@/hooks/useAutosave';
 import { deriveAutosaveId } from '@/lib/autosave-id';
 import { logger } from '@/lib/logger';
-import { useCallback, useEffect, useState } from 'react';
+import { COGSCalculation, RecipeIngredient } from '@/lib/types/cogs';
 import { Recipe } from '@/lib/types/recipes';
+import { useCallback, useEffect, useState } from 'react';
 import { useRecipeEditIngredientSave } from './hooks/useRecipeEditIngredientSave';
 import { useRecipeIngredientsState } from './RecipeEditDrawer/hooks/useRecipeIngredientsState';
 import { RecipeIngredientsTab } from './RecipeIngredientsTab';
@@ -225,10 +225,16 @@ export function RecipeEditDrawer({
             ingredientSearch.handleKeyDown(e as React.KeyboardEvent<HTMLInputElement>, filtered)
           }
           onQuantityChange={quantity =>
-            ingredientSearch.setNewIngredient((prev: any) => ({ ...prev, quantity }))
+            ingredientSearch.setNewIngredient((prev: Partial<RecipeIngredient>) => ({
+              ...prev,
+              quantity,
+            }))
           }
           onUnitChange={unit =>
-            ingredientSearch.setNewIngredient((prev: any) => ({ ...prev, unit }))
+            ingredientSearch.setNewIngredient((prev: Partial<RecipeIngredient>) => ({
+              ...prev,
+              unit,
+            }))
           }
           onAddIngredient={handleAddIngredientWrapper}
           onConsumableSearchChange={consumableSearch.handleSearchChange}
@@ -237,10 +243,16 @@ export function RecipeEditDrawer({
             consumableSearch.handleKeyDown(e as React.KeyboardEvent<HTMLInputElement>, filtered)
           }
           onConsumableQuantityChange={quantity =>
-            consumableSearch.setNewIngredient((prev: any) => ({ ...prev, quantity }))
+            consumableSearch.setNewIngredient((prev: Partial<RecipeIngredient>) => ({
+              ...prev,
+              quantity,
+            }))
           }
           onConsumableUnitChange={unit =>
-            consumableSearch.setNewIngredient((prev: any) => ({ ...prev, unit }))
+            consumableSearch.setNewIngredient((prev: Partial<RecipeIngredient>) => ({
+              ...prev,
+              unit,
+            }))
           }
           onAddConsumable={handleAddConsumableWrapper}
           onUpdateCalculation={(ingredientId, newQuantity) =>
