@@ -1,4 +1,4 @@
-import type { TemperatureLog, TemperatureEquipment } from '../../types';
+import type { TemperatureEquipment, TemperatureLog } from '../../types';
 
 /**
  * Format temperature logs for HTML/PDF export
@@ -25,6 +25,15 @@ export function formatTemperatureLogsForExport(
     {} as Record<string, TemperatureLog[]>,
   );
 
+  const formatLogRow = (log: TemperatureLog) => `
+    <tr style="border-bottom: 1px solid rgba(42, 42, 42, 0.5);">
+      <td style="padding: 10px; color: rgba(255, 255, 255, 0.9);">${new Date(log.log_date).toLocaleDateString('en-AU')}</td>
+      <td style="padding: 10px; color: rgba(255, 255, 255, 0.8);">${log.log_time}</td>
+      <td style="padding: 10px; color: rgba(255, 255, 255, 0.8);">${log.temperature_type}</td>
+      <td style="text-align: right; padding: 10px; color: rgba(255, 255, 255, 0.9); font-weight: 600;">${log.temperature_celsius.toFixed(1)}°C</td>
+    </tr>
+  `;
+
   return Object.entries(logsByEquipment)
     .map(
       ([equipmentName, equipmentLogs]) => `
@@ -47,16 +56,7 @@ export function formatTemperatureLogsForExport(
                 const dateCompare = a.log_date.localeCompare(b.log_date);
                 return dateCompare !== 0 ? dateCompare : a.log_time.localeCompare(b.log_time);
               })
-              .map(
-                log => `
-                <tr style="border-bottom: 1px solid rgba(42, 42, 42, 0.5);">
-                  <td style="padding: 10px; color: rgba(255, 255, 255, 0.9);">${new Date(log.log_date).toLocaleDateString('en-AU')}</td>
-                  <td style="padding: 10px; color: rgba(255, 255, 255, 0.8);">${log.log_time}</td>
-                  <td style="padding: 10px; color: rgba(255, 255, 255, 0.8);">${log.temperature_type}</td>
-                  <td style="text-align: right; padding: 10px; color: rgba(255, 255, 255, 0.9); font-weight: 600;">${log.temperature_celsius.toFixed(1)}°C</td>
-                </tr>
-              `,
-              )
+              .map(formatLogRow)
               .join('')}
           </tbody>
         </table>

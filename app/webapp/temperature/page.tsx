@@ -121,47 +121,26 @@ function TemperatureLogsPageContent() {
         <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
 
         {activeTab === 'logs' && (
-          <>
-            <TemperatureLogsTab
-              logs={logs}
-              equipment={equipment}
-              selectedDate={selectedDate}
-              setSelectedDate={setSelectedDate}
-              selectedType={selectedType}
-              setSelectedType={setSelectedType}
-              showAddLog={showAddLog}
-              setShowAddLog={setShowAddLog}
-              newLog={newLog}
-              setNewLog={setNewLog}
-              onAddLog={handleAddLog}
-              onRefreshLogs={handleRefreshLogs}
-              isLoading={logsLoading}
-              allLogs={allLogs}
-            />
-            {isMounted && (
-              <div className="mt-4 flex items-center justify-between">
-                <span className="text-sm text-[var(--foreground-muted)]">
-                  Page {page} of {totalPages} ({total} items)
-                </span>
-                <div className="space-x-2">
-                  <button
-                    onClick={() => setPage(p => Math.max(1, p - 1))}
-                    disabled={page <= 1}
-                    className="rounded-lg bg-[var(--muted)] px-3 py-2 text-sm text-[var(--foreground)] disabled:opacity-50"
-                  >
-                    Prev
-                  </button>
-                  <button
-                    onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                    disabled={page >= totalPages}
-                    className="rounded-lg bg-[var(--muted)] px-3 py-2 text-sm text-[var(--foreground)] disabled:opacity-50"
-                  >
-                    Next
-                  </button>
-                </div>
-              </div>
-            )}
-          </>
+          <TemperatureLogsTab
+            logs={logs}
+            equipment={equipment}
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            selectedType={selectedType}
+            setSelectedType={setSelectedType}
+            showAddLog={showAddLog}
+            setShowAddLog={setShowAddLog}
+            newLog={newLog}
+            setNewLog={setNewLog}
+            onAddLog={handleAddLog}
+            onRefreshLogs={handleRefreshLogs}
+            isLoading={logsLoading}
+            allLogs={allLogs}
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            onPageChange={setPage}
+          />
         )}
 
         {activeTab === 'equipment' && (

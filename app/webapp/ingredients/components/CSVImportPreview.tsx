@@ -1,5 +1,7 @@
 'use client';
 
+import { IngredientPreviewRow } from './IngredientPreviewRow';
+
 interface Ingredient {
   ingredient_name?: string;
   brand?: string;
@@ -55,55 +57,16 @@ export function CSVImportPreview({
       </div>
 
       <div className="max-h-60 overflow-y-auto rounded-lg border border-[var(--border)]">
-        {parsedIngredients.map((ingredient, index) => {
-          const displayCost = getDisplayCost(ingredient);
-          const isSelected = selectedIngredients.has(index.toString());
-
-          return (
-            <div
-              key={index}
-              className={`border-b border-[var(--border)] p-3 transition-colors last:border-b-0 ${
-                isSelected ? 'bg-[var(--primary)]/10' : 'hover:bg-[var(--muted)]/20'
-              }`}
-            >
-              <div className="flex items-center space-x-3">
-                <button
-                  onClick={() => onSelectIngredient(index.toString(), !isSelected)}
-                  className="flex items-center justify-center transition-colors hover:text-[var(--primary)]"
-                  aria-label={`${isSelected ? 'Deselect' : 'Select'} ingredient ${ingredient.ingredient_name || 'Unknown'}`}
-                >
-                  {isSelected ? (
-                    <svg
-                      className="h-4 w-4 text-[var(--primary)]"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  ) : (
-                    <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
-                  )}
-                </button>
-                <div className="flex-1">
-                  <div className="font-medium text-[var(--foreground)]">
-                    {ingredient.ingredient_name}
-                  </div>
-                  <div className="text-sm text-[var(--foreground-muted)]">
-                    {ingredient.brand && `Brand: ${ingredient.brand} • `}
-                    Cost: ${displayCost.formattedCost}/{displayCost.unit}
-                    {displayCost.packInfo && ` • ${displayCost.packInfo}`}
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+        {parsedIngredients.map((ingredient, index) => (
+          <IngredientPreviewRow
+            key={index}
+            ingredient={ingredient}
+            index={index}
+            isSelected={selectedIngredients.has(index.toString())}
+            onToggle={onSelectIngredient}
+            displayCost={getDisplayCost(ingredient)}
+          />
+        ))}
       </div>
     </div>
   );

@@ -72,12 +72,23 @@ function main() {
 
     // Improved regex to catch more variations and avoid false positives
     // Matches: from 'pkg', import 'pkg', require('pkg'), from "pkg/sub"
-    const importRegex =
-      /(?:from|import|require)\s*\(?\s*['"](@?[a-zA-Z0-9._-]+)(?:\/[a-zA-Z0-9._-]+)*['"]\s*\)?/g;
+    // Handles scoped packages correctly (@scope/pkg)
+    const importRegex = /(?:from|import|require)\s*\(?\s*['"](@?[a-zA-Z0-9._\-/]+)['"]/g;
     let match;
     while ((match = importRegex.exec(content)) !== null) {
-      const pkg = match[1];
-      if (!pkg.startsWith('.') && !pkg.startsWith('@/')) {
+      const fullPath = match[1];
+      let pkg = '';
+
+      if (fullPath.startsWith('@')) {
+        // Scoped package: @scope/package/something -> @scope/package
+        const parts = fullPath.split('/');
+        pkg = parts.slice(0, 2).join('/');
+      } else {
+        // Regular package: package/something -> package
+        pkg = fullPath.split('/')[0];
+      }
+
+      if (pkg && !pkg.startsWith('.') && !pkg.startsWith('@/')) {
         importedPackages.add(pkg);
       }
     }

@@ -1,26 +1,27 @@
 'use client';
-import { useCountryFormatting } from '@/hooks/useCountryFormatting';
-import { useTranslation } from '@/lib/useTranslation';
-import { logger } from '@/lib/logger';
-import { useState, useEffect } from 'react';
-import { AddTemperatureLogForm } from './AddTemperatureLogForm';
-import { EquipmentDetailDrawer } from './EquipmentDetailDrawer';
-import { TemperatureFilters } from './TemperatureFilters';
-import { TemperatureLogsLoadingState } from './TemperatureLogsLoadingState';
-import { TemperatureLogsEmptyState } from './TemperatureLogsEmptyState';
-import { TemperatureLogsTimePeriodHeader } from './TemperatureLogsTimePeriodHeader';
-import { useSampleDataGeneration } from '../hooks/useSampleDataGeneration';
-import { TemperatureLogCard } from './TemperatureLogCard';
 import { ExportButton } from '@/components/ui/ExportButton';
 import { PrintButton } from '@/components/ui/PrintButton';
 import { useNotification } from '@/contexts/NotificationContext';
-import { groupLogsByTimePeriod } from './utils';
+import { useCountryFormatting } from '@/hooks/useCountryFormatting';
+import { logger } from '@/lib/logger';
+import { useTranslation } from '@/lib/useTranslation';
+import { useEffect, useState } from 'react';
+import { useSampleDataGeneration } from '../hooks/useSampleDataGeneration';
 import { getTypeLabel, temperatureTypesForSelect } from '../utils/temperatureUtils';
-import { useTemperatureExport } from './TemperatureLogsTab/hooks/useTemperatureExport';
+import { AddTemperatureLogForm } from './AddTemperatureLogForm';
+import { EquipmentDetailDrawer } from './EquipmentDetailDrawer';
+import { TemperatureFilters } from './TemperatureFilters';
+import { TemperatureLogCard } from './TemperatureLogCard';
+import { TemperatureLogsEmptyState } from './TemperatureLogsEmptyState';
+import { TemperatureLogsLoadingState } from './TemperatureLogsLoadingState';
 import { useEquipmentDrawer } from './TemperatureLogsTab/hooks/useEquipmentDrawer';
-import { createFormatHelpers } from './TemperatureLogsTab/utils/formatHelpers';
-import { convertEquipmentForFilters } from './TemperatureLogsTab/utils/equipmentFilters';
+import { useTemperatureExport } from './TemperatureLogsTab/hooks/useTemperatureExport';
 import type { TemperatureLogsTabProps } from './TemperatureLogsTab/types';
+import { convertEquipmentForFilters } from './TemperatureLogsTab/utils/equipmentFilters';
+import { createFormatHelpers } from './TemperatureLogsTab/utils/formatHelpers';
+import { TemperatureLogsTimePeriodHeader } from './TemperatureLogsTimePeriodHeader';
+import { TemperaturePagination } from './TemperaturePagination';
+import { groupLogsByTimePeriod } from './utils';
 
 export default function TemperatureLogsTab({
   logs,
@@ -37,6 +38,10 @@ export default function TemperatureLogsTab({
   onRefreshLogs,
   isLoading = false,
   allLogs = [],
+  page,
+  totalPages,
+  total,
+  onPageChange,
 }: TemperatureLogsTabProps) {
   const { t } = useTranslation();
   const { formatDate } = useCountryFormatting();
@@ -53,7 +58,6 @@ export default function TemperatureLogsTab({
           logger.error('[TemperatureLogsTab] Error refreshing logs:', {
             error: error instanceof Error ? error.message : String(error),
           });
-          // Optionally show a toast or alert to the user
         }
       }
     },
@@ -75,26 +79,6 @@ export default function TemperatureLogsTab({
   useEffect(() => {
     setIsMounted(true);
   }, []);
-
-  // Debug logging
-  useEffect(() => {
-    if (isMounted) {
-      logger.dev('[TemperatureLogsTab] State:', {
-        isMounted,
-        isLoading,
-        logsCount: logs.length,
-        hasLogs: logs.length > 0,
-        logsSample: logs.slice(0, 2),
-        renderingState: !isMounted
-          ? 'loading (not mounted)'
-          : isLoading
-            ? 'loading (isLoading=true)'
-            : logs.length === 0
-              ? 'empty (no logs)'
-              : 'logs (has logs)',
-      });
-    }
-  }, [isMounted, isLoading, logs]);
 
   // Formatting helpers
   const formatHelpers = createFormatHelpers(formatDate, equipment);
@@ -151,9 +135,7 @@ export default function TemperatureLogsTab({
 
       {/* Logs List */}
       <div className="space-y-6">
-        {!isMounted ? (
-          <TemperatureLogsLoadingState />
-        ) : isLoading ? (
+        {!isMounted || isLoading ? (
           <TemperatureLogsLoadingState />
         ) : logs.length === 0 ? (
           <TemperatureLogsEmptyState
@@ -162,34 +144,44 @@ export default function TemperatureLogsTab({
             onGenerateSampleData={handleGenerateSampleData}
           />
         ) : (
-          groupLogsByTimePeriod(logs).map(timeGroup => (
-            <div key={timeGroup.period} className="space-y-4">
-              <TemperatureLogsTimePeriodHeader
-                period={timeGroup.period}
-                icon={timeGroup.icon}
-                label={timeGroup.label}
-                logCount={timeGroup.logs.length}
-              />
+          <>
+            {groupLogsByTimePeriod(logs).map(timeGroup => (
+              <div key={timeGroup.period} className="space-y-4">
+                <TemperatureLogsTimePeriodHeader
+                  period={timeGroup.period}
+                  icon={timeGroup.icon}
+                  label={timeGroup.label}
+                  logCount={timeGroup.logs.length}
+                />
 
-              {/* Logs for this time period */}
-              <div className="tablet:grid-cols-1 large-desktop:grid-cols-2 grid gap-4">
-                {timeGroup.logs.map(log => (
-                  <TemperatureLogCard
-                    key={log.id}
-                    log={log}
-                    equipment={equipment}
-                    temperatureTypes={temperatureTypesForSelect}
-                    formatDateString={formatHelpers.formatDateString}
-                    getTemperatureStatus={formatHelpers.getTemperatureStatus}
-                    getFoodSafetyStatus={formatHelpers.getFoodSafetyStatus}
-                    getTypeIcon={formatHelpers.getTypeIcon}
-                    getTypeLabel={getTypeLabel}
-                    onLogClick={handleLogClick}
-                  />
-                ))}
+                <div className="tablet:grid-cols-1 large-desktop:grid-cols-2 grid gap-4">
+                  {timeGroup.logs.map(log => (
+                    <TemperatureLogCard
+                      key={log.id}
+                      log={log}
+                      equipment={equipment}
+                      temperatureTypes={temperatureTypesForSelect}
+                      formatDateString={formatHelpers.formatDateString}
+                      getTemperatureStatus={formatHelpers.getTemperatureStatus}
+                      getFoodSafetyStatus={formatHelpers.getFoodSafetyStatus}
+                      getTypeIcon={formatHelpers.getTypeIcon}
+                      getTypeLabel={getTypeLabel}
+                      onLogClick={handleLogClick}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          ))
+            ))}
+
+            {page && totalPages && total && onPageChange && (
+              <TemperaturePagination
+                currentPage={page}
+                totalPages={totalPages}
+                totalItems={total}
+                onPageChange={onPageChange}
+              />
+            )}
+          </>
         )}
       </div>
 

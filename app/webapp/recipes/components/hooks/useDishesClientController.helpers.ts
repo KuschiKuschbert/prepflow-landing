@@ -1,11 +1,87 @@
 import { formatRecipeName } from '@/lib/text-utils';
-import { Dish, Recipe } from '@/lib/types/recipes';
+import { Menu } from '@/lib/types/menu-builder';
+import {
+  Dish,
+  DishCostData,
+  Recipe,
+  RecipeIngredientWithDetails,
+  RecipePriceData,
+  UnifiedItem,
+} from '@/lib/types/recipes';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { createRecipeImagesGeneratedHandler } from '../DishesClient/helpers/handleRecipeImagesGenerated';
 import {
   EditingItemShape,
+  SidePanelHandlers,
   UseDishesClientControllerResult,
 } from './useDishesClientController.types';
+import { UnifiedFilters } from './useDishesClientPagination/helpers/useFilterState';
+
+type ViewMode = 'list' | 'editor' | 'builder';
+
+interface BulkActionsResult {
+  bulkActionLoading: boolean;
+  showBulkMenu: boolean;
+  setShowBulkMenu: (show: boolean) => void;
+  showBulkDeleteConfirm: boolean;
+  setShowBulkDeleteConfirm: (show: boolean) => void;
+  handleBulkDelete: () => void;
+  confirmBulkDelete: () => void;
+  cancelBulkDelete: () => void;
+  handleBulkShare: (format: string) => void;
+  handleBulkAddToMenu: () => void;
+  handleSelectMenu: (menuId: string) => void;
+  handleCreateNewMenu: () => void;
+  menus: Menu[];
+  loadingMenus: boolean;
+  showMenuDialog: boolean;
+  setShowMenuDialog: (show: boolean) => void;
+}
+
+interface PaginationResult {
+  allItems: UnifiedItem[];
+  paginatedItems: UnifiedItem[];
+  paginatedDishesList: (Dish & { itemType: 'dish' })[];
+  paginatedRecipesList: (Recipe & { itemType: 'recipe' })[];
+  filters: UnifiedFilters;
+  updateFilters: (filters: Partial<UnifiedFilters>) => void;
+}
+
+interface PreviewStateResult {
+  selectedRecipeForPreview: Recipe | null;
+  showRecipePanel: boolean;
+  selectedDishForPreview: Dish | null;
+  showDishPanel: boolean;
+  editingDish: Dish | null;
+  showDishEditDrawer: boolean;
+  highlightingRowId: string | null;
+  highlightingRowType: 'dish' | 'recipe' | null;
+  handlePreviewDish: (dish: Dish) => void;
+  handlePreviewRecipe: (recipe: Recipe) => void;
+  recipeIngredients: RecipeIngredientWithDetails[];
+  previewYield: number;
+}
+
+interface HandlersResult {
+  showDeleteConfirm: boolean;
+  itemToDelete: (Dish & { itemType: 'dish' }) | (Recipe & { itemType: 'recipe' }) | null;
+  handleEditDish: (dish: Dish) => void;
+  handleEditRecipe: (recipe: Recipe) => void;
+  handleDeleteDish: (dish: Dish) => void;
+  handleDeleteRecipe: (recipe: Recipe) => void;
+  confirmDeleteItem: () => void;
+}
+
+interface SelectionHandlersResult {
+  handleSelectAll: () => void;
+  handleSelectItem: (id: string) => void;
+}
+
+interface SelectionModeHelpersResult {
+  startLongPress: (id: string) => void;
+  cancelLongPress: () => void;
+  enterSelectionMode: () => void;
+}
 
 export function useResetStateOnViewModeChange(
   viewMode: string,
@@ -79,39 +155,39 @@ export function useRecipeImagesHandler(
 export function buildControllerResult(
   // State
   loading: boolean,
-  error: any,
-  viewMode: any,
-  setViewMode: any,
+  error: string | null,
+  viewMode: ViewMode,
+  setViewMode: (mode: ViewMode) => void,
 
   // Selection
   isSelectionMode: boolean,
   selectedItems: Set<string>,
   selectedRecipeCount: number,
-  handleExitSelectionMode: any,
+  handleExitSelectionMode: () => void,
 
   // Bulk Actions
-  bulkActions: any, // useDishesClientBulkActions result
-  selectedItemTypes: any,
+  bulkActions: BulkActionsResult,
+  selectedItemTypes: Map<string, 'recipe' | 'dish'>,
 
   // Data
-  dishes: any[],
-  recipes: any[],
+  dishes: Dish[],
+  recipes: Recipe[],
 
   // Editing & Pagination & Others
-  editingItem: any,
-  setEditingItem: any,
-  editingRecipe: any,
-  setEditingRecipe: any,
-  fetchItems: any,
-  pagination: any, // useDishesClientPagination result
-  dishCosts: any,
-  recipePrices: any,
+  editingItem: EditingItemShape | null,
+  setEditingItem: (item: EditingItemShape | null) => void,
+  editingRecipe: Recipe | null,
+  setEditingRecipe: (recipe: Recipe | null) => void,
+  fetchItems: () => Promise<void>,
+  pagination: PaginationResult,
+  dishCosts: Map<string, DishCostData>,
+  recipePrices: Record<string, RecipePriceData>,
 
-  previewState: any, // useDishesClientPreview result
-  handlers: any, // useDishesClientHandlers result
-  sidePanelsHandlers: any,
-  selectionHandlers: any, // useDishesClientSelection result - destructuring handled inside or passed whole?
-  selectionModeHelpers: any, // useSelectionMode result
+  previewState: PreviewStateResult,
+  handlers: HandlersResult,
+  sidePanelsHandlers: SidePanelHandlers,
+  selectionHandlers: SelectionHandlersResult,
+  selectionModeHelpers: SelectionModeHelpersResult,
 ): UseDishesClientControllerResult {
   const {
     bulkActionLoading,

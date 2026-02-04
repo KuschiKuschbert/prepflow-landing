@@ -12,7 +12,11 @@ import { useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { IngredientList } from './IngredientPopover/components/IngredientList';
 import { RecipeSourcesList } from './IngredientPopover/components/RecipeSourcesList';
-import { useIngredientData } from './IngredientPopover/hooks/useIngredientData';
+import {
+  IngredientData,
+  RecipeSource,
+  useIngredientData,
+} from './IngredientPopover/hooks/useIngredientData';
 import { usePopoverCloseHandlers } from './IngredientPopover/hooks/usePopoverCloseHandlers';
 import { usePopoverPosition } from './IngredientPopover/hooks/usePopoverPosition';
 
@@ -75,7 +79,13 @@ export function IngredientPopover({
   return null;
 }
 
-function PopoverHeader({ menuItemName, menuItemType, onClose }: any) {
+interface PopoverHeaderProps {
+  menuItemName: string;
+  menuItemType: 'dish' | 'recipe';
+  onClose: () => void;
+}
+
+function PopoverHeader({ menuItemName, menuItemType, onClose }: PopoverHeaderProps) {
   return (
     <div className="flex items-center justify-between border-b border-[var(--border)] p-4">
       <div className="min-w-0 flex-1">
@@ -97,7 +107,14 @@ function PopoverHeader({ menuItemName, menuItemType, onClose }: any) {
   );
 }
 
-function PopoverContent({ loading, error, ingredients, recipeSources }: any) {
+interface PopoverContentProps {
+  loading: boolean;
+  error: string | null;
+  ingredients: IngredientData[];
+  recipeSources: RecipeSource[];
+}
+
+function PopoverContent({ loading, error, ingredients, recipeSources }: PopoverContentProps) {
   return (
     <div className="flex-1 overflow-y-auto p-4">
       {loading ? (

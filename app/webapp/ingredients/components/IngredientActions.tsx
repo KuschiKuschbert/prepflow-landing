@@ -2,9 +2,11 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { useTranslation } from '@/lib/useTranslation';
-import { MapPin, Store, Target, Trash2, Zap } from 'lucide-react';
+import { Zap } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { BulkActionsMenu } from './BulkActionsMenu';
 import { useBulkActions } from './hooks/useBulkActions';
+
 interface Ingredient {
   id: string;
   ingredient_name: string;
@@ -27,6 +29,7 @@ interface Ingredient {
   created_at?: string;
   updated_at?: string;
 }
+
 interface IngredientActionsProps {
   selectedIngredients: Set<string>;
   filteredIngredients: Ingredient[];
@@ -43,7 +46,6 @@ export default function IngredientActions({
   loading = false,
 }: IngredientActionsProps) {
   const { t: _t } = useTranslation();
-
   const [showBulkMenu, setShowBulkMenu] = useState(false);
   const selectedCount = selectedIngredients.size;
 
@@ -87,68 +89,20 @@ export default function IngredientActions({
               onClick={() => setShowBulkMenu(!showBulkMenu)}
               className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2 font-medium text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:from-orange-500/80 hover:to-red-500/80 hover:shadow-xl"
             >
-              <Icon icon={Zap} size="sm" className="text-current" aria-hidden={true} />
+              <Icon icon={Zap} size="sm" className="text-current" aria-hidden />
               <span>Bulk Actions ({selectedCount})</span>
             </button>
 
             {showBulkMenu && (
-              <>
-                <div
-                  className="fixed inset-0 z-[55]"
-                  onClick={() => setShowBulkMenu(false)}
-                  aria-hidden={true}
-                />
-                <div className="absolute top-full left-0 z-[60] mt-1.5 w-64 rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-xl">
-                  <div className="p-1.5">
-                    <div className="border-b border-[var(--border)] px-2.5 py-1.5 text-xs text-[var(--foreground-muted)]">
-                      {selectedCount} ingredient{selectedCount > 1 ? 's' : ''} selected
-                    </div>
-
-                    <div className="mt-1.5 space-y-0.5">
-                      <button
-                        onClick={handleBulkDelete}
-                        disabled={bulkActionLoading}
-                        className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-[var(--color-error)] transition-colors hover:bg-[var(--color-error)]/10 disabled:opacity-50"
-                      >
-                        <Icon
-                          icon={Trash2}
-                          size="xs"
-                          className="text-[var(--color-error)]"
-                          aria-hidden={true}
-                        />
-                        <span>Delete Selected</span>
-                      </button>
-
-                      <button
-                        onClick={handleBulkUpdateSupplier}
-                        disabled={bulkActionLoading}
-                        className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)] disabled:opacity-50"
-                      >
-                        <Icon icon={Store} size="xs" className="text-current" aria-hidden={true} />
-                        <span>Update Supplier</span>
-                      </button>
-
-                      <button
-                        onClick={handleBulkUpdateStorage}
-                        disabled={bulkActionLoading}
-                        className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)] disabled:opacity-50"
-                      >
-                        <Icon icon={MapPin} size="xs" className="text-current" aria-hidden={true} />
-                        <span>Update Storage Location</span>
-                      </button>
-
-                      <button
-                        onClick={handleBulkUpdateWastage}
-                        disabled={bulkActionLoading}
-                        className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)] disabled:opacity-50"
-                      >
-                        <Icon icon={Target} size="xs" className="text-current" aria-hidden={true} />
-                        <span>Update Wastage %</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </>
+              <BulkActionsMenu
+                selectedCount={selectedCount}
+                bulkActionLoading={bulkActionLoading}
+                onDelete={handleBulkDelete}
+                onUpdateSupplier={handleBulkUpdateSupplier}
+                onUpdateStorage={handleBulkUpdateStorage}
+                onUpdateWastage={handleBulkUpdateWastage}
+                onClose={() => setShowBulkMenu(false)}
+              />
             )}
           </div>
         )}

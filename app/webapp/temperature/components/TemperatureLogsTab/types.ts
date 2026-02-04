@@ -33,6 +33,10 @@ export interface TemperatureLogsTabProps {
   onRefreshLogs: () => Promise<void>;
   isLoading?: boolean;
   allLogs?: TemperatureLog[]; // All logs for export (unfiltered)
+  page?: number;
+  totalPages?: number;
+  total?: number;
+  onPageChange?: (page: number | ((p: number) => number)) => void;
 }
 
 export interface DateRange {

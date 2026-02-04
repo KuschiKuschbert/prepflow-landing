@@ -92,6 +92,9 @@ export const metadata: Metadata = {
   },
 };
 
+import { DevelopmentServiceWorkerCleanup } from '../components/DevelopmentServiceWorkerCleanup';
+import { ThemeInitializer } from '../components/ThemeInitializer';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -113,18 +116,12 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png" />
 
-        {/* Resource Preloading - Critical for Performance */}
-        {/* Note: dashboard-screenshot.png preload removed - Image component with priority prop handles preloading automatically */}
-        {/* Preloading here caused warnings on non-landing pages where image isn't used */}
-
-        {/* DNS Prefetch for external domains */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://dev-7myakdl4itf644km.us.auth0.com" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
 
-        {/* Preconnect to critical third-party domains */}
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.google-analytics.com" crossOrigin="anonymous" />
         <link
@@ -135,33 +132,13 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
-        {/* Apply theme immediately to prevent flash */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  const theme = localStorage.getItem('prepflow-theme') || 'dark';
-                  document.documentElement.setAttribute('data-theme', theme);
-                } catch (e) {
-                  // Error handled: Fallback to dark theme if localStorage fails (e.g., private browsing)
-                  // Note: Using console.error here as logger is not available in script tag before React loads
-                  console.error('Failed to read theme from localStorage, using dark theme fallback:', e);
-                  document.documentElement.setAttribute('data-theme', 'dark');
-                }
-              })();
-            `,
-          }}
-        />
+        <ThemeInitializer />
       </head>
       <body className="geist-sans-variable geist-mono-variable antialiased">
         <ErrorBoundary>
           <Providers>{children}</Providers>
-
           <Analytics />
           <SpeedInsights />
-
-          {/* Analytics and tracking - gated by env */}
           {process.env.NEXT_PUBLIC_ENABLE_GA === 'true' && (
             <>
               <GoogleAnalytics measurementId="G-W1D5LQXGJT" />
@@ -169,38 +146,7 @@ export default function RootLayout({
             </>
           )}
         </ErrorBoundary>
-
-        {/* Service Worker Registration */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              // Service Worker Registration - COMPLETELY DISABLED FOR DEVELOPMENT
-              // Unregister any existing service workers in development
-              if (window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1')) {
-                if ('serviceWorker' in navigator) {
-                  navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                    for(let registration of registrations) {
-                      registration.unregister().then(function(success) {
-                        if (success) {
-                          // Service worker unregistered in development
-                        }
-                      });
-                    }
-                  });
-                  // Also clear all caches
-                  if ('caches' in window) {
-                    caches.keys().then(function(names) {
-                      for (let name of names) {
-                        caches.delete(name);
-                      }
-                      // All caches cleared in development
-                    });
-                  }
-                }
-              }
-            `,
-          }}
-        />
+        <DevelopmentServiceWorkerCleanup />
       </body>
     </html>
   );

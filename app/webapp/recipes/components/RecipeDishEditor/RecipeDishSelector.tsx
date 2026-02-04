@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useMemo } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
-import { BookOpen, UtensilsCrossed, Search, X } from 'lucide-react';
+import { BookOpen, Search, UtensilsCrossed, X } from 'lucide-react';
+import { useMemo, useState } from 'react';
 
 interface Item {
   id: string;
@@ -18,6 +18,94 @@ interface RecipeDishSelectorProps {
   capitalizeName: (name: string) => string;
 }
 
+/**
+ * Sub-component for individual item selection cards
+ */
+function ItemCard({
+  item,
+  isSelected,
+  onSelect,
+  capitalizeName,
+}: {
+  item: Item;
+  isSelected: boolean;
+  onSelect: () => void;
+  capitalizeName: (name: string) => string;
+}) {
+  return (
+    <button
+      onClick={onSelect}
+      className={`w-full rounded-xl border p-4 text-left transition-all duration-200 ${
+        isSelected
+          ? 'border-[var(--primary)] bg-[var(--primary)]/10'
+          : 'border-[var(--border)] bg-[var(--background)] hover:border-[var(--primary)]/50'
+      }`}
+    >
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Icon
+            icon={item.type === 'recipe' ? BookOpen : UtensilsCrossed}
+            size="md"
+            className={
+              item.type === 'recipe' ? 'text-[var(--color-info)]' : 'text-[var(--primary)]'
+            }
+            aria-hidden={true}
+          />
+          <div>
+            <p className="font-medium text-[var(--foreground)]">{capitalizeName(item.name)}</p>
+            <p className="text-xs text-[var(--foreground-muted)]">
+              {item.type === 'recipe' ? 'Recipe' : 'Dish'}
+            </p>
+          </div>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+/**
+ * Search bar component
+ */
+function SearchBar({
+  value,
+  onChange,
+  onClear,
+}: {
+  value: string;
+  onChange: (val: string) => void;
+  onClear: () => void;
+}) {
+  return (
+    <div className="relative mb-4">
+      <div className="relative">
+        <Icon
+          icon={Search}
+          size="sm"
+          className="absolute top-1/2 left-3 -translate-y-1/2 text-[var(--foreground-muted)]"
+          aria-hidden={true}
+        />
+        <input
+          type="text"
+          value={value}
+          onChange={e => onChange(e.target.value)}
+          placeholder="Search recipes and dishes..."
+          className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] py-2 pr-10 pl-10 text-[var(--foreground)] placeholder-gray-500 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
+          aria-label="Search recipes and dishes"
+        />
+        {value && (
+          <button
+            onClick={onClear}
+            className="absolute top-1/2 right-3 -translate-y-1/2 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
+            aria-label="Clear search"
+          >
+            <Icon icon={X} size="sm" aria-hidden={true} />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function RecipeDishSelector({
   allItems,
   selectedItem,
@@ -26,12 +114,8 @@ export function RecipeDishSelector({
 }: RecipeDishSelectorProps) {
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Filter items based on search term
   const filteredItems = useMemo(() => {
-    if (!searchTerm.trim()) {
-      return allItems;
-    }
-
+    if (!searchTerm.trim()) return allItems;
     const lowerSearch = searchTerm.toLowerCase().trim();
     return allItems.filter(item => {
       const itemName = item.name.toLowerCase();
@@ -39,10 +123,6 @@ export function RecipeDishSelector({
       return itemName.includes(lowerSearch) || itemType.includes(lowerSearch);
     });
   }, [allItems, searchTerm]);
-
-  const clearSearch = () => {
-    setSearchTerm('');
-  };
 
   return (
     <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
@@ -55,47 +135,17 @@ export function RecipeDishSelector({
         )}
       </div>
 
-      {/* Search Bar */}
-      <div className="relative mb-4">
-        <div className="relative">
-          <Icon
-            icon={Search}
-            size="sm"
-            className="absolute top-1/2 left-3 -translate-y-1/2 text-[var(--foreground-muted)]"
-            aria-hidden={true}
-          />
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-            placeholder="Search recipes and dishes..."
-            className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] py-2 pr-10 pl-10 text-[var(--foreground)] placeholder-gray-500 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
-            aria-label="Search recipes and dishes"
-          />
-          {searchTerm && (
-            <button
-              onClick={clearSearch}
-              className="absolute top-1/2 right-3 -translate-y-1/2 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
-              aria-label="Clear search"
-            >
-              <Icon icon={X} size="sm" aria-hidden={true} />
-            </button>
-          )}
-        </div>
-      </div>
+      <SearchBar value={searchTerm} onChange={setSearchTerm} onClear={() => setSearchTerm('')} />
 
-      {/* Items List */}
       <div className="max-h-[calc(100vh-400px)] space-y-2 overflow-y-auto">
         {filteredItems.length === 0 ? (
           <div className="flex h-32 flex-col items-center justify-center text-[var(--foreground-muted)]">
             <p className="mb-2">
-              {searchTerm
-                ? 'No recipes or dishes found matching your search'
-                : 'No recipes or dishes found'}
+              {searchTerm ? 'No results found matching your search' : 'No items found'}
             </p>
             {searchTerm && (
               <button
-                onClick={clearSearch}
+                onClick={() => setSearchTerm('')}
                 className="text-sm text-[var(--primary)] hover:underline"
               >
                 Clear search
@@ -104,39 +154,16 @@ export function RecipeDishSelector({
           </div>
         ) : (
           filteredItems.map(item => (
-            <button
+            <ItemCard
               key={`${item.type}-${item.id}`}
-              onClick={() => {
+              item={item}
+              isSelected={selectedItem?.id === item.id && selectedItem?.type === item.type}
+              onSelect={() => {
                 logger.dev('RecipeDishSelector: Item clicked', { item });
                 onSelectItem(item);
               }}
-              className={`w-full rounded-xl border p-4 text-left transition-all duration-200 ${
-                selectedItem?.id === item.id && selectedItem?.type === item.type
-                  ? 'border-[var(--primary)] bg-[var(--primary)]/10'
-                  : 'border-[var(--border)] bg-[var(--background)] hover:border-[var(--primary)]/50'
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Icon
-                    icon={item.type === 'recipe' ? BookOpen : UtensilsCrossed}
-                    size="md"
-                    className={
-                      item.type === 'recipe' ? 'text-[var(--color-info)]' : 'text-[var(--primary)]'
-                    }
-                    aria-hidden={true}
-                  />
-                  <div>
-                    <p className="font-medium text-[var(--foreground)]">
-                      {capitalizeName(item.name)}
-                    </p>
-                    <p className="text-xs text-[var(--foreground-muted)]">
-                      {item.type === 'recipe' ? 'Recipe' : 'Dish'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </button>
+              capitalizeName={capitalizeName}
+            />
           ))
         )}
       </div>
