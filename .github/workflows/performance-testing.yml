@@ -12,7 +12,6 @@ on:
     - cron: '0 2 * * *' # Daily at 2 AM
   workflow_dispatch: # Enable manual triggering
 
-
 jobs:
   performance-test:
     runs-on: ubuntu-latest
