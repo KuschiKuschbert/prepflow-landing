@@ -66,8 +66,10 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     });
   } catch (err: unknown) {
     if (err instanceof NextResponse) return err;
-    if (err instanceof Error && 'status' in err) {
-      return NextResponse.json(err, { status: (err as any).status });
+    if (ApiErrorHandler.isApiError(err)) {
+      return NextResponse.json(ApiErrorHandler.toResponseData(err), {
+        status: ApiErrorHandler.getStatus(err),
+      });
     }
 
     logger.error('[Menus API] Unexpected error:', {
@@ -110,8 +112,10 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     });
   } catch (err: unknown) {
     if (err instanceof NextResponse) return err;
-    if (err instanceof Error && 'status' in err) {
-      return NextResponse.json(err, { status: (err as any).status });
+    if (ApiErrorHandler.isApiError(err)) {
+      return NextResponse.json(ApiErrorHandler.toResponseData(err), {
+        status: ApiErrorHandler.getStatus(err),
+      });
     }
 
     logger.error('[Menus API] Unexpected error:', {
@@ -138,8 +142,10 @@ export async function DELETE(_req: NextRequest, context: { params: Promise<{ id:
     });
   } catch (err: unknown) {
     if (err instanceof NextResponse) return err;
-    if (err instanceof Error && 'status' in err) {
-      return NextResponse.json(err, { status: (err as any).status });
+    if (ApiErrorHandler.isApiError(err)) {
+      return NextResponse.json(ApiErrorHandler.toResponseData(err), {
+        status: ApiErrorHandler.getStatus(err),
+      });
     }
 
     logger.error('[Menus API] Unexpected error:', {

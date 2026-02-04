@@ -95,8 +95,10 @@ export async function POST(request: NextRequest) {
   } catch (err) {
     if (err instanceof NextResponse) return err;
     // catch thrown ApiError from getAuthenticatedUser
-    if (err instanceof Error && 'status' in err) {
-      return NextResponse.json(err, { status: (err as any).status });
+    if (ApiErrorHandler.isApiError(err)) {
+      return NextResponse.json(ApiErrorHandler.toResponseData(err), {
+        status: ApiErrorHandler.getStatus(err),
+      });
     }
     return handleSupplierError(err, 'POST');
   }
@@ -108,8 +110,10 @@ export async function PUT(request: NextRequest) {
     return handleUpdateSupplier(request, supabase, userId);
   } catch (err) {
     if (err instanceof NextResponse) return err;
-    if (err instanceof Error && 'status' in err) {
-      return NextResponse.json(err, { status: (err as any).status });
+    if (ApiErrorHandler.isApiError(err)) {
+      return NextResponse.json(ApiErrorHandler.toResponseData(err), {
+        status: ApiErrorHandler.getStatus(err),
+      });
     }
     return handleSupplierError(err, 'PUT');
   }
@@ -121,8 +125,10 @@ export async function DELETE(request: NextRequest) {
     return handleDeleteSupplier(request, supabase, userId);
   } catch (err) {
     if (err instanceof NextResponse) return err;
-    if (err instanceof Error && 'status' in err) {
-      return NextResponse.json(err, { status: (err as any).status });
+    if (ApiErrorHandler.isApiError(err)) {
+      return NextResponse.json(ApiErrorHandler.toResponseData(err), {
+        status: ApiErrorHandler.getStatus(err),
+      });
     }
     return handleSupplierError(err, 'DELETE');
   }

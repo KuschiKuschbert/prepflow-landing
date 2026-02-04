@@ -53,8 +53,10 @@ export async function GET(request: NextRequest) {
     });
   } catch (err) {
     if (err instanceof NextResponse) return err;
-    if (err instanceof Error && 'status' in err) {
-      return NextResponse.json(err, { status: (err as any).status });
+    if (ApiErrorHandler.isApiError(err)) {
+      return NextResponse.json(ApiErrorHandler.toResponseData(err), {
+        status: ApiErrorHandler.getStatus(err),
+      });
     }
 
     logger.error('[Menus API] Unexpected error:', {
@@ -108,8 +110,10 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     if (err instanceof NextResponse) return err;
-    if (err instanceof Error && 'status' in err) {
-      return NextResponse.json(err, { status: (err as any).status });
+    if (ApiErrorHandler.isApiError(err)) {
+      return NextResponse.json(ApiErrorHandler.toResponseData(err), {
+        status: ApiErrorHandler.getStatus(err),
+      });
     }
 
     logger.error('[Menus API] Unexpected error:', {

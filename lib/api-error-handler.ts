@@ -94,4 +94,43 @@ export class ApiErrorHandler {
   static isRowNotFoundError(error: PostgrestError | unknown): boolean {
     return isRowNotFoundError(error);
   }
+
+  /**
+   * Type guard to check if an unknown error is an ApiError
+   */
+  static isApiError(error: unknown): error is ApiError {
+    return (
+      typeof error === 'object' &&
+      error !== null &&
+      'message' in error &&
+      typeof (error as ApiError).message === 'string'
+    );
+  }
+
+  /**
+   * Get the HTTP status code from an error, defaulting to 500
+   */
+  static getStatus(error: unknown): number {
+    if (this.isApiError(error) && typeof error.status === 'number') {
+      return error.status;
+    }
+    return 500;
+  }
+
+  /**
+   * Convert an unknown error to an ApiError-shaped object for JSON responses
+   */
+  static toResponseData(error: unknown): { message: string; code?: string; details?: unknown } {
+    if (this.isApiError(error)) {
+      return {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+      };
+    }
+    if (error instanceof Error) {
+      return { message: error.message };
+    }
+    return { message: 'An unexpected error occurred' };
+  }
 }

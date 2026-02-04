@@ -33,9 +33,6 @@ interface OrderListFormProps {
   isEditing: boolean;
 }
 
-/**
- * Basic info fields (Supplier, Name, Notes)
- */
 function OrderListBasicInfo({
   formData,
   setFormData,
@@ -97,9 +94,6 @@ function OrderListBasicInfo({
   );
 }
 
-/**
- * Individual item row
- */
 function OrderListItem({
   item,
   index,
