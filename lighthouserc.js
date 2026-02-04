@@ -1,7 +1,8 @@
 module.exports = {
   ci: {
     collect: {
-      startServerCommand: 'npm run dev',
+      // In CI, the workflow starts the server manually. Locally, we want to test the production build.
+      startServerCommand: process.env.CI ? undefined : 'npm start',
       url: ['http://localhost:3000'],
       startServerReadyPattern: 'ready - started server',
       startServerReadyTimeout: 30000,

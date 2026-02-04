@@ -96,4 +96,54 @@ function analyzeBundle() {
   };
 }
 
-analyzeBundle();
+const results = analyzeBundle();
+
+// Save results to file
+if (results) {
+  const reportPath = path.join(process.cwd(), 'bundle-analysis-report.json');
+
+  // Add CSS size and JS size (approximated from chunks logic)
+  // Re-calculate specific types for the report
+  let jsSize = 0;
+  let cssSize = 0;
+  let imageSize = 0;
+
+  const nextDir = '.next';
+  if (fs.existsSync(path.join(nextDir, 'static'))) {
+    const staticDir = path.join(nextDir, 'static');
+
+    // Quick recursive walk to check file types properly
+    function categorizeSizes(dir) {
+      const items = fs.readdirSync(dir);
+      for (const item of items) {
+        const fullPath = path.join(dir, item);
+        const stat = fs.statSync(fullPath);
+        if (stat.isDirectory()) {
+          categorizeSizes(fullPath);
+        } else if (item.endsWith('.js')) {
+          jsSize += stat.size;
+        } else if (item.endsWith('.css')) {
+          cssSize += stat.size;
+        } else if (item.match(/\.(png|jpg|jpeg|gif|svg|webp|avif)$/)) {
+          imageSize += stat.size;
+        }
+      }
+    }
+    categorizeSizes(staticDir);
+  }
+
+  const report = {
+    ...results,
+    jsSize,
+    cssSize,
+    imageSize,
+    timestamp: Date.now(),
+  };
+
+  try {
+    fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
+    console.log(`\n💾 Bundle analysis report saved to: ${reportPath}`);
+  } catch (error) {
+    console.error('❌ Failed to save bundle analysis report:', error.message);
+  }
+}
