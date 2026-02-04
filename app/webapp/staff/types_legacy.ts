@@ -55,19 +55,3 @@ export interface EmployeeFormData {
   photo_url: string;
   notes: string;
 }
-
-export interface QualificationFormData {
-  qualification_type_id: string;
-  certificate_number: string;
-  issue_date: string;
-  expiry_date: string;
-  issuing_authority: string;
-  document_url: string;
-  notes: string;
-}
-
-export interface EmployeeWithQualifications extends Employee {
-  employee_qualifications: (EmployeeQualification & {
-    qualification_types: QualificationType;
-  })[];
-}

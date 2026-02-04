@@ -1,16 +1,16 @@
 # QA Audit Report
 
-**Generated:** 2026-01-13T13:05:04.124Z
+**Generated:** 2026-02-04T15:25:44.906Z
 
 ## Summary
 
 ### Test Results
 
-- **Total Tests:** 7
+- **Total Tests:** 5
 - **Passed:** 0 ✅
-- **Failed:** 7 ❌
+- **Failed:** 4 ❌
 - **Skipped:** 0 ⏭️
-- **Total Duration:** 2.52s
+- **Total Duration:** 86.00s
 
 ### Error Summary
 
@@ -25,69 +25,61 @@
 ### 1. Chef Workflow - Login
 
 - **Status:** ❌ Failed
-- **Duration:** 0.57s
+- **Duration:** 5.42s
 - **Steps:**
   1. undefined
   2. undefined
   3. undefined
+  4. undefined
+  5. undefined
+  6. undefined
+  7. undefined
+  8. undefined
 
 ### 2. Chef Workflow - Create Ingredient
 
 - **Status:** ❌ Failed
-- **Duration:** 0.23s
+- **Duration:** 19.28s
 - **Steps:**
   1. undefined
   2. undefined
   3. undefined
+  4. undefined
+  5. undefined
+  6. undefined
+  7. undefined
+  8. undefined
+  9. undefined
 
 ### 3. Chef Workflow - Create Recipe/Dish
 
 - **Status:** ❌ Failed
-- **Duration:** 0.21s
+- **Duration:** 30.44s
 - **Steps:**
   1. undefined
   2. undefined
   3. undefined
+  4. undefined
+  5. undefined
+  6. undefined
+  7. undefined
 
 ### 4. Chef Workflow - Create Menu Cycle
 
 - **Status:** ❌ Failed
-- **Duration:** 0.20s
+- **Duration:** 30.15s
 - **Steps:**
   1. undefined
   2. undefined
   3. undefined
-
-### 5. Chef Workflow - Temperature Log
-
-- **Status:** ❌ Failed
-- **Duration:** 0.21s
-- **Steps:**
-  1. undefined
-  2. undefined
-  3. undefined
-
-### 6. Chef Workflow - Equipment Maintenance Log
-
-- **Status:** ❌ Failed
-- **Duration:** 0.32s
-- **Steps:**
-  1. undefined
-  2. undefined
-  3. undefined
-
-### 7. Gremlin Crawler - Scan and Visit All Links
-
-- **Status:** ❌ Failed
-- **Duration:** 0.79s
-- **Steps:**
-  1. undefined
-  2. undefined
-  3. undefined
+  4. undefined
+  5. undefined
+  6. undefined
+  7. undefined
 
 ## Recommendations
 
-- **7 test(s) failed** - Review failed test details above
+- **4 test(s) failed** - Review failed test details above
 
 ---
 

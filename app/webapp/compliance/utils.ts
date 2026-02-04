@@ -1,17 +1,17 @@
 import {
+  AlertTriangle,
+  Briefcase,
   Bug,
+  Building2,
+  CheckCircle,
+  ClipboardCheck,
   Flame,
   Hospital,
-  Building2,
-  Shield,
-  Briefcase,
-  Wine,
-  UtensilsCrossed,
-  ClipboardCheck,
-  CheckCircle,
-  XCircle,
-  AlertTriangle,
   LucideIcon,
+  Shield,
+  UtensilsCrossed,
+  Wine,
+  XCircle,
 } from 'lucide-react';
 
 export function getTypeIcon(typeName: string): LucideIcon {
@@ -64,20 +64,6 @@ export function getStatusIcon(status: 'active' | 'expired' | 'pending_renewal'):
       return AlertTriangle;
     default:
       return ClipboardCheck;
-  }
-}
-
-export function getStatusIconEmoji(status: 'active' | 'expired' | 'pending_renewal'): string {
-  // Keep for select options where React components can't be used
-  switch (status) {
-    case 'active':
-      return '✅';
-    case 'expired':
-      return '❌';
-    case 'pending_renewal':
-      return '⚠️';
-    default:
-      return '📋';
   }
 }
 

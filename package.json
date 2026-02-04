@@ -97,6 +97,7 @@
     "error:report": "node scripts/error-learning/generate-learning-report.js",
     "error:generate-rules": "node -e \"const { generateRulesFromKnowledgeBase } = require('./lib/error-learning/rule-generator.ts'); generateRulesFromKnowledgeBase().catch(console.error);\"",
     "audit:any": "tsx scripts/audit-any.ts",
+    "audit:dead-code": "node scripts/cleanup/checks/dead-code.js",
     "audit:scripts": "eslint scripts/",
     "check:coverage": "tsx scripts/coverage-scanner.ts",
     "check:bundle": "tsx scripts/bundle-budget.ts",

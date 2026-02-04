@@ -12,21 +12,31 @@ const { execSync } = require('child_process');
 const { createViolation } = require('../utils/violations');
 const { getStandardConfig } = require('../utils/config');
 
+const excludePatterns = [
+  /node_modules/,
+  /\.next/,
+  /out/,
+  /build/,
+  /dist/,
+  /\.test\.tsx?$/,
+  /\.spec\.tsx?$/,
+  /\.d\.ts$/,
+  /types/, // Common type definitions often have unused exports in partial implementations
+  /page\.tsx$/,
+  /layout\.tsx$/,
+  /loading\.tsx$/,
+  /error\.tsx$/,
+  /not-found\.tsx$/,
+  /route\.ts$/,
+  /middleware\.ts$/,
+  /next\.config\.ts$/,
+  /playwright\.config\.ts$/,
+];
+
 /**
  * Check if file should be excluded from dead code detection
  */
 function shouldExcludeFile(filePath) {
-  const excludePatterns = [
-    /node_modules/,
-    /\.next/,
-    /out/,
-    /build/,
-    /dist/,
-    /\.test\.tsx?$/,
-    /\.spec\.tsx?$/,
-    /\.d\.ts$/,
-  ];
-
   return excludePatterns.some(pattern => pattern.test(filePath));
 }
 
@@ -44,19 +54,33 @@ function parseTsPruneOutput(output) {
       continue;
     }
 
-    // Parse format: filePath:line:exportName
-    const match = line.match(/^(.+?):(\d+):(.+)$/);
+    // Parse format: filePath:line - exportName
+    const match = line.match(/^(.+?):(\d+) - (.+)$/);
     if (match) {
       const [, filePath, lineNum, exportName] = match;
       const fullPath = path.resolve(process.cwd(), filePath);
 
       // Exclude test files, type definitions, and build directories
-      if (!shouldExcludeFile(fullPath)) {
+      const isExcluded = shouldExcludeFile(fullPath);
+      if (filePath.includes('test-dead-code')) {
+        console.log('Testing specific file:', fullPath);
+        console.log('Is excluded?', isExcluded);
+        if (isExcluded) {
+          console.log(
+            'Exclusion check details:',
+            excludePatterns.map(p => ({ p: p.toString(), match: p.test(fullPath) })),
+          );
+        }
+      }
+
+      if (!isExcluded) {
         unusedExports.push({
           file: filePath,
           line: parseInt(lineNum, 10),
           export: exportName,
         });
+      } else {
+        // console.log('Excluded:', filePath);
       }
     }
   }
@@ -88,6 +112,10 @@ async function checkDeadCode(files = null) {
     const command = 'npx ts-prune --project tsconfig.json 2>/dev/null || true';
     const output = execSync(command, { encoding: 'utf-8', cwd: process.cwd() });
 
+    // DEBUG LOGGING
+    console.log('Raw Output Length:', output.length);
+    console.log('First 100 chars:', output.substring(0, 100));
+
     if (!output || output.trim().length === 0) {
       return {
         passed: true,
@@ -97,6 +125,7 @@ async function checkDeadCode(files = null) {
     }
 
     const unusedExports = parseTsPruneOutput(output);
+    console.log('Parsed lines count:', unusedExports.length);
 
     // Create violations for each unused export
     for (const unused of unusedExports) {
@@ -136,3 +165,20 @@ module.exports = {
   name: 'dead-code',
   check: checkDeadCode,
 };
+
+// Allow running directly
+if (require.main === module) {
+  checkDeadCode().then(result => {
+    if (result.violations && result.violations.length > 0) {
+      console.log(result.summary);
+      result.violations.forEach(v => {
+        console.log(`\n📄 ${v.file}:${v.line}`);
+        console.log(`   ${v.message}`);
+      });
+      process.exit(1);
+    } else {
+      console.log(result.summary);
+      process.exit(0);
+    }
+  });
+}

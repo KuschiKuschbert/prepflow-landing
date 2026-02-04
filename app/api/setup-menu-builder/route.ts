@@ -130,13 +130,14 @@ export async function POST(_request: NextRequest) {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function checkMenuBuilderTables(supabaseAdmin: any): Promise<{
+import { PostgrestError, SupabaseClient } from '@supabase/supabase-js';
+
+async function checkMenuBuilderTables(supabaseAdmin: SupabaseClient): Promise<{
   tablesExist: boolean;
   message?: string;
   missingTables?: string[];
   instructions?: string[];
-  error?: any;
+  error?: PostgrestError;
 }> {
   // Check if dishes table exists (primary table for menu builder)
   const { data: _data, error } = await supabaseAdmin.from('dishes').select('id').limit(1);
