@@ -7,46 +7,46 @@ export function getCustomerVariantCSS(): string {
   return `
     /* Customer Variant - Polished, Marketing-Focused, Photo-Ready */
     body.variant-customer {
-      background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+      background: linear-gradient(180deg, var(--pf-color-bg-page) 0%, var(--pf-color-bg-page) 100%);
       padding: 40px 20px;
     }
 
     .variant-customer .content-wrapper {
-      background: #ffffff;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      background: var(--pf-color-bg-content);
+      box-shadow: var(--pf-shadow-content);
       padding: 48px;
       max-width: 1000px;
-      border-radius: 0;
-      border: 1px solid #e8e8e8;
+      border-radius: var(--pf-border-radius);
+      border: var(--pf-border-width) solid var(--pf-color-border);
     }
 
     .variant-customer .header {
       padding-bottom: 32px;
       margin-bottom: 40px;
-      border-bottom: 3px solid #f0f0f0;
+      border-bottom: 3px solid var(--pf-color-border);
     }
 
     .variant-customer .header-content h1 {
       font-size: 42px;
       font-weight: 300;
-      color: #1a1a1a;
+      color: var(--pf-color-text-header);
       background: none;
-      -webkit-text-fill-color: #1a1a1a;
+      -webkit-text-fill-color: var(--pf-color-text-header);
       margin: 0;
       letter-spacing: -0.5px;
-      font-family: Georgia, 'Times New Roman', serif;
+      font-family: var(--pf-font-family-header);
     }
 
     .variant-customer .header-content h2 {
       font-size: 18px;
-      color: #666666;
+      color: var(--pf-color-text-muted);
       margin: 8px 0 0 0;
       font-weight: 400;
       font-style: italic;
     }
 
     .variant-customer .header-meta {
-      color: #999999;
+      color: var(--pf-color-text-muted);
       font-size: 12px;
       font-weight: 300;
     }

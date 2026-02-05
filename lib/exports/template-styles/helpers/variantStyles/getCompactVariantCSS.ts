@@ -7,43 +7,43 @@ export function getCompactVariantCSS(): string {
   return `
     /* Compact Variant - Compact Layout, Minimal Spacing */
     body.variant-compact {
-      background: #ffffff;
+      background: var(--pf-color-bg-page);
       padding: 10px;
     }
 
     .variant-compact .content-wrapper {
-      background: #ffffff;
+      background: var(--pf-color-bg-content);
       box-shadow: none;
       padding: 20px;
       max-width: 100%;
-      border-radius: 0;
-      border: 1px solid #e0e0e0;
+      border-radius: var(--pf-border-radius);
+      border: 1px solid var(--pf-color-border);
     }
 
     .variant-compact .header {
       padding-bottom: 12px;
       margin-bottom: 16px;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid var(--pf-color-border);
     }
 
     .variant-compact .header-content h1 {
       font-size: 18px;
       font-weight: 600;
-      color: #000000;
+      color: var(--pf-color-text-header);
       background: none;
-      -webkit-text-fill-color: #000000;
+      -webkit-text-fill-color: var(--pf-color-text-header);
       margin: 0;
     }
 
     .variant-compact .header-content h2 {
       font-size: 12px;
-      color: #666666;
+      color: var(--pf-color-text-muted);
       margin: 4px 0 0 0;
       font-weight: 400;
     }
 
     .variant-compact .header-meta {
-      color: #999999;
+      color: var(--pf-color-text-muted);
       font-size: 10px;
     }
 

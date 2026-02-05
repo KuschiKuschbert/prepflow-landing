@@ -199,22 +199,32 @@ This document provides a comprehensive testing checklist for all export template
 - Menus HTML
 - Prep lists HTML
 
-### PDF Export (via Print Dialog)
+### PDF Export (Server-Side)
 
 **Test Cases:**
 
-- [ ] Print dialog opens correctly
-- [ ] Print preview shows correctly
-- [ ] Page layout is correct
-- [ ] Margins are appropriate
-- [ ] Page breaks work correctly
-- [ ] Colors render correctly
-- [ ] Fonts render correctly
-- [ ] Images render correctly (if any)
-- [ ] "Print to PDF" works
-- [ ] PDF file is created successfully
-- [ ] PDF opens correctly in PDF viewers
-- [ ] PDF is readable and well-formatted
+- [ ] Export button triggers download directly
+- [ ] No print dialog appears
+- [ ] File downloads with correct name and .pdf extension
+- [ ] File size is reasonable (not empty)
+- [ ] Opens correctly in PDF viewer
+- [ ] Layout matches print template
+- [ ] Background graphics are included
+- [ ] Text is selectable (not an image)
+- [ ] Links are clickable (if any)
+- [ ] Admin permissions work (bypasses tier check)
+- [ ] Non-admin checks work (enforces tier check)
+
+**Files to Test:**
+
+- `generate-pdf.ts` (unit test)
+- Order lists PDF
+- Temperature logs PDF
+- Cleaning records PDF
+- Compliance reports PDF
+- Menus PDF
+- Prep lists PDF
+- Recipes PDF
 
 **Files to Test:**
 

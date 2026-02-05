@@ -3,11 +3,12 @@
  * Uses unified print template with Cyber Carrot branding
  */
 
-import { getPrintStyles } from './prepListPrintStyles';
-import { formatPrepListForPrint } from './formatPrepList';
-import { formatGeneratedPrepListForPrint } from './formatGeneratedPrepList';
 import { printWithTemplate } from '@/lib/exports/print-template';
+import { getSavedExportTheme } from '@/lib/exports/utils/themeUtils';
 import type { PrepList, SectionData } from '@/lib/types/prep-lists';
+import { formatGeneratedPrepListForPrint } from './formatGeneratedPrepList';
+import { formatPrepListForPrint } from './formatPrepList';
+import { getPrintStyles } from './prepListPrintStyles';
 
 interface ExportOptions {
   sections?: string[];
@@ -21,6 +22,7 @@ export function printPrepList(
 ): void {
   const html = formatPrepListForPrint(prepList, variant);
   const styles = getPrintStyles(variant);
+  const theme = getSavedExportTheme();
 
   // Use unified print template with variant support
   printWithTemplate({
@@ -28,6 +30,7 @@ export function printPrepList(
     subtitle: 'Prep List',
     content: `<style>${styles}</style>${html}`,
     variant: variant === 'kitchen' ? 'kitchen' : 'default',
+    theme,
   });
 }
 
@@ -39,6 +42,7 @@ export function printGeneratedPrepList(
   const variant = options?.variant || 'default';
   const html = formatGeneratedPrepListForPrint(sections, menuName, options);
   const styles = getPrintStyles(variant);
+  const theme = getSavedExportTheme();
 
   // Use unified print template with variant support
   printWithTemplate({
@@ -51,5 +55,6 @@ export function printGeneratedPrepList(
       0,
     ),
     variant: variant === 'kitchen' ? 'kitchen' : 'default',
+    theme,
   });
 }

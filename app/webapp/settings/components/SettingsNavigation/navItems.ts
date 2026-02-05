@@ -1,5 +1,7 @@
 import {
   CreditCard,
+  FileText,
+  Flag,
   HardDrive,
   HelpCircle,
   QrCode,
@@ -8,9 +10,8 @@ import {
   ShieldCheck,
   User,
   Wrench,
-  Flag,
 } from 'lucide-react';
-import type { NavItem, Category } from './types';
+import type { Category, NavItem } from './types';
 
 export const navItems: NavItem[] = [
   {
@@ -36,6 +37,14 @@ export const navItems: NavItem[] = [
     category: 'preferences',
     ariaLabel: 'View app preferences',
     description: 'Customize app behavior and appearance',
+  },
+  {
+    hash: '#exports',
+    label: 'Export Settings',
+    icon: FileText,
+    category: 'preferences',
+    ariaLabel: 'View export settings',
+    description: 'Customize document exports and themes',
   },
   {
     hash: '#security',

@@ -1,7 +1,13 @@
+import { ExportTheme, themes } from '@/lib/exports/themes';
+
 /**
  * Background elements CSS
  */
-export function getBackgroundStyles(): string {
+export function getBackgroundStyles(theme: ExportTheme = 'cyber-carrot'): string {
+  const config = themes[theme] || themes['cyber-carrot'];
+  const primary = config.cssVariables['--pf-color-primary'];
+  const secondary = config.cssVariables['--pf-color-secondary'];
+
   return `
     /* Background Elements */
     .background-grid {
@@ -10,8 +16,8 @@ export function getBackgroundStyles(): string {
       pointer-events: none;
       z-index: 0;
       background-image:
-        linear-gradient(rgba(41,231,205,0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(59,130,246,0.06) 1px, transparent 1px);
+        linear-gradient(${primary}14 1px, transparent 1px),
+        linear-gradient(90deg, ${secondary}0F 1px, transparent 1px);
       background-size: 48px 48px;
       background-position: 0px 0px, 0px 0px;
       opacity: 0.6;
@@ -25,7 +31,7 @@ export function getBackgroundStyles(): string {
       height: 420px;
       pointer-events: none;
       z-index: 0;
-      background: radial-gradient(closest-side, rgba(41,231,205,0.18), transparent 70%);
+      background: radial-gradient(closest-side, ${primary}2D, transparent 70%);
       opacity: 0.5;
     }
 
@@ -37,7 +43,7 @@ export function getBackgroundStyles(): string {
       height: 400px;
       pointer-events: none;
       z-index: 0;
-      background: radial-gradient(closest-side, rgba(217,37,199,0.16), transparent 70%);
+      background: radial-gradient(closest-side, ${secondary}28, transparent 70%);
       opacity: 0.5;
     }
 
@@ -56,15 +62,15 @@ export function getBackgroundStyles(): string {
     .circle {
       position: absolute;
       border-radius: 50%;
-      border: 1.5px solid rgba(41, 231, 205, 0.08);
+      border: 1.5px solid ${primary}14;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
     }
 
     .circle-1 { width: 80px; height: 80px; }
-    .circle-2 { width: 130px; height: 130px; border-color: rgba(41, 231, 205, 0.06); }
-    .circle-3 { width: 180px; height: 180px; border-color: rgba(41, 231, 205, 0.05); }
-    .circle-4 { width: 230px; height: 230px; border-color: rgba(41, 231, 205, 0.04); }
+    .circle-2 { width: 130px; height: 130px; border-color: ${primary}0F; }
+    .circle-3 { width: 180px; height: 180px; border-color: ${primary}0D; }
+    .circle-4 { width: 230px; height: 230px; border-color: ${primary}0A; }
   `;
 }

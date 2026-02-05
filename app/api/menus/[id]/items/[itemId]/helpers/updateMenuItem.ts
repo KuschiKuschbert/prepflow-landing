@@ -12,7 +12,7 @@ export async function updateMenuItem(
 ): Promise<
   { success: boolean; item: MenuItem; message: string } | { error: unknown; status: number }
 > {
-  const { category, position, actual_selling_price, region } = data;
+  const { category, position, actual_selling_price } = data;
 
   // Fetch menu item first to get dish_id or recipe_id
   const { menuItem, error: fetchError } = await fetchMenuItem(menuId, menuItemId);
@@ -27,8 +27,8 @@ export async function updateMenuItem(
   if (actual_selling_price !== undefined) {
     updateData.actual_selling_price = actual_selling_price === null ? null : actual_selling_price;
   }
-  if (region !== undefined) {
-    updateData.region = region === null ? null : region;
+  if (position !== undefined) {
+    updateData.position = position;
   }
 
   logger.dev('[Menu Item API] Updating menu item', {

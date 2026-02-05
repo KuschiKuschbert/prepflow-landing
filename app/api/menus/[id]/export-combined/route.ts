@@ -22,6 +22,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     const { searchParams } = new URL(request.url);
     const format = searchParams.get('format') || 'html';
     const include = searchParams.get('include') || 'menu,matrix';
+    const theme = (searchParams.get('theme') || 'cyber-carrot') as any;
 
     // Validate request parameters
     const validation = validateRequest(menuId, format, include);
@@ -29,6 +30,21 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       return validation.error;
     }
     const { options } = validation;
+
+    // Check feature access for CSV/PDF exports (requires Pro tier)
+    if (options.format === 'csv' || options.format === 'pdf') {
+      try {
+        const { requireAuth } = await import('@/lib/auth0-api-helpers');
+        const { checkFeatureAccess } = await import('@/lib/api-feature-gate');
+
+        const user = await requireAuth(request);
+        const featureKey = options.format === 'csv' ? 'export_csv' : 'export_pdf';
+        await checkFeatureAccess(featureKey, user, request);
+      } catch (error) {
+        if (error instanceof NextResponse) return error;
+        throw error;
+      }
+    }
 
     const { userId } = await getAuthenticatedUser(request);
 
@@ -79,7 +95,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       );
     }
     if (options.format === 'pdf') {
-      return generateCombinedHTML(
+      return await generateCombinedHTML(
         menuWithFreshData.menu_name,
         menuData,
         matrixData,
@@ -88,9 +104,10 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
         options.includeMatrix,
         options.includeRecipes,
         true,
+        theme,
       );
     }
-    return generateCombinedHTML(
+    return await generateCombinedHTML(
       menuWithFreshData.menu_name,
       menuData,
       matrixData,
@@ -99,6 +116,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       options.includeMatrix,
       options.includeRecipes,
       false,
+      theme,
     );
   } catch (err) {
     logger.error('[Combined Export API] Unexpected error:', {

@@ -27,14 +27,19 @@ export function exportOrderListsToCSV(orderLists: OrderList[]): void {
   exportToCSV(csvData, CSV_HEADERS, `order-lists-${new Date().toISOString().split('T')[0]}.csv`);
 }
 
+import { getSavedExportTheme } from '@/lib/exports/utils/themeUtils';
+
 export function exportOrderListsToHTML(orderLists: OrderList[]): void {
   if (!orderLists || orderLists.length === 0) return;
   const content = orderLists.map(formatOrderListForExport).join('');
+  const theme = getSavedExportTheme();
   const html = generatePrintTemplate({
     title: 'Order Lists',
     subtitle: 'Purchase Orders',
     content,
     totalItems: orderLists.reduce((sum, list) => sum + list.order_list_items.length, 0),
+    variant: 'supplier',
+    theme,
   });
   downloadFile(
     new Blob([html], { type: 'text/html' }),

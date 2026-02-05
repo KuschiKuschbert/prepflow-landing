@@ -1,7 +1,8 @@
-import { useState } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
+import { getSavedExportTheme } from '@/lib/exports/utils/themeUtils';
 import { logger } from '@/lib/logger';
 import type { Menu } from '@/lib/types/menu-builder';
+import { useState } from 'react';
 import type { ExportContentType, ExportFormat } from '../components/ExportOptions';
 
 export function useExport(menu: Menu) {
@@ -10,6 +11,7 @@ export function useExport(menu: Menu) {
 
   const handleExport = async (contentType: ExportContentType, format: ExportFormat) => {
     const loadingKey = `${contentType}-${format}`;
+    const theme = getSavedExportTheme();
     setExportLoading(loadingKey);
     try {
       let endpoint = '';
@@ -19,43 +21,43 @@ export function useExport(menu: Menu) {
       // Map content types to endpoints
       switch (contentType) {
         case 'menu':
-          endpoint = `/api/menus/${menu.id}/menu-display/export?format=${format}`;
+          endpoint = `/api/menus/${menu.id}/menu-display/export?format=${format}&theme=${theme}`;
           filename = `${menu.menu_name}_menu_display.${format === 'csv' ? 'csv' : format === 'pdf' ? 'pdf' : 'html'}`;
           successMessage = `Menu display exported as ${format.toUpperCase()}`;
           break;
 
         case 'matrix':
-          endpoint = `/api/menus/${menu.id}/allergen-matrix/export?format=${format}`;
+          endpoint = `/api/menus/${menu.id}/allergen-matrix/export?format=${format}&theme=${theme}`;
           filename = `${menu.menu_name}_allergen_matrix.${format === 'csv' ? 'csv' : format === 'pdf' ? 'pdf' : 'html'}`;
           successMessage = `Allergen matrix exported as ${format.toUpperCase()}`;
           break;
 
         case 'recipe-cards':
-          endpoint = `/api/menus/${menu.id}/recipe-cards/export?format=${format}`;
+          endpoint = `/api/menus/${menu.id}/recipe-cards/export?format=${format}&theme=${theme}`;
           filename = `${menu.menu_name}_recipe_cards.${format === 'csv' ? 'csv' : format === 'pdf' ? 'pdf' : 'html'}`;
           successMessage = `Recipe cards exported as ${format.toUpperCase()}`;
           break;
 
         case 'menu-matrix':
-          endpoint = `/api/menus/${menu.id}/export-combined?format=${format}`;
+          endpoint = `/api/menus/${menu.id}/export-combined?format=${format}&theme=${theme}`;
           filename = `${menu.menu_name}_menu_matrix.${format === 'csv' ? 'csv' : format === 'pdf' ? 'pdf' : 'html'}`;
           successMessage = `Menu and allergen matrix exported as ${format.toUpperCase()}`;
           break;
 
         case 'menu-recipes':
-          endpoint = `/api/menus/${menu.id}/export-combined?format=${format}&include=menu,recipes`;
+          endpoint = `/api/menus/${menu.id}/export-combined?format=${format}&include=menu,recipes&theme=${theme}`;
           filename = `${menu.menu_name}_menu_recipes.${format === 'csv' ? 'csv' : format === 'pdf' ? 'pdf' : 'html'}`;
           successMessage = `Menu and recipe cards exported as ${format.toUpperCase()}`;
           break;
 
         case 'matrix-recipes':
-          endpoint = `/api/menus/${menu.id}/export-combined?format=${format}&include=matrix,recipes`;
+          endpoint = `/api/menus/${menu.id}/export-combined?format=${format}&include=matrix,recipes&theme=${theme}`;
           filename = `${menu.menu_name}_matrix_recipes.${format === 'csv' ? 'csv' : format === 'pdf' ? 'pdf' : 'html'}`;
           successMessage = `Allergen matrix and recipe cards exported as ${format.toUpperCase()}`;
           break;
 
         case 'all':
-          endpoint = `/api/menus/${menu.id}/export-combined?format=${format}&include=all`;
+          endpoint = `/api/menus/${menu.id}/export-combined?format=${format}&include=all&theme=${theme}`;
           filename = `${menu.menu_name}_complete.${format === 'csv' ? 'csv' : format === 'pdf' ? 'pdf' : 'html'}`;
           successMessage = `Complete menu exported as ${format.toUpperCase()}`;
           break;
@@ -70,7 +72,7 @@ export function useExport(menu: Menu) {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Failed to export');
+        throw new Error(data.message || data.error || 'Failed to export');
       }
 
       const blob = await response.blob();

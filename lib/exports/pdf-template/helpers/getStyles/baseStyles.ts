@@ -1,8 +1,16 @@
+import { ExportTheme, getThemeCSS, themes } from '@/lib/exports/themes';
+
 /**
  * Base styles (reset, typography, page setup)
  */
-export function getBaseStyles(): string {
+export function getBaseStyles(theme: ExportTheme = 'cyber-carrot'): string {
+  const themeCSS = getThemeCSS(theme);
+  const themeConfig = themes[theme] || themes['cyber-carrot'];
+  const bgPage = themeConfig.cssVariables['--pf-color-bg-page'] || '#09090b';
+
   return `
+    ${themeCSS}
+
     * {
       margin: 0;
       padding: 0;
@@ -15,9 +23,9 @@ export function getBaseStyles(): string {
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      background: linear-gradient(180deg, rgba(10,10,10,1) 0%, rgba(8,8,10,1) 100%);
-      color: #ffffff;
+      font-family: var(--pf-font-family-body, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif);
+      background: ${bgPage};
+      color: var(--pf-color-text-main, #ffffff);
       min-height: 100vh;
       position: relative;
       padding: 40px 20px;

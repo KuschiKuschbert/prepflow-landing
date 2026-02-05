@@ -1,4 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
+import fs from 'fs';
+import path from 'path';
+
+// Check for auth state
+const authFile = path.join(__dirname, 'e2e', 'auth.json');
+const hasAuth = fs.existsSync(authFile);
 
 /**
  * Playwright E2E Test Configuration
@@ -41,6 +47,8 @@ export default defineConfig({
     viewport: { width: 1920, height: 1080 },
     /* Headless: false (visible browser) */
     headless: false,
+    /* Load Auth State if available */
+    storageState: hasAuth ? authFile : undefined,
     /* Maximum speed - no slowMo */
     // slowMo: 0, // Default is 0, no need to set
   },

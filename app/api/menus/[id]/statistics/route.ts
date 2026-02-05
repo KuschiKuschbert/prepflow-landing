@@ -1,6 +1,6 @@
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { calculateMenuStatistics } from './helpers/calculateMenuStatistics';
 import { handleMenuStatisticsError } from './helpers/handleMenuStatisticsError';
@@ -41,7 +41,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         ),
         recipes (
           id,
-          name,
+          name:recipe_name,
           yield
         )
       `,

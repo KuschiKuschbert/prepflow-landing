@@ -14,10 +14,10 @@ export function getComplianceReportStyles(): string {
     .compliance-report-section h3 {
       font-size: 16px;
       font-weight: 700;
-      color: #000000;
+      color: var(--pf-color-text-main);
       margin-bottom: 16px;
       padding-bottom: 8px;
-      border-bottom: 2px solid #000000;
+      border-bottom: 2px solid var(--pf-color-text-main);
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -26,20 +26,20 @@ export function getComplianceReportStyles(): string {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 24px;
-      border: 1px solid #000000;
+      border: 1px solid var(--pf-color-border);
       font-size: 11px;
     }
 
     .compliance-report-table thead {
-      background-color: #000000;
+      background-color: var(--pf-color-primary);
     }
 
     .compliance-report-table th {
       padding: 10px 8px;
       text-align: left;
       font-weight: 700;
-      color: #ffffff;
-      border: 1px solid #000000;
+      color: var(--pf-color-text-header); /* Use text header color for contrast on primary bg */
+      border: 1px solid var(--pf-color-border);
       text-transform: uppercase;
       letter-spacing: 0.5px;
       font-size: 10px;
@@ -47,32 +47,32 @@ export function getComplianceReportStyles(): string {
 
     .compliance-report-table td {
       padding: 8px;
-      border: 1px solid #cccccc;
-      color: #000000;
+      border: 1px solid var(--pf-color-border);
+      color: var(--pf-color-text-main);
       font-size: 11px;
       vertical-align: top;
     }
 
     .compliance-report-table tbody tr:nth-child(even) {
-      background-color: #f9f9f9;
+      background-color: var(--pf-color-secondary);
     }
 
     .compliance-report-summary {
       margin-top: 32px;
       padding: 20px;
-      background-color: #f5f5f5;
-      border: 2px solid #000000;
+      background-color: var(--pf-color-secondary);
+      border: 2px solid var(--pf-color-border);
     }
 
     .compliance-report-summary h3 {
       margin-top: 0;
-      border-bottom: 2px solid #000000;
+      border-bottom: 2px solid var(--pf-color-text-main);
     }
 
     .compliance-report-summary ul {
       margin: 12px 0;
       padding-left: 24px;
-      color: #000000;
+      color: var(--pf-color-text-main);
       font-size: 11px;
       line-height: 1.8;
     }

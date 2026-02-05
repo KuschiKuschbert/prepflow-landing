@@ -45,5 +45,11 @@
   "app/api/prep-lists/route.ts",
   "app/api/roster/shifts/[id]/route.ts",
   "app/api/roster/templates/[id]/template-shifts/route.ts",
-  "app/api/roster/templates/route.ts"
+  "app/api/roster/templates/route.ts",
+  "app/api/menus/[id]/recipe-cards/export/route.ts",
+  "lib/exports/components/preview-data.ts",
+  "lib/exports/template-styles/helpers/variantStyles/getMatrixVariantCSS.ts",
+  "lib/exports/template-styles/helpers/variantStyles/getMenuVariantCSS.ts",
+  "lib/exports/template-styles/helpers/variantStyles/getRecipeVariantCSS.ts",
+  "lib/exports/template-styles/helpers/variantStyles/getSupplierVariantCSS.ts"
 ]

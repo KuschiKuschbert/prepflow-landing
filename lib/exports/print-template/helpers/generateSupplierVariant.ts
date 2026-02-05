@@ -1,5 +1,6 @@
-import { getAllTemplateStyles } from '../../template-styles';
-import { formatDateAustralian, formatMetaInfo, escapeHtml } from '../../template-utils';
+import { getAllTemplateStyles } from '../../template-styles/index';
+import { escapeHtml, formatDateAustralian, formatMetaInfo } from '../../template-utils';
+import { type ExportTheme } from '../../themes';
 
 export function generateSupplierVariant(
   title: string,
@@ -7,12 +8,13 @@ export function generateSupplierVariant(
   content: string,
   totalItems: number | undefined,
   customMeta: string | undefined,
+  theme: ExportTheme = 'cyber-carrot',
 ): string {
   const generatedDate = formatDateAustralian();
   const metaInfo = formatMetaInfo({ totalItems, customMeta });
   const escapedTitle = escapeHtml(title);
   const escapedSubtitle = subtitle ? escapeHtml(subtitle) : '';
-  const styles = getAllTemplateStyles('supplier');
+  const styles = getAllTemplateStyles('supplier', theme);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -25,6 +27,7 @@ export function generateSupplierVariant(
   </style>
 </head>
 <body class="variant-supplier">
+  <div class="print-background-layer"></div>
   <div class="content-wrapper variant-supplier">
     <header class="header variant-supplier">
       <div class="header-content variant-supplier">
@@ -38,6 +41,9 @@ export function generateSupplierVariant(
     </header>
     <div class="export-content variant-supplier">
       ${content}
+    </div>
+    <div class="footer">
+      <p>Created with PrepFlow</p>
     </div>
   </div>
 </body>

@@ -17,6 +17,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     const { id: menuId } = await context.params;
     const { searchParams } = new URL(request.url);
     const format = searchParams.get('format') || 'html';
+    const theme = (searchParams.get('theme') || 'cyber-carrot') as any;
 
     if (!menuId) {
       return NextResponse.json(
@@ -42,7 +43,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       try {
         const user = await requireAuth(request);
         const featureKey = format === 'csv' ? 'export_csv' : 'export_pdf';
-        await checkFeatureAccess(featureKey, user.email, request);
+        await checkFeatureAccess(featureKey, user, request);
       } catch (error) {
         // requireAuth or checkFeatureAccess throws NextResponse, so return it
         if (error instanceof NextResponse) {
@@ -175,9 +176,9 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       return generateCSV(menuName, transformedCards as unknown as RecipeCardData[]);
     }
     if (format === 'pdf') {
-      return generateHTML(menuName, transformedCards as unknown as RecipeCardData[], true);
+      return generateHTML(menuName, transformedCards as unknown as RecipeCardData[], true, theme);
     }
-    return generateHTML(menuName, transformedCards as unknown as RecipeCardData[], false);
+    return generateHTML(menuName, transformedCards as unknown as RecipeCardData[], false, theme);
   } catch (err) {
     logger.error('[Recipe Cards Export API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

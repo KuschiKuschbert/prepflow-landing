@@ -61,6 +61,11 @@ export function useRecipeCards({ menuId, onError }: UseRecipeCardsOptions) {
           performFetch,
         });
       } catch (err) {
+        if (err instanceof DOMException && err.name === 'AbortError') {
+          logger.dev('[useRecipeCards] Request aborted');
+          return;
+        }
+
         logger.error('[useRecipeCards.ts] Error in catch block:', {
           error: err instanceof Error ? err.message : String(err),
           stack: err instanceof Error ? err.stack : undefined,

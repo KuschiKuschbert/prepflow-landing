@@ -24,8 +24,12 @@ interface RecipeCardData {
  * Build HTML for a single recipe card
  */
 export function buildCardHTML(card: RecipeCardData): string {
+  // Calculate complexity to determine density
+  const complexityScore = (card.ingredients?.length || 0) + (card.methodSteps?.length || 0);
+  const isCompact = complexityScore > 20;
+
   let html = `
-    <div class="recipe-card">
+    <div class="recipe-card ${isCompact ? 'density-compact' : ''}">
       <div class="recipe-card-header">
         <h3 class="recipe-card-title">${escapeHtml(card.title)}</h3>
         <div class="recipe-card-yield">Base Yield: ${card.baseYield} serving${card.baseYield !== 1 ? 's' : ''}</div>

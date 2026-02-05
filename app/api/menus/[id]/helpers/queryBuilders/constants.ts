@@ -53,8 +53,7 @@ export const MENU_ITEM_BASE_FIELDS = `
   dish_id,
   recipe_id,
   category,
-  position,
-  region
+  position
 `;
 
 export const MENU_ITEM_PRICING_FIELDS = `

@@ -9,9 +9,9 @@ export function getFooterCSS(): string {
     .footer {
       margin-top: 40px;
       padding-top: 24px;
-      border-top: 2px solid rgba(42, 42, 42, 0.8);
+      border-top: var(--pf-border-width) solid var(--pf-color-border);
       text-align: center;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--pf-color-text-muted);
       font-size: 12px;
     }
   `;

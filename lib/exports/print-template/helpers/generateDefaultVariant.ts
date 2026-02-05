@@ -1,4 +1,4 @@
-import { getAllTemplateStyles } from '../../template-styles';
+import { getAllTemplateStyles } from '../../template-styles/index';
 import {
   escapeHtml,
   formatDateAustralian,
@@ -6,6 +6,7 @@ import {
   getFooterHtml,
   getLogoUrl,
 } from '../../template-utils';
+import { type ExportTheme } from '../../themes';
 
 export function generateDefaultVariant(
   title: string,
@@ -13,6 +14,7 @@ export function generateDefaultVariant(
   content: string,
   totalItems: number | undefined,
   customMeta: string | undefined,
+  theme: ExportTheme = 'cyber-carrot',
 ): string {
   const generatedDate = formatDateAustralian();
   const logoUrl = getLogoUrl();
@@ -20,7 +22,7 @@ export function generateDefaultVariant(
   const footerHtml = getFooterHtml();
   const escapedTitle = escapeHtml(title);
   const escapedSubtitle = subtitle ? escapeHtml(subtitle) : '';
-  const styles = getAllTemplateStyles('default');
+  const styles = getAllTemplateStyles('default', theme);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -33,15 +35,7 @@ export function generateDefaultVariant(
   </style>
 </head>
 <body class="variant-default">
-  <div class="background-grid"></div>
-  <div class="corner-glow-cyan"></div>
-  <div class="corner-glow-magenta"></div>
-  <div class="concentric-circles">
-    <div class="circle circle-1"></div>
-    <div class="circle circle-2"></div>
-    <div class="circle circle-3"></div>
-    <div class="circle circle-4"></div>
-  </div>
+  <div class="print-background-layer"></div>
   <div class="content-wrapper">
     <header class="header">
       <img src="${logoUrl}" alt="PrepFlow Logo" class="logo" onerror="this.style.display='none'" />

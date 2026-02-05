@@ -5,125 +5,158 @@
  */
 export function getSupplierVariantCSS(): string {
   return `
-    /* Supplier Variant - Purchase Order Format, Formal Layout */
-    body.variant-supplier {
-      background: #ffffff;
-      padding: 20px;
+    /* Supplier Variant - Purchase Order Styles */
+
+    .supplier-variant .purchase-order-items {
+      margin-top: 2rem;
     }
 
-    .variant-supplier .content-wrapper {
-      background: #ffffff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      padding: 40px;
-      max-width: 900px;
-      border-radius: 0;
-      border: 2px solid #333333;
-    }
-
-    .variant-supplier .header {
-      padding-bottom: 24px;
-      margin-bottom: 32px;
-      border-bottom: 3px solid #333333;
-    }
-
-    .variant-supplier .header-content h1 {
-      font-size: 32px;
+    .supplier-variant .purchase-order-items-header {
+      font-size: 1.5rem;
       font-weight: 700;
-      color: #000000;
-      background: none;
-      -webkit-text-fill-color: #000000;
+      color: var(--pf-color-primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--pf-color-border);
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+    }
+
+    /* Modern Table Styles for Orders */
+    .supplier-variant .purchase-order-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+      border-radius: var(--pf-border-radius);
+      overflow: hidden;
+      box-shadow: var(--pf-shadow-content);
+    }
+
+    .supplier-variant .purchase-order-table thead {
+      background: var(--pf-color-bg-header);
+    }
+
+    .supplier-variant .purchase-order-table th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--pf-color-primary);
+      border-bottom: 1px solid var(--pf-color-border);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .supplier-variant .purchase-order-table th.col-qty,
+    .supplier-variant .purchase-order-table th.col-unit-price,
+    .supplier-variant .purchase-order-table th.col-total {
+      text-align: right;
+    }
+
+    .supplier-variant .purchase-order-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--pf-color-border);
+      color: var(--pf-color-text-main);
+      font-size: 0.95rem;
+      vertical-align: middle;
+    }
+
+    .supplier-variant .purchase-order-table td.col-qty,
+    .supplier-variant .purchase-order-table td.col-unit-price,
+    .supplier-variant .purchase-order-table td.col-total {
+      text-align: right;
+      font-family: var(--pf-font-family-header);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .supplier-variant .purchase-order-table td.col-qty {
+      font-weight: 700;
+      color: var(--pf-color-text-header);
+    }
+
+    .supplier-variant .purchase-order-table tbody tr:nth-child(even) {
+       background: rgba(255,255,255,0.02);
+    }
+
+    .supplier-variant .purchase-order-table tbody tr:hover {
+       background: rgba(255,255,255,0.05);
+    }
+
+    /* Footer Totals */
+    .supplier-variant .purchase-order-table tfoot {
+      background: var(--pf-color-bg-header);
+      border-top: 2px solid var(--pf-color-primary);
+    }
+
+    .supplier-variant .purchase-order-table tfoot td {
+      padding: 1.5rem 1rem;
+      font-weight: 700;
+      color: var(--pf-color-text-header);
+      border: none;
+    }
+
+    .supplier-variant .purchase-order-table tfoot .totals-label {
+      text-align: right;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.9rem;
+    }
+
+    .supplier-variant .purchase-order-table tfoot .totals-value {
+      text-align: right;
+      font-size: 1.25rem;
+      color: var(--pf-color-primary);
+      font-family: var(--pf-font-family-header);
+    }
+
+    /* Terms Box */
+    .supplier-variant .purchase-order-terms {
+      margin-top: 3rem;
+      padding: 2rem;
+      background: var(--pf-color-bg-content);
+      border: 1px solid var(--pf-color-border);
+      border-radius: var(--pf-border-radius);
+    }
+
+    .supplier-variant .purchase-order-terms h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--pf-color-text-muted);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--pf-color-border);
+      padding-bottom: 0.5rem;
+    }
+
+    .supplier-variant .purchase-order-terms ul {
       margin: 0;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .variant-supplier .header-content h2 {
-      font-size: 16px;
-      color: #333333;
-      margin: 8px 0 0 0;
-      font-weight: 400;
-    }
-
-    .variant-supplier .header-meta {
-      color: #666666;
-      font-size: 12px;
-      font-weight: 500;
-    }
-
-    .variant-supplier .export-content {
-      margin-top: 0;
-    }
-
-    /* Purchase Order Specific Styles */
-    .purchase-order-info {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-      margin-bottom: 32px;
-      padding: 20px;
-      background: #f8f8f8;
-      border: 1px solid #e0e0e0;
-    }
-
-    .purchase-order-info-section h3 {
-      font-size: 14px;
-      font-weight: 700;
-      color: #000000;
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border-bottom: 2px solid #333333;
-      padding-bottom: 4px;
-    }
-
-    .purchase-order-info-section p {
-      margin: 4px 0;
-      color: #333333;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .purchase-order-info-section strong {
-      font-weight: 600;
-      color: #000000;
+      padding-left: 1.5rem;
+      color: var(--pf-color-text-main);
+      font-size: 0.9rem;
+      line-height: 1.8;
     }
 
     @media print {
-      body.variant-supplier {
-        padding: 0;
+      .supplier-variant .purchase-order-table th {
+        background: #eee;
+        color: #000;
+        border-bottom-color: #000;
       }
-
-      .variant-supplier .content-wrapper {
-        padding: 30px;
-        box-shadow: none;
-        border: 2px solid #000000;
+      .supplier-variant .purchase-order-table td {
+        color: #000;
+        border-bottom-color: #ccc;
       }
-
-      .variant-supplier .header {
-        padding-bottom: 20px;
-        margin-bottom: 24px;
-        border-bottom-color: #000000;
+      .supplier-variant .purchase-order-table tfoot {
+        background: #f5f5f5;
+        border-top-color: #000;
       }
-
-      .variant-supplier .header-content h1 {
-        font-size: 28px;
+      .supplier-variant .purchase-order-table tfoot td {
+        color: #000;
       }
-
-      .variant-supplier .header-content h2 {
-        font-size: 14px;
-      }
-
-      .purchase-order-info {
-        background: #ffffff;
-        border-color: #000000;
-      }
-
-      .purchase-order-info-section h3 {
-        border-bottom-color: #000000;
-      }
-
-      @page {
-        margin: 1.5cm;
+      .supplier-variant .purchase-order-terms {
+        background: #fff;
+        border-color: #ccc;
       }
     }
   `;

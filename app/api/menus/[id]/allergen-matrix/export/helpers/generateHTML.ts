@@ -1,18 +1,22 @@
 import { AUSTRALIAN_ALLERGENS } from '@/lib/allergens/australian-allergens';
+import { generatePDF } from '@/lib/exports/generate-pdf';
 import { escapeHtml, generateExportTemplate } from '@/lib/exports/pdf-template';
+import { getAllTemplateStyles } from '@/lib/exports/template-styles/index';
+import { type ExportTheme } from '@/lib/exports/themes';
 import { NextResponse } from 'next/server';
-import { allergenMatrixStyles } from './allergenMatrixStyles';
 import { MatrixItem } from './processMatrixData';
 
-export function generateHTML(
+export async function generateHTML(
   menuName: string,
   matrixData: MatrixItem[],
   forPDF: boolean,
-): NextResponse {
+  theme: ExportTheme = 'cyber-carrot',
+): Promise<NextResponse> {
   // Generate table content
+  const styles = getAllTemplateStyles('matrix', theme);
   const tableContent = `
     <style>
-      ${allergenMatrixStyles}
+      ${styles}
     </style>
     <div class="table-container">
       <table>
@@ -67,12 +71,20 @@ export function generateHTML(
     customMeta: `Menu: ${menuName}`,
   });
 
+  if (forPDF) {
+    const pdfBuffer = await generatePDF(htmlContent);
+    return new NextResponse(pdfBuffer as unknown as BodyInit, {
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${menuName.replace(/[^a-z0-9]/gi, '_')}_allergen_matrix.pdf"`,
+      },
+    });
+  }
+
   return new NextResponse(htmlContent, {
     headers: {
       'Content-Type': 'text/html',
-      'Content-Disposition': forPDF
-        ? `inline; filename="${menuName.replace(/[^a-z0-9]/gi, '_')}_allergen_matrix.html"`
-        : `inline; filename="${menuName.replace(/[^a-z0-9]/gi, '_')}_allergen_matrix.html"`,
+      'Content-Disposition': `attachment; filename="${menuName.replace(/[^a-z0-9]/gi, '_')}_allergen_matrix.html"`,
     },
   });
 }

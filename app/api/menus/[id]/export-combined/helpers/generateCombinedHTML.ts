@@ -1,8 +1,6 @@
-/**
- * Generate combined HTML export (menu display + allergen matrix + recipe cards)
- */
-
+import { generatePDF } from '@/lib/exports/generate-pdf';
 import { generateExportTemplate } from '@/lib/exports/pdf-template';
+import { ExportTheme } from '@/lib/exports/themes';
 import { NextResponse } from 'next/server';
 import { COMBINED_EXPORT_STYLES } from './combinedExportStyles';
 import { generateAllergenMatrixHTML, type AllergenMatrixData } from './generateAllergenMatrixHTML';
@@ -21,9 +19,10 @@ import { RecipeCardData } from './types';
  * @param {boolean} includeMatrix - Whether to include allergen matrix
  * @param {boolean} includeRecipes - Whether to include recipe cards
  * @param {boolean} forPDF - Whether this is for PDF export
- * @returns {NextResponse} HTML response
+ * @param {ExportTheme} theme - Selected theme
+ * @returns {Promise<NextResponse>} Response
  */
-export function generateCombinedHTML(
+export async function generateCombinedHTML(
   menuName: string,
   menuData: MenuDisplayData[],
   matrixData: AllergenMatrixData[],
@@ -32,7 +31,8 @@ export function generateCombinedHTML(
   includeMatrix: boolean,
   includeRecipes: boolean,
   forPDF: boolean,
-): NextResponse {
+  theme: ExportTheme = 'cyber-carrot',
+): Promise<NextResponse> {
   const parts: string[] = [];
 
   // Generate menu display HTML (if included)
@@ -75,14 +75,23 @@ export function generateCombinedHTML(
     forPDF,
     totalItems,
     customMeta: `Menu: ${menuName} | Items: ${totalItems}`,
+    theme,
   });
+
+  if (forPDF) {
+    const pdfBuffer = await generatePDF(htmlContent);
+    return new NextResponse(pdfBuffer as unknown as BodyInit, {
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${menuName.replace(/[^a-z0-9]/gi, '_')}_complete.pdf"`,
+      },
+    });
+  }
 
   return new NextResponse(htmlContent, {
     headers: {
       'Content-Type': 'text/html',
-      'Content-Disposition': forPDF
-        ? `inline; filename="${menuName.replace(/[^a-z0-9]/gi, '_')}_complete.html"`
-        : `inline; filename="${menuName.replace(/[^a-z0-9]/gi, '_')}_complete.html"`,
+      'Content-Disposition': `attachment; filename="${menuName.replace(/[^a-z0-9]/gi, '_')}_complete.html"`,
     },
   });
 }

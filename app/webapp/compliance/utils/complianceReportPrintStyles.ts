@@ -3,7 +3,7 @@
  * Audit-ready styling for compliance report exports
  */
 
-import { getAllTemplateStyles } from '@/lib/exports/template-styles';
+import { getAllTemplateStyles } from '@/lib/exports/template-styles/index';
 
 export function getComplianceReportPrintStyles(): string {
   const baseStyles = getAllTemplateStyles('compliance');

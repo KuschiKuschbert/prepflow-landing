@@ -18,6 +18,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     const { id: menuId } = await context.params;
     const { searchParams } = new URL(request.url);
     const format = searchParams.get('format') || 'html';
+    const theme = (searchParams.get('theme') || 'cyber-carrot') as any;
 
     if (!menuId) {
       return NextResponse.json(
@@ -43,7 +44,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       try {
         const user = await requireAuth(request);
         const featureKey = format === 'csv' ? 'export_csv' : 'export_pdf';
-        await checkFeatureAccess(featureKey, user.email, request);
+        await checkFeatureAccess(featureKey, user, request);
       } catch (error) {
         // requireAuth or checkFeatureAccess throws NextResponse, so return it
         if (error instanceof NextResponse) {
@@ -92,9 +93,9 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       return generateCSV(menu.menu_name, menuData);
     }
     if (format === 'pdf') {
-      return generateHTML(menu.menu_name, menuData, true);
+      return await generateHTML(menu.menu_name, menuData, true, theme);
     }
-    return generateHTML(menu.menu_name, menuData, false);
+    return await generateHTML(menu.menu_name, menuData, false, theme);
   } catch (err) {
     logger.error('[Menu Display Export API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

@@ -17,7 +17,7 @@ export async function fetchMenuItemNames(
     dish_id: string | null;
     recipe_id: string | null;
     dishes: { dish_name: string } | null;
-    recipes: { name: string; recipe_name?: string } | null;
+    recipes: { recipe_name?: string } | null;
   }
   const { data: menuItemsWithNames, error: menuItemsError } = await supabase
     .from('menu_items')
@@ -30,7 +30,6 @@ export async function fetchMenuItemNames(
         dish_name
       ),
       recipes (
-        name,
         recipe_name
       )
     `,
@@ -48,9 +47,9 @@ export async function fetchMenuItemNames(
   const menuItemNameMap = new Map<string, string>();
   if (menuItemsWithNames) {
     (menuItemsWithNames as unknown as MenuItemNameResult[]).forEach(item => {
-      const recipeRow = item.recipes as { name?: string; recipe_name?: string } | null;
+      const recipeRow = item.recipes as { recipe_name?: string } | null;
       const dishRow = item.dishes as { dish_name?: string } | null;
-      const recipeName = recipeRow?.recipe_name || recipeRow?.name || null;
+      const recipeName = recipeRow?.recipe_name || null;
       const name = dishRow?.dish_name || recipeName || 'Unknown Item';
       menuItemNameMap.set(item.id, name);
     });
