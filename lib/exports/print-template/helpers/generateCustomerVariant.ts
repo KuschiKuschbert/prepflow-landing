@@ -1,5 +1,6 @@
-import { getAllTemplateStyles } from '../../template-styles';
-import { formatDateAustralian, formatMetaInfo, escapeHtml } from '../../template-utils';
+import { getAllTemplateStyles } from '../../template-styles/index';
+import { escapeHtml, formatDateAustralian, formatMetaInfo } from '../../template-utils';
+import { type ExportTheme } from '../../themes';
 
 export function generateCustomerVariant(
   title: string,
@@ -7,12 +8,13 @@ export function generateCustomerVariant(
   content: string,
   totalItems: number | undefined,
   customMeta: string | undefined,
+  theme: ExportTheme = 'cyber-carrot',
 ): string {
   const generatedDate = formatDateAustralian();
   const metaInfo = formatMetaInfo({ totalItems, customMeta });
   const escapedTitle = escapeHtml(title);
   const escapedSubtitle = subtitle ? escapeHtml(subtitle) : '';
-  const styles = getAllTemplateStyles('customer');
+  const styles = getAllTemplateStyles('customer', theme);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -25,6 +27,7 @@ export function generateCustomerVariant(
   </style>
 </head>
 <body class="variant-customer">
+  <div class="print-background-layer"></div>
   <div class="content-wrapper variant-customer">
     <header class="header variant-customer">
       <div class="header-content variant-customer">
@@ -35,6 +38,9 @@ export function generateCustomerVariant(
     </header>
     <div class="export-content variant-customer">
       ${content}
+    </div>
+    <div class="footer">
+      <p>Created with PrepFlow</p>
     </div>
   </div>
 </body>

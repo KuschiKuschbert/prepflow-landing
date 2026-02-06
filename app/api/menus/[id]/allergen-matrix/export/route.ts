@@ -20,6 +20,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     const { id: menuId } = await context.params;
     const { searchParams } = new URL(request.url);
     const format = searchParams.get('format') || 'html';
+    const theme = (searchParams.get('theme') || 'cyber-carrot') as any;
 
     if (!menuId) {
       return NextResponse.json(
@@ -37,6 +38,20 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
         ),
         { status: 400 },
       );
+    }
+    // Check feature access for CSV/PDF exports (requires Pro tier)
+    if (format === 'csv' || format === 'pdf') {
+      try {
+        const { requireAuth } = await import('@/lib/auth0-api-helpers');
+        const { checkFeatureAccess } = await import('@/lib/api-feature-gate');
+
+        const user = await requireAuth(request);
+        const featureKey = format === 'csv' ? 'export_csv' : 'export_pdf';
+        await checkFeatureAccess(featureKey, user, request);
+      } catch (error) {
+        if (error instanceof NextResponse) return error;
+        throw error;
+      }
     }
 
     const { userId } = await getAuthenticatedUser(request);
@@ -86,8 +101,9 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     const matrixData = processMenuItemsToMatrix(menuWithFreshData.items || []);
 
     if (format === 'csv') return generateCSV(menuWithFreshData.menu_name, matrixData);
-    if (format === 'pdf') return generateHTML(menuWithFreshData.menu_name, matrixData, true);
-    return generateHTML(menuWithFreshData.menu_name, matrixData, false);
+    if (format === 'pdf')
+      return await generateHTML(menuWithFreshData.menu_name, matrixData, true, theme);
+    return await generateHTML(menuWithFreshData.menu_name, matrixData, false, theme);
   } catch (err: unknown) {
     logger.error('[Allergen Matrix Export API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

@@ -27,7 +27,7 @@ interface RecipeCardData {
 export function buildCategoryHTML(category: string, cards: RecipeCardData[]): string {
   let html = `
     <div class="recipe-category">
-      <h2 style="color: #29E7CD; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.5rem;">${escapeHtml(category)}</h2>
+      <h2>${escapeHtml(category)}</h2>
   `;
 
   cards.forEach(card => {

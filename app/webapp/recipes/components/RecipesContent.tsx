@@ -1,11 +1,11 @@
 'use client';
 
+import { TablePagination } from '@/components/ui/TablePagination';
 import { Recipe, RecipePriceData } from '@/lib/types/recipes';
 import { RecipeFilters } from '../hooks/useRecipeFiltering';
-import { TablePagination } from '@/components/ui/TablePagination';
 import RecipeCard from './RecipeCard';
-import RecipeTable from './RecipeTable';
 import { RecipeFilterBar } from './RecipeFilterBar';
+import RecipeTable from './RecipeTable';
 
 interface RecipesContentProps {
   recipes: Recipe[];
@@ -94,7 +94,7 @@ export function RecipesContent({
         className="mb-4"
       />
 
-      <div className="large-desktop:hidden block">
+      <div className="desktop:hidden block">
         <div className="divide-y divide-[var(--muted)]">
           {paginatedRecipes.map(recipe => (
             <RecipeCard

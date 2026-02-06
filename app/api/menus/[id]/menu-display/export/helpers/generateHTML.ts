@@ -1,10 +1,8 @@
-/**
- * Generate HTML export for menu display
- */
-
+import { generatePDF } from '@/lib/exports/generate-pdf';
+import { escapeHtml, generateExportTemplate } from '@/lib/exports/pdf-template';
+import { getAllTemplateStyles } from '@/lib/exports/template-styles/index';
+import { type ExportTheme } from '@/lib/exports/themes';
 import { NextResponse } from 'next/server';
-import { generateExportTemplate, escapeHtml } from '@/lib/exports/pdf-template';
-import { menuDisplayStyles } from './menuDisplayStyles';
 
 interface MenuDisplayData {
   name: string;
@@ -19,13 +17,15 @@ interface MenuDisplayData {
  * @param {string} menuName - Menu name
  * @param {MenuDisplayData[]} menuData - Menu items data
  * @param {boolean} forPDF - Whether this is for PDF export
- * @returns {NextResponse} HTML response
+ * @param {ExportTheme} theme - Aesthetic theme
+ * @returns {Promise<NextResponse>} Response
  */
-export function generateHTML(
+export async function generateHTML(
   menuName: string,
   menuData: MenuDisplayData[],
   forPDF: boolean,
-): NextResponse {
+  theme: ExportTheme = 'cyber-carrot',
+): Promise<NextResponse> {
   // Group items by category
   const itemsByCategory = new Map<string, MenuDisplayData[]>();
   menuData.forEach(item => {
@@ -39,12 +39,22 @@ export function generateHTML(
   // Sort categories alphabetically
   const sortedCategories = Array.from(itemsByCategory.keys()).sort();
 
+  // Determine density class
+  const totalItems = menuData.length;
+  let densityClass = '';
+
+  if (totalItems > 40) {
+    densityClass = 'density-ultra-compact';
+  } else if (totalItems > 20) {
+    densityClass = 'density-compact';
+  }
+
   // Generate menu content HTML
   let menuContent = `
     <style>
-      ${menuDisplayStyles}
+      ${getAllTemplateStyles('menu', theme)}
     </style>
-    <div class="menu-display">
+    <div class="menu-display ${densityClass}">
   `;
 
   sortedCategories.forEach(category => {
@@ -88,12 +98,20 @@ export function generateHTML(
     customMeta: `Menu: ${menuName}`,
   });
 
+  if (forPDF) {
+    const pdfBuffer = await generatePDF(htmlContent);
+    return new NextResponse(pdfBuffer as unknown as BodyInit, {
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${menuName.replace(/[^a-z0-9]/gi, '_')}_menu_display.pdf"`,
+      },
+    });
+  }
+
   return new NextResponse(htmlContent, {
     headers: {
       'Content-Type': 'text/html',
-      'Content-Disposition': forPDF
-        ? `inline; filename="${menuName.replace(/[^a-z0-9]/gi, '_')}_menu_display.html"`
-        : `inline; filename="${menuName.replace(/[^a-z0-9]/gi, '_')}_menu_display.html"`,
+      'Content-Disposition': `attachment; filename="${menuName.replace(/[^a-z0-9]/gi, '_')}_menu_display.html"`,
     },
   });
 }

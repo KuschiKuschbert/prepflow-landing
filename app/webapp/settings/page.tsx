@@ -6,13 +6,14 @@ import SettingsNavigation from './components/SettingsNavigation';
 import { AdvancedSection } from './components/sections/AdvancedSection';
 import { BillingSection } from './components/sections/BillingSection';
 import { DataBackupSection } from './components/sections/DataBackupSection';
+import { ExportSection } from './components/sections/ExportSection';
 import { FAQSection } from './components/sections/FAQSection';
+import { FeatureFlagsSection } from './components/sections/FeatureFlagsSection';
 import { PreferencesSection } from './components/sections/PreferencesSection';
 import { PrivacyLegalSection } from './components/sections/PrivacyLegalSection';
 import { ProfileAccountSection } from './components/sections/ProfileAccountSection';
 import { QRCodesSection } from './components/sections/QRCodesSection';
 import { SecuritySection } from './components/sections/SecuritySection';
-import { FeatureFlagsSection } from './components/sections/FeatureFlagsSection';
 
 type SettingsSection =
   | 'profile'
@@ -23,6 +24,7 @@ type SettingsSection =
   | 'help'
   | 'backup'
   | 'qr-codes'
+  | 'exports'
   | 'advanced'
   | 'feature-flags';
 
@@ -47,6 +49,7 @@ export default function SettingsPage() {
         'help',
         'backup',
         'qr-codes',
+        'exports',
         'advanced',
         'feature-flags',
       ];
@@ -101,6 +104,8 @@ export default function SettingsPage() {
         return <SecuritySection />;
       case 'privacy':
         return <PrivacyLegalSection />;
+      case 'exports':
+        return <ExportSection />;
       case 'help':
         return (
           <div className="space-y-6">
@@ -136,6 +141,7 @@ export default function SettingsPage() {
               </div>
               <div id="security">{activeSection === 'security' && renderSectionContent()}</div>
               <div id="privacy">{activeSection === 'privacy' && renderSectionContent()}</div>
+              <div id="exports">{activeSection === 'exports' && renderSectionContent()}</div>
               <div id="help">{activeSection === 'help' && renderSectionContent()}</div>
               <div id="backup">{activeSection === 'backup' && renderSectionContent()}</div>
               <div id="qr-codes">{activeSection === 'qr-codes' && renderSectionContent()}</div>

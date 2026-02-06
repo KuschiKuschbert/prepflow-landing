@@ -12,7 +12,7 @@ export function getHeaderCSS(): string {
       gap: 16px;
       margin-bottom: 32px;
       padding-bottom: 24px;
-      border-bottom: 2px solid rgba(42, 42, 42, 0.8);
+      border-bottom: var(--pf-border-width) solid var(--pf-color-border);
     }
 
     .logo {
@@ -20,30 +20,29 @@ export function getHeaderCSS(): string {
       height: auto;
       flex-shrink: 0;
       object-fit: contain;
+      filter: var(--pf-logo-filter);
     }
 
     .header-content h1 {
       font-size: 32px;
       font-weight: 700;
-      color: #ffffff;
+      color: var(--pf-color-text-header);
       margin: 0;
-      background: linear-gradient(135deg, #29E7CD 0%, #D925C7 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      /* Default gradient for Cyber Carrot, others can override or use solid color */
+      color: var(--pf-color-primary);
     }
 
     .header-content h2 {
       font-size: 18px;
       font-weight: 500;
-      color: rgba(255, 255, 255, 0.8);
+      color: var(--pf-color-text-muted);
       margin: 4px 0 0 0;
     }
 
     .header-meta {
       margin-left: auto;
       text-align: right;
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--pf-color-text-muted);
       font-size: 14px;
     }
   `;

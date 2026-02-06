@@ -1,15 +1,17 @@
-import { getAllTemplateStyles } from '../../template-styles';
-import { formatDateAustralian, escapeHtml } from '../../template-utils';
+import { getAllTemplateStyles } from '../../template-styles/index';
+import { escapeHtml, formatDateAustralian } from '../../template-utils';
+import { type ExportTheme } from '../../themes';
 
 export function generateKitchenVariant(
   title: string,
   subtitle: string | undefined,
   content: string,
+  theme: ExportTheme = 'cyber-carrot',
 ): string {
   const generatedDate = formatDateAustralian();
   const escapedTitle = escapeHtml(title);
   const escapedSubtitle = subtitle ? escapeHtml(subtitle) : '';
-  const styles = getAllTemplateStyles('kitchen');
+  const styles = getAllTemplateStyles('kitchen', theme);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -22,6 +24,7 @@ export function generateKitchenVariant(
   </style>
 </head>
 <body class="variant-kitchen">
+  <div class="print-background-layer"></div>
   <div class="content-wrapper variant-kitchen">
     <header class="header variant-kitchen">
       <div class="header-content variant-kitchen">
@@ -34,6 +37,9 @@ export function generateKitchenVariant(
     </header>
     <div class="export-content variant-kitchen">
       ${content}
+    </div>
+    <div class="footer">
+      <p>Created with PrepFlow</p>
     </div>
   </div>
 </body>

@@ -38,8 +38,8 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ co
     // Fetch all recipes
     const { data: recipes, error: fetchError } = await supabaseAdmin
       .from('recipes')
-      .select('id, name, recipe_name, allergens')
-      .order('name');
+      .select('id, recipe_name, allergens')
+      .order('recipe_name');
 
     if (fetchError) {
       logger.error('[Allergen Cross-Reference API] Error fetching recipes:', {
@@ -71,7 +71,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ co
     // Filter recipes that contain the allergen
     const recipesWithAllergen = recipes
       .map(recipe => {
-        const recipeName = recipe.recipe_name || recipe.name;
+        const recipeName = recipe.recipe_name;
         const cachedAllergens = recipe.allergens as string[] | null | undefined;
         const aggregatedAllergens = allergensByRecipe[recipe.id] || [];
 

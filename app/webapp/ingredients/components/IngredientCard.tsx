@@ -1,5 +1,6 @@
 'use client';
 
+import { formatRecipeDate } from '@/app/webapp/recipes/utils/formatDate';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
@@ -171,6 +172,11 @@ export function IngredientCard({
               {showUnitTooltip && (
                 <span className="text-[var(--foreground-subtle)]">({standardUnit})</span>
               )}
+            </span>
+          )}
+          {ingredient.created_at && (
+            <span className="flex items-center gap-1 text-[var(--foreground-subtle)]">
+              Added: {formatRecipeDate(ingredient.created_at)}
             </span>
           )}
         </div>

@@ -28,6 +28,7 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const format = searchParams.get('format') || 'html';
+    const theme = (searchParams.get('theme') || 'cyber-carrot') as any;
     const excludeAllergen = searchParams.get('exclude_allergen');
     const menuIdsParam = searchParams.get('menu_ids');
     const menuIds = menuIdsParam ? menuIdsParam.split(',').filter(id => id.trim()) : null;
@@ -59,7 +60,7 @@ export async function GET(request: NextRequest) {
       : items;
 
     if (format === 'csv') return generateCSVExport(filteredItems);
-    return generateHTMLExport(filteredItems, format === 'pdf');
+    return generateHTMLExport(filteredItems, format === 'pdf', theme);
   } catch (err) {
     logger.error('[Compliance Allergen Export] Error:', err);
     return NextResponse.json(

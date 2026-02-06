@@ -5,6 +5,7 @@ import { logger } from '@/lib/logger';
  */
 
 export interface AuthUser {
+  email?: string;
   roles?: string[];
   role?: string;
   app_metadata?: { roles?: string[] };

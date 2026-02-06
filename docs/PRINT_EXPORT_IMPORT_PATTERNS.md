@@ -99,7 +99,7 @@ Export functionality supports three formats: CSV, PDF, and HTML. All exports use
 
 - **CSV Export**: `exportToCSV()` from `lib/csv/csv-utils.ts`
 - **HTML Export**: `exportHTMLReport()` from `lib/exports/export-html.ts`
-- **PDF Export**: `exportPDFReport()` from `lib/exports/export-html.ts`
+- **PDF Export**: `generatePDF()` from `lib/exports/generate-pdf.ts` (Server-Side)
 
 ### Usage Pattern
 
@@ -133,19 +133,22 @@ export function exportMyDataToHTML(data: MyDataType[]): void {
   });
 }
 
-// PDF Export
+// PDF Export (Server-Side)
 export async function exportMyDataToPDF(data: MyDataType[]): Promise<void> {
-  const content = formatMyDataForPrint(data); // Reuse print formatting
+  // Call your API endpoint which uses generatePDF
+  const response = await fetch('/api/my-data/export?format=pdf');
+  const blob = await response.blob();
 
-  await exportPDFReport({
-    title: 'My Data Report',
-    subtitle: 'Optional subtitle',
-    content,
-    totalItems: data.length,
-    filename: `my-data-${new Date().toISOString().split('T')[0]}.pdf`,
-  });
+  // Download the blob
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `my-data-${new Date().toISOString().split('T')[0]}.pdf`;
+  a.click();
 }
 ```
+
+````
 
 ### Adding Export Button
 
@@ -172,7 +175,7 @@ const handleExport = useCallback(async (format: ExportFormat) => {
   disabled={data.length === 0}
   availableFormats={['csv', 'pdf', 'html']}
 />
-```
+````
 
 ---
 

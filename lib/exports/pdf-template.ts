@@ -4,10 +4,12 @@
  * Client-safe: Uses public URLs instead of filesystem access
  */
 
-import { getLogoUrl, getInlineSVGLogo } from './pdf-template/helpers/getLogo';
-import { getExportStyles } from './pdf-template/helpers/getStyles';
 import { buildExportHTML } from './pdf-template/helpers/buildHTML';
 import { escapeHtml } from './pdf-template/helpers/escapeHtml';
+import { getInlineSVGLogo, getLogoUrl } from './pdf-template/helpers/getLogo';
+import { getExportStyles } from './pdf-template/helpers/getStyles';
+
+import { ExportTheme } from './themes';
 
 export interface ExportTemplateOptions {
   title: string;
@@ -16,6 +18,7 @@ export interface ExportTemplateOptions {
   forPDF?: boolean;
   totalItems?: number;
   customMeta?: string;
+  theme?: ExportTheme;
 }
 
 /**
@@ -31,12 +34,13 @@ export function generateExportTemplate({
   forPDF = false,
   totalItems,
   customMeta,
+  theme = 'cyber-carrot',
 }: ExportTemplateOptions): string {
   // Use public URL for logo (works in browser context)
   // For standalone HTML files, use inline SVG as fallback
   const logoUrl = forPDF ? getInlineSVGLogo() : getLogoUrl();
   const generatedDate = new Date().toLocaleString();
-  const styles = getExportStyles();
+  const styles = getExportStyles(theme);
   const bodyHTML = buildExportHTML(
     logoUrl,
     title,

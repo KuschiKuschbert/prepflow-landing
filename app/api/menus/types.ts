@@ -66,7 +66,7 @@ export interface RawMenuItem extends Partial<MenuItem> {
   actual_selling_price?: number | null;
   category?: string;
   position?: number;
-  region?: string | null;
+
   dishes?: {
     id: string;
     dish_name: string;
@@ -130,7 +130,6 @@ export interface UpdateMenuItemInput {
   category?: string;
   position?: number;
   actual_selling_price?: number | null;
-  region?: string | null;
 }
 
 // --- Response Schemas ---

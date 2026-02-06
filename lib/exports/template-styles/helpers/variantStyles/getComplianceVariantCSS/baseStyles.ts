@@ -7,50 +7,50 @@ export function getComplianceBaseStyles(): string {
   return `
     /* Compliance Variant - Audit-Ready, Formal Layout */
     body.variant-compliance {
-      background: #ffffff;
+      background: var(--pf-color-bg-page);
       padding: 20px;
     }
 
     .variant-compliance .content-wrapper {
-      background: #ffffff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background: var(--pf-color-bg-content);
+      box-shadow: var(--pf-shadow-content);
       padding: 40px;
       max-width: 1000px;
-      border-radius: 0;
-      border: 1px solid #cccccc;
+      border-radius: var(--pf-border-radius);
+      border: 1px solid var(--pf-color-border);
     }
 
     .variant-compliance .header {
       padding-bottom: 24px;
       margin-bottom: 32px;
-      border-bottom: 3px solid #000000;
+      border-bottom: 3px solid var(--pf-color-text-main);
     }
 
     .variant-compliance .header-content h1 {
       font-size: 28px;
       font-weight: 700;
-      color: #000000;
+      color: var(--pf-color-text-header);
       background: none;
-      -webkit-text-fill-color: #000000;
+      -webkit-text-fill-color: var(--pf-color-text-header);
       margin: 0;
       text-transform: uppercase;
       letter-spacing: 1px;
-      font-family: Arial, sans-serif;
+      font-family: var(--pf-font-family-header);
     }
 
     .variant-compliance .header-content h2 {
       font-size: 16px;
-      color: #333333;
+      color: var(--pf-color-text-muted);
       margin: 8px 0 0 0;
       font-weight: 400;
       text-transform: none;
     }
 
     .variant-compliance .header-meta {
-      color: #666666;
+      color: var(--pf-color-text-muted);
       font-size: 11px;
       font-weight: 500;
-      font-family: 'Courier New', monospace;
+      font-family: monospace;
     }
 
     .variant-compliance .export-content {

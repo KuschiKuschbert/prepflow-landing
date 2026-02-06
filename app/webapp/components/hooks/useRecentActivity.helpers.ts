@@ -22,7 +22,7 @@ export async function fetchRecentActivityData(): Promise<RecentActivity[]> {
         .limit(3),
       supabase
         .from('recipes')
-        .select('id, name, created_at, updated_at')
+        .select('id, recipe_name, created_at, updated_at')
         .order('updated_at', { ascending: false })
         .limit(3),
       supabase
@@ -51,7 +51,7 @@ export async function fetchRecentActivityData(): Promise<RecentActivity[]> {
         activities.push({
           id: recipe.id,
           type: 'recipe',
-          name: recipe.name,
+          name: recipe.recipe_name,
           action: recipe.created_at === recipe.updated_at ? 'created' : 'updated',
           created_at: recipe.updated_at,
         });

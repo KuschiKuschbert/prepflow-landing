@@ -108,7 +108,7 @@ export function buildQueryWithoutRelations(menuId: string) {
 
   return supabaseAdmin!
     .from('menu_items')
-    .select('id, dish_id, recipe_id, category, position, region')
+    .select('id, dish_id, recipe_id, category, position')
     .eq('menu_id', menuId)
     .order('category')
     .order('position');

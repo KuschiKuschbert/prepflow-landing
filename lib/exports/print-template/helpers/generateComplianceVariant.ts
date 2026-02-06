@@ -1,5 +1,6 @@
-import { getAllTemplateStyles } from '../../template-styles';
-import { formatDateAustralian, formatMetaInfo, escapeHtml } from '../../template-utils';
+import { getAllTemplateStyles } from '../../template-styles/index';
+import { escapeHtml, formatDateAustralian, formatMetaInfo } from '../../template-utils';
+import { type ExportTheme } from '../../themes';
 
 export function generateComplianceVariant(
   title: string,
@@ -7,12 +8,13 @@ export function generateComplianceVariant(
   content: string,
   totalItems: number | undefined,
   customMeta: string | undefined,
+  theme: ExportTheme = 'cyber-carrot',
 ): string {
   const generatedDate = formatDateAustralian();
   const metaInfo = formatMetaInfo({ totalItems, customMeta });
   const escapedTitle = escapeHtml(title);
   const escapedSubtitle = subtitle ? escapeHtml(subtitle) : '';
-  const styles = getAllTemplateStyles('compliance');
+  const styles = getAllTemplateStyles('compliance', theme);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -25,6 +27,7 @@ export function generateComplianceVariant(
   </style>
 </head>
 <body class="variant-compliance">
+  <div class="print-background-layer"></div>
   <div class="content-wrapper variant-compliance">
     <header class="header variant-compliance">
       <div class="header-content variant-compliance">
@@ -38,6 +41,9 @@ export function generateComplianceVariant(
     </header>
     <div class="export-content variant-compliance">
       ${content}
+    </div>
+    <div class="footer">
+      <p>Created with PrepFlow</p>
     </div>
   </div>
 </body>

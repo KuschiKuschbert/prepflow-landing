@@ -19,6 +19,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   generateEtags: true,
 
+  serverExternalPackages: ['puppeteer'],
+
   // Image optimization with advanced settings
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -118,8 +120,7 @@ const nextConfig: NextConfig = {
       '@supabase/supabase-js',
       '@vercel/analytics',
       'recharts',
-      // Temporarily disabled lucide-react to fix HMR RotateCcw error
-      // 'lucide-react',
+      'lucide-react',
       'framer-motion',
       '@dnd-kit/core',
       '@dnd-kit/sortable',
@@ -128,7 +129,7 @@ const nextConfig: NextConfig = {
     // Enable modern bundling (disabled for Turbopack compatibility)
     // esmExternals: true, // Disabled - causes module import errors with Turbopack
     // Optimize CSS loading to prevent unused preloads
-    optimizeCss: true,
+    optimizeCss: false,
   },
 
   // Remove dev tools from production

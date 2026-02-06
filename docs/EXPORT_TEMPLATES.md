@@ -386,21 +386,22 @@ a.click();
 
 ### PDF Export
 
-- Use browser's print dialog (Print to PDF)
-- Ensure print media queries are optimized
-- Test print preview before finalizing
-- Consider page breaks and margins
+- Uses server-side `puppeteer` generation via `generatePDF` utility
+- **Do NOT** use browser print dialog for "Export PDF" buttons
+- Reuses the same HTML/CSS templates as the Print view
+- Handles A4 sizing and background graphics automatically
 
-**Example:**
+**Example (API Route):**
 
 ```typescript
-// PDF is handled via print dialog
-printWithTemplate({
-  title: 'Report',
-  content: htmlContent,
-  variant: 'compliance',
-});
-// User selects "Print to PDF" in browser print dialog
+import { generatePDF } from '@/lib/exports/generate-pdf';
+// ...
+if (format === 'pdf') {
+  const pdfBuffer = await generatePDF(htmlContent);
+  return new NextResponse(pdfBuffer, {
+    headers: { 'Content-Type': 'application/pdf' },
+  });
+}
 ```
 
 ## Best Practices

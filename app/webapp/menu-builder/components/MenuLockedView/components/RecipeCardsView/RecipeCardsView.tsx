@@ -4,82 +4,91 @@
  */
 
 'use client';
+// Force recompile: 2026-02-05-v1
 
 import { logger } from '@/lib/logger';
+import { RecipeCardsViewProps } from '@/lib/types/menu-builder';
 import { Loader2, RefreshCw } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import React from 'react';
 import { EmptyState } from './components/EmptyState';
 import { MainCardsGrid } from './components/MainCardsGrid';
 import { SubRecipeSections } from './components/SubRecipeSections';
 import { useCardGeneration } from './hooks/useCardGeneration';
 import { useRecipeCards } from './hooks/useRecipeCards';
-import { RecipeCardsViewProps } from '@/lib/types/menu-builder';
 
 export function RecipeCardsView({ menuId }: RecipeCardsViewProps) {
-  const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
+  const [expandedCardId, setExpandedCardId] = React.useState<string | null>(null);
+
+  // Define stable error handler to prevents infinite loops in useRecipeCards
+  const handleError = React.useCallback((err: string) => {
+    logger.error('[RecipeCardsView] Error from useRecipeCards:', err);
+  }, []);
+
   const { cards, subRecipeCards, loading, error, setCards, setSubRecipeCards, pollingRef } =
     useRecipeCards({
       menuId,
-      onError: (err: string) => logger.error('[RecipeCardsView] Error from useRecipeCards:', err),
+      onError: handleError,
     });
+
+  const handleGenerationSuccess = React.useCallback(async () => {
+    // Refresh cards after successful generation
+    setTimeout(async () => {
+      try {
+        logger.dev('[RecipeCardsView] Refreshing cards after generation...');
+        const refreshResponse = await fetch(`/api/menus/${menuId}/recipe-cards`);
+        if (refreshResponse.ok) {
+          const refreshData = await refreshResponse.json();
+          logger.dev('[RecipeCardsView] Refresh response:', {
+            success: refreshData.success,
+            cardCount: refreshData.cards?.length || 0,
+          });
+          if (refreshData.success) {
+            if (refreshData.cards) {
+              setCards(refreshData.cards);
+            }
+            if (refreshData.subRecipeCards) {
+              setSubRecipeCards(refreshData.subRecipeCards);
+            }
+            const totalCards =
+              (refreshData.cards?.length || 0) +
+              (refreshData.subRecipeCards?.sauces?.length || 0) +
+              (refreshData.subRecipeCards?.marinades?.length || 0) +
+              (refreshData.subRecipeCards?.brines?.length || 0) +
+              (refreshData.subRecipeCards?.slowCooked?.length || 0) +
+              (refreshData.subRecipeCards?.other?.length || 0);
+            if (totalCards === 0) {
+              const noCardsError =
+                'No recipe cards were generated. This might be because:\n' +
+                '1. AI service is not configured (check HUGGINGFACE_API_KEY)\n' +
+                '2. Menu items have no ingredients\n' +
+                '3. Generation failed silently - check server logs';
+              logger.warn('[RecipeCardsView]', { error: noCardsError });
+            } else {
+              logger.dev(
+                `[RecipeCardsView] Successfully loaded ${refreshData.cards.length} recipe cards`,
+              );
+            }
+          }
+        } else {
+          const refreshError = 'Failed to refresh recipe cards';
+          logger.error('[RecipeCardsView]', {
+            error: refreshError,
+            status: refreshResponse.status,
+          });
+        }
+      } catch (refreshErr) {
+        logger.error('[RecipeCardsView] Error refreshing cards:', refreshErr);
+      }
+    }, 2000); // Wait 2 seconds for generation to complete
+  }, [menuId, setCards, setSubRecipeCards]);
 
   const { generating, handleGenerateCards } = useCardGeneration({
     menuId,
-    onSuccess: async () => {
-      // Refresh cards after successful generation
-      setTimeout(async () => {
-        try {
-          logger.dev('[RecipeCardsView] Refreshing cards after generation...');
-          const refreshResponse = await fetch(`/api/menus/${menuId}/recipe-cards`);
-          if (refreshResponse.ok) {
-            const refreshData = await refreshResponse.json();
-            logger.dev('[RecipeCardsView] Refresh response:', {
-              success: refreshData.success,
-              cardCount: refreshData.cards?.length || 0,
-            });
-            if (refreshData.success) {
-              if (refreshData.cards) {
-                setCards(refreshData.cards);
-              }
-              if (refreshData.subRecipeCards) {
-                setSubRecipeCards(refreshData.subRecipeCards);
-              }
-              const totalCards =
-                (refreshData.cards?.length || 0) +
-                (refreshData.subRecipeCards?.sauces?.length || 0) +
-                (refreshData.subRecipeCards?.marinades?.length || 0) +
-                (refreshData.subRecipeCards?.brines?.length || 0) +
-                (refreshData.subRecipeCards?.slowCooked?.length || 0) +
-                (refreshData.subRecipeCards?.other?.length || 0);
-              if (totalCards === 0) {
-                const noCardsError =
-                  'No recipe cards were generated. This might be because:\n' +
-                  '1. AI service is not configured (check HUGGINGFACE_API_KEY)\n' +
-                  '2. Menu items have no ingredients\n' +
-                  '3. Generation failed silently - check server logs';
-                logger.warn('[RecipeCardsView]', { error: noCardsError });
-              } else {
-                logger.dev(
-                  `[RecipeCardsView] Successfully loaded ${refreshData.cards.length} recipe cards`,
-                );
-              }
-            }
-          } else {
-            const refreshError = 'Failed to refresh recipe cards';
-            logger.error('[RecipeCardsView]', {
-              error: refreshError,
-              status: refreshResponse.status,
-            });
-          }
-        } catch (refreshErr) {
-          logger.error('[RecipeCardsView] Error refreshing cards:', refreshErr);
-        }
-      }, 2000); // Wait 2 seconds for generation to complete
-    },
+    onSuccess: handleGenerationSuccess,
   });
 
   // Handle Escape key to close expanded card
-  useEffect(() => {
+  React.useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && expandedCardId) {
         setExpandedCardId(null);

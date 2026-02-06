@@ -2,34 +2,32 @@
  * HTML export generator for allergen overview
  */
 
-import { getAllergenDisplayName } from '@/lib/allergens/australian-allergens';
 import { escapeHtml, generateExportTemplate } from '@/lib/exports/pdf-template';
+import { getAllTemplateStyles } from '@/lib/exports/template-styles/index';
+import { ExportTheme } from '@/lib/exports/themes';
 import { NextResponse } from 'next/server';
 import type { AllergenExportItem } from './fetchAllergenExportData';
-import { ALLERGEN_EXPORT_STYLES } from './htmlExportStyles';
 
 /**
- * Generates HTML export for allergen overview
+ * Generate PDF or HTML export for allergen overview
  *
- * @param {AllergenExportItem[]} items - Items to export
- * @param {boolean} forPDF - Whether this is for PDF generation
- * @returns {NextResponse} HTML file response
+ * @param {AllergenExportItem[]} items - Allergen items
+ * @param {boolean} forPDF - Whether this is for PDF export
+ * @param {ExportTheme} theme - Selected theme
+ * @returns {NextResponse} Response
  */
-export function generateHTMLExport(items: AllergenExportItem[], forPDF: boolean): NextResponse {
-  // Build ingredient list for each item
-  // Build ingredient list for each item
+export function generateHTMLExport(
+  items: AllergenExportItem[],
+  forPDF: boolean,
+  theme: ExportTheme = 'cyber-carrot',
+): NextResponse {
   const itemsWithIngredients = enrichItemsWithIngredients(items);
 
-  // Format allergens as display names
-  const formatAllergens = (allergens: string[]) => {
-    if (!allergens || allergens.length === 0) return 'None';
-    return allergens.map(code => getAllergenDisplayName(code)).join(', ');
-  };
-
   // Generate table content
+  const styles = getAllTemplateStyles('compliance', theme);
   const tableContent = `
     <style>
-      ${ALLERGEN_EXPORT_STYLES}
+      ${styles}
     </style>
     <div class="table-container">
       <table>
@@ -73,6 +71,7 @@ export function generateHTMLExport(items: AllergenExportItem[], forPDF: boolean)
     content: tableContent,
     forPDF,
     totalItems: items.length,
+    theme,
   });
 
   return new NextResponse(htmlContent, {
@@ -104,4 +103,13 @@ function enrichItemsWithIngredients(items: AllergenExportItem[]) {
     const allIngredientNames = Object.keys(ingredientAllergenMap);
     return { ...item, ingredientNames: allIngredientNames };
   });
+}
+function formatAllergens(allergens: string[]) {
+  if (!allergens || allergens.length === 0) return '—';
+  return allergens
+    .map(
+      allergen =>
+        `<span class="allergen-tag allergen-${allergen.toLowerCase().replace(/\s+/g, '-')}">${escapeHtml(allergen)}</span>`,
+    )
+    .join(' ');
 }

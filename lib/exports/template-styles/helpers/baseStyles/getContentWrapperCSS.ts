@@ -11,10 +11,10 @@ export function getContentWrapperCSS(): string {
       z-index: 1;
       max-width: 1200px;
       margin: 0 auto;
-      background: rgba(31, 31, 31, 0.95);
-      border-radius: 24px;
+      background: var(--pf-color-bg-content);
+      border-radius: var(--pf-border-radius);
       padding: 40px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      box-shadow: var(--pf-shadow-content);
     }
   `;
 }
