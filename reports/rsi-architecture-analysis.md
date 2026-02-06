@@ -1,9 +1,9 @@
 # 🏗️ RSI Architecture Analysis Report
 
-**Date:** 2/5/2026, 3:46:08 PM
+**Date:** 2/6/2026, 3:45:21 PM
 
 **Detected Design Patterns:** 6
-**Detected Anti-Patterns:** 463
+**Detected Anti-Patterns:** 465
 
 ## ⚠️ Anti-Patterns Detected
 
@@ -491,12 +491,6 @@
 
 **File:** `app/api/menus/[id]/menu-display/export/helpers/menuDisplayStyles.ts`
 **Description:** Found 22 magic numbers
-**Suggestion:** Extract magic numbers to named constants
-
-### Magic Numbers (MEDIUM)
-
-**File:** `app/api/menus/[id]/recipe-cards/export/helpers/generateHTML.ts`
-**Description:** Found 26 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
@@ -1522,7 +1516,7 @@
 ### Spaghetti Code (HIGH)
 
 **File:** `app/webapp/menu-builder/components/MenuLockedView/components/RecipeCardsView/RecipeCardsView.tsx`
-**Description:** Code has 9 levels of nesting
+**Description:** Code has 8 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
 ### Spaghetti Code (HIGH)
@@ -1716,12 +1710,6 @@
 **File:** `app/webapp/prep-lists/utils/formatPrepList.ts`
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
-
-### Magic Numbers (MEDIUM)
-
-**File:** `app/webapp/prep-lists/utils/prepListPrintStyles.ts`
-**Description:** Found 57 magic numbers
-**Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
 
@@ -2311,22 +2299,22 @@
 **Description:** Code has 7 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
+### Spaghetti Code (HIGH)
+
+**File:** `lib/exports/components/ThemePreview.tsx`
+**Description:** Code has 6 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Magic Numbers (MEDIUM)
+
+**File:** `lib/exports/components/preview-data.ts`
+**Description:** Found 12 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
 ### Magic Numbers (MEDIUM)
 
 **File:** `lib/exports/pdf-template/helpers/getLogo.ts`
 **Description:** Found 19 magic numbers
-**Suggestion:** Extract magic numbers to named constants
-
-### Magic Numbers (MEDIUM)
-
-**File:** `lib/exports/pdf-template/helpers/getStyles/backgroundStyles.ts`
-**Description:** Found 16 magic numbers
-**Suggestion:** Extract magic numbers to named constants
-
-### Magic Numbers (MEDIUM)
-
-**File:** `lib/exports/pdf-template/helpers/getStyles/contentStyles.ts`
-**Description:** Found 12 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
@@ -2337,14 +2325,38 @@
 
 ### Magic Numbers (MEDIUM)
 
-**File:** `lib/exports/template-styles/helpers/variantStyles/getComplianceVariantCSS/reportStyles.ts`
-**Description:** Found 17 magic numbers
+**File:** `lib/exports/template-styles/helpers/getThemeBackgroundCSS.ts`
+**Description:** Found 14 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
+**File:** `lib/exports/template-styles/helpers/variantStyles/getMatrixVariantCSS.ts`
+**Description:** Found 22 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
+**File:** `lib/exports/template-styles/helpers/variantStyles/getMenuVariantCSS.ts`
+**Description:** Found 15 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
+**File:** `lib/exports/template-styles/helpers/variantStyles/getRecipeVariantCSS.ts`
+**Description:** Found 16 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
 
 **File:** `lib/exports/template-styles/helpers/variantStyles/getSupplierVariantCSS.ts`
-**Description:** Found 19 magic numbers
+**Description:** Found 17 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
+**File:** `lib/exports/themes.ts`
+**Description:** Found 21 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
@@ -2825,7 +2837,7 @@
 🔄 Checking for Circular Dependencies...
 
 🛡️  Checking Client/Server Boundaries...
-Scanning 2658 files for boundaries...
+Scanning 2659 files for boundaries...
 ✅ Client/Server boundaries respected.
 
 📚 Checking Lib vs Components Boundaries...
