@@ -11,8 +11,7 @@ export function getLogoBase64(): string {
     const fileBuffer = fs.readFileSync(filePath);
     const base64Image = fileBuffer.toString('base64');
     return `data:image/png;base64,${base64Image}`;
-  } catch (error) {
-    console.error('Error reading logo file:', error);
+  } catch {
     // Fallback if file read fails (though it shouldn't) - return empty or standard URL
     return '/images/prepflow-logo.png';
   }
