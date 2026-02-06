@@ -7,6 +7,7 @@ export function generateRecipeVariant(
   subtitle: string | undefined,
   content: string,
   theme: ExportTheme = 'cyber-carrot',
+  logoSrc: string = '/images/prepflow-logo.png',
 ): string {
   const generatedDate = formatDateAustralian();
   const escapedTitle = escapeHtml(title);

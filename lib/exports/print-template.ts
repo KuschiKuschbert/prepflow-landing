@@ -4,6 +4,7 @@
  * Uses Cyber Carrot design system and PrepFlow voice
  */
 
+// Removed getLogoBase64 import to prevent fs module leakage to client
 import { generateCompactVariant } from './print-template/helpers/generateCompactVariant';
 import { generateComplianceVariant } from './print-template/helpers/generateComplianceVariant';
 import { generateCustomerVariant } from './print-template/helpers/generateCustomerVariant';
@@ -34,6 +35,7 @@ export interface PrintTemplateOptions {
   customMeta?: string;
   variant?: TemplateVariant;
   theme?: ExportTheme;
+  logoSrc?: string;
 }
 
 /**
@@ -47,8 +49,10 @@ export function generatePrintTemplate({
   customMeta,
   variant = 'default',
   theme = 'cyber-carrot',
+  logoSrc = '/images/prepflow-logo.png',
 }: PrintTemplateOptions): string {
-  const options = { title, subtitle, content, totalItems, customMeta, theme };
+  // logoSrc is now passed in or defaults to public URL
+  // Server-side callers should pass getLogoBase64() result here
 
   switch (variant) {
     case 'customer':
@@ -56,9 +60,17 @@ export function generatePrintTemplate({
     case 'supplier':
       return generateSupplierVariant(title, subtitle, content, totalItems, customMeta, theme);
     case 'compliance':
-      return generateComplianceVariant(title, subtitle, content, totalItems, customMeta, theme);
+      return generateComplianceVariant(
+        title,
+        subtitle,
+        content,
+        totalItems,
+        customMeta,
+        theme,
+        logoSrc,
+      );
     case 'compact':
-      return generateCompactVariant(title, subtitle, content, theme);
+      return generateCompactVariant(title, subtitle, content, theme, logoSrc);
     case 'kitchen':
       return generateKitchenVariant(title, subtitle, content, theme);
     case 'menu':

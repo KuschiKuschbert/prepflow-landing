@@ -9,6 +9,7 @@ export function generateCustomerVariant(
   totalItems: number | undefined,
   customMeta: string | undefined,
   theme: ExportTheme = 'cyber-carrot',
+  logoSrc: string = '/images/prepflow-logo.png',
 ): string {
   const generatedDate = formatDateAustralian();
   const metaInfo = formatMetaInfo({ totalItems, customMeta });

@@ -4,7 +4,6 @@ import {
   formatDateAustralian,
   formatMetaInfo,
   getFooterHtml,
-  getLogoUrl,
 } from '../../template-utils';
 import { type ExportTheme } from '../../themes';
 
@@ -15,9 +14,9 @@ export function generateDefaultVariant(
   totalItems: number | undefined,
   customMeta: string | undefined,
   theme: ExportTheme = 'cyber-carrot',
+  logoSrc: string = '/images/prepflow-logo.png',
 ): string {
   const generatedDate = formatDateAustralian();
-  const logoUrl = getLogoUrl();
   const metaInfo = formatMetaInfo({ totalItems, customMeta });
   const footerHtml = getFooterHtml();
   const escapedTitle = escapeHtml(title);
@@ -38,7 +37,7 @@ export function generateDefaultVariant(
   <div class="print-background-layer"></div>
   <div class="content-wrapper">
     <header class="header">
-      <img src="${logoUrl}" alt="PrepFlow Logo" class="logo" onerror="this.style.display='none'" />
+      <img src="${logoSrc}" alt="PrepFlow Logo" class="logo" onerror="this.style.display='none'" />
       <div class="header-content">
         <h1>PrepFlow</h1>
         <h2>${escapedSubtitle || escapedTitle}</h2>

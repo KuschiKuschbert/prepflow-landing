@@ -7,13 +7,12 @@ export function generateCompactVariant(
   subtitle: string | undefined,
   content: string,
   theme: ExportTheme = 'cyber-carrot',
+  logoSrc: string = '/images/prepflow-logo.png',
 ): string {
   const generatedDate = formatDateAustralian();
   const escapedTitle = escapeHtml(title);
   const escapedSubtitle = subtitle ? escapeHtml(subtitle) : '';
   const styles = getAllTemplateStyles('compact', theme);
-
-  const logoSrc = getLogoBase64();
 
   return `<!DOCTYPE html>
 <html lang="en">
