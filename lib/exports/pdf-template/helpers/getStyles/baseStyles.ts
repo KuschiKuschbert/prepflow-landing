@@ -22,6 +22,12 @@ export function getBaseStyles(theme: ExportTheme = 'cyber-carrot'): string {
       size: A4;
     }
 
+    html {
+      background: ${bgPage};
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
     body {
       font-family: var(--pf-font-family-body, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif);
       background: ${bgPage};
@@ -29,6 +35,7 @@ export function getBaseStyles(theme: ExportTheme = 'cyber-carrot'): string {
       min-height: 100vh;
       position: relative;
       padding: 40px 20px;
+      margin: 0;
     }
 
     /* Content Area */

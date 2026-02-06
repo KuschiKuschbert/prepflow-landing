@@ -49,7 +49,10 @@ export function detectItemChanges(
     }
   });
 
-  const contentChanged = idsChanged || signaturesChanged || itemReferencesChanged;
+  // FIX: Ignore itemReferencesChanged for contentChanged.
+  // We only want to trigger updates if the ACTUAL CONTENT (IDs or Signatures) changed.
+  // Reference changes alone should not trigger a content update in useStableMenuItems.
+  const contentChanged = idsChanged || signaturesChanged;
 
   return {
     contentChanged,

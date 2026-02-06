@@ -33,6 +33,7 @@ export function generateRecipePDF(recipe: RecipeForPDF): string {
   const { getRecipePrintStyles } = require('@/app/webapp/recipes/utils/recipePrintStyles');
 
   const { generateExportTemplate } = require('@/lib/exports/pdf-template');
+  const { getLogoBase64 } = require('@/lib/exports/pdf-template/helpers/getLogoServer');
 
   // Format ingredients for the print function
   const ingredients = (recipe.recipe_ingredients || []).map(ri => ({
@@ -67,6 +68,7 @@ export function generateRecipePDF(recipe: RecipeForPDF): string {
     content: `<style>${recipeStyles}</style>${contentHtml}`,
     totalItems: ingredients.length,
     forPDF: true,
+    logoOverride: getLogoBase64(),
   });
 
   return html;

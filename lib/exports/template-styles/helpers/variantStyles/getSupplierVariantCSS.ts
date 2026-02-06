@@ -75,11 +75,11 @@ export function getSupplierVariantCSS(): string {
     }
 
     .supplier-variant .purchase-order-table tbody tr:nth-child(even) {
-       background: rgba(255,255,255,0.02);
+       background: color-mix(in srgb, var(--pf-color-text-main), transparent 97%);
     }
 
     .supplier-variant .purchase-order-table tbody tr:hover {
-       background: rgba(255,255,255,0.05);
+       background: color-mix(in srgb, var(--pf-color-primary), transparent 90%);
     }
 
     /* Footer Totals */
@@ -138,25 +138,10 @@ export function getSupplierVariantCSS(): string {
     }
 
     @media print {
+      /* Print overrides removed to allow theme colors */
       .supplier-variant .purchase-order-table th {
-        background: #eee;
-        color: #000;
-        border-bottom-color: #000;
-      }
-      .supplier-variant .purchase-order-table td {
-        color: #000;
-        border-bottom-color: #ccc;
-      }
-      .supplier-variant .purchase-order-table tfoot {
-        background: #f5f5f5;
-        border-top-color: #000;
-      }
-      .supplier-variant .purchase-order-table tfoot td {
-        color: #000;
-      }
-      .supplier-variant .purchase-order-terms {
-        background: #fff;
-        border-color: #ccc;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
     }
   `;

@@ -102,49 +102,49 @@ export const allergenMatrixStyles = `
 
   @media print {
     table {
-      background: #ffffff;
+      /* background: #ffffff; */
     }
 
     thead {
-      background: #f5f5f5;
+      /* background: #f5f5f5; */
     }
 
     th {
-      color: #000000;
-      border-color: #cccccc;
+      /* color: #000000; */
+      /* border-color: #cccccc; */
     }
 
     tbody tr {
-      border-color: #e0e0e0;
+      /* border-color: #e0e0e0; */
     }
 
     tbody tr:nth-child(even) {
-      background: #f9f9f9;
+      /* background: #f9f9f9; */
     }
 
     td {
-      color: #000000;
-      border-color: #e0e0e0;
+      /* color: #000000; */
+      /* border-color: #e0e0e0; */
     }
 
     td.type {
-      color: #666666;
+      /* color: #666666; */
     }
 
     .has-allergen {
-      color: #dc2626;
+      /* color: #dc2626; */
     }
 
     .vegetarian {
-      background-color: #dcfce7;
+      /* background-color: #dcfce7;
       color: #166534;
-      border-color: #86efac;
+      border-color: #86efac; */
     }
 
     .vegan {
-      background-color: #d1fae5;
+      /* background-color: #d1fae5;
       color: #065f46;
-      border-color: #6ee7b7;
+      border-color: #6ee7b7; */
     }
 
     thead {

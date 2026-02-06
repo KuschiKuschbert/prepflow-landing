@@ -34,7 +34,8 @@ export const themes: Record<ExportTheme, ThemeConfig> = {
       '--pf-color-bg-page': '#09090b', // Deep dark background
       '--pf-color-bg-content': 'rgba(24, 24, 27, 0.85)', // Card background (85% opacity)
       '--pf-shadow-content': '0 0 40px rgba(41, 231, 205, 0.1)', // Teal glow
-      '--pf-logo-filter': 'brightness(0) invert(1)', // White logo
+      '--pf-logo-filter': 'none', // Original logo colors
+      '--pf-logo-mix-blend': 'normal',
     },
   },
   'electric-lemon': {
@@ -58,7 +59,8 @@ export const themes: Record<ExportTheme, ThemeConfig> = {
       '--pf-color-bg-page': '#000000', // Pitch black
       '--pf-color-bg-content': 'rgba(9, 9, 11, 0.85)', // Zin-950 (85% opacity)
       '--pf-shadow-content': '4px 4px 0px #FACC15', // Hard yellow shadow
-      '--pf-logo-filter': 'brightness(0) invert(1)', // White logo
+      '--pf-logo-filter': 'none', // Original logo colors
+      '--pf-logo-mix-blend': 'normal',
     },
   },
   'phantom-pepper': {
@@ -82,7 +84,8 @@ export const themes: Record<ExportTheme, ThemeConfig> = {
       '--pf-color-bg-page': '#FFFFFF',
       '--pf-color-bg-content': 'rgba(255, 255, 255, 0.82)', // (82% opacity)
       '--pf-shadow-content': 'none',
-      '--pf-logo-filter': 'none', // Normal black logo
+      '--pf-logo-filter': 'invert(1)', // Invert colors: Black BG -> White, White Text -> Black
+      '--pf-logo-mix-blend': 'multiply', // Knock out white background if present
     },
   },
   'cosmic-blueberry': {
@@ -106,7 +109,8 @@ export const themes: Record<ExportTheme, ThemeConfig> = {
       '--pf-color-bg-page': '#0F172A', // Deep space
       '--pf-color-bg-content': 'rgba(30, 41, 59, 0.75)', // Slate-800 (75% opacity)
       '--pf-shadow-content': '0 0 50px rgba(139, 92, 246, 0.15)', // Purple glow
-      '--pf-logo-filter': 'brightness(0) invert(1)', // White logo
+      '--pf-logo-filter': 'none', // Original logo colors
+      '--pf-logo-mix-blend': 'normal',
     },
   },
 };

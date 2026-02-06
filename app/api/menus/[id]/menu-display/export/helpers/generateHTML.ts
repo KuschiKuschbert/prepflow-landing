@@ -1,5 +1,6 @@
 import { generatePDF } from '@/lib/exports/generate-pdf';
 import { escapeHtml, generateExportTemplate } from '@/lib/exports/pdf-template';
+import { getLogoBase64 } from '@/lib/exports/pdf-template/helpers/getLogoServer';
 import { getAllTemplateStyles } from '@/lib/exports/template-styles/index';
 import { type ExportTheme } from '@/lib/exports/themes';
 import { NextResponse } from 'next/server';
@@ -57,7 +58,7 @@ export async function generateHTML(
     <div class="menu-display ${densityClass}">
   `;
 
-  sortedCategories.forEach(category => {
+  sortedCategories.forEach((category, index) => {
     const categoryItems = itemsByCategory.get(category)!;
 
     menuContent += `
@@ -84,6 +85,11 @@ export async function generateHTML(
         </div>
       </div>
     `;
+
+    // Add page break between categories (except the last one)
+    if (index < sortedCategories.length - 1) {
+      menuContent += `<div class="print-section-break"></div>`;
+    }
   });
 
   menuContent += `</div>`;
@@ -96,6 +102,7 @@ export async function generateHTML(
     forPDF,
     totalItems: menuData.length,
     customMeta: `Menu: ${menuName}`,
+    logoOverride: forPDF ? getLogoBase64() : undefined, // Inject Base64 logo for PDF
   });
 
   if (forPDF) {

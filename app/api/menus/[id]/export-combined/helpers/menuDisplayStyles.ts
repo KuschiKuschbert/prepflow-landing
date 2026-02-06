@@ -6,6 +6,8 @@ export const menuDisplayStyles = `
   .menu-display {
     max-width: 100%;
     margin-bottom: 3rem;
+    font-family: var(--pf-font-family-body);
+    color: var(--pf-color-text-main);
   }
 
   .menu-category {
@@ -19,15 +21,18 @@ export const menuDisplayStyles = `
   }
 
   .menu-category-header {
-    border-bottom: 2px solid rgba(41, 231, 205, 0.3);
+    border-bottom-width: var(--pf-border-width);
+    border-bottom-style: var(--pf-header-style);
+    border-bottom-color: var(--pf-color-border);
     padding-bottom: 0.75rem;
     margin-bottom: 1.5rem;
   }
 
   .menu-category-header h2 {
+    font-family: var(--pf-font-family-header);
     font-size: 24px;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.95);
+    color: var(--pf-color-text-header);
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -42,9 +47,10 @@ export const menuDisplayStyles = `
   .menu-item {
     page-break-inside: avoid;
     padding: 1.25rem;
-    background: rgba(42, 42, 42, 0.3);
-    border-radius: 12px;
-    border: 1px solid rgba(42, 42, 42, 0.5);
+    background: var(--pf-color-bg-content);
+    border-radius: var(--pf-border-radius);
+    border: var(--pf-border-width) solid var(--pf-color-border);
+    box-shadow: var(--pf-shadow-content);
   }
 
   .menu-item-header {
@@ -56,57 +62,33 @@ export const menuDisplayStyles = `
   }
 
   .menu-item-name {
+    font-family: var(--pf-font-family-header);
     font-size: 18px;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.95);
+    color: var(--pf-color-text-main);
     flex: 1;
     line-height: 1.3;
   }
 
   .menu-item-price {
+    font-family: var(--pf-font-family-header);
     font-size: 18px;
     font-weight: 700;
-    color: #29E7CD;
+    color: var(--pf-color-primary);
     white-space: nowrap;
     flex-shrink: 0;
   }
 
   .menu-item-description {
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--pf-color-text-muted);
     line-height: 1.6;
     margin-top: 0.5rem;
   }
 
   @media print {
     .menu-display {
-      background: #ffffff;
-    }
-
-    .menu-category-header {
-      border-bottom-color: #000;
-    }
-
-    .menu-category-header h2 {
-      color: #000;
-    }
-
-    .menu-item {
-      background: #f9f9f9;
-      border-color: #e0e0e0;
-      page-break-inside: avoid;
-    }
-
-    .menu-item-name {
-      color: #000;
-    }
-
-    .menu-item-price {
-      color: #000;
-    }
-
-    .menu-item-description {
-      color: #333;
+      background: transparent;
     }
   }
 `;

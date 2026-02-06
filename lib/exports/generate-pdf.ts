@@ -29,12 +29,7 @@ export async function generatePDF(html: string): Promise<Uint8Array> {
     const pdfBuffer = await page.pdf({
       format: 'A4',
       printBackground: true,
-      margin: {
-        top: '20px',
-        right: '20px',
-        bottom: '20px',
-        left: '20px',
-      },
+      margin: undefined, // Let CSS control margins to ensure background color fills the page
     });
 
     logger.dev('[generatePDF] PDF generated successfully');

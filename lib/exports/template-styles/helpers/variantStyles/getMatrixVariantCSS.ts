@@ -57,7 +57,8 @@ export function getMatrixVariantCSS(): string {
     }
 
     tbody tr:hover {
-      background: rgba(41, 231, 205, 0.05); /* Hover tint */
+      background: var(--pf-color-primary);
+      opacity: 0.1; /* Use opacity instead of hardcoded RGBA */
     }
 
     td {
@@ -118,44 +119,22 @@ export function getMatrixVariantCSS(): string {
 
     @media print {
       table {
-        background: #fff;
         font-size: 8pt;
       }
 
-      thead {
-        background: #f0f0f0;
-      }
-
       th {
-        color: #000;
-        border-color: #000;
-        background: #e0e0e0 !important;
         -webkit-print-color-adjust: exact;
-      }
-
-      td {
-        color: #000;
-        border-color: #999;
       }
 
       tbody tr:nth-child(even) {
-        background: #f9f9f9 !important;
         -webkit-print-color-adjust: exact;
       }
 
-      .has-allergen {
-        color: #dc2626; /* Darker red for print */
-      }
-
       .vegetarian {
-        border-color: #166534;
-        color: #166534;
         background: transparent;
       }
 
       .vegan {
-        border-color: #065f46;
-        color: #065f46;
         background: transparent;
       }
 

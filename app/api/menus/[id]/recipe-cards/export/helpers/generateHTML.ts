@@ -1,5 +1,6 @@
 import { generatePDF } from '@/lib/exports/generate-pdf';
 import { generateExportTemplate } from '@/lib/exports/pdf-template';
+import { getLogoBase64 } from '@/lib/exports/pdf-template/helpers/getLogoServer';
 import { type ExportTheme } from '@/lib/exports/themes';
 import { NextResponse } from 'next/server';
 import { buildCategoryHTML } from './generateHTML/buildCategoryHTML';
@@ -52,6 +53,7 @@ export async function generateHTML(
     forPDF,
     totalItems: cards.length,
     customMeta: `Menu: ${menuName}`,
+    logoOverride: forPDF ? getLogoBase64() : undefined,
   });
 
   const filename = `${menuName.replace(/[^a-z0-9]/gi, '_')}_recipe_cards`;

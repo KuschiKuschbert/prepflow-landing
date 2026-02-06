@@ -74,7 +74,7 @@ export function getMenuVariantCSS(): string {
       align-items: flex-start;
       gap: 1rem;
       margin-bottom: 0.5rem;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid var(--pf-color-border);
       padding-bottom: 0.75rem;
     }
 
@@ -171,7 +171,7 @@ export function getMenuVariantCSS(): string {
       padding: 0.75rem 0;
       background: transparent;
       border: none;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid var(--pf-color-border);
       border-radius: 0;
       box-shadow: none;
       margin-bottom: 0;
@@ -197,35 +197,12 @@ export function getMenuVariantCSS(): string {
       flex: 1;
     }
 
+    /* Print overrides removed to allow theme colors to pass through */
     @media print {
-      .menu-category-header {
-        border-bottom-color: #000;
-      }
-
-      .menu-category-header h2 {
-        color: #000;
-      }
-
       .menu-item {
-        background: #ffffff;
-        border-color: #e5e5e5;
-        box-shadow: none;
-      }
-
-      .menu-item-name {
-        color: #000;
-      }
-
-      .menu-item-price {
-        color: #000;
-      }
-
-      .menu-item-description {
-        color: #444;
-      }
-
-      .menu-item-header {
-        border-bottom-color: #eee;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
     }
   `;

@@ -6,9 +6,8 @@
 'use client';
 
 import { DietaryBadge } from '@/components/ui/DietaryBadge';
-import { FoodImageDisplay } from '@/components/ui/FoodImageDisplay';
-import { useMemo } from 'react';
 import { Menu, MenuItem } from '@/lib/types/menu-builder';
+import { useMemo } from 'react';
 
 interface MenuDisplayViewProps {
   menu: Menu;
@@ -51,128 +50,101 @@ export function MenuDisplayView({ menu, menuItems }: MenuDisplayViewProps) {
 
   if (menuItems.length === 0) {
     return (
-      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center">
-        <p className="text-[var(--foreground-muted)]">No items in this menu</p>
+      <div className="flex h-64 flex-col items-center justify-center space-y-3 rounded-xl border border-dashed border-[var(--border)] bg-[var(--surface-subtle)] text-center">
+        <p className="text-[var(--foreground-muted)]">No menu items added yet.</p>
+        <p className="text-sm text-[var(--foreground-subtle)]">
+          Add dishes or recipes to build your menu.
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
-      {/* Menu Header */}
-      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
-        <h2 className="text-2xl font-bold text-[var(--foreground)]">{menu.menu_name}</h2>
+    <div className="mx-auto min-h-[800px] max-w-5xl space-y-16 rounded-sm border border-neutral-800 bg-neutral-900/50 px-8 py-12">
+      {/* Menu Header (Centered) */}
+      <div className="space-y-6 text-center">
+        <h2 className="desktop:text-6xl font-header text-5xl font-bold tracking-tight text-white uppercase">
+          {menu.menu_name}
+        </h2>
         {menu.description && (
-          <p className="mt-2 text-sm text-[var(--foreground-muted)]">{menu.description}</p>
-        )}
-      </div>
-      {/* Menu Items by Category */}
-      {itemsByCategory.map(({ category, items }) => (
-        <div key={category} className="space-y-4">
-          {/* Category Header */}
-          <div className="flex items-center gap-3 border-b border-[var(--border)] pb-2">
-            <h3 className="text-xl font-semibold tracking-wider text-[var(--foreground)] uppercase">
-              {category}
-            </h3>
-            <span className="text-sm text-[var(--foreground-muted)]">({items.length})</span>
+          <div className="mx-auto max-w-2xl text-xl leading-relaxed font-light text-neutral-400 italic">
+            &ldquo;{menu.description}&rdquo;
           </div>
+        )}
+        <div className="mx-auto h-0.5 w-32 bg-neutral-800"></div>
+      </div>
 
-          {/* Items Grid */}
-          <div className="tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-5 grid grid-cols-1 gap-4">
-            {items.map(item => {
-              const isDish = !!item.dish_id;
-              const itemName = isDish
-                ? item.dishes?.dish_name || 'Unknown Dish'
-                : item.recipes?.recipe_name || 'Unknown Recipe';
+      {/* Menu Items by Category */}
+      <div className="space-y-16">
+        {itemsByCategory.map(({ category, items }) => (
+          <div key={category} className="space-y-10">
+            {/* Category Header */}
+            <div className="flex items-center justify-center gap-4">
+              <div className="h-px w-12 bg-neutral-800"></div>
+              <h3 className="font-header text-2xl font-bold tracking-[0.2em] text-white uppercase">
+                {category}
+              </h3>
+              <div className="h-px w-12 bg-neutral-800"></div>
+            </div>
 
-              const description = isDish ? item.dishes?.description : item.recipes?.description;
+            {/* Items Grid - modernized list layout instead of cards for cleaner "menu" feel */}
+            <div className="grid grid-cols-1 gap-x-12 gap-y-8 md:grid-cols-2">
+              {items.map(item => {
+                const isDish = !!item.dish_id;
+                const itemName = isDish
+                  ? item.dishes?.dish_name || 'Unknown Dish'
+                  : item.recipes?.recipe_name || 'Unknown Recipe';
 
-              // Get price - prefer actual_selling_price, fallback to selling_price or recommended_selling_price
-              const price =
-                item.actual_selling_price ||
-                (isDish ? item.dishes?.selling_price : item.recommended_selling_price) ||
-                0;
+                const description = isDish ? item.dishes?.description : item.recipes?.description;
 
-              // Get dietary info
-              const isVegetarian =
-                item.is_vegetarian ??
-                (isDish ? item.dishes?.is_vegetarian : item.recipes?.is_vegetarian);
-              const isVegan =
-                item.is_vegan ?? (isDish ? item.dishes?.is_vegan : item.recipes?.is_vegan);
-              const dietaryConfidence =
-                item.dietary_confidence ||
-                (isDish ? item.dishes?.dietary_confidence : item.recipes?.dietary_confidence);
+                // Get price
+                const price =
+                  item.actual_selling_price ||
+                  (isDish ? item.dishes?.selling_price : item.recommended_selling_price) ||
+                  0;
 
-              // Get image URLs from dish or recipe (all plating methods)
-              const imageUrl = isDish ? item.dishes?.image_url : item.recipes?.image_url;
-              const imageUrlAlternative = isDish
-                ? item.dishes?.image_url_alternative
-                : item.recipes?.image_url_alternative;
-              const imageUrlModern = isDish
-                ? item.dishes?.image_url_modern
-                : item.recipes?.image_url_modern;
-              const imageUrlMinimalist = isDish
-                ? item.dishes?.image_url_minimalist
-                : item.recipes?.image_url_minimalist;
-              const _entityId = isDish ? item.dish_id : item.recipe_id;
+                // Get dietary info
+                const isVegetarian =
+                  item.is_vegetarian ??
+                  (isDish ? item.dishes?.is_vegetarian : item.recipes?.is_vegetarian);
+                const isVegan =
+                  item.is_vegan ?? (isDish ? item.dishes?.is_vegan : item.recipes?.is_vegan);
+                const dietaryConfidence =
+                  item.dietary_confidence ||
+                  (isDish ? item.dishes?.dietary_confidence : item.recipes?.dietary_confidence);
 
-              return (
-                <div
-                  key={item.id}
-                  className="group rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 transition-all duration-200 hover:border-[var(--primary)]/50 hover:shadow-lg"
-                >
-                  {/* Food Image */}
-                  {(imageUrl || imageUrlAlternative || imageUrlModern || imageUrlMinimalist) && (
-                    <div className="mb-4">
-                      <FoodImageDisplay
-                        imageUrl={imageUrl}
-                        imageUrlAlternative={imageUrlAlternative}
-                        imageUrlModern={imageUrlModern}
-                        imageUrlMinimalist={imageUrlMinimalist}
-                        alt={itemName}
-                        className="w-full"
-                        priority={false}
-                        showSelector={true}
-                      />
-                    </div>
-                  )}
-
-                  {/* Item Header with Name and Price */}
-                  <div className="mb-3 flex items-start justify-between gap-4">
-                    <h4 className="flex-1 text-lg font-semibold text-[var(--foreground)]">
-                      {itemName}
-                    </h4>
-                    <div className="flex-shrink-0">
-                      <span className="text-lg font-bold text-[var(--primary)]">
+                return (
+                  <div key={item.id} className="group relative flex flex-col">
+                    <div className="mb-2 flex items-baseline justify-between border-b border-neutral-800 pb-1">
+                      <h4 className="font-header text-lg font-bold text-neutral-100">{itemName}</h4>
+                      <span className="font-header ml-4 text-lg font-semibold text-neutral-100">
                         ${price.toFixed(2)}
                       </span>
                     </div>
+
+                    {description && (
+                      <p className="text-sm leading-relaxed font-light text-neutral-500">
+                        {description}
+                      </p>
+                    )}
+
+                    {(isVegetarian || isVegan) && (
+                      <div className="mt-2">
+                        <DietaryBadge
+                          isVegetarian={isVegetarian}
+                          isVegan={isVegan}
+                          confidence={dietaryConfidence}
+                          size="sm"
+                        />
+                      </div>
+                    )}
                   </div>
-
-                  {/* Description */}
-                  {description && (
-                    <p className="mb-3 text-sm leading-relaxed text-[var(--foreground-muted)]">
-                      {description}
-                    </p>
-                  )}
-
-                  {/* Dietary Badge */}
-                  {(isVegetarian || isVegan) && (
-                    <div className="mt-3">
-                      <DietaryBadge
-                        isVegetarian={isVegetarian}
-                        isVegan={isVegan}
-                        confidence={dietaryConfidence}
-                        size="sm"
-                      />
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

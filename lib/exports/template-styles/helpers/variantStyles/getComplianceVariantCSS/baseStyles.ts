@@ -50,7 +50,7 @@ export function getComplianceBaseStyles(): string {
       color: var(--pf-color-text-muted);
       font-size: 11px;
       font-weight: 500;
-      font-family: monospace;
+      font-family: var(--pf-font-family-body);
     }
 
     .variant-compliance .export-content {
@@ -65,11 +65,11 @@ export function getComplianceBaseStyles(): string {
       .variant-compliance .content-wrapper {
         padding: 30px;
         box-shadow: none;
-        border: 1px solid #000000;
+        border: 1px solid var(--pf-color-border);
       }
 
       .variant-compliance .header {
-        border-bottom-color: #000000;
+        border-bottom-color: var(--pf-color-border);
       }
 
       @page {

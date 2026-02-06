@@ -1,3 +1,4 @@
+export { type IngredientRow, type MethodStepRow } from '../../recipe-cards/types';
 import { IngredientRow, MethodStepRow } from '../../recipe-cards/types';
 
 export interface RecipeCardData {

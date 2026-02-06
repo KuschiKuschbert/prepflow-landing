@@ -3,8 +3,8 @@
  */
 export function getDevUser() {
   return {
-    email: 'dev@prepflow.org',
-    name: 'Dev User',
+    email: 'derkusch@gmail.com',
+    name: 'Daniel Kuschmierz',
     sub: 'dev|123',
     roles: ['admin'],
     email_verified: true,

@@ -7,7 +7,7 @@ export const allergenMatrixStyles = `
     page-break-before: always;
     margin-top: 3rem;
     padding-top: 2rem;
-    border-top: 2px solid rgba(42, 42, 42, 0.8);
+    border-top: var(--pf-border-width) solid var(--pf-color-border);
   }
 
   .allergen-matrix-header {
@@ -15,16 +15,17 @@ export const allergenMatrixStyles = `
   }
 
   .allergen-matrix-header h2 {
+    font-family: var(--pf-font-family-header);
     font-size: 24px;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.95);
+    color: var(--pf-color-text-header);
     margin: 0 0 0.5rem 0;
     text-transform: uppercase;
     letter-spacing: 1px;
   }
 
   .allergen-matrix-header p {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--pf-color-text-muted);
     font-size: 14px;
     margin: 0;
   }
@@ -37,14 +38,15 @@ export const allergenMatrixStyles = `
   table {
     width: 100%;
     border-collapse: collapse;
-    background: rgba(26, 26, 26, 0.8);
-    border-radius: 16px;
+    background: var(--pf-color-bg-content);
+    border-radius: var(--pf-border-radius);
     overflow: hidden;
     font-size: 12px;
   }
 
   thead {
-    background: linear-gradient(135deg, rgba(42, 42, 42, 0.9) 0%, rgba(42, 42, 42, 0.7) 100%);
+    background: var(--pf-color-bg-header);
+    color: var(--pf-color-text-header);
   }
 
   th {
@@ -53,9 +55,9 @@ export const allergenMatrixStyles = `
     font-weight: 600;
     text-transform: uppercase;
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(42, 42, 42, 0.8);
-    border-bottom: 2px solid rgba(41, 231, 205, 0.3);
+    color: var(--pf-color-text-header);
+    border: 1px solid var(--pf-color-border);
+    border-bottom: 2px solid var(--pf-color-primary);
   }
 
   th.allergen-header {
@@ -66,28 +68,29 @@ export const allergenMatrixStyles = `
   }
 
   tbody tr {
-    border-bottom: 1px solid rgba(42, 42, 42, 0.6);
+    border-bottom: 1px solid var(--pf-color-border);
   }
 
   tbody tr:nth-child(even) {
-    background: rgba(26, 26, 26, 0.4);
+    background: rgba(255, 255, 255, 0.03);
   }
 
   td {
-    border: 1px solid rgba(42, 42, 42, 0.6);
+    border: 1px solid var(--pf-color-border);
     padding: 8px;
     text-align: center;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--pf-color-text-main);
   }
 
   td.item-name {
     text-align: left;
     font-weight: 500;
+    font-family: var(--pf-font-family-header);
   }
 
   td.type {
     text-align: left;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--pf-color-text-muted);
   }
 
   .has-allergen {
@@ -119,67 +122,17 @@ export const allergenMatrixStyles = `
   .empty-state {
     text-align: center;
     padding: 40px 20px;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--pf-color-text-muted);
   }
 
   @media print {
     .allergen-matrix-section {
-      border-top-color: #000;
       page-break-before: always;
-    }
-
-    .allergen-matrix-header h2 {
-      color: #000;
-    }
-
-    .allergen-matrix-header p {
-      color: #333;
+      border-top-color: #000;
     }
 
     table {
-      background: #ffffff;
-    }
-
-    thead {
-      background: #f5f5f5;
-    }
-
-    th {
-      color: #000000;
-      border-color: #cccccc;
-    }
-
-    tbody tr {
-      border-color: #e0e0e0;
-    }
-
-    tbody tr:nth-child(even) {
-      background: #f9f9f9;
-    }
-
-    td {
-      color: #000000;
-      border-color: #e0e0e0;
-    }
-
-    td.type {
-      color: #666666;
-    }
-
-    .has-allergen {
-      color: #dc2626;
-    }
-
-    .vegetarian {
-      background-color: #dcfce7;
-      color: #166534;
-      border-color: #86efac;
-    }
-
-    .vegan {
-      background-color: #d1fae5;
-      color: #065f46;
-      border-color: #6ee7b7;
+      /* background: #fff; -- Removed to allow theme colors */
     }
   }
 `;

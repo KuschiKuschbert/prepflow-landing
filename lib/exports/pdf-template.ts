@@ -19,6 +19,7 @@ export interface ExportTemplateOptions {
   totalItems?: number;
   customMeta?: string;
   theme?: ExportTheme;
+  logoOverride?: string; // Optional override (e.g. Base64 string from server)
 }
 
 /**
@@ -35,10 +36,11 @@ export function generateExportTemplate({
   totalItems,
   customMeta,
   theme = 'cyber-carrot',
+  logoOverride,
 }: ExportTemplateOptions): string {
-  // Use public URL for logo (works in browser context)
-  // For standalone HTML files, use inline SVG as fallback
-  const logoUrl = forPDF ? getInlineSVGLogo() : getLogoUrl();
+  // Use override if provided (e.g. Base64 PNG from server)
+  // Otherwise fall back to public URL (client) or inline SVG (legacy PDF fallback)
+  const logoUrl = logoOverride || (forPDF ? getInlineSVGLogo() : getLogoUrl());
   const generatedDate = new Date().toLocaleString();
   const styles = getExportStyles(theme);
   const bodyHTML = buildExportHTML(

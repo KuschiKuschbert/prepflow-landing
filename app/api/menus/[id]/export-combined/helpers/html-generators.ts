@@ -5,14 +5,21 @@ export function renderIngredients(ingredients: RecipeCardData['ingredients']): s
   if (ingredients.length === 0) return '';
 
   let html = `
-    <div class="recipe-card-section">
+    <div class="recipe-card-section recipe-section-ingredients">
       <h4 class="recipe-card-section-title">Ingredients</h4>
       <ul class="recipe-card-ingredients">
   `;
 
   ingredients.forEach(ingredient => {
     html += `
-        <li>${escapeHtml(ingredient.name)}: ${ingredient.quantity ?? ''} ${escapeHtml(ingredient.unit ?? '')}${ingredient.notes ? ` (${escapeHtml(ingredient.notes)})` : ''}</li>
+        <li>${escapeHtml(ingredient.name)}: <strong>${
+          ingredient.quantity
+            ? Number(ingredient.quantity)
+                .toFixed(2)
+                .replace(/\.00$/, '')
+                .replace(/(\.\d)0$/, '$1')
+            : ''
+        }</strong> ${escapeHtml(ingredient.unit ?? '')}${ingredient.notes ? ` <span style="font-style: italic; opacity: 0.8;">(${escapeHtml(ingredient.notes)})</span>` : ''}</li>
     `;
   });
 
@@ -23,18 +30,18 @@ export function renderIngredients(ingredients: RecipeCardData['ingredients']): s
   return html;
 }
 
-export function renderMethod(methodSteps: RecipeCardData['methodSteps']): string {
+export function renderMethod(methodSteps: (MethodStepRow | string)[]): string {
   if (!methodSteps || methodSteps.length === 0) return '';
 
   let html = `
-    <div class="recipe-card-section">
+    <div class="recipe-card-section recipe-section-method">
       <h4 class="recipe-card-section-title">Method</h4>
       <ol class="recipe-card-method">
   `;
 
   methodSteps.forEach(step => {
     html += `
-        <li>${escapeHtml(step.instruction)}</li>
+        <li>${escapeHtml(typeof step === 'string' ? step : step.instruction || '')}</li>
     `;
   });
 
@@ -75,8 +82,11 @@ export function renderRecipeCard(card: RecipeCardData): string {
         <div class="recipe-card-yield">Base Yield: ${card.baseYield} serving${card.baseYield !== 1 ? 's' : ''}</div>
       </div>
 
-      ${renderIngredients(card.ingredients)}
-      ${renderMethod(card.methodSteps)}
+      <div class="recipe-body-content">
+        ${renderIngredients(card.ingredients)}
+        ${renderMethod(card.methodSteps)}
+      </div>
+
       ${renderNotes(card.notes)}
     </div>
   `;

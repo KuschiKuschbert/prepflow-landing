@@ -3,6 +3,7 @@
  */
 
 import { escapeHtml, generateExportTemplate } from '@/lib/exports/pdf-template';
+import { getLogoBase64 } from '@/lib/exports/pdf-template/helpers/getLogoServer';
 import { getAllTemplateStyles } from '@/lib/exports/template-styles/index';
 import { ExportTheme } from '@/lib/exports/themes';
 import { NextResponse } from 'next/server';
@@ -72,6 +73,7 @@ export function generateHTMLExport(
     forPDF,
     totalItems: items.length,
     theme,
+    logoOverride: forPDF ? getLogoBase64() : undefined,
   });
 
   return new NextResponse(htmlContent, {

@@ -21,6 +21,7 @@ export function getHeaderCSS(): string {
       flex-shrink: 0;
       object-fit: contain;
       filter: var(--pf-logo-filter);
+      mix-blend-mode: var(--pf-logo-mix-blend, normal);
     }
 
     .header-content h1 {

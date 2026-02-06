@@ -13,6 +13,8 @@ export function generateCompactVariant(
   const escapedSubtitle = subtitle ? escapeHtml(subtitle) : '';
   const styles = getAllTemplateStyles('compact', theme);
 
+  const logoSrc = getLogoBase64();
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,6 +29,7 @@ export function generateCompactVariant(
   <div class="print-background-layer"></div>
   <div class="content-wrapper variant-compact">
     <header class="header variant-compact">
+      <img src="${logoSrc}" alt="Logo" class="logo" />
       <div class="header-content variant-compact">
         <h1 class="variant-compact">${escapedTitle}</h1>
         ${escapedSubtitle ? `<h2 class="variant-compact">${escapedSubtitle}</h2>` : ''}

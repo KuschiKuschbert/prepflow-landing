@@ -57,7 +57,7 @@ export function getCustomerVariantCSS(): string {
 
     @media print {
       body.variant-customer {
-        background: #ffffff;
+        /* background: #ffffff; -- Removed */
         padding: 0;
       }
 
@@ -70,7 +70,7 @@ export function getCustomerVariantCSS(): string {
       .variant-customer .header {
         padding-bottom: 24px;
         margin-bottom: 32px;
-        border-bottom-color: #e0e0e0;
+        /* border-bottom-color: #e0e0e0; -- Removed */
       }
 
       .variant-customer .header-content h1 {

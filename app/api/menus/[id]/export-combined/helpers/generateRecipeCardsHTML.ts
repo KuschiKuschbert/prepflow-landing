@@ -46,7 +46,7 @@ export function generateRecipeCardsHTML(cards: RecipeCardData[]): string {
 
     cardsContent += `
       <div class="recipe-category">
-        <h3 style="color: #29E7CD; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem;">${escapeHtml(category)}</h3>
+        <h3>${escapeHtml(category)}</h3>
     `;
 
     categoryCards.forEach(card => {

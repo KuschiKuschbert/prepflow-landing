@@ -222,22 +222,52 @@ export function getRecipeVariantCSS(): string {
       font-size: 0.8rem;
     }
 
+    /* 2-Column Layout for Print (Industry Standard) */
     @media print {
-      .recipe-card-yield {
-        border-color: #ddd;
-        background: #f5f5f5;
-        color: #333;
+      .recipe-card {
+        page-break-inside: avoid;
+        break-inside: avoid;
+        padding: 1.5rem !important; /* Slightly more padding than basic combined export */
+        border: 1px solid var(--pf-color-border);
+        background: transparent;
       }
 
-      .recipe-card-method li::before {
-        background: #eee;
-        color: #000;
-        border: 1px solid #ccc;
+      .recipe-card-header {
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
       }
 
-      .recipe-card-notes {
-        background: #fffbeb;
-        border-left-color: #d97706;
+      .recipe-body-content {
+        display: grid;
+        grid-template-columns: 1fr 2.2fr; /* Ingredients narrower, Method wider */
+        gap: 2rem;
+        align-items: start;
+      }
+
+      /* Assign columns explicitly */
+      .recipe-section-ingredients {
+        grid-column: 1;
+      }
+      .recipe-section-method {
+        grid-column: 2;
+      }
+
+      /* Auto-expand if the other section is missing */
+      .recipe-section-ingredients:only-child,
+      .recipe-section-method:only-child {
+        grid-column: 1 / -1;
+      }
+
+      .recipe-card-section {
+        margin-bottom: 0; /* Let grid gap handle spacing */
+      }
+
+      /* Ensure lists are compact for print */
+      .recipe-card-ingredients li,
+      .recipe-card-method li,
+      .recipe-card-notes li {
+        padding: 0.25rem 0;
+        font-size: 0.95rem;
       }
     }
   `;

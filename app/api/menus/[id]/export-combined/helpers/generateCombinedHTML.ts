@@ -1,5 +1,6 @@
 import { generatePDF } from '@/lib/exports/generate-pdf';
 import { generateExportTemplate } from '@/lib/exports/pdf-template';
+import { getLogoBase64 } from '@/lib/exports/pdf-template/helpers/getLogoServer';
 import { ExportTheme } from '@/lib/exports/themes';
 import { NextResponse } from 'next/server';
 import { COMBINED_EXPORT_STYLES } from './combinedExportStyles';
@@ -37,17 +38,30 @@ export async function generateCombinedHTML(
 
   // Generate menu display HTML (if included)
   if (includeMenu) {
-    parts.push(generateMenuDisplayHTML(menuData));
+    parts.push(`<div class="section-menu">${generateMenuDisplayHTML(menuData)}</div>`);
   }
 
   // Generate allergen matrix HTML (if included)
   if (includeMatrix) {
-    parts.push(generateAllergenMatrixHTML(matrixData));
+    // Force new page if menu was included
+    const breakClass = includeMenu ? 'print-page-break' : '';
+    parts.push(
+      `<div class="section-matrix ${breakClass}">${generateAllergenMatrixHTML(matrixData)}</div>`,
+    );
   }
 
   // Generate recipe cards HTML (if included)
   if (includeRecipes) {
-    parts.push(generateRecipeCardsHTML(recipeCardsData));
+    // Force new page if menu or matrix was included
+    const breakClass = includeMenu || includeMatrix ? 'print-page-break' : '';
+    // INJECT HARD BREAK ELEMENT + WRAPPER
+    parts.push(`
+      <div class="section-recipes ${breakClass}">
+        <!-- Physical Page Break Anchor -->
+        <div style="page-break-before: always !important; break-before: page !important; height: 1px; display: block; clear: both;"></div>
+        ${generateRecipeCardsHTML(recipeCardsData)}
+      </div>
+    `);
   }
 
   // Build subtitle based on what's included
@@ -63,6 +77,34 @@ export async function generateCombinedHTML(
       ${COMBINED_EXPORT_STYLES}
     </style>
     ${parts.join('')}
+
+    <!-- Nuclear Print Overrides: Injected LAST to win cascade -->
+    <style>
+      @media print {
+        /* Force Matrix to start on new page */
+        .section-matrix, .allergen-matrix-section {
+          page-break-before: always !important;
+          break-before: page !important;
+        }
+
+        /* Force Recipes to start on new page */
+        .section-recipes, .recipe-cards-section {
+          page-break-before: always !important;
+          break-before: page !important;
+          margin-top: 0 !important;
+          padding-top: 1px !important; /* Prevent margin collapse */
+        }
+
+        /* Ensure containers are block-level */
+        .section-menu, .section-matrix, .section-recipes {
+          display: block !important;
+          width: 100% !important;
+          float: none !important;
+          clear: both !important;
+          overflow: visible !important;
+        }
+      }
+    </style>
   `;
 
   const totalItems = Math.max(menuData.length, matrixData.length, recipeCardsData.length);
@@ -76,6 +118,7 @@ export async function generateCombinedHTML(
     totalItems,
     customMeta: `Menu: ${menuName} | Items: ${totalItems}`,
     theme,
+    logoOverride: forPDF ? getLogoBase64() : undefined,
   });
 
   if (forPDF) {

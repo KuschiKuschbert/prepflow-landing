@@ -86,31 +86,17 @@ export function getComplianceReportStyles(): string {
         page-break-inside: avoid;
       }
 
-      .compliance-report-table {
-        border-color: #000000;
-      }
-
       .compliance-report-table th {
-        background-color: #000000 !important;
-        color: #ffffff !important;
-        border-color: #000000 !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
 
-      .compliance-report-table td {
-        border-color: #000000 !important;
-      }
-
       .compliance-report-table tbody tr:nth-child(even) {
-        background-color: #f5f5f5 !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
 
       .compliance-report-summary {
-        background-color: #f5f5f5 !important;
-        border-color: #000000 !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }

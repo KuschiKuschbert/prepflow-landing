@@ -35,9 +35,10 @@ export function buildCardHTML(card: RecipeCardData): string {
         <div class="recipe-card-yield">Base Yield: ${card.baseYield} serving${card.baseYield !== 1 ? 's' : ''}</div>
       </div>
 
-      <div class="recipe-card-section">
-        <h4 class="recipe-card-section-title">Ingredients</h4>
-        <ul class="recipe-card-ingredients">
+      <div class="recipe-body-content">
+        <div class="recipe-card-section recipe-section-ingredients">
+          <h4 class="recipe-card-section-title">Ingredients</h4>
+          <ul class="recipe-card-ingredients">
   `;
 
   card.ingredients.forEach(ingredient => {
@@ -47,15 +48,15 @@ export function buildCardHTML(card: RecipeCardData): string {
   });
 
   html += `
-        </ul>
-      </div>
+          </ul>
+        </div>
   `;
 
   if (card.methodSteps && card.methodSteps.length > 0) {
     html += `
-      <div class="recipe-card-section">
-        <h4 class="recipe-card-section-title">Method</h4>
-        <ol class="recipe-card-method">
+        <div class="recipe-card-section recipe-section-method">
+          <h4 class="recipe-card-section-title">Method</h4>
+          <ol class="recipe-card-method">
     `;
 
     card.methodSteps.forEach(step => {
@@ -65,10 +66,14 @@ export function buildCardHTML(card: RecipeCardData): string {
     });
 
     html += `
-        </ol>
-      </div>
+          </ol>
+        </div>
     `;
   }
+
+  html += `
+      </div>
+  `;
 
   if (card.notes && card.notes.length > 0) {
     html += `
