@@ -35,7 +35,7 @@ export function NavigationSidebar({
 }: NavigationSidebarProps) {
   return (
     <aside
-      className="desktop:translate-x-0 desktop:translate-x-0 sticky top-[calc(var(--header-height-mobile)+var(--safe-area-inset-top)+1rem)] left-4 z-40 h-[calc(100vh-var(--header-height-mobile)-var(--safe-area-inset-top)-2rem)] w-64 -translate-x-full transform rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 to-[var(--primary)]/20 p-[1px] transition-transform duration-200"
+      className="desktop:translate-x-0 h-full w-full rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 to-[var(--primary)]/20 p-[1px] transition-transform duration-200"
       role="navigation"
       aria-label="Settings navigation"
     >
