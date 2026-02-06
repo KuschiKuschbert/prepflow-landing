@@ -16,7 +16,11 @@ import { transformCards } from './helpers/transformCards';
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { id: menuId } = await context.params;
+    const { id: rawMenuId } = await context.params;
+    // Defensive coding: Clean menu ID if it has trailing comma or other garbage
+    // This fixes the "can't find menu,L" error where ",L" is appended to the ID
+    const menuId = rawMenuId?.split(',')[0]?.trim();
+
     if (!menuId) {
       return NextResponse.json(
         ApiErrorHandler.createError('Menu ID is required', 'VALIDATION_ERROR', 400),

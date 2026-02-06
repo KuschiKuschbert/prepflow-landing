@@ -7,8 +7,9 @@ import { handleMenuStatisticsError } from './helpers/handleMenuStatisticsError';
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await context.params;
-    const menuId = id;
+    const { id: rawMenuId } = await context.params;
+    // Defensive coding: Clean menu ID if it has trailing comma or other garbage
+    const menuId = rawMenuId?.split(',')[0]?.trim();
 
     if (!menuId) {
       return NextResponse.json(

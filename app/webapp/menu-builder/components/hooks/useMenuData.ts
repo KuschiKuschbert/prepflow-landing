@@ -1,8 +1,8 @@
 /**
  * Hook for managing menu data loading and caching
  */
-import { useState, useEffect, useCallback } from 'react';
-import type { MenuItem, MenuStatistics, Dish, Recipe } from '@/lib/types/menu-builder';
+import type { Dish, MenuItem, MenuStatistics, Recipe } from '@/lib/types/menu-builder';
+import { useCallback, useEffect, useState } from 'react';
 import { loadMenuData as loadMenuDataHelper } from './useMenuData/dataLoading';
 import { initializeState } from './useMenuData/helpers/initializeState';
 import { refreshStatistics as refreshStatisticsHelper } from './useMenuData/helpers/refreshStatistics';
@@ -26,7 +26,11 @@ interface UseMenuDataReturn {
   setStatistics: React.Dispatch<React.SetStateAction<MenuStatistics | null>>;
 }
 
-export function useMenuData({ menuId, onError }: UseMenuDataProps): UseMenuDataReturn {
+export function useMenuData({ menuId: rawMenuId, onError }: UseMenuDataProps): UseMenuDataReturn {
+  // Defensive coding: Clean menu ID if it has trailing comma or other garbage
+  // This fixes the "can't find menu,L" error where ",L" is appended to the ID
+  const menuId = rawMenuId?.split(',')[0]?.trim();
+
   const menuCacheKey = `menu_${menuId}_data`;
   const dishesCacheKey = 'menu_builder_dishes';
   const recipesCacheKey = 'menu_builder_recipes';

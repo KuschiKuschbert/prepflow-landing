@@ -22,21 +22,6 @@ export async function GET(request: NextRequest) {
     const start = (page - 1) * pageSize;
     const end = start + pageSize - 1;
 
-    // DEBUG: Check counts
-    const { count: totalCount } = await supabaseAdmin
-      .from('dishes')
-      .select('*', { count: 'exact', head: true });
-    const { count: userCount } = await supabaseAdmin
-      .from('dishes')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', userId);
-    const { count: nullUserCount } = await supabaseAdmin
-      .from('dishes')
-      .select('*', { count: 'exact', head: true })
-      .is('user_id', null);
-
-    logger.info('[Debug] Dish counts:', { totalCount, userCount, nullUserCount });
-
     let query = supabaseAdmin.from('dishes').select('*', { count: 'exact' }).eq('user_id', userId);
 
     // Filter by category if provided
