@@ -12,7 +12,10 @@ export function getLogoBase64(): string {
     const base64Image = fileBuffer.toString('base64');
     return `data:image/png;base64,${base64Image}`;
   } catch {
-    // Fallback if file read fails (though it shouldn't) - return empty or standard URL
-    return '/images/prepflow-logo.png';
+    // Fallback if file read fails (though it shouldn't) - return absolute URL for Puppeteer
+    const baseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    return `${baseUrl}/images/prepflow-logo.png`;
   }
 }

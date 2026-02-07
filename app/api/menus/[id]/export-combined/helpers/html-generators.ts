@@ -1,5 +1,5 @@
 import { escapeHtml } from '@/lib/exports/pdf-template';
-import { RecipeCardData } from './types';
+import { MethodStepRow, RecipeCardData } from './types';
 
 export function renderIngredients(ingredients: RecipeCardData['ingredients']): string {
   if (ingredients.length === 0) return '';

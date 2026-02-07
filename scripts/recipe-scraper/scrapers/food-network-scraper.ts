@@ -3,8 +3,9 @@
  * Scrapes recipes from Food Network (may require Puppeteer for JS-heavy pages)
  */
 
+import chromium from '@sparticuz/chromium';
 import * as cheerio from 'cheerio';
-import puppeteer from 'puppeteer';
+import puppeteerCore from 'puppeteer-core';
 import {
   isJSONLDRecipe,
   JSONLDImageObject,
@@ -21,8 +22,6 @@ export class FoodNetworkScraper extends BaseScraper {
 
   constructor(config?: Partial<import('../parsers/types').ScraperConfig>) {
     super('food-network', config);
-    // Check if Puppeteer is available
-    this.usePuppeteer = typeof puppeteer !== 'undefined';
   }
 
   /**
@@ -37,12 +36,30 @@ export class FoodNetworkScraper extends BaseScraper {
 
     let browser;
     try {
-      scraperLogger.debug(`Using Puppeteer to fetch: ${url}`);
-      browser = await puppeteer.launch({
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
-        timeout: 30000, // 30 second launch timeout
-      });
+      if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
+        // Production (Vercel): Use puppeteer-core + @sparticuz/chromium
+        chromium.setGraphicsMode = false;
+        const executablePath = await chromium.executablePath();
+
+        scraperLogger.debug(`Using Puppeteer Core (Serverless) to fetch: ${url}`);
+        browser = await puppeteerCore.launch({
+          args: chromium.args,
+          defaultViewport: { width: 1920, height: 1080 },
+          executablePath,
+          headless: true,
+          timeout: 30000,
+        });
+      } else {
+        // Development: Use standard puppeteer (installed in devDependencies)
+        scraperLogger.debug(`Using Standard Puppeteer to fetch: ${url}`);
+        // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
+        const puppeteer = require('puppeteer');
+        browser = await puppeteer.launch({
+          headless: true,
+          args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+          timeout: 30000,
+        });
+      }
       const page = await browser.newPage();
       await page.setUserAgent(this.config.userAgent);
 
