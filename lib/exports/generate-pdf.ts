@@ -41,10 +41,15 @@ export async function generatePDF(html: string): Promise<Uint8Array> {
 
     const page = await browser.newPage();
 
-    // Set content and wait for network idle to ensure assets load
+    // Set a reasonable timeout for the whole operation (Vercel has its own, but we should be stricter)
+    page.setDefaultTimeout(25000); // 25 seconds
+
+    // Set content and wait for load.
+    // We avoid 'networkidle0' because it's slow and risky in serverless environments
+    // where some assets (like tracking pixels or slow fonts) might never "idle".
     logger.dev('[generatePDF] Setting content...');
     await page.setContent(html, {
-      waitUntil: ['load', 'networkidle0'],
+      waitUntil: 'load',
     });
 
     // Generate PDF
@@ -52,17 +57,30 @@ export async function generatePDF(html: string): Promise<Uint8Array> {
     const pdfBuffer = await page.pdf({
       format: 'A4',
       printBackground: true,
-      margin: undefined, // Let CSS control margins
+      margin: {
+        top: '10mm',
+        right: '10mm',
+        bottom: '10mm',
+        left: '10mm',
+      },
     });
 
     logger.dev('[generatePDF] PDF generated successfully');
     return pdfBuffer;
   } catch (error) {
-    logger.error('[generatePDF] Error generating PDF:', error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error('[generatePDF] Error generating PDF:', {
+      error: errorMessage,
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     throw error;
   } finally {
     if (browser) {
-      await browser.close();
+      try {
+        await browser.close();
+      } catch (closeError) {
+        logger.warn('[generatePDF] Error closing browser:', closeError);
+      }
     }
   }
 }

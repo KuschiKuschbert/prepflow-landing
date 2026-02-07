@@ -1,16 +1,16 @@
 'use client';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { logger } from '@/lib/logger';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { Menu } from '@/lib/types/menu-builder';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { DatabaseErrorBanner } from './MenuBuilderClient/components/DatabaseErrorBanner';
+import { ErrorBanner } from './MenuBuilderClient/components/ErrorBanner';
+import { useDatabaseCheck } from './MenuBuilderClient/hooks/useDatabaseCheck';
+import { useMenuData } from './MenuBuilderClient/hooks/useMenuData';
+import { useMenuHandlers } from './MenuBuilderClient/hooks/useMenuHandlers';
 import MenuEditor from './MenuEditor';
 import MenuForm from './MenuForm';
 import MenuList from './MenuList';
-import { useMenuData } from './MenuBuilderClient/hooks/useMenuData';
-import { useDatabaseCheck } from './MenuBuilderClient/hooks/useDatabaseCheck';
-import { useMenuHandlers } from './MenuBuilderClient/hooks/useMenuHandlers';
-import { DatabaseErrorBanner } from './MenuBuilderClient/components/DatabaseErrorBanner';
-import { ErrorBanner } from './MenuBuilderClient/components/ErrorBanner';
 
 interface MenuBuilderClientProps {
   selectedMenu: Menu | null;
@@ -138,23 +138,29 @@ export default function MenuBuilderClient({
     }
   };
 
-  const handleCreateMenuClick = () => {
+  const handleCreateMenuClick = useCallback(() => {
     const result = handleCreateMenu();
     setEditingMenu(result.editingMenu);
     setShowMenuForm(result.showMenuForm);
-  };
+  }, [handleCreateMenu]);
 
-  const handleEditMenuClick = (menu: Menu) => {
-    const result = handleEditMenu(menu);
-    setEditingMenu(result.editingMenu);
-    setShowMenuForm(result.showMenuForm);
-  };
+  const handleEditMenuClick = useCallback(
+    (menu: Menu) => {
+      const result = handleEditMenu(menu);
+      setEditingMenu(result.editingMenu);
+      setShowMenuForm(result.showMenuForm);
+    },
+    [handleEditMenu],
+  );
 
-  const handleMenuSavedClick = (savedMenu: Menu) => {
-    const result = handleMenuSaved(savedMenu);
-    setShowMenuForm(result.showMenuForm);
-    setEditingMenu(result.editingMenu);
-  };
+  const handleMenuSavedClick = useCallback(
+    (savedMenu: Menu) => {
+      const result = handleMenuSaved(savedMenu);
+      setShowMenuForm(result.showMenuForm);
+      setEditingMenu(result.editingMenu);
+    },
+    [handleMenuSaved],
+  );
 
   // Log when selectedMenu prop changes
   useEffect(() => {

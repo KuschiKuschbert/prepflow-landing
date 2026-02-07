@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
-import { useEffect, useRef } from 'react';
 import { Menu } from '@/lib/types/menu-builder';
+import { useEffect, useRef } from 'react';
 
 export function useRenderTracking(menu: Menu) {
   const prevMenuRef = useRef(menu);
@@ -34,5 +34,5 @@ export function useRenderTracking(menu: Menu) {
     }
 
     prevMenuRef.current = menu;
-  }, [menu, renderId]);
+  }, [menu]);
 }

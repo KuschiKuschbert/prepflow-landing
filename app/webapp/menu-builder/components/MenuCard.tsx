@@ -2,8 +2,9 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
-import { Check, Edit2, Lock, Printer, Trash2, X } from 'lucide-react';
 import { Menu } from '@/lib/types/menu-builder';
+import { Check, Edit2, Lock, Printer, Trash2, X } from 'lucide-react';
+import { memo } from 'react';
 
 interface MenuCardProps {
   menu: Menu;
@@ -36,7 +37,7 @@ interface MenuCardProps {
  * @param {MenuCardProps} props - Component props
  * @returns {JSX.Element} Menu card element
  */
-export function MenuCard({
+export const MenuCard = memo(function MenuCard({
   menu,
   isEditingThisMenu,
   isEditingTitle,
@@ -267,4 +268,4 @@ export function MenuCard({
       </div>
     </div>
   );
-}
+});

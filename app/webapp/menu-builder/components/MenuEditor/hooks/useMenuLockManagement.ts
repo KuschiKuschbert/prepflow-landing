@@ -1,7 +1,7 @@
 import { useNotification } from '@/contexts/NotificationContext';
 import { MenuChangeTracking } from '@/lib/menu-lock/change-tracking';
-import { useCallback, useRef, useState } from 'react';
 import { Menu } from '@/lib/types/menu-builder';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { handleLockToggle as performLockToggle } from './useMenuLockManagement/helpers/handleLockToggle';
 import { useLockStatusSync } from './useMenuLockManagement/helpers/useLockStatusSync';
 
@@ -74,16 +74,28 @@ export function useMenuLockManagement(
     setShowUnlockDialog(false);
   }, []);
 
-  return {
-    menuLockStatus,
-    lockLoading,
-    unlockChanges,
-    showUnlockDialog,
-    handleLockMenu,
-    handleUnlockMenu,
-    handleDismissChanges,
-    handleCloseUnlockDialog,
-    setUnlockChanges,
-    setShowUnlockDialog,
-  };
+  return useMemo(
+    () => ({
+      menuLockStatus,
+      lockLoading,
+      unlockChanges,
+      showUnlockDialog,
+      handleLockMenu,
+      handleUnlockMenu,
+      handleDismissChanges,
+      handleCloseUnlockDialog,
+      setUnlockChanges,
+      setShowUnlockDialog,
+    }),
+    [
+      menuLockStatus,
+      lockLoading,
+      unlockChanges,
+      showUnlockDialog,
+      handleLockMenu,
+      handleUnlockMenu,
+      handleDismissChanges,
+      handleCloseUnlockDialog,
+    ],
+  );
 }
