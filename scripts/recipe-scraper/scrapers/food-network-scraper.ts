@@ -52,7 +52,7 @@ export class FoodNetworkScraper extends BaseScraper {
       } else {
         // Development: Use standard puppeteer (installed in devDependencies)
         scraperLogger.debug(`Using Standard Puppeteer to fetch: ${url}`);
-        // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
+
         const puppeteer = require('puppeteer');
         browser = await puppeteer.launch({
           headless: true,

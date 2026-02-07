@@ -15,7 +15,6 @@ async function test() {
         headless: true,
       })) as unknown as Browser;
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
       const puppeteer = require('puppeteer');
       browser = await puppeteer.launch({
         headless: true,
