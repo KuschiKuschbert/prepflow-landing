@@ -1,9 +1,9 @@
 # 🏗️ RSI Architecture Analysis Report
 
-**Date:** 2/6/2026, 3:45:21 PM
+**Date:** 2/7/2026, 3:31:30 PM
 
 **Detected Design Patterns:** 6
-**Detected Anti-Patterns:** 465
+**Detected Anti-Patterns:** 461
 
 ## ⚠️ Anti-Patterns Detected
 
@@ -418,19 +418,7 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/api/menus/[id]/export-combined/helpers/allergenMatrixStyles.ts`
-**Description:** Found 39 magic numbers
-**Suggestion:** Extract magic numbers to named constants
-
-### Magic Numbers (MEDIUM)
-
-**File:** `app/api/menus/[id]/export-combined/helpers/menuDisplayStyles.ts`
-**Description:** Found 20 magic numbers
-**Suggestion:** Extract magic numbers to named constants
-
-### Magic Numbers (MEDIUM)
-
-**File:** `app/api/menus/[id]/export-combined/helpers/recipe-card-styles.ts`
-**Description:** Found 28 magic numbers
+**Description:** Found 15 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
@@ -2332,25 +2320,13 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `lib/exports/template-styles/helpers/variantStyles/getMatrixVariantCSS.ts`
-**Description:** Found 22 magic numbers
-**Suggestion:** Extract magic numbers to named constants
-
-### Magic Numbers (MEDIUM)
-
-**File:** `lib/exports/template-styles/helpers/variantStyles/getMenuVariantCSS.ts`
-**Description:** Found 15 magic numbers
+**Description:** Found 14 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
 
 **File:** `lib/exports/template-styles/helpers/variantStyles/getRecipeVariantCSS.ts`
-**Description:** Found 16 magic numbers
-**Suggestion:** Extract magic numbers to named constants
-
-### Magic Numbers (MEDIUM)
-
-**File:** `lib/exports/template-styles/helpers/variantStyles/getSupplierVariantCSS.ts`
-**Description:** Found 17 magic numbers
+**Description:** Found 14 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)

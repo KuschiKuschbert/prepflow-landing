@@ -27,7 +27,7 @@ export async function generatePDF(html: string): Promise<Uint8Array> {
     } else {
       // Development: Use standard puppeteer (installed in devDependencies)
       // Dynamic import to avoid bundling it in production
-      // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const puppeteer = require('puppeteer');
       browser = await puppeteer.launch({
         headless: true,
