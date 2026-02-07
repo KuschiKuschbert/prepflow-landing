@@ -1,6 +1,6 @@
-import { useMemo, useRef } from 'react';
 import { logger } from '@/lib/logger';
 import type { MenuItem } from '@/lib/types/menu-builder';
+import { useMemo, useRef } from 'react';
 import { processMenuItem } from './useMenuItemsWithAllergens/helpers/processMenuItem';
 
 export interface MenuItemWithAllergens {
@@ -32,5 +32,5 @@ export function useMenuItemsWithAllergens(
     });
 
     return menuItems.map(item => processMenuItem(item));
-  }, [menuItems, menuId, renderId]);
+  }, [menuItems, menuId]);
 }

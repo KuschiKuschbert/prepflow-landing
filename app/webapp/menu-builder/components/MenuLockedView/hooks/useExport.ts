@@ -6,13 +6,14 @@ import { useState } from 'react';
 import type { ExportContentType, ExportFormat } from '../components/ExportOptions';
 
 export function useExport(menu: Menu) {
-  const { showError, showSuccess } = useNotification();
+  const { showError, showSuccess, showInfo } = useNotification();
   const [exportLoading, setExportLoading] = useState<string | null>(null);
 
   const handleExport = async (contentType: ExportContentType, format: ExportFormat) => {
     const loadingKey = `${contentType}-${format}`;
     const theme = getSavedExportTheme();
     setExportLoading(loadingKey);
+    showInfo('Preparing your export, chef. Please wait...');
     try {
       let endpoint = '';
       let filename = '';

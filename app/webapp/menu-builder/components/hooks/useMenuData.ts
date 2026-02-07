@@ -2,7 +2,7 @@
  * Hook for managing menu data loading and caching
  */
 import type { Dish, MenuItem, MenuStatistics, Recipe } from '@/lib/types/menu-builder';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { loadMenuData as loadMenuDataHelper } from './useMenuData/dataLoading';
 import { initializeState } from './useMenuData/helpers/initializeState';
 import { refreshStatistics as refreshStatisticsHelper } from './useMenuData/helpers/refreshStatistics';
@@ -35,7 +35,10 @@ export function useMenuData({ menuId: rawMenuId, onError }: UseMenuDataProps): U
   const dishesCacheKey = 'menu_builder_dishes';
   const recipesCacheKey = 'menu_builder_recipes';
 
-  const initialState = initializeState({ menuCacheKey, dishesCacheKey, recipesCacheKey });
+  const initialState = useMemo(
+    () => initializeState({ menuCacheKey, dishesCacheKey, recipesCacheKey }),
+    [menuCacheKey, dishesCacheKey, recipesCacheKey],
+  );
   const [menuItems, setMenuItems] = useState<MenuItem[]>(initialState.menuItems);
   const [dishes, setDishes] = useState<Dish[]>(initialState.dishes);
   const [recipes, setRecipes] = useState<Recipe[]>(initialState.recipes);
@@ -82,18 +85,30 @@ export function useMenuData({ menuId: rawMenuId, onError }: UseMenuDataProps): U
   useEffect(() => {
     loadMenuData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [menuId]);
-  return {
-    menuItems,
-    dishes,
-    recipes,
-    categories,
-    statistics,
-    loading,
-    loadMenuData,
-    refreshStatistics,
-    setMenuItems,
-    setCategories,
-    setStatistics,
-  };
+  }, [loadMenuData, menuId]);
+  return useMemo(
+    () => ({
+      menuItems,
+      dishes,
+      recipes,
+      categories,
+      statistics,
+      loading,
+      loadMenuData,
+      refreshStatistics,
+      setMenuItems,
+      setCategories,
+      setStatistics,
+    }),
+    [
+      menuItems,
+      dishes,
+      recipes,
+      categories,
+      statistics,
+      loading,
+      loadMenuData,
+      refreshStatistics,
+    ],
+  );
 }

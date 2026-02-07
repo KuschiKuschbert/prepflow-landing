@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
-import { useCallback, useRef } from 'react';
 import type { Menu } from '@/lib/types/menu-builder';
+import { useCallback, useMemo, useRef } from 'react';
 
 interface UseMenuHandlersProps {
   menus: Menu[];
@@ -86,13 +86,24 @@ export function useMenuHandlers({
     fetchMenus(false);
   }, [fetchMenus]);
 
-  return {
-    handleCreateMenu,
-    handleEditMenu,
-    handleSelectMenu,
-    handleMenuSaved,
-    handleMenuUpdated,
-    handleDeleteMenu,
-    handleBack,
-  };
+  return useMemo(
+    () => ({
+      handleCreateMenu,
+      handleEditMenu,
+      handleSelectMenu,
+      handleMenuSaved,
+      handleMenuUpdated,
+      handleDeleteMenu,
+      handleBack,
+    }),
+    [
+      handleCreateMenu,
+      handleEditMenu,
+      handleSelectMenu,
+      handleMenuSaved,
+      handleMenuUpdated,
+      handleDeleteMenu,
+      handleBack,
+    ],
+  );
 }

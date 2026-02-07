@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
-import { Download, FileDown, FileSpreadsheet, FileText } from 'lucide-react';
+import { Download, FileDown, FileSpreadsheet, FileText, Loader2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 // Version identifier for cache-busting verification
@@ -136,8 +136,17 @@ export function ExportOptions({ handleExport, exportLoading }: ExportOptionsProp
         disabled={isAnyExporting}
         className="flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--background)]/80 px-4 py-2 text-sm font-medium text-[var(--foreground-secondary)] transition-all hover:bg-[var(--surface)] disabled:cursor-not-allowed disabled:opacity-50"
       >
-        <Icon icon={Download} size="sm" aria-hidden={true} />
-        <span>Export</span>
+        {isAnyExporting ? (
+          <>
+            <Icon icon={Loader2} size="sm" className="animate-spin" aria-hidden={true} />
+            <span>Exporting...</span>
+          </>
+        ) : (
+          <>
+            <Icon icon={Download} size="sm" aria-hidden={true} />
+            <span>Export</span>
+          </>
+        )}
       </button>
 
       {/* Content Selection Dropdown */}

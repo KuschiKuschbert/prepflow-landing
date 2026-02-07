@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react';
 import { logger } from '@/lib/logger';
 import type { Menu } from '@/lib/types/menu-builder';
+import { useEffect, useRef } from 'react';
 import { fetchMenuLockStatus } from './fetchLockStatus';
 
 interface MenuLockStatus {
@@ -56,7 +56,10 @@ export function useLockStatusSync(
               prevStatus.locked_at !== newStatus.locked_at ||
               prevStatus.locked_by !== newStatus.locked_by
             ) {
-              logger.dev('[MenuEditor] fetchMenuLockStatus - Status changed, updating');
+              logger.dev('[MenuEditor] fetchMenuLockStatus - Status changed, updating', {
+                prev: prevStatus,
+                next: newStatus,
+              });
               return newStatus;
             }
             logger.dev('[MenuEditor] fetchMenuLockStatus - Status unchanged, keeping previous');

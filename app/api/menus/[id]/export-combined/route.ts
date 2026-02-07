@@ -11,7 +11,6 @@ import { fetchMenuWithItems } from '../helpers/fetchMenuWithItems';
 import { fetchRecipeCards } from './helpers/fetchRecipeCards';
 import { generateCombinedCSV } from './helpers/generateCombinedCSV';
 import { generateCombinedHTML } from './helpers/generateCombinedHTML';
-import { recalculateDietaryStatus } from './helpers/recalculateDietaryStatus';
 import { transformMatrixData } from './helpers/transformMatrixData';
 import { transformMenuData } from './helpers/transformMenuData';
 import { validateRequest } from './helpers/validateRequest';
@@ -48,7 +47,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
 
     const { userId } = await getAuthenticatedUser(request);
 
-    // Fetch menu with items
+    // Fetch menu with items (this automatically triggers enrichment and dietary recalculation)
     const menu = await fetchMenuWithItems(menuId, userId);
 
     if (!menu) {
@@ -57,26 +56,14 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       });
     }
 
-    // Ensure fresh dietary data by triggering recalculation for all recipes/dishes
-    await recalculateDietaryStatus(menu.items as EnrichedMenuItem[]);
-
-    // Re-fetch menu with items to get updated dietary status
-    const menuWithFreshData = await fetchMenuWithItems(menuId, userId);
-
-    if (!menuWithFreshData) {
-      return NextResponse.json(ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404), {
-        status: 404,
-      });
-    }
-
     // Transform menu items to display data (only if needed)
     const menuData = options.includeMenu
-      ? transformMenuData(menuWithFreshData.items as EnrichedMenuItem[])
+      ? transformMenuData(menu.items as EnrichedMenuItem[])
       : [];
 
     // Transform menu items to allergen matrix data (only if needed)
     const matrixData = options.includeMatrix
-      ? transformMatrixData(menuWithFreshData.items as EnrichedMenuItem[])
+      ? transformMatrixData(menu.items as EnrichedMenuItem[])
       : [];
 
     // Fetch recipe cards (only if needed)
@@ -85,7 +72,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     // Generate export based on format
     if (options.format === 'csv') {
       return generateCombinedCSV(
-        menuWithFreshData.menu_name,
+        menu.menu_name,
         menuData,
         matrixData,
         recipeCardsData,
@@ -96,7 +83,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     }
     if (options.format === 'pdf') {
       return await generateCombinedHTML(
-        menuWithFreshData.menu_name,
+        menu.menu_name,
         menuData,
         matrixData,
         recipeCardsData,
@@ -108,7 +95,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       );
     }
     return await generateCombinedHTML(
-      menuWithFreshData.menu_name,
+      menu.menu_name,
       menuData,
       matrixData,
       recipeCardsData,
