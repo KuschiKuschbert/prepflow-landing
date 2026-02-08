@@ -98,7 +98,12 @@ export function getComponentSize(
 ): string {
   const componentSizes = COMPONENT_SIZES[component];
   const sizeConfig = componentSizes[size];
-  return Object.values(sizeConfig)
-    .filter((v): v is string => typeof v === 'string')
-    .join(' ');
+  // Extract CSS class values, excluding the 'usage' property
+  const classes: string[] = [];
+  if ('padding' in sizeConfig) classes.push(sizeConfig.padding);
+  if ('text' in sizeConfig) classes.push(sizeConfig.text);
+  if ('height' in sizeConfig) classes.push(sizeConfig.height);
+  if ('width' in sizeConfig) classes.push(sizeConfig.width);
+  if ('gap' in sizeConfig) classes.push(sizeConfig.gap);
+  return classes.join(' ');
 }

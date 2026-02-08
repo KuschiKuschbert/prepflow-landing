@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { IngredientsTab } from './IngredientsTab';
 import { RecipeManagementTabs, type RecipeManagementTab } from './RecipeManagementTabs';
@@ -56,7 +56,11 @@ export function RecipeBookContent() {
     <div>
       <RecipeManagementTabs activeTab={activeTab} onTabChange={setActiveTab} />
       {/* Render tab content - will update after mount if hash differs */}
-      {activeTab === 'ingredients' && <IngredientsTab />}
+      {activeTab === 'ingredients' && (
+        <Suspense fallback={<PageSkeleton />}>
+          <IngredientsTab />
+        </Suspense>
+      )}
       {activeTab === 'dishes' && <DishesClient />}
       {activeTab === 'menu-builder' && <MenuBuilderTab />}
     </div>
