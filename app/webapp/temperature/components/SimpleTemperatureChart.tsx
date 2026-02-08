@@ -9,7 +9,6 @@ import { useChartFormatters } from '../utils/chart-formatters';
 import { TemperatureChartContent } from './TemperatureChartContent';
 import { TemperatureChartEmptyState } from './TemperatureChartEmptyState';
 import { TemperatureStatistics } from './utils';
-import styles from './temperature-charts.module.css';
 
 interface SimpleTemperatureChartProps {
   logs: TemperatureLog[];
@@ -85,7 +84,7 @@ export default function SimpleTemperatureChart({
       >
         {chartData.length > 0 ? (
           <div
-            className={`${styles.temperatureChartContainer} h-full w-full`}
+            className="tablet:[-webkit-overflow-scrolling:touch] tablet:[overscroll-behavior:contain] relative h-full w-full overflow-hidden opacity-100 transition-opacity duration-200 select-none hover:-translate-y-px hover:shadow-[0_10px_25px_rgba(0,0,0,0.3)] focus:outline-2 focus:outline-offset-2 focus:outline-[#29e7cd] focus:not-focus-visible:outline-none [&_*]:transition-[transform,box-shadow,color] [&_*]:duration-200 [&_*]:ease-in-out"
             style={{ position: 'relative', overflow: 'visible' }}
           >
             <TemperatureChartContent
