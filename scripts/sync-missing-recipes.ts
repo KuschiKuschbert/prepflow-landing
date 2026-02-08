@@ -20,25 +20,6 @@ if (fs.existsSync(envPath)) {
   });
 }
 
-interface LocalRecipe {
-  id?: string;
-  source_url?: string;
-  file_path: string;
-  recipe_name: string;
-  description?: string;
-  instructions?: any[];
-  ingredients?: any[];
-  source?: string;
-  image_url?: string;
-  yield?: number | string;
-  yield_unit?: string;
-  prep_time_minutes?: number;
-  cook_time_minutes?: number;
-  category?: string;
-  cuisine?: string;
-  scraped_at?: string;
-}
-
 // Initialize Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey =
@@ -60,10 +41,13 @@ async function syncRecipes() {
 
   console.log('Loading local index...');
   const indexData = JSON.parse(fs.readFileSync(indexPath, 'utf-8'));
-  const localRecipes: LocalRecipe[] = indexData.recipes;
+  const localRecipes = indexData.recipes;
   console.log(`Found ${localRecipes.length} recipes in local index.`);
 
   console.log('Fetching existing URLs from Supabase...');
+  // Fetch all source_urls to compare
+  let existingUrls = new Set<string>();
+
   // Fetch all existing IDs using pagination
   const existingKeys = new Set<string>();
   const PAGE_SIZE = 1000;
@@ -82,7 +66,7 @@ async function syncRecipes() {
     }
 
     if (existingData && existingData.length > 0) {
-      existingData.forEach((row: { source_url?: string; external_id?: string }) => {
+      existingData.forEach((row: any) => {
         if (row.source_url) existingKeys.add(row.source_url);
         if (row.external_id) existingKeys.add(row.external_id);
       });
@@ -101,7 +85,7 @@ async function syncRecipes() {
 
   console.log(`Found ${existingKeys.size} unique keys (URLs/IDs) in Supabase.`);
 
-  const missingRecipes = localRecipes.filter(r => {
+  const missingRecipes = localRecipes.filter((r: any) => {
     // Check source_url
     if (r.source_url && existingKeys.has(r.source_url)) return false;
     // Check id (which maps to external_id)
@@ -144,7 +128,7 @@ async function syncRecipes() {
           content = buffer.toString('utf-8');
         }
 
-        const recipe: LocalRecipe = JSON.parse(content);
+        const recipe = JSON.parse(content);
 
         // Map to ai_specials schema
         const instructions = recipe.instructions || [];
