@@ -48,7 +48,7 @@ async function verifySync() {
     .select('source_url')
     .in(
       'source_url',
-      sampleRecipes.map((r: any) => r.source_url),
+      sampleRecipes.map((r: { source_url: string }) => r.source_url),
     );
 
   if (aiSpecialsError) {
@@ -60,17 +60,10 @@ async function verifySync() {
     if (aiSpecialsData && aiSpecialsData.length > 0) {
       console.log(
         'Sample matched URLs:',
-        aiSpecialsData.slice(0, 3).map((r: any) => r.source_url),
+        aiSpecialsData.slice(0, 3).map((r: { source_url: string }) => r.source_url),
       );
     }
   }
-
-  // Get count by source in 'ai_specials'
-  console.log("Analyzing counts by source in 'ai_specials'...");
-  const { data: sourceCounts, error: sourceCountsError } = await supabase
-    .from('ai_specials')
-    .select('source')
-    .csv(); // CSV format to avoid large JSON payload, or we can just iterate if rpc/group by isn't available
 
   // Supabase JS doesn't support GROUP BY directly on client unless using .rpc or view
   // Let's trying fetching just sources and aggregation in memory since 22k isn't too huge for node memory
@@ -82,14 +75,14 @@ async function verifySync() {
     console.log(`Error fetching sources: ${allSourcesError.message}`);
   } else if (allSources) {
     const supabaseCounts: Record<string, number> = {};
-    allSources.forEach((r: any) => {
+    allSources.forEach((r: { source: string }) => {
       const s = r.source || 'unknown';
       supabaseCounts[s] = (supabaseCounts[s] || 0) + 1;
     });
 
     console.log('\n--- Comparison by Source ---');
     const localCounts: Record<string, number> = {};
-    indexData.recipes.forEach((r: any) => {
+    indexData.recipes.forEach((r: { source: string }) => {
       localCounts[r.source] = (localCounts[r.source] || 0) + 1;
     });
 
