@@ -43,7 +43,6 @@ export class AllRecipesScraper extends BaseScraper {
       }
 
       const cookingMethod = recipeData.cookingMethod;
-      // @ts-ignore - temperature extraction logic
       const temperatureData =
         (typeof cookingMethod === 'object' && cookingMethod?.temperature) ||
         (recipeData as any).temperature;
@@ -52,7 +51,6 @@ export class AllRecipesScraper extends BaseScraper {
         id: recipeData.url || url,
         recipe_name: recipeData.name || recipeData.headline || 'Untitled Recipe',
         description: recipeData.description || '',
-        // @ts-ignore - parseInstructions is protected in BaseScraper
         instructions: (this as any).parseInstructions(recipeData.recipeInstructions || []),
         ingredients: this.parseIngredients(recipeData.recipeIngredient || []),
         yield: this.parseYield(recipeData.recipeYield),
@@ -60,12 +58,9 @@ export class AllRecipesScraper extends BaseScraper {
         prep_time_minutes: this.parseDuration(recipeData.prepTime),
         cook_time_minutes: this.parseDuration(recipeData.cookTime),
         total_time_minutes: this.parseDuration(recipeData.totalTime),
-        // @ts-ignore - parseTemperature is protected
         ...(this as any).parseTemperature(temperatureData),
         image_url: this.parseImage(recipeData.image),
-        // @ts-ignore - parseAuthor is protected
         author: (this as any).parseAuthor(recipeData.author),
-        // @ts-ignore - parseRating is protected
         rating: (this as any).parseRating(recipeData.aggregateRating?.ratingValue),
       };
 
@@ -123,7 +118,6 @@ export class AllRecipesScraper extends BaseScraper {
         const found = $(selector)
           .map((_, el) => {
             const text = $(el).text().trim();
-            // @ts-ignore - parseIngredientName is protected
             const name = (this as any).parseIngredientName(text);
             return text.length > 0 ? { name: name || text, original_text: text } : null;
           })
@@ -169,7 +163,6 @@ export class AllRecipesScraper extends BaseScraper {
     if (!Array.isArray(ingredients)) return [];
     return ingredients.map(ing => {
       const originalText = String(ing);
-      // @ts-ignore - extractIngredientName private in original, using parseIngredientName if possible or manual
       const cleaned = originalText
         .replace(/^\d+\s*/, '')
         .replace(/^\d+\/\d+\s*/, '')

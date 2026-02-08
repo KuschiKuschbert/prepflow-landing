@@ -37,7 +37,6 @@ export class TastyScraper extends BaseScraper {
         id: url,
         recipe_name: recipeData.name || '',
         description: recipeData.description || '',
-        // @ts-ignore
         instructions: (this as any).parseInstructions(recipeData.recipeInstructions || []),
         ingredients: (recipeData.recipeIngredient || []).map(ing => ({
           name: ing.replace(/^\d+\s*/, '').trim(),

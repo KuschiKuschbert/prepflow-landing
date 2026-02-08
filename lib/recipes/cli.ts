@@ -17,11 +17,13 @@ async function main() {
   if (statsFlag) {
     const storage = new JSONStorage();
     const recipes = storage.getAllRecipes();
+    // eslint-disable-next-line no-console
     console.log(`Total Recipes: ${recipes.length}`);
     return;
   }
 
   if (sourceArg) {
+    // eslint-disable-next-line no-console
     console.log(`Starting scraper for ${sourceArg}...`);
     const job = getComprehensiveScraperJob();
     // Simplified CLI interaction for now
@@ -29,9 +31,11 @@ async function main() {
     return;
   }
 
+  // eslint-disable-next-line no-console
   console.log('Starting comprehensive scrape...');
   const job = getComprehensiveScraperJob();
   await job.start();
 }
 
+// eslint-disable-next-line no-console
 main().catch(console.error);

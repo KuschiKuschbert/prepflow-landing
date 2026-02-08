@@ -187,6 +187,7 @@ export class ComprehensiveScraperJob {
   }
 
   private getScraper(source: SourceType) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { getScraper } = require('../factory');
     return getScraper(source);
   }
