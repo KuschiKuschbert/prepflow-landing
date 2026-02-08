@@ -37,7 +37,7 @@ export async function handleComprehensiveScrape(): Promise<NextResponse> {
   try {
     logger.info('[Recipe Scraper API] Starting comprehensive scraping job');
     const job = getComprehensiveScraperJob();
-    let status = job.getStatus();
+    const status = job.getStatus();
 
     job.start().catch(error => {
       logger.error('[Recipe Scraper API] Comprehensive scraping job failed:', {
