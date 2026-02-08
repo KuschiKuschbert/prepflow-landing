@@ -7,22 +7,10 @@ import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { STORAGE_PATH } from '@/lib/recipes/config';
+import { JSONStorage } from '@/lib/recipes/storage/json-storage';
 import { NextRequest, NextResponse } from 'next/server';
 import * as path from 'path';
 import { processRecipeBatches } from './helpers/batch-processing';
-
-// Dynamic import to handle potential import failures gracefully
-async function loadJSONStorage() {
-  try {
-    const storageMod = await import('@/lib/recipes/storage/json-storage');
-    return storageMod.JSONStorage;
-  } catch (importErr) {
-    logger.error('[Recipe Unit Conversion API] Failed to import JSONStorage:', {
-      error: importErr instanceof Error ? importErr.message : String(importErr),
-    });
-    throw new Error('Failed to load JSONStorage module');
-  }
-}
 
 /**
  * POST /api/recipe-scraper/convert-units
@@ -37,21 +25,7 @@ export async function POST(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const dryRun = searchParams.get('dry') === '1';
 
-    // Load JSONStorage
-    let JSONStorageClass;
-    try {
-      JSONStorageClass = await loadJSONStorage();
-    } catch (loadErr) {
-      logger.error('[Recipe Unit Conversion API] Failed to load JSONStorage:', {
-        error: loadErr instanceof Error ? loadErr.message : String(loadErr),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Failed to load storage module', 'INTERNAL_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
-    const storage = new JSONStorageClass();
+    const storage = new JSONStorage();
     const allRecipes = storage.getAllRecipes();
 
     if (allRecipes.length === 0) {
