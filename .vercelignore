@@ -1,0 +1,12 @@
+# Exclude large data directories from Vercel builds
+# Prevents Next.js from scanning 99k+ files during build
+data/recipe-database/**/*
+!data/recipe-database/index.json
+
+# Exclude other large directories
+node_modules/
+.next/
+out/
+dist/
+coverage/
+*.log

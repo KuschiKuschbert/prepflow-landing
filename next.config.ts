@@ -130,6 +130,8 @@ const nextConfig: NextConfig = {
     // esmExternals: true, // Disabled - causes module import errors with Turbopack
     // Optimize CSS loading to prevent unused preloads
     optimizeCss: false,
+    // Exclude large data directories from build analysis
+    serverComponentsExternalPackages: ['fs', 'path'],
   },
 
   // Remove dev tools from production
@@ -159,6 +161,17 @@ const nextConfig: NextConfig = {
 
   // Webpack configuration with advanced optimizations
   webpack: (config, { dev, isServer }) => {
+    // Exclude data/recipe-database from file watching and analysis
+    // This prevents Next.js from scanning 99k+ files during build
+    config.watchOptions = {
+      ...config.watchOptions,
+      ignored: [
+        ...(Array.isArray(config.watchOptions?.ignored) ? config.watchOptions.ignored : []),
+        '**/data/recipe-database/**',
+        '**/node_modules/**',
+      ],
+    };
+
     // Production optimizations
     if (!dev && !isServer) {
       // Advanced bundle splitting

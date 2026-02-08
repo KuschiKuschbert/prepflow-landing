@@ -13,8 +13,14 @@ import { formatRecipesForPrompt } from './recipe-database-helpers/format-helpers
 
 const gunzip = promisify(zlib.gunzip);
 
-const RECIPE_DATABASE_PATH = path.join(process.cwd(), 'data', 'recipe-database');
-const INDEX_PATH = path.join(RECIPE_DATABASE_PATH, 'index.json');
+// Lazy-load paths to prevent Next.js from scanning directory at build time
+function getRecipeDatabasePath(): string {
+  return path.join(process.cwd(), 'data', 'recipe-database');
+}
+
+function getIndexPath(): string {
+  return path.join(getRecipeDatabasePath(), 'index.json');
+}
 
 interface RecipeIndexEntry {
   id: string;
@@ -37,9 +43,11 @@ interface RecipeIndex {
  */
 export function loadIndex(): RecipeIndex | null {
   try {
-    if (!fs.existsSync(RECIPE_DATABASE_PATH)) return null;
-    if (!fs.existsSync(INDEX_PATH)) return null;
-    const content = fs.readFileSync(INDEX_PATH, 'utf-8');
+    const dbPath = getRecipeDatabasePath();
+    const indexPath = getIndexPath();
+    if (!fs.existsSync(dbPath)) return null;
+    if (!fs.existsSync(indexPath)) return null;
+    const content = fs.readFileSync(indexPath, 'utf-8');
     return JSON.parse(content) as RecipeIndex;
   } catch (error) {
     logger.error('Error loading recipe index:', error);
@@ -54,7 +62,7 @@ export async function loadRecipe(filePath: string): Promise<ScrapedRecipe | null
   try {
     const fullPath = path.isAbsolute(filePath)
       ? filePath
-      : path.join(RECIPE_DATABASE_PATH, filePath);
+      : path.join(getRecipeDatabasePath(), filePath);
     if (!fs.existsSync(fullPath)) return null;
 
     const buffer = fs.readFileSync(fullPath);
