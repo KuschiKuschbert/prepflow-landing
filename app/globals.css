@@ -721,6 +721,40 @@ nav[aria-label='Bottom navigation'] {
 .recharts-wrapper {
   opacity: 1;
   visibility: visible;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Smooth Recharts animations */
+.recharts-wrapper * {
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* Ensure smooth chart rendering without flicker */
+.recharts-surface {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Chart elements are visible by default */
+.recharts-cartesian-axis,
+.recharts-cartesian-grid,
+.recharts-line,
+.recharts-dot {
+  opacity: 1;
+}
+
+/* Ensure Recharts tooltips don't cover bottom navbar on mobile */
+.recharts-tooltip-wrapper {
+  z-index: 40 !important;
+}
+
+/* Mobile-specific: ensure tooltips stay below navbar */
+@media (max-width: 768px) {
+  .recharts-tooltip-wrapper {
+    z-index: 40 !important;
+    max-width: calc(100vw - 2rem);
+  }
 }
 
 /* FOUC prevention handled by component-level loading states */

@@ -1,7 +1,7 @@
-/* Clean Temperature Charts Styles */
+/* Clean Temperature Charts Styles - Component Scoped */
 
 /* Prevent flash of unstyled content and hide any stray chart elements */
-.temperature-chart-container {
+.temperatureChartContainer {
   opacity: 1;
   user-select: none;
   position: relative;
@@ -9,83 +9,53 @@
   transition: opacity 0.2s ease-in-out;
 }
 
-/* Hide any stray Recharts elements that might appear */
-.recharts-wrapper {
-  position: relative !important;
-  overflow: hidden !important;
-}
-
-/* Ensure chart containers are properly contained */
-.recharts-surface {
-  position: relative !important;
-}
-
 /* Chart elements are visible by default */
-.recharts-cartesian-axis,
-.recharts-cartesian-grid,
-.recharts-line,
-.recharts-dot {
-  opacity: 1;
-}
-
-/* Smooth Recharts animations */
-.recharts-wrapper * {
-  transition: opacity 0.2s ease-in-out;
-}
-
-/* Ensure smooth chart rendering without flicker */
-.recharts-surface {
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-/* Chart elements are visible by default */
-.temperature-chart-container .recharts-wrapper {
+.temperatureChartContainer .rechartsWrapper {
   opacity: 1 !important;
   pointer-events: auto !important;
   transition: opacity 0.2s ease-in-out;
 }
 
-.temperature-chart-container:hover {
+.temperatureChartContainer:hover {
   transform: translateY(-1px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
 /* Smooth cursor changes */
-.temperature-chart-container[style*='grabbing'] {
+.temperatureChartContainer[style*='grabbing'] {
   cursor: grabbing !important;
 }
 
-.temperature-chart-container[style*='grab'] {
+.temperatureChartContainer[style*='grab'] {
   cursor: grab !important;
 }
 
 /* Responsive chart grid */
-.chart-grid {
+.chartGrid {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
 @media (max-width: 640px) {
-  .chart-grid {
+  .chartGrid {
     gap: 1rem;
   }
 }
 
 /* Clean hover effects */
-.temperature-chart-container:hover .chart-title {
+.temperatureChartContainer:hover .chartTitle {
   color: #29e7cd;
   transition: color 0.2s ease;
 }
 
 /* Subtle loading animation */
-.chart-loading {
+.chartLoading {
   position: relative;
   overflow: hidden;
 }
 
-.chart-loading::after {
+.chartLoading::after {
   content: '';
   position: absolute;
   top: 0;
@@ -106,17 +76,17 @@
 }
 
 /* Focus states for accessibility */
-.temperature-chart-container:focus {
+.temperatureChartContainer:focus {
   outline: 2px solid #29e7cd;
   outline-offset: 2px;
 }
 
-.temperature-chart-container:focus:not(:focus-visible) {
+.temperatureChartContainer:focus:not(:focus-visible) {
   outline: none;
 }
 
 /* Smooth transitions for interactive elements (excluding visibility) */
-.temperature-chart-container * {
+.temperatureChartContainer * {
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease,
@@ -125,24 +95,24 @@
 
 /* Mobile optimizations */
 @media (max-width: 768px) {
-  .temperature-chart-container {
+  .temperatureChartContainer {
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }
 
-  .chart-grid {
+  .chartGrid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
 }
 
 /* Clean status indicators */
-.status-indicator {
+.statusIndicator {
   position: relative;
   display: inline-block;
 }
 
-.status-indicator::before {
+.statusIndicator::before {
   content: '';
   position: absolute;
   top: 50%;
@@ -168,32 +138,19 @@
 }
 
 /* Clean tooltip styling */
-.temperature-tooltip {
+.temperatureTooltip {
   backdrop-filter: blur(8px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
 }
 
-/* Ensure Recharts tooltips don't cover bottom navbar on mobile */
-.recharts-tooltip-wrapper {
-  z-index: 40 !important;
-}
-
-/* Mobile-specific: ensure tooltips stay below navbar */
-@media (max-width: 768px) {
-  .recharts-tooltip-wrapper {
-    z-index: 40 !important;
-    max-width: calc(100vw - 2rem);
-  }
-}
-
 /* Smooth zoom transitions */
-.chart-zoom-transition {
+.chartZoomTransition {
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Clean instruction text */
-.chart-instructions {
+.chartInstructions {
   color: #6b7280;
   font-size: 0.75rem;
   text-align: center;
@@ -201,7 +158,7 @@
   opacity: 0.8;
 }
 
-.chart-instructions:hover {
+.chartInstructions:hover {
   opacity: 1;
   color: #9ca3af;
 }

@@ -9,6 +9,7 @@ import { useChartFormatters } from '../utils/chart-formatters';
 import { TemperatureChartContent } from './TemperatureChartContent';
 import { TemperatureChartEmptyState } from './TemperatureChartEmptyState';
 import { TemperatureStatistics } from './utils';
+import styles from './temperature-charts.module.css';
 
 interface SimpleTemperatureChartProps {
   logs: TemperatureLog[];
@@ -84,7 +85,7 @@ export default function SimpleTemperatureChart({
       >
         {chartData.length > 0 ? (
           <div
-            className="temperature-chart-container h-full w-full"
+            className={`${styles.temperatureChartContainer} h-full w-full`}
             style={{ position: 'relative', overflow: 'visible' }}
           >
             <TemperatureChartContent

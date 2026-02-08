@@ -11,7 +11,7 @@ import { GenerateSampleDataButton } from './GenerateSampleDataButton';
 import { useEquipmentStatus } from '../hooks/useEquipmentStatus';
 import { useSampleDataGeneration } from '../hooks/useSampleDataGeneration';
 import { prefetchApi, getCachedData } from '@/lib/cache/data-cache';
-import './temperature-charts.css';
+import styles from './temperature-charts.module.css';
 import { useTemperatureFilters } from './useTemperatureFilters';
 
 interface TemperatureAnalyticsTabProps {
