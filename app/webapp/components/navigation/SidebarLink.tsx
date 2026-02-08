@@ -64,7 +64,7 @@ export function SidebarLink({
           'font-medium',
           isActive
             ? 'text-[var(--foreground)]'
-            : 'text-[var(--foreground)]/80 group-hover:text-[var(--foreground)]',
+            : 'text-[var(--foreground-secondary)] group-hover:text-[var(--foreground)]',
         )}
       >
         {label}

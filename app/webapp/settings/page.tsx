@@ -133,7 +133,7 @@ export default function SettingsPage() {
         <div className="desktop:p-8 large-desktop:max-w-[1400px] mx-auto max-w-[1400px] p-6 xl:max-w-[1400px] 2xl:max-w-[1600px]">
           {/* Section Content - Render all sections with IDs for hash navigation */}
           {isMounted && (
-            <div className="space-y-6">
+            <div className="space-y-8">
               <div id="profile">{activeSection === 'profile' && renderSectionContent()}</div>
               <div id="billing">{activeSection === 'billing' && renderSectionContent()}</div>
               <div id="preferences">

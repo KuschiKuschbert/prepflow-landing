@@ -23,8 +23,8 @@ import {
 // Dynamic import to handle potential import failures gracefully
 async function getRecipeProcessor() {
   try {
-    const processorMod = await import('../../../../scripts/recipe-scraper/utils/recipe-processor');
-    return processorMod;
+    const processorMod = await import('@/lib/recipes/utils/recipe-processor');
+    return processorMod as any; // Cast to any for dynamic property access in handlers
   } catch (importErr) {
     logger.error('[Process Recipes API] Failed to import recipe processor:', {
       error: importErr instanceof Error ? importErr.message : String(importErr),
@@ -142,7 +142,7 @@ export async function POST(request: NextRequest) {
     // Handle start action (process all recipes)
     if (action === 'start' || !action) {
       const result = await handleStartAction(processorMod, limit, model);
-      return NextResponse.json(result, { status: result.status || 200 });
+      return NextResponse.json(result, { status: (result as any).status || 200 });
     }
 
     // Unknown action

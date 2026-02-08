@@ -2,8 +2,8 @@
  * Recipe ingredient conversion helpers
  */
 
-import { normalizeIngredient } from '../../../../../scripts/recipe-scraper/parsers/schema-validator';
-import { RecipeIngredient } from '../../../../../scripts/recipe-scraper/parsers/types';
+import { normalizeIngredient } from '@/lib/recipes/parsers/schema-validator';
+import { RecipeIngredient } from '@/lib/recipes/types';
 import { convertToAustralianUnit } from './unit-conversion';
 
 interface ConversionResult {

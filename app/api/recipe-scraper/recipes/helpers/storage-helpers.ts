@@ -3,20 +3,13 @@
  */
 
 import { logger } from '@/lib/logger';
+import { JSONStorage } from '@/lib/recipes/storage/json-storage';
 
 /**
- * Load JSONStorage class dynamically
+ * Load JSONStorage class
  */
 export async function loadJSONStorage() {
-  try {
-    const storageMod = await import('../../../../../scripts/recipe-scraper/storage/json-storage');
-    return storageMod.JSONStorage;
-  } catch (importErr) {
-    logger.error('[Recipe Scraper API] Failed to import JSONStorage:', {
-      error: importErr instanceof Error ? importErr.message : String(importErr),
-    });
-    throw new Error('Failed to load JSONStorage module');
-  }
+  return JSONStorage;
 }
 
 import { RecipeEntry } from './filter-helpers';
@@ -29,7 +22,7 @@ export interface StorageInterface {
 /**
  * Initialize storage with error handling
  */
-export function initializeStorage(JSONStorageClass: new () => unknown): StorageInterface | null {
+export function initializeStorage(JSONStorageClass: any): StorageInterface | null {
   try {
     return new JSONStorageClass() as StorageInterface;
   } catch (storageErr) {

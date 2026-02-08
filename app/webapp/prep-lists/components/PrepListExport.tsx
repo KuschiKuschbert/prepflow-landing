@@ -25,7 +25,7 @@ function ExportHeader({ onClose, hasPrepList }: { onClose: () => void; hasPrepLi
   return (
     <div className="mb-6 flex items-center justify-between">
       <div>
-        <h2 className="text-2xl font-semibold text-[var(--foreground)]">
+        <h2 className="text-fluid-xl tablet:text-fluid-2xl font-semibold text-[var(--foreground)]">
           {t('prepLists.export', 'Export Prep List')}
         </h2>
         <p className="mt-1 text-sm text-[var(--foreground-muted)]">

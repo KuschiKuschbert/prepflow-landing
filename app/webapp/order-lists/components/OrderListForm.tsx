@@ -222,7 +222,7 @@ export function OrderListForm({
   return (
     <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-[var(--foreground)]">
+        <h2 className="text-fluid-xl tablet:text-fluid-2xl font-semibold text-[var(--foreground)]">
           {isEditing
             ? t('orderLists.editOrderList', 'Edit Order List')
             : t('orderLists.createOrderList', 'Create Order List')}

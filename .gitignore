@@ -116,6 +116,9 @@ pnpm-lock.yaml
 
 # Generated files
 *.generated.*
+lint_report.json
+lint_report.txt
+architecture_full.txt
 
 # SSL Certificates (local development)
 .certificates/

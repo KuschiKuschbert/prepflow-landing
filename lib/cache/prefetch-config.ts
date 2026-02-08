@@ -10,7 +10,7 @@ export const PREFETCH_MAP: Record<string, string[]> = {
     '/api/dashboard/menu-summary',
     '/api/dashboard/recipe-readiness',
   ],
-  '/webapp/recipes': ['/api/recipes', '/api/ingredients'],
+  '/webapp/recipes': ['/api/recipes', '/api/ingredients', '/api/menus'],
   '/webapp/performance': ['/api/performance'],
   '/webapp/temperature': ['/api/temperature-logs'],
   '/webapp/cleaning': ['/api/cleaning-areas', '/api/cleaning-tasks'],

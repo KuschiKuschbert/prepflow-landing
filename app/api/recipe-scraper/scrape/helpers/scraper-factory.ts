@@ -1,69 +1,17 @@
 /**
- * Scraper factory for creating scraper instances
+ * Scraper factory for creating scraper instances (API Helper)
+ * Now points to central lib/recipes/factory
  */
 
-import { SOURCES, SourceType } from '../../../../../scripts/recipe-scraper/config';
-import { AllRecipesScraper } from '../../../../../scripts/recipe-scraper/scrapers/allrecipes-scraper';
-import { BonAppetitScraper } from '../../../../../scripts/recipe-scraper/scrapers/bon-appetit-scraper';
-import { DelishScraper } from '../../../../../scripts/recipe-scraper/scrapers/delish-scraper';
-import { EpicuriousScraper } from '../../../../../scripts/recipe-scraper/scrapers/epicurious-scraper';
-import { FoodAndWineScraper } from '../../../../../scripts/recipe-scraper/scrapers/food-and-wine-scraper';
-import { FoodNetworkScraper } from '../../../../../scripts/recipe-scraper/scrapers/food-network-scraper';
-import { Food52Scraper } from '../../../../../scripts/recipe-scraper/scrapers/food52-scraper';
-import { SeriousEatsScraper } from '../../../../../scripts/recipe-scraper/scrapers/serious-eats-scraper';
-import { SimplyRecipesScraper } from '../../../../../scripts/recipe-scraper/scrapers/simply-recipes-scraper';
-import { SmittenKitchenScraper } from '../../../../../scripts/recipe-scraper/scrapers/smitten-kitchen-scraper';
-import { TastyScraper } from '../../../../../scripts/recipe-scraper/scrapers/tasty-scraper';
-import { TheKitchnScraper } from '../../../../../scripts/recipe-scraper/scrapers/the-kitchn-scraper';
+import { getScraper } from '@/lib/recipes/factory';
+import { BaseScraper } from '@/lib/recipes/scrapers/base-scraper';
+import { SourceType } from '@/lib/recipes/types';
 
-export type ScraperInstance =
-  | AllRecipesScraper
-  | FoodNetworkScraper
-  | EpicuriousScraper
-  | BonAppetitScraper
-  | TastyScraper
-  | SeriousEatsScraper
-  | Food52Scraper
-  | SimplyRecipesScraper
-  | SmittenKitchenScraper
-  | TheKitchnScraper
-  | DelishScraper
-  | FoodAndWineScraper;
+export type ScraperInstance = BaseScraper;
 
 /**
  * Create scraper instance for source
  */
 export function createScraper(source: SourceType): ScraperInstance {
-  switch (source) {
-    case SOURCES.ALLRECIPES:
-      return new AllRecipesScraper();
-    case SOURCES.BBC_GOOD_FOOD:
-      throw new Error(
-        'BBC Good Food scraper is disabled due to Terms of Service violation. See docs/BBC_GOOD_FOOD_LEGAL_ANALYSIS.md',
-      );
-    case SOURCES.FOOD_NETWORK:
-      return new FoodNetworkScraper();
-    case SOURCES.EPICURIOUS:
-      return new EpicuriousScraper();
-    case SOURCES.BON_APPETIT:
-      return new BonAppetitScraper();
-    case SOURCES.TASTY:
-      return new TastyScraper();
-    case SOURCES.SERIOUS_EATS:
-      return new SeriousEatsScraper();
-    case SOURCES.FOOD52:
-      return new Food52Scraper();
-    case SOURCES.SIMPLY_RECIPES:
-      return new SimplyRecipesScraper();
-    case SOURCES.SMITTEN_KITCHEN:
-      return new SmittenKitchenScraper();
-    case SOURCES.THE_KITCHN:
-      return new TheKitchnScraper();
-    case SOURCES.DELISH:
-      return new DelishScraper();
-    case SOURCES.FOOD_AND_WINE:
-      return new FoodAndWineScraper();
-    default:
-      throw new Error(`Unknown source: ${source}`);
-  }
+  return getScraper(source);
 }

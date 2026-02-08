@@ -1,9 +1,9 @@
 /**
- * Scraping operations helpers
+ * Scraping operations helpers (API Helper)
  */
 
 import { logger } from '@/lib/logger';
-import { JSONStorage } from '../../../../../scripts/recipe-scraper/storage/json-storage';
+import { JSONStorage } from '@/lib/recipes/storage/json-storage';
 import type { ScraperInstance } from './scraper-factory';
 
 /**

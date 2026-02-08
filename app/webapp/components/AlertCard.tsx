@@ -87,7 +87,7 @@ export function AlertCard({ alert }: AlertCardProps) {
               {alert.severity}
             </span>
           </div>
-          <p className="text-fluid-xs tablet:text-fluid-sm mb-3 text-[var(--foreground)]/80">
+          <p className="text-fluid-xs tablet:text-fluid-sm mb-3 text-[var(--foreground-secondary)]">
             {alert.message}
           </p>
           <Link

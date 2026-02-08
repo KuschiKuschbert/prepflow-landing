@@ -113,7 +113,7 @@ export function IngredientCard({
   return (
     <>
       <div
-        className={`rounded-xl border-l-2 border-[var(--accent)]/30 bg-[var(--accent)]/2 p-3 transition-all duration-200 ${
+        className={`tablet:p-6 desktop:p-6 rounded-xl border-l-2 border-[var(--accent)]/30 bg-[var(--accent)]/2 p-4 transition-all duration-200 ${
           isSelectionMode ? 'cursor-pointer' : 'cursor-pointer hover:bg-[var(--accent)]/5'
         } ${isSelected && isSelectionMode ? 'border-[var(--accent)]/50 bg-[var(--accent)]/10' : ''}`}
         onClick={handleCardClick}

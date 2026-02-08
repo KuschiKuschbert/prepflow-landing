@@ -47,7 +47,7 @@ export function RecentActivityItem({ activity }: RecentActivityItemProps) {
         <p className="text-fluid-sm tablet:text-fluid-base truncate font-medium text-[var(--foreground)]">
           {activity.name}
         </p>
-        <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground)]/60">
+        <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground-muted)]">
           {activity.action === 'created' ? 'Created' : 'Updated'} •{' '}
           {new Date(activity.created_at).toLocaleDateString()}
         </p>

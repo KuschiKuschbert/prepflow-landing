@@ -1,24 +1,16 @@
 /**
- * Scrape operation helpers
+ * Scrape operation helpers (API Helper)
  */
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import type { BaseScraper } from '@/lib/recipes/scrapers/base-scraper';
+import { JSONStorage } from '@/lib/recipes/storage/json-storage';
 import { NextResponse } from 'next/server';
 
 export async function loadStorage() {
-  try {
-    const storageMod = await import('../../../../../scripts/recipe-scraper/storage/json-storage');
-    return storageMod.JSONStorage;
-  } catch (importErr) {
-    logger.error('[Recipe Scraper API] Failed to load storage:', {
-      error: importErr instanceof Error ? importErr.message : String(importErr),
-    });
-    throw new Error('Failed to load JSONStorage module');
-  }
+  return JSONStorage;
 }
-
-import type { BaseScraper } from '../../../../../scripts/recipe-scraper/scrapers/base-scraper';
 
 export async function handleDiscovery(
   scraper: BaseScraper,

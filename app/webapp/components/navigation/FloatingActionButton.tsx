@@ -95,7 +95,7 @@ export function FloatingActionButton() {
           aria-orientation="vertical"
         >
           <div className="p-2">
-            <div className="mb-2 px-3 py-1.5 text-xs font-semibold tracking-wider text-[var(--foreground)]/60 uppercase">
+            <div className="mb-2 px-3 py-1.5 text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase">
               Create New
             </div>
             <div className="max-h-[60vh] space-y-1 overflow-y-auto">
@@ -113,7 +113,7 @@ export function FloatingActionButton() {
                     'py-2.5',
                     'text-left',
                     'text-sm',
-                    'text-[var(--foreground)]/80',
+                    'text-[var(--foreground-secondary)]',
                     'transition-all',
                     'duration-200',
                     'hover:bg-[var(--muted)]/50',

@@ -2,11 +2,11 @@
  * File operations for recipe conversion
  */
 
+import { ScrapedRecipe } from '@/lib/recipes/types';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as zlib from 'zlib';
 import { promisify } from 'util';
-import { ScrapedRecipe } from '../../../../../scripts/recipe-scraper/parsers/types';
+import * as zlib from 'zlib';
 
 const gzip = promisify(zlib.gzip);
 

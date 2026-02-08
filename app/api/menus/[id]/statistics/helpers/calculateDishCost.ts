@@ -22,7 +22,7 @@ export async function calculateDishCost(dishId: string): Promise<number> {
         quantity,
         recipes (
           id,
-          name
+          recipe_name
         )
       `,
       )

@@ -105,7 +105,7 @@ function TemperatureLogsPageContent() {
   if (loading) {
     return (
       <ResponsivePageContainer>
-        <div className="tablet:py-6 tablet:pb-6 min-h-screen bg-transparent py-4 pb-24">
+        <div className="tablet:py-16 desktop:py-20 min-h-screen bg-transparent py-12 pb-24">
           <PageHeader />
           <TemperatureLogsLoadingState />
         </div>
@@ -115,7 +115,7 @@ function TemperatureLogsPageContent() {
 
   return (
     <ResponsivePageContainer>
-      <div className="tablet:py-6 tablet:pb-6 min-h-screen bg-transparent py-4 pb-24">
+      <div className="tablet:py-16 desktop:py-20 min-h-screen bg-transparent py-12 pb-24">
         <PageHeader />
 
         <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />

@@ -48,7 +48,9 @@ export default function BillingSettingsPage() {
     <>
       <ConfirmDialog />
       <div className="large-desktop:max-w-[1400px] mx-auto max-w-[1400px] p-6 text-[var(--foreground)] xl:max-w-[1400px] 2xl:max-w-[1600px]">
-        <h1 className="mb-4 text-3xl font-bold">Billing & Subscription</h1>
+        <h1 className="text-fluid-xl tablet:text-fluid-2xl mb-4 font-bold">
+          Billing & Subscription
+        </h1>
 
         <StatusBanner isActive={isActive} isPastDue={isPastDue} isCancelled={isCancelled} />
 

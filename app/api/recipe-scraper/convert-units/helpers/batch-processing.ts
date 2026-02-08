@@ -3,9 +3,9 @@
  */
 
 import { logger } from '@/lib/logger';
-import { ScrapedRecipe } from '../../../../../scripts/recipe-scraper/parsers/types';
-import { convertRecipeIngredients } from './ingredient-conversion';
+import { ScrapedRecipe } from '@/lib/recipes/types';
 import { updateRecipeFile } from './file-operations';
+import { convertRecipeIngredients } from './ingredient-conversion';
 
 interface RecipeEntry {
   id: string;

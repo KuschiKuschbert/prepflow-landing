@@ -187,11 +187,11 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-[var(--foreground)]/80">Language</span>
+                <span className="text-sm text-[var(--foreground-secondary)]">Language</span>
                 <LanguageSwitcher />
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-[var(--foreground)]/80">Account</span>
+                <span className="text-sm text-[var(--foreground-secondary)]">Account</span>
                 <LogoutButton />
               </div>
             </div>

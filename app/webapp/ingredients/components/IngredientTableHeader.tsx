@@ -57,7 +57,7 @@ export function IngredientTableHeader({
     <div className="bg-gradient-to-r from-[var(--muted)]/50 to-[var(--muted)]/20 px-6 py-4">
       <div className="tablet:flex-row tablet:items-center tablet:justify-between flex flex-col gap-3">
         <div className="flex items-center gap-3">
-          <h2 className="text-xl font-semibold text-[var(--button-active-text)]">
+          <h2 className="text-fluid-xl tablet:text-fluid-2xl font-semibold text-[var(--button-active-text)]">
             Ingredients{' '}
             {totalFiltered !== undefined
               ? `(${totalFiltered} total, showing ${ingredientsCount})`

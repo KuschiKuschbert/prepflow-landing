@@ -33,7 +33,7 @@ function EmptyState() {
           <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">
             Kitchen Alerts
           </h2>
-          <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground)]/60">
+          <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground-muted)]">
             All clear! No alerts at this time.
           </p>
         </div>
@@ -60,7 +60,7 @@ export default function KitchenAlerts() {
         <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">
           Kitchen Alerts
         </h2>
-        <p className="text-fluid-xs tablet:text-fluid-sm mt-1 text-[var(--foreground)]/60">
+        <p className="text-fluid-xs tablet:text-fluid-sm mt-1 text-[var(--foreground-muted)]">
           Action items requiring attention
         </p>
       </div>

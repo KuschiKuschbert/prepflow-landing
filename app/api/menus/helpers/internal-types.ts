@@ -14,7 +14,7 @@ export interface DishRecipeJoinData {
   quantity: string | number;
   recipes: {
     id: string;
-    name: string;
+    recipe_name: string;
   } | null;
 }
 

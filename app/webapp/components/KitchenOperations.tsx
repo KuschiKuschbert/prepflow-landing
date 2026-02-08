@@ -76,7 +76,7 @@ export default function KitchenOperations() {
         <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">
           Kitchen Operations
         </h2>
-        <p className="text-fluid-xs tablet:text-fluid-sm mt-1 text-[var(--foreground)]/60">
+        <p className="text-fluid-xs tablet:text-fluid-sm mt-1 text-[var(--foreground-muted)]">
           Current operational status and readiness
         </p>
       </div>

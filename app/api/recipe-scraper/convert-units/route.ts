@@ -6,15 +6,15 @@
 import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { STORAGE_PATH } from '@/lib/recipes/config';
 import { NextRequest, NextResponse } from 'next/server';
 import * as path from 'path';
-import { STORAGE_PATH } from '../../../../scripts/recipe-scraper/config';
 import { processRecipeBatches } from './helpers/batch-processing';
 
 // Dynamic import to handle potential import failures gracefully
 async function loadJSONStorage() {
   try {
-    const storageMod = await import('../../../../scripts/recipe-scraper/storage/json-storage');
+    const storageMod = await import('@/lib/recipes/storage/json-storage');
     return storageMod.JSONStorage;
   } catch (importErr) {
     logger.error('[Recipe Unit Conversion API] Failed to import JSONStorage:', {

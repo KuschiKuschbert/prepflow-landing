@@ -213,7 +213,9 @@ export function RecipeCardsView({ menuId }: RecipeCardsViewProps) {
         {/* Main Recipe Cards Section */}
         {cards.length > 0 && (
           <div className="mb-8">
-            <h2 className="mb-4 text-xl font-bold text-[var(--foreground)]">Main Recipe Cards</h2>
+            <h2 className="text-fluid-xl tablet:text-fluid-2xl mb-4 font-bold text-[var(--foreground)]">
+              Main Recipe Cards
+            </h2>
             <MainCardsGrid
               cards={cards}
               expandedCardId={expandedCardId}
@@ -229,7 +231,9 @@ export function RecipeCardsView({ menuId }: RecipeCardsViewProps) {
           subRecipeCards.slowCooked.length > 0 ||
           subRecipeCards.other.length > 0) && (
           <div className="space-y-8">
-            <h2 className="text-xl font-bold text-[var(--foreground)]">Sub-Recipes & Prep Items</h2>
+            <h2 className="text-fluid-xl tablet:text-fluid-2xl font-bold text-[var(--foreground)]">
+              Sub-Recipes & Prep Items
+            </h2>
             <SubRecipeSections
               subRecipeCards={subRecipeCards}
               expandedCardId={expandedCardId}

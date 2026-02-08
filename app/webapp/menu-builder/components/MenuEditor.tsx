@@ -144,8 +144,6 @@ function MenuEditorComponent({ menu, onMenuUpdated }: MenuEditorProps) {
 
   const { handleRecalculatePrices } = usePriceRecalculation(menu.id, onMenuUpdated);
 
-  if (loading) return <PageSkeleton />;
-
   // Prioritize menuLockStatus over menu prop for immediate UI updates
   // menuLockStatus is updated immediately when lock/unlock happens
   // menu prop will be updated after onMenuUpdated() refreshes data
@@ -153,12 +151,19 @@ function MenuEditorComponent({ menu, onMenuUpdated }: MenuEditorProps) {
   const isLocked =
     menuLockStatus.is_locked !== undefined ? menuLockStatus.is_locked : (menu.is_locked ?? false);
 
+  // For locked menus, let LockedMenuView handle loading state
+  // For unlocked menus, show skeleton only if loading AND no menuItems
+  if (!isLocked && loading && menuItems.length === 0) {
+    return <PageSkeleton />;
+  }
+
   if (isLocked) {
     return (
       <LockedMenuView
         menu={menu}
         menuLockStatus={menuLockStatus}
         menuItems={menuItems}
+        loading={loading}
         onUnlock={handleUnlockMenu}
       />
     );

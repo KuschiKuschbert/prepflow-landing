@@ -57,9 +57,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     }
 
     // Transform menu items to display data (only if needed)
-    const menuData = options.includeMenu
-      ? transformMenuData(menu.items as EnrichedMenuItem[])
-      : [];
+    const menuData = options.includeMenu ? transformMenuData(menu.items as EnrichedMenuItem[]) : [];
 
     // Transform menu items to allergen matrix data (only if needed)
     const matrixData = options.includeMatrix

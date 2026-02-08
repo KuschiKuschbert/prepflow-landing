@@ -51,5 +51,16 @@
   "lib/exports/template-styles/helpers/variantStyles/getMatrixVariantCSS.ts",
   "lib/exports/template-styles/helpers/variantStyles/getMenuVariantCSS.ts",
   "lib/exports/template-styles/helpers/variantStyles/getRecipeVariantCSS.ts",
-  "lib/exports/template-styles/helpers/variantStyles/getSupplierVariantCSS.ts"
+  "lib/exports/template-styles/helpers/variantStyles/getSupplierVariantCSS.ts",
+  "app/webapp/menu-builder/components/hooks/useMenuData/dataLoading.ts",
+  "app/webapp/menu-builder/components/hooks/useMenuData.ts",
+  "lib/recipes/jobs/comprehensive-scraper.ts",
+  "lib/recipes/parsers/schema-validator.ts",
+  "lib/recipes/scrapers/allrecipes-scraper.ts",
+  "lib/recipes/storage/json-storage.ts",
+  "lib/recipes/utils/ai-extractor.ts",
+  "lib/recipes/utils/error-categorizer.ts",
+  "lib/recipes/utils/progress-tracker.ts",
+  "lib/recipes/utils/recipe-processor.ts",
+  "lib/recipes/utils/sitemap-parser.ts"
 ]

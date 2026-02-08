@@ -94,7 +94,7 @@ export default function TemperatureEquipmentTab({
     <div className="space-y-6">
       <div className="tablet:flex-row tablet:items-center tablet:justify-between flex flex-col gap-4">
         <div>
-          <h2 className="tablet:text-3xl text-2xl font-bold text-[var(--foreground)]">
+          <h2 className="text-fluid-xl tablet:text-fluid-2xl font-semibold text-[var(--foreground)]">
             {t('temperature.equipment', 'Temperature Equipment')}
           </h2>
           <p className="mt-2 text-base text-[var(--foreground-muted)]">

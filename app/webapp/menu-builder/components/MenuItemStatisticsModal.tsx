@@ -223,7 +223,9 @@ export function MenuItemStatisticsModal({
           </button>
 
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-[var(--foreground)]">{itemName}</h2>
+            <h2 className="text-fluid-xl tablet:text-fluid-2xl font-bold text-[var(--foreground)]">
+              {itemName}
+            </h2>
             <p className="mt-1 text-sm text-[var(--foreground-muted)]">
               {isDish ? 'Dish' : isRecipe ? 'Recipe' : 'Item'} Statistics
             </p>

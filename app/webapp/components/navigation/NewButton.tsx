@@ -106,7 +106,7 @@ function NewButton({ isCollapsed = false }: NewButtonProps) {
           aria-orientation="vertical"
         >
           <div className="desktop:p-2 rounded-xl bg-[var(--surface)]/95 p-2">
-            <div className="mb-2 px-3 py-1.5 text-xs font-semibold tracking-wider text-[var(--foreground)]/60 uppercase">
+            <div className="mb-2 px-3 py-1.5 text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase">
               Create New
             </div>
             <div className="desktop:space-y-1 space-y-2">
@@ -126,7 +126,7 @@ function NewButton({ isCollapsed = false }: NewButtonProps) {
                     'desktop:py-2.5',
                     'text-left',
                     'text-sm',
-                    'text-[var(--foreground)]/80',
+                    'text-[var(--foreground-secondary)]',
                     // Mobile: Individual card styling
                     'border',
                     'border-[var(--border)]',

@@ -43,7 +43,7 @@ export function NavigationSidebar({
         {/* Header */}
         <div className="rounded-t-3xl border-b border-[var(--border)] p-4">
           <h1 className="text-lg font-semibold text-[var(--foreground)]">Settings</h1>
-          <p className="mt-0.5 text-xs text-[var(--foreground)]/60">
+          <p className="mt-0.5 text-xs text-[var(--foreground-subtle)]">
             Manage your account and preferences
           </p>
         </div>
@@ -60,7 +60,7 @@ export function NavigationSidebar({
                   {/* Category Header */}
                   <button
                     onClick={() => onToggleCategory(category.id)}
-                    className="flex w-full items-center justify-between rounded-lg px-3 py-1.5 text-xs font-semibold tracking-wider text-[var(--foreground)]/60 uppercase transition-colors duration-200 hover:bg-[var(--surface)]/50 hover:text-[var(--foreground)]/80 focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
+                    className="flex w-full items-center justify-between rounded-lg px-3 py-1.5 text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase transition-colors duration-200 hover:bg-[var(--surface)]/50 hover:text-[var(--foreground-secondary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
                     aria-expanded={isExpanded}
                     aria-controls={`category-${category.id}`}
                   >
@@ -68,7 +68,7 @@ export function NavigationSidebar({
                       <Icon
                         icon={category.icon}
                         size="xs"
-                        className="text-[var(--foreground)]/60"
+                        className="text-[var(--foreground-muted)]"
                       />
                       <span>{category.label}</span>
                     </div>
@@ -76,7 +76,7 @@ export function NavigationSidebar({
                       <Icon
                         icon={isExpanded ? ChevronUp : ChevronDown}
                         size="xs"
-                        className="text-[var(--foreground)]/60 transition-transform duration-200"
+                        className="text-[var(--foreground-muted)] transition-transform duration-200"
                       />
                     )}
                   </button>
@@ -119,14 +119,16 @@ export function NavigationSidebar({
                                 icon={item.icon}
                                 size="sm"
                                 className={`transition-colors duration-200 ${
-                                  isActive ? 'text-[var(--primary)]' : 'text-[var(--foreground)]/60'
+                                  isActive
+                                    ? 'text-[var(--primary)]'
+                                    : 'text-[var(--foreground-muted)]'
                                 }`}
                               />
                               <span
                                 className={`font-medium transition-colors duration-200 ${
                                   isActive
                                     ? 'text-[var(--foreground)]'
-                                    : 'text-[var(--foreground)]/70 group-hover:text-[var(--foreground)]'
+                                    : 'text-[var(--foreground-secondary)] group-hover:text-[var(--foreground)]'
                                 }`}
                               >
                                 {item.label}

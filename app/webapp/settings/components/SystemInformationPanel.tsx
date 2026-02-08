@@ -82,8 +82,10 @@ Environment: ${process.env.NODE_ENV || 'unknown'}`;
   return (
     <div className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
       <div>
-        <h2 className="text-xl font-semibold text-[var(--foreground)]">System Information</h2>
-        <p className="mt-1 text-sm text-[var(--foreground)]/80">
+        <h2 className="text-fluid-xl tablet:text-fluid-2xl font-semibold text-[var(--foreground)]">
+          System Information
+        </h2>
+        <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
           Technical details for support and troubleshooting.
         </p>
       </div>
@@ -101,7 +103,7 @@ Environment: ${process.env.NODE_ENV || 'unknown'}`;
 
       <button
         onClick={copySystemInfo}
-        className="flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 px-4 py-2 text-sm text-[var(--foreground)]/80 transition-colors hover:bg-[var(--surface)]/40"
+        className="flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 px-4 py-2 text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--surface)]/40"
       >
         {copied ? (
           <>
@@ -123,7 +125,7 @@ Environment: ${process.env.NODE_ENV || 'unknown'}`;
 
       <div className="flex items-start gap-2 rounded-xl border border-[var(--primary)]/20 bg-[var(--primary)]/5 p-3">
         <Icon icon={Info} size="sm" className="mt-0.5 text-[var(--primary)]" aria-hidden={true} />
-        <p className="text-xs text-[var(--foreground)]/60">
+        <p className="text-xs text-[var(--foreground-muted)]">
           Copy this information when contacting support to help us troubleshoot issues faster.
         </p>
       </div>
@@ -167,7 +169,7 @@ function InfoRow({
   return (
     <div className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
       <div>
-        <p className="text-xs text-[var(--foreground)]/60">{label}</p>
+        <p className="text-xs text-[var(--foreground-muted)]">{label}</p>
         <p className={`text-sm font-medium text-[var(--foreground)] ${valueClassName}`}>{value}</p>
       </div>
     </div>

@@ -2,7 +2,7 @@
  * Format helpers for recipe database
  */
 
-import { ScrapedRecipe } from '../../../scripts/recipe-scraper/parsers/types';
+import { ScrapedRecipe } from '@/lib/recipes/types';
 
 const PROFESSIONAL_SOURCES = new Set([
   'serious-eats',

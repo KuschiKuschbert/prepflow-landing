@@ -1,13 +1,14 @@
 /**
  * Helper functions for recipe database operations
+ * Migrated to use core lib types
  */
 
+import { logger } from '@/lib/logger';
+import { ScrapedRecipe } from '@/lib/recipes/types';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as zlib from 'zlib';
 import { promisify } from 'util';
-import { ScrapedRecipe } from '../../scripts/recipe-scraper/parsers/types';
-import { logger } from '@/lib/logger';
+import * as zlib from 'zlib';
 import { formatRecipesForPrompt } from './recipe-database-helpers/format-helpers';
 
 const gunzip = promisify(zlib.gunzip);
@@ -36,16 +37,8 @@ interface RecipeIndex {
  */
 export function loadIndex(): RecipeIndex | null {
   try {
-    if (!fs.existsSync(RECIPE_DATABASE_PATH)) {
-      logger.debug('Recipe database directory not found');
-      return null;
-    }
-
-    if (!fs.existsSync(INDEX_PATH)) {
-      logger.debug('Recipe database index not found');
-      return null;
-    }
-
+    if (!fs.existsSync(RECIPE_DATABASE_PATH)) return null;
+    if (!fs.existsSync(INDEX_PATH)) return null;
     const content = fs.readFileSync(INDEX_PATH, 'utf-8');
     return JSON.parse(content) as RecipeIndex;
   } catch (error) {
@@ -59,19 +52,10 @@ export function loadIndex(): RecipeIndex | null {
  */
 export async function loadRecipe(filePath: string): Promise<ScrapedRecipe | null> {
   try {
-    if (!fs.existsSync(RECIPE_DATABASE_PATH)) {
-      logger.debug('Recipe database directory not found');
-      return null;
-    }
-
     const fullPath = path.isAbsolute(filePath)
       ? filePath
       : path.join(RECIPE_DATABASE_PATH, filePath);
-
-    if (!fs.existsSync(fullPath)) {
-      logger.debug(`Recipe file not found: ${fullPath}`);
-      return null;
-    }
+    if (!fs.existsSync(fullPath)) return null;
 
     const buffer = fs.readFileSync(fullPath);
     let content: string;
@@ -81,7 +65,6 @@ export async function loadRecipe(filePath: string): Promise<ScrapedRecipe | null
     } else {
       content = buffer.toString('utf-8');
     }
-
     return JSON.parse(content) as ScrapedRecipe;
   } catch (error) {
     logger.error(`Error loading recipe from ${filePath}:`, error);
@@ -89,7 +72,6 @@ export async function loadRecipe(filePath: string): Promise<ScrapedRecipe | null
   }
 }
 
-// Re-export format helper
 export { formatRecipesForPrompt };
 
 /**
@@ -101,40 +83,15 @@ export function getRecipeDatabaseStats(): {
   lastUpdated: string | null;
 } {
   try {
-    if (!fs.existsSync(RECIPE_DATABASE_PATH)) {
-      logger.debug('Recipe database directory not found');
-      return {
-        totalRecipes: 0,
-        bySource: {},
-        lastUpdated: null,
-      };
-    }
-
     const index = loadIndex();
-    if (!index) {
-      return {
-        totalRecipes: 0,
-        bySource: {},
-        lastUpdated: null,
-      };
-    }
-
+    if (!index) return { totalRecipes: 0, bySource: {}, lastUpdated: null };
     const bySource: Record<string, number> = {};
     for (const entry of index.recipes) {
       bySource[entry.source] = (bySource[entry.source] || 0) + 1;
     }
-
-    return {
-      totalRecipes: index.totalCount,
-      bySource,
-      lastUpdated: index.lastUpdated,
-    };
+    return { totalRecipes: index.totalCount, bySource, lastUpdated: index.lastUpdated };
   } catch (error) {
     logger.error('Error getting recipe database stats:', error);
-    return {
-      totalRecipes: 0,
-      bySource: {},
-      lastUpdated: null,
-    };
+    return { totalRecipes: 0, bySource: {}, lastUpdated: null };
   }
 }

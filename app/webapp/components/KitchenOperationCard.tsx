@@ -29,7 +29,7 @@ export function KitchenOperationCard({ operation }: KitchenOperationCardProps) {
       <div className="flex items-center justify-between">
         <div className="min-w-0 flex-1">
           <div className="mb-1 flex flex-wrap items-center gap-2">
-            <p className="text-fluid-xs tablet:text-fluid-sm min-w-0 flex-1 truncate font-medium text-[var(--foreground)]/60">
+            <p className="text-fluid-xs tablet:text-fluid-sm min-w-0 flex-1 truncate font-medium text-[var(--foreground-muted)]">
               {title}
             </p>
             {status === 'good' && (
@@ -84,7 +84,7 @@ export function KitchenOperationCard({ operation }: KitchenOperationCardProps) {
         </div>
       </div>
       <div className="tablet:mt-4 mt-3">
-        <p className="text-fluid-xs line-clamp-2 text-[var(--foreground)]/60">{description}</p>
+        <p className="text-fluid-xs line-clamp-2 text-[var(--foreground-muted)]">{description}</p>
       </div>
     </Link>
   );

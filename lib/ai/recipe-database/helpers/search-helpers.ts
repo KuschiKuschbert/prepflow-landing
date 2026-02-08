@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { ScrapedRecipe } from '../../../../scripts/recipe-scraper/parsers/types';
+import { ScrapedRecipe } from '@/lib/recipes/types';
 import { loadRecipe } from '../../recipe-database-helpers';
 
 export interface RecipeMatch {

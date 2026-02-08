@@ -11,8 +11,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // Dynamic import to handle potential import failures gracefully
 async function getComprehensiveScraperJob() {
   try {
-    const scraperJobMod =
-      await import('../../../../scripts/recipe-scraper/jobs/comprehensive-scraper');
+    const scraperJobMod = await import('@/lib/recipes/jobs/comprehensive-scraper');
     return scraperJobMod.getComprehensiveScraperJob();
   } catch (importErr) {
     logger.error('[Recipe Scraper Status API] Failed to import comprehensive scraper job:', {

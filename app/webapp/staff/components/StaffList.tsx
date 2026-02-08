@@ -34,7 +34,9 @@ export function StaffList({ staff, qualificationTypes, onDelete, loading }: Staf
             />
           </svg>
         </div>
-        <h3 className="mb-2 text-2xl font-bold text-[var(--foreground)]">No Staff Found</h3>
+        <h3 className="text-fluid-xl tablet:text-fluid-2xl mb-2 font-bold text-[var(--foreground)]">
+          No Staff Found
+        </h3>
         <p className="mx-auto max-w-xs text-[var(--foreground-muted)]">
           No team members match the selected filters. Try adjusting your status filter or adding a
           new member.

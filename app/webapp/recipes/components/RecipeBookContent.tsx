@@ -19,15 +19,12 @@ const MenuBuilderTab = dynamic(() => import('./MenuBuilderTab'), {
 });
 
 export function RecipeBookContent() {
-  // Initialize with consistent default to prevent hydration mismatch
-  // Use 'ingredients' as default, will be updated from URL hash in useEffect on client
+  // Always start with 'ingredients' to ensure server/client hydration match
+  // We'll update from hash in useEffect after mount
   const [activeTab, setActiveTab] = useState<RecipeManagementTab>('ingredients');
-  const [isMounted, setIsMounted] = useState(false);
 
-  // Initialize from URL hash on client mount and sync with hash changes
+  // Initialize tab from hash after mount to prevent hydration mismatch
   useEffect(() => {
-    setIsMounted(true);
-
     const updateTabFromHash = () => {
       if (typeof window === 'undefined') return;
 
@@ -43,7 +40,7 @@ export function RecipeBookContent() {
       }
     };
 
-    // Set initial tab from hash on mount
+    // Set initial tab from hash
     updateTabFromHash();
 
     // Sync with URL hash changes (e.g., browser back/forward)
@@ -58,14 +55,10 @@ export function RecipeBookContent() {
   return (
     <div>
       <RecipeManagementTabs activeTab={activeTab} onTabChange={setActiveTab} />
-      {/* Only render tab content after mount to prevent hydration mismatch */}
-      {isMounted && (
-        <>
-          {activeTab === 'ingredients' && <IngredientsTab />}
-          {activeTab === 'dishes' && <DishesClient />}
-          {activeTab === 'menu-builder' && <MenuBuilderTab />}
-        </>
-      )}
+      {/* Render tab content - will update after mount if hash differs */}
+      {activeTab === 'ingredients' && <IngredientsTab />}
+      {activeTab === 'dishes' && <DishesClient />}
+      {activeTab === 'menu-builder' && <MenuBuilderTab />}
     </div>
   );
 }

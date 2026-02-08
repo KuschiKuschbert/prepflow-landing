@@ -39,9 +39,9 @@ export function SearchResultsList({ filtered, query, onClose }: SearchResultsLis
           onMouseEnter={() => prefetchRoute(item.href)}
           className="flex items-center space-x-3 rounded-lg px-3 py-2 transition-colors hover:bg-[var(--muted)]/50 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none"
         >
-          <span className="text-[var(--foreground)]/60">{item.icon}</span>
-          <span className="text-[var(--foreground)]/80">{item.label}</span>
-          <span className="ml-auto text-xs text-[var(--foreground)]/50">{item.category}</span>
+          <span className="text-[var(--foreground-muted)]">{item.icon}</span>
+          <span className="text-[var(--foreground-secondary)]">{item.label}</span>
+          <span className="ml-auto text-xs text-[var(--foreground-subtle)]">{item.category}</span>
         </Link>
       ))}
     </div>

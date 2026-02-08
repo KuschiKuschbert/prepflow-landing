@@ -11,7 +11,9 @@ export function ExportSection() {
           <FileDown className="text-primary h-6 w-6" />
         </div>
         <div>
-          <h2 className="text-foreground text-2xl font-bold tracking-tight">Export Settings</h2>
+          <h2 className="text-foreground text-fluid-xl tablet:text-fluid-2xl font-bold tracking-tight">
+            Export Settings
+          </h2>
           <p className="text-muted-foreground">
             Customize how your documents look when exported to PDF.
           </p>

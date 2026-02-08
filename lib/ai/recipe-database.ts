@@ -4,7 +4,7 @@
  */
 
 import { logger } from '@/lib/logger';
-import { ScrapedRecipe } from '../../scripts/recipe-scraper/parsers/types';
+import { ScrapedRecipe } from '@/lib/recipes/types';
 import {
   formatRecipesForPrompt,
   getRecipeDatabaseStats,

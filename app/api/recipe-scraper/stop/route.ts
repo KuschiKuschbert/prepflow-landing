@@ -1,7 +1,7 @@
 import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { getComprehensiveScraperJob } from '@/scripts/recipe-scraper/jobs/comprehensive-scraper';
+import { getComprehensiveScraperJob } from '@/lib/recipes/jobs/comprehensive-scraper';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**

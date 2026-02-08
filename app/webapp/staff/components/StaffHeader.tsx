@@ -13,8 +13,8 @@ interface StaffHeaderProps {
 export function StaffHeader({ selectedStatus, onStatusChange, onAddStaff }: StaffHeaderProps) {
   return (
     <>
-      <div className="mb-8">
-        <h1 className="mb-2 flex items-center gap-2 text-4xl font-bold text-[var(--foreground)]">
+      <div className="tablet:mb-6 desktop:mb-8 mb-4">
+        <h1 className="text-fluid-xl tablet:text-fluid-2xl mb-2 flex items-center gap-2 font-bold text-[var(--foreground)]">
           <Icon icon={Users} size="lg" aria-hidden={true} />
           Staff Management
         </h1>

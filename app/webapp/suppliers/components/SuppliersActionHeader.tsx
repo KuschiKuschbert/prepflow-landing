@@ -38,7 +38,7 @@ export function SuppliersActionHeader({
   if (activeTab === 'suppliers') {
     return (
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <h2 className="text-2xl font-semibold text-[var(--foreground)]">
+        <h2 className="text-fluid-xl tablet:text-fluid-2xl font-semibold text-[var(--foreground)]">
           {t('suppliers.manageSuppliers', 'Manage Suppliers')}
         </h2>
         <div className="flex flex-wrap gap-3">

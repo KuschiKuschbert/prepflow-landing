@@ -95,7 +95,9 @@ export function ClockIn({ employee, shift, venueLocation }: ClockInProps) {
     <Card className="p-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-[var(--foreground)]">Time & Attendance</h2>
+          <h2 className="text-fluid-xl tablet:text-fluid-2xl font-semibold text-[var(--foreground)]">
+            Time & Attendance
+          </h2>
           <p className="text-sm text-[var(--foreground-muted)]">
             {employee.first_name} {employee.last_name}
           </p>
