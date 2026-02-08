@@ -44,9 +44,9 @@ let globalProcessingStatus: ProcessingStatus = {
 
 const _processingQueue: ScrapedRecipe[] = [];
 const currentlyProcessing: Set<string> = new Set();
-let processingStartTime: Date | null = null;
+const processingStartTime: Date | null = null;
 let lastProgressTime: Date | null = null;
-let consecutiveErrors = 0;
+const consecutiveErrors = 0;
 
 export function getProcessingStatus(): ProcessingStatus {
   if (globalProcessingStatus.isProcessing && processingStartTime) {
@@ -152,7 +152,7 @@ export async function processSingleRecipe(
   let processedBy = 'unknown';
 
   const groqEnabled = isGroqEnabled();
-  let groqAvailable = groqEnabled ? await isGroqAvailable() : false;
+  const groqAvailable = groqEnabled ? await isGroqAvailable() : false;
 
   if (groqAvailable) {
     processedBy = 'groq';
@@ -175,7 +175,7 @@ export async function processSingleRecipe(
     processedText = result.response;
   }
 
-  let formattedRecipe: Partial<ScrapedRecipe> = JSON.parse(
+  const formattedRecipe: Partial<ScrapedRecipe> = JSON.parse(
     processedText.replace(/^```json\s*/, '').replace(/\s*```$/, ''),
   );
 

@@ -173,7 +173,7 @@ JSON:`;
       },
     );
 
-    let generatedText: string | null = Array.isArray(response.data)
+    const generatedText: string | null = Array.isArray(response.data)
       ? response.data[0]?.generated_text
       : response.data.generated_text || (typeof response.data === 'string' ? response.data : null);
     if (!generatedText) return null;

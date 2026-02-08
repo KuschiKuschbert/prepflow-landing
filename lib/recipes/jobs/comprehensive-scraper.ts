@@ -125,7 +125,7 @@ export class ComprehensiveScraperJob {
     existingProgress?: ScrapingProgress,
   ): Promise<void> {
     const scraper = this.getScraper(source);
-    let progress =
+    const progress =
       existingProgress ||
       this.progressTracker.initializeProgress(source, await scraper.getAllRecipeUrls());
 

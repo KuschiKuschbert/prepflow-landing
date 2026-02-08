@@ -3,7 +3,7 @@
  */
 import { logger } from '@/lib/logger';
 import type { Dish, MenuItem, MenuStatistics, Recipe } from '@/lib/types/menu-builder';
-import { clearLoadingIfNeeded, setLoadingIfNeeded } from './dataLoading/helpers/handleLoadingState';
+import { setLoadingIfNeeded } from './dataLoading/helpers/handleLoadingState';
 import { handleStatistics } from './dataLoading/helpers/handleStatistics';
 import { processDishesAndRecipes } from './dataLoading/helpers/processDishesAndRecipes';
 import { processMenuResponse } from './dataLoading/helpers/processMenuResponse';

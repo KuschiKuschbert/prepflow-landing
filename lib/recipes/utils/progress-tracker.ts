@@ -139,7 +139,7 @@ export class ProgressTracker {
     let averageTimePerRecipe: number | undefined;
 
     if (remaining > 0) {
-      let actualStartTime = startTime || new Date(progress.startedAt);
+      const actualStartTime = startTime || new Date(progress.startedAt);
       if (totalScraped > 0) {
         const elapsedSeconds = (new Date().getTime() - actualStartTime.getTime()) / 1000;
         if (elapsedSeconds > 0) {
