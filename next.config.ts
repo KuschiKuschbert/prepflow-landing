@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   generateEtags: true,
 
-  serverExternalPackages: ['puppeteer'],
+  serverExternalPackages: ['puppeteer', 'fs', 'path'],
 
   // Image optimization with advanced settings
   images: {
@@ -130,8 +130,10 @@ const nextConfig: NextConfig = {
     // esmExternals: true, // Disabled - causes module import errors with Turbopack
     // Optimize CSS loading to prevent unused preloads
     optimizeCss: false,
-    // Exclude large data directories from build analysis
-    serverComponentsExternalPackages: ['fs', 'path'],
+  },
+
+  outputFileTracingExcludes: {
+    '*': ['data/recipe-database/**/*', './data/recipe-database/**/*'],
   },
 
   // Remove dev tools from production
