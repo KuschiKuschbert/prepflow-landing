@@ -19,10 +19,10 @@ export async function generatePDF(html: string): Promise<Uint8Array> {
       const executablePath = await chromium.executablePath();
 
       browser = await puppeteerCore.launch({
-        args: chromium.args,
-        defaultViewport: { width: 1920, height: 1080 },
+        args: [...(chromium as any).args, '--disable-dev-shm-usage', '--no-sandbox'],
+        defaultViewport: (chromium as any).defaultViewport,
         executablePath,
-        headless: true,
+        headless: (chromium as any).headless,
       });
     } else {
       // Development: Use standard puppeteer (installed in devDependencies)
@@ -42,7 +42,7 @@ export async function generatePDF(html: string): Promise<Uint8Array> {
     const page = await browser.newPage();
 
     // Set a reasonable timeout for the whole operation (Vercel has its own, but we should be stricter)
-    page.setDefaultTimeout(25000); // 25 seconds
+    page.setDefaultTimeout(60000); // 60 seconds (increased for large menus)
 
     // Set content and wait for load.
     // We avoid 'networkidle0' because it's slow and risky in serverless environments
