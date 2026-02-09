@@ -161,11 +161,12 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Performance test bypass: Skip auth if correct secret token is provided in header
+  // Performance test bypass: Skip auth if correct secret token is provided in header OR cookie
   const perfTestToken = process.env.PERFORMANCE_TEST_TOKEN;
   const bypassHeader = req.headers.get('x-prepflow-perf-bypass');
+  const bypassCookie = req.cookies.get('prepflow-perf-bypass')?.value;
 
-  if (perfTestToken && bypassHeader === perfTestToken) {
+  if (perfTestToken && (bypassHeader === perfTestToken || bypassCookie === perfTestToken)) {
     logger.info('[Middleware] Performance test bypass enabled for request', { pathname });
     return NextResponse.next();
   }

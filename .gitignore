@@ -145,3 +145,4 @@ data/recipe-database/**/*.json
 
 # Playwright Authentication State
 e2e/auth.json
+performance-reports/

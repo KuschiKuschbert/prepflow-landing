@@ -5,7 +5,6 @@
  * create/update operations. See `docs/SQUARE_API_REFERENCE.md` (Automatic Sync section) for details.
  */
 
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getUserEmail } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
@@ -13,58 +12,14 @@ import { triggerIngredientSync } from '@/lib/square/sync/hooks';
 import { NextRequest, NextResponse } from 'next/server';
 import { createIngredient } from './helpers/createIngredient';
 import { handleDeleteIngredient } from './helpers/deleteIngredientHandler';
+import { handleGetIngredients } from './helpers/getIngredientsHandler';
 import { handleIngredientError } from './helpers/handleIngredientError';
 import { parseAndValidateRequest } from './helpers/requestHelpers';
 import { createIngredientSchema, updateIngredientSchema } from './helpers/schemas';
 import { updateIngredient } from './helpers/updateIngredient';
 
 export async function GET(request: NextRequest) {
-  try {
-    const { userId, supabase: supabaseAdmin } = await getAuthenticatedUser(request);
-
-    const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get('page') || '1');
-    const pageSize = parseInt(searchParams.get('pageSize') || '20');
-
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize - 1;
-
-    const { data, error, count } = await supabaseAdmin
-      .from('ingredients')
-      .select('*', { count: 'exact' })
-      .eq('user_id', userId)
-      .order('ingredient_name')
-      .range(start, end);
-
-    if (error) {
-      logger.error('[Ingredients API] Database error fetching ingredients:', {
-        error: error.message,
-        code: error.code,
-        context: { endpoint: '/api/ingredients', operation: 'GET', table: 'ingredients' },
-      });
-
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
-      return NextResponse.json(apiError, { status: apiError.status || 500 });
-    }
-
-    return NextResponse.json({
-      success: true,
-      data: {
-        items: data || [],
-        total: count || 0,
-        page,
-        pageSize,
-        totalPages: Math.ceil((count || 0) / pageSize),
-      },
-    });
-  } catch (err) {
-    if (err instanceof NextResponse) return err;
-    logger.error('[Ingredients API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      context: { endpoint: '/api/ingredients', method: 'GET' },
-    });
-    return handleIngredientError(err, 'GET');
-  }
+  return handleGetIngredients(request);
 }
 
 export async function POST(request: NextRequest) {

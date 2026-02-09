@@ -24,11 +24,20 @@ export function useIngredientsClientController() {
   const [selectedIngredients, setSelectedIngredients] = useState<Set<string>>(new Set());
 
   // View State (Filtering, Pagination, Sorting)
-  const view = useIngredientsView(ingredients);
+  const view = useIngredientsView();
 
   // Data & Sync
-  const { availableUnits, suppliers, loading, isLoading, error, setError, refetchIngredients } =
-    useIngredientDataSync(setIngredients);
+  const {
+    availableUnits,
+    suppliers,
+    loading,
+    isLoading,
+    error,
+    setError,
+    refetchIngredients,
+    total,
+    totalPages,
+  } = useIngredientDataSync(setIngredients, view.queryParams);
 
   // Form State
   const formState = useIngredientFormState();
@@ -48,7 +57,7 @@ export function useIngredientsClientController() {
     setParsedIngredients: formState.setParsedIngredients,
     setSelectedIngredients,
     selectedIngredients,
-    filteredIngredients: view.filteredIngredients || [],
+    filteredIngredients: [], // Logic moved to server-side
     parsedIngredients: formState.parsedIngredients,
     setImporting: formState.setImporting,
     exitSelectionMode,
@@ -60,11 +69,11 @@ export function useIngredientsClientController() {
 
   useEffect(() => {
     setIsHydrated(true);
-    if (view.page > view.totalPages && view.totalPages > 0) view.setPage(1);
+    if (view.page > totalPages && totalPages > 0) view.setPage(1);
     if (isSelectionMode && selectedIngredients.size === 0) exitSelectionMode();
   }, [
     view.page,
-    view.totalPages,
+    totalPages,
     isSelectionMode,
     selectedIngredients.size,
     exitSelectionMode,
@@ -103,5 +112,9 @@ export function useIngredientsClientController() {
     suppliers,
     availableUnits,
     refetchIngredients,
+    // Override view-derived values with server data
+    filteredTotal: total,
+    totalPages,
+    paginatedIngredients: ingredients, // Server returns already paginated items
   };
 }

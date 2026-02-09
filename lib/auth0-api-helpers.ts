@@ -22,6 +22,23 @@ export async function getUserFromRequest(req: NextRequest): Promise<{
   if (isDev && authBypassDev) {
     return getDevUser();
   }
+
+  // Performance test bypass
+  const perfTestToken = process.env.PERFORMANCE_TEST_TOKEN;
+  const bypassHeader = req.headers.get('x-prepflow-perf-bypass');
+  const bypassCookie = req.cookies.get('prepflow-perf-bypass')?.value;
+
+  if (perfTestToken && (bypassHeader === perfTestToken || bypassCookie === perfTestToken)) {
+    return {
+      email: 'perf-test-user@prepflow.org',
+      name: 'Performance Test User',
+      picture: 'https://via.placeholder.com/150',
+      sub: '00000000-0000-0000-0000-000000000000', // Valid UUID for Postgres
+      email_verified: true,
+      roles: [],
+    };
+  }
+
   return extractUserFromSession(req);
 }
 

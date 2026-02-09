@@ -62,5 +62,6 @@
   "lib/recipes/utils/error-categorizer.ts",
   "lib/recipes/utils/progress-tracker.ts",
   "lib/recipes/utils/recipe-processor.ts",
-  "lib/recipes/utils/sitemap-parser.ts"
+  "lib/recipes/utils/sitemap-parser.ts",
+  "lib/auth0-api-helpers.ts"
 ]

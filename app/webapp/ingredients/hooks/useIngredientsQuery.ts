@@ -34,40 +34,65 @@ interface IngredientsResponse {
   totalPages: number;
 }
 
-export function useIngredientsQuery(page: number, pageSize: number) {
-  // Prefetch on first page
-  if (page === 1) {
-    prefetchApi('/api/ingredients?page=1&pageSize=20');
+export interface IngredientsQueryParams {
+  page: number;
+  pageSize: number;
+  search?: string;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+  category?: string;
+  supplier?: string;
+  storage?: string;
+}
+
+export function useIngredientsQuery(params: IngredientsQueryParams) {
+  const { page, pageSize, search, sortBy, sortOrder, category, supplier, storage } = params;
+
+  // Construct query string
+  const queryString = new URLSearchParams({
+    page: page.toString(),
+    pageSize: pageSize.toString(),
+    ...(search && { search }),
+    ...(sortBy && { sortBy }),
+    ...(sortOrder && { sortOrder }),
+    ...(category && { category }),
+    ...(supplier && { supplier }),
+    ...(storage && { storage }),
+  }).toString();
+
+  // Prefetch on first page (only if no filters active to avoid cache thrashing)
+  if (page === 1 && !search && !category && !supplier && !storage) {
+    prefetchApi(`/api/ingredients?${queryString}`);
   }
 
   return useQuery<IngredientsResponse, Error>({
-    queryKey: ['ingredients', { page, pageSize }],
+    queryKey: ['ingredients', params],
     queryFn: async () => {
-      const res = await fetch(`/api/ingredients?page=${page}&pageSize=${pageSize}`, {
+      const res = await fetch(`/api/ingredients?${queryString}`, {
         cache: 'no-store',
       });
       if (!res.ok) throw new Error('Failed to fetch ingredients');
       const json = (await res.json()) as { data: IngredientsResponse };
       const data = json.data;
-      // Cache first page for instant display
-      if (page === 1 && data?.items) {
+
+      // Cache first page for instant display (only default view)
+      if (page === 1 && !search && !category && !supplier && !storage && data?.items) {
         cacheData('ingredients_page_1', data.items);
       }
       return data;
     },
-    placeholderData: previousData => previousData,
-    // Use cached data as initial data if available
+    // Use cached data as initial data only for default view
     initialData:
-      page === 1
+      page === 1 && !search && !category && !supplier && !storage
         ? (() => {
             const cached = getCachedData<Ingredient[]>('ingredients_page_1');
             if (cached) {
               return {
                 items: cached,
-                total: cached.length,
+                total: cached.length, // Approximate total from cache
                 page: 1,
                 pageSize,
-                totalPages: 1,
+                totalPages: 1, // Unknown real total
               } as IngredientsResponse;
             }
             return undefined;

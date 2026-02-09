@@ -6,7 +6,10 @@ import { useIngredientsQuery } from '../../hooks/useIngredientsQuery';
 import { useRegionalUnits } from '../../hooks/useRegionalUnits';
 import { Ingredient } from './useIngredientsClientController';
 
-export function useIngredientDataSync(setIngredients: (ingredients: Ingredient[]) => void) {
+export function useIngredientDataSync(
+  setIngredients: (ingredients: Ingredient[]) => void,
+  queryParams: any, // Typed as IngredientsQueryParams in usage
+) {
   const { availableUnits } = useRegionalUnits();
   const { suppliers, loading, error, setError } = useIngredientData();
 
@@ -14,7 +17,7 @@ export function useIngredientDataSync(setIngredients: (ingredients: Ingredient[]
     data: ingredientsData,
     isLoading,
     refetch: refetchIngredients,
-  } = useIngredientsQuery(1, 10000);
+  } = useIngredientsQuery(queryParams);
 
   useIngredientMigration(loading, isLoading, ingredientsData);
 
@@ -37,5 +40,7 @@ export function useIngredientDataSync(setIngredients: (ingredients: Ingredient[]
     error,
     setError,
     refetchIngredients,
+    total: ingredientsData?.total || 0,
+    totalPages: ingredientsData?.totalPages || 1,
   };
 }

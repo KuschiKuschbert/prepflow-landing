@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useIngredientFiltering, type SortOption } from '../../hooks/useIngredientFiltering';
-import { usePagination } from '../IngredientsClient/helpers/usePagination';
-import { Ingredient } from './useIngredientsClientController';
+import { type SortOption } from '../../hooks/useIngredientFiltering';
 
-export function useIngredientsView(ingredients: Ingredient[]) {
+export function useIngredientsView() {
   const [displayUnit, setDisplayUnit] = useState('g');
   const [searchTerm, setSearchTerm] = useState('');
   const [supplierFilter, setSupplierFilter] = useState('');
@@ -11,27 +9,27 @@ export function useIngredientsView(ingredients: Ingredient[]) {
   const [categoryFilter, setCategoryFilter] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('name_asc');
 
-  const { filteredIngredients } = useIngredientFiltering({
-    ingredients,
-    searchTerm,
-    supplierFilter,
-    storageFilter,
-    categoryFilter,
-    sortBy,
-  });
-
   const [page, setPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [itemsPerPage, setItemsPerPage] = useState(20); // Default to smaller page size for server-side
 
+  // Reset page when filters change
   useEffect(
     () => setPage(1),
-    [itemsPerPage, searchTerm, supplierFilter, storageFilter, categoryFilter],
+    [itemsPerPage, searchTerm, supplierFilter, storageFilter, categoryFilter, sortBy],
   );
 
-  const filteredTotal = filteredIngredients?.length || 0;
-  const { totalPages, startIndex } = usePagination({ filteredTotal, itemsPerPage, page });
-  const paginatedIngredients =
-    filteredIngredients?.slice(startIndex, startIndex + itemsPerPage) || [];
+  // Derived params for API
+  const [field, order] = sortBy.split('_');
+  const queryParams = {
+    page,
+    pageSize: itemsPerPage,
+    search: searchTerm,
+    category: categoryFilter,
+    supplier: supplierFilter,
+    storage: storageFilter,
+    sortBy: field,
+    sortOrder: order as 'asc' | 'desc',
+  };
 
   return {
     displayUnit,
@@ -46,13 +44,10 @@ export function useIngredientsView(ingredients: Ingredient[]) {
     setCategoryFilter,
     sortBy,
     setSortBy,
-    filteredIngredients,
     page,
     setPage,
     itemsPerPage,
     setItemsPerPage,
-    totalPages,
-    filteredTotal,
-    paginatedIngredients,
+    queryParams, // Expose for data fetcher
   };
 }
