@@ -1,9 +1,9 @@
 # 🏗️ RSI Architecture Analysis Report
 
-**Date:** 2/8/2026, 3:31:43 PM
+**Date:** 2/9/2026, 4:01:40 PM
 
 **Detected Design Patterns:** 6
-**Detected Anti-Patterns:** 482
+**Detected Anti-Patterns:** 484
 
 ## ⚠️ Anti-Patterns Detected
 
@@ -1033,10 +1033,16 @@
 **Description:** Found 22 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
+### Spaghetti Code (HIGH)
+
+**File:** `app/generate-background/page.tsx`
+**Description:** Code has 6 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/generate-background/page.tsx`
-**Description:** Found 33 magic numbers
+**Description:** Found 41 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
@@ -2185,6 +2191,12 @@
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
+### Magic Numbers (MEDIUM)
+
+**File:** `lib/auth0-api-helpers.ts`
+**Description:** Found 11 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
 ### Spaghetti Code (HIGH)
 
 **File:** `lib/autosave-storage.ts`
@@ -2939,7 +2951,7 @@
 🔄 Checking for Circular Dependencies...
 
 🛡️  Checking Client/Server Boundaries...
-Scanning 2659 files for boundaries...
+Scanning 2661 files for boundaries...
 ✅ Client/Server boundaries respected.
 
 📚 Checking Lib vs Components Boundaries...
