@@ -37,6 +37,22 @@ export async function syncUserFromAuth0(
       });
     }
 
+    // Check for demo user
+    try {
+      const { isDemoUser, setupDemoAccount } = await import('@/lib/demo-mode');
+      if (isDemoUser(email)) {
+        // For demo user, we always want to ensure the account exists first
+        if (!existingUser) {
+          await createNewUser(email, emailVerified, name);
+        }
+        // Then trigger the full reset/setup
+        await setupDemoAccount(email);
+        return;
+      }
+    } catch (importError) {
+      logger.error('[Auth0 Sync] Failed to import demo mode logic:', importError);
+    }
+
     if (existingUser) {
       await updateExistingUser(email, emailVerified, existingUser.email_verified, name);
       return;
