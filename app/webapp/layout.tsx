@@ -88,6 +88,12 @@ const WebappBackground = dynamic(
   },
 );
 
+const DemoWelcomeToast = dynamic(
+  () =>
+    import('@/components/demo/DemoWelcomeToast').then(mod => ({ default: mod.DemoWelcomeToast })),
+  { ssr: false },
+);
+
 const inter = Inter({ subsets: ['latin'] });
 
 export default function WebAppLayout({
@@ -246,6 +252,9 @@ function WebAppLayoutContent({
 
       {/* Milestone Toast */}
       <MilestoneToast />
+
+      {/* Demo Welcome Toast */}
+      <DemoWelcomeToast />
 
       {/* Main Content - responsive padding handled by CSS in globals.css */}
       <main className="webapp-main-content bg-transparent">
