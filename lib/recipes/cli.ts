@@ -3,7 +3,6 @@
  * Migrated from scripts/recipe-scraper/index.ts
  */
 
-import { getComprehensiveScraperJob } from './jobs/comprehensive-scraper';
 import { JSONStorage } from './storage/json-storage';
 
 async function main() {
@@ -43,17 +42,12 @@ async function main() {
 
   if (sourceArg) {
     // eslint-disable-next-line no-console
-    console.log(`Starting scraper for ${sourceArg}...`);
-    const job = getComprehensiveScraperJob();
-    // Simplified CLI interaction for now
-    await job.start([sourceArg as any]);
+    console.log(`Scraping has been decommissioned.`);
     return;
   }
 
   // eslint-disable-next-line no-console
-  console.log('Starting comprehensive scrape...');
-  const job = getComprehensiveScraperJob();
-  await job.start();
+  console.log('Use --stats or --search to query the local database.');
 }
 
 // eslint-disable-next-line no-console

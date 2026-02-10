@@ -87,6 +87,17 @@
 
   /* Background gradient - dark mode */
   --background-gradient: linear-gradient(180deg, rgba(10, 10, 10, 1) 0%, rgba(8, 8, 10, 1) 100%);
+
+  /* Modern Dashboard Theme - Energy Flow Style */
+  --dash-bg: #050505;
+  --dash-card-bg: rgba(20, 20, 20, 0.6);
+  --dash-card-border: rgba(255, 255, 255, 0.05);
+  --dash-accent-orange: #ff6b00;
+  --dash-accent-cyan: #29e7cd;
+  --dash-accent-purple: #d925c7;
+  --dash-glow-orange: 0 0 20px rgba(255, 107, 0, 0.15);
+  --dash-glow-cyan: 0 0 20px rgba(41, 231, 205, 0.15);
+  --dash-linear-orange: linear-gradient(135deg, #ff6b00 0%, #ff8800 100%);
 }
 
 /* Light Mode Theme Variables - Pale-light-dark grey for better readability */
