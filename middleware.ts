@@ -26,8 +26,14 @@ export default async function middleware(req: NextRequest) {
     (perfTokenHeader && perfTokenHeader === 'perf-test-secret') ||
     (perfTokenQuery && perfTokenQuery === 'perf-test-secret');
 
-  if ((isDevelopment && authBypassDev) || isPerfTest) {
-    logger.dev('[Middleware] Auth bypass enabled (Dev/Perf) - skipping entirely');
+  if (isPerfTest) {
+    console.log('[Middleware] Performance Test Bypass TRIGGERED for:', pathname);
+    const { applySecurityHeaders } = await import('@/lib/security/SecurityHeaders');
+    return applySecurityHeaders(req, NextResponse.next());
+  }
+
+  if (isDevelopment && authBypassDev) {
+    console.log('[Middleware] Dev Auth bypass enabled');
     const { applySecurityHeaders } = await import('@/lib/security/SecurityHeaders');
     return applySecurityHeaders(req, NextResponse.next());
   }
