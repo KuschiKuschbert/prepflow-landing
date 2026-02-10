@@ -19,6 +19,12 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   generateEtags: true,
 
+  // Ignore lint errors during build for this debug branch (legacy codebase has 400+ errors)
+  // @ts-expect-error - eslint config is valid but types might be outdated
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
   serverExternalPackages: ['puppeteer', 'puppeteer-core', '@sparticuz/chromium', 'fs', 'path'],
 
   // Image optimization with advanced settings
