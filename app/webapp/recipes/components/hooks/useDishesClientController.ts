@@ -1,4 +1,5 @@
 import { useSelectionMode } from '@/app/webapp/ingredients/hooks/useSelectionMode';
+import { Dish, Recipe } from '@/lib/types/recipes';
 import { useAIInstructions } from '../../hooks/useAIInstructions';
 import { useRecipeIngredients } from '../../hooks/useRecipeIngredients';
 import { useRecipePricing } from '../../hooks/useRecipePricing';
@@ -19,7 +20,15 @@ import { useDishesClientSelection } from './useDishesClientSelection';
 import { useDishesClientViewMode } from './useDishesClientViewMode';
 import { useDishesSidePanelsHandlers } from './useDishesSidePanelsHandlers';
 
-export function useDishesClientController(): UseDishesClientControllerResult {
+interface UseDishesClientControllerProps {
+  initialDishes?: Dish[];
+  initialRecipes?: Recipe[];
+}
+
+export function useDishesClientController({
+  initialDishes,
+  initialRecipes,
+}: UseDishesClientControllerProps = {}): UseDishesClientControllerResult {
   const { viewMode, setViewMode } = useDishesClientViewMode();
   const { recipePrices, updateVisibleRecipePrices } = useRecipePricing();
   const {
@@ -32,7 +41,7 @@ export function useDishesClientController(): UseDishesClientControllerResult {
     setRecipes,
     setError,
     fetchItems,
-  } = useDishesClientData();
+  } = useDishesClientData({ initialDishes, initialRecipes });
   const { fetchRecipeIngredients, fetchBatchRecipeIngredients } = useRecipeIngredients(setError);
 
   const { generateAIInstructions } = useAIInstructions();

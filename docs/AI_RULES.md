@@ -123,3 +123,18 @@ The RSI system matches the **Ralph Loop** methodology with autonomous tooling. I
 2.  **Format**: `lint-staged` runs automatically on commit.
 3.  **Check**: Run `npm run rsi:status` before starting.
 4.  **Merge**: MUST use `scripts/safe-merge.sh`.
+
+## 8. 🚀 Performance & Data Fetching
+
+> **Goal**: Zero client-side waterfalls. Instant initial paint.
+
+1.  **Server-Side First**: ALL initial data for a page MUST be fetched on the server (in `page.tsx`) and passed to client components.
+    - **Do Not**: Fetch data in `useEffect` on mount.
+    - **Do Not**: Return `null` or a full-page spinner while fetching initial data on the client.
+2.  **React Query Hydration**: Use `@tanstack/react-query` with `initialData` from the server.
+    - This gives us: Instant render (SSR) + Caching + Background updates + Deduping.
+3.  **No "Force Dynamic" Abuse**: Only use `export const dynamic = 'force-dynamic'` if strictly necessary. Prefer `suspense` boundaries.
+4.  **Parallelize**: Use `Promise.all` for multiple server-side fetches.
+    - **Bad**: `await getDishes(); await getRecipes();` (Sequential = Slow)
+    - **Good**: `await Promise.all([getDishes(), getRecipes()])` (Parallel = Fast)
+5.  **Skeleton Loading**: If dynamic imports are needed, ALWAYS provide a `loading` component (Skeleton) that matches the dimensions of the loaded content to prevent layout shifts.

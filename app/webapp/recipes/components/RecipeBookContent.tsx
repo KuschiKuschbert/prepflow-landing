@@ -1,8 +1,9 @@
 'use client';
 
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { Dish, Recipe } from '@/lib/types/recipes';
 import dynamic from 'next/dynamic';
 import { Suspense, useEffect, useState } from 'react';
-import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { IngredientsTab } from './IngredientsTab';
 import { RecipeManagementTabs, type RecipeManagementTab } from './RecipeManagementTabs';
 
@@ -18,7 +19,12 @@ const MenuBuilderTab = dynamic(() => import('./MenuBuilderTab'), {
   loading: () => <PageSkeleton />,
 });
 
-export function RecipeBookContent() {
+interface RecipeBookContentProps {
+  initialDishes?: Dish[];
+  initialRecipes?: Recipe[];
+}
+
+export function RecipeBookContent({ initialDishes, initialRecipes }: RecipeBookContentProps = {}) {
   // Always start with 'ingredients' to ensure server/client hydration match
   // We'll update from hash in useEffect after mount
   const [activeTab, setActiveTab] = useState<RecipeManagementTab>('ingredients');
@@ -61,7 +67,9 @@ export function RecipeBookContent() {
           <IngredientsTab />
         </Suspense>
       )}
-      {activeTab === 'dishes' && <DishesClient />}
+      {activeTab === 'dishes' && (
+        <DishesClient initialDishes={initialDishes} initialRecipes={initialRecipes} />
+      )}
       {activeTab === 'menu-builder' && <MenuBuilderTab />}
     </div>
   );

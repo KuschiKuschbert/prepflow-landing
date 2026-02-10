@@ -1,5 +1,6 @@
 'use client';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { Dish, Recipe } from '@/lib/types/recipes';
 import { DishesBulkActionsSection } from './DishesBulkActionsSection';
 import { ErrorBanner } from './DishesClient/components/ErrorBanner';
 import { DishesEditorView } from './DishesEditorView';
@@ -7,7 +8,13 @@ import { DishesListViewSection } from './DishesListViewSection';
 import { DishesModalsSection } from './DishesModalsSection';
 import { DishesViewModeToggle } from './DishesViewModeToggle';
 import { useDishesClientController } from './hooks/useDishesClientController';
-export default function DishesClient() {
+
+interface DishesClientProps {
+  initialDishes?: Dish[];
+  initialRecipes?: Recipe[];
+}
+
+export default function DishesClient({ initialDishes, initialRecipes }: DishesClientProps = {}) {
   const {
     loading,
     error,
@@ -73,7 +80,7 @@ export default function DishesClient() {
     startLongPress,
     cancelLongPress,
     enterSelectionMode,
-  } = useDishesClientController();
+  } = useDishesClientController({ initialDishes, initialRecipes });
 
   if (loading) return <PageSkeleton />;
 
