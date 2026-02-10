@@ -90,8 +90,8 @@ function useCanvasAnimation(canvasRef: React.RefObject<HTMLCanvasElement | null>
 
         // Stop if tab is hidden
         if (document.hidden) {
-           animationFrameRef.current = requestAnimationFrame(animate);
-           return;
+          animationFrameRef.current = requestAnimationFrame(animate);
+          return;
         }
 
         // Throttle frame rate

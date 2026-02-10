@@ -130,9 +130,7 @@ export default function WebAppDashboard() {
           </div>
 
           {/* Row 4: Kitchen Charts */}
-          <Suspense fallback={null}>
-            {mountStage >= 4 && <KitchenCharts />}
-          </Suspense>
+          <Suspense fallback={null}>{mountStage >= 4 && <KitchenCharts />}</Suspense>
         </div>
       </div>
     </ResponsivePageContainer>

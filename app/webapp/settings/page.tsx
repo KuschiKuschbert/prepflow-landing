@@ -40,8 +40,7 @@ const SecuritySection = dynamic(
 );
 
 const PrivacyLegalSection = dynamic(
-  () =>
-    import('./components/sections/PrivacyLegalSection').then(mod => mod.PrivacyLegalSection),
+  () => import('./components/sections/PrivacyLegalSection').then(mod => mod.PrivacyLegalSection),
   {
     loading: () => <PageSkeleton />,
     ssr: false,
@@ -81,8 +80,7 @@ const AdvancedSection = dynamic(
 );
 
 const FeatureFlagsSection = dynamic(
-  () =>
-    import('./components/sections/FeatureFlagsSection').then(mod => mod.FeatureFlagsSection),
+  () => import('./components/sections/FeatureFlagsSection').then(mod => mod.FeatureFlagsSection),
   {
     loading: () => <PageSkeleton />,
     ssr: false,

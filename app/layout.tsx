@@ -132,7 +132,10 @@ export default function RootLayout({
         />
 
         <ThemeInitializer />
-        <Partytown debug={process.env.NODE_ENV === 'development'} forward={['dataLayer.push', 'gtag']} />
+        <Partytown
+          debug={process.env.NODE_ENV === 'development'}
+          forward={['dataLayer.push', 'gtag']}
+        />
       </head>
       <body className="geist-sans-variable geist-mono-variable antialiased">
         <ErrorBoundary>

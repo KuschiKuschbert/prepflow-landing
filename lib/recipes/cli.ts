@@ -8,17 +8,36 @@ import { JSONStorage } from './storage/json-storage';
 
 async function main() {
   const args = process.argv.slice(2);
-  const sourceArg =
-    args.find(arg => arg.startsWith('--source='))?.split('=')[1] ||
-    args[args.indexOf('--source') + 1];
   const statsFlag = args.includes('--stats');
   const searchFlag = args.includes('--search');
+  const searchQuery = searchFlag ? args[args.indexOf('--search') + 1] : undefined;
+
+  const sourceArg =
+    !statsFlag && !searchFlag
+      ? args.find(arg => arg.startsWith('--source='))?.split('=')[1] ||
+        args[args.indexOf('--source') + 1]
+      : undefined;
 
   if (statsFlag) {
     const storage = new JSONStorage();
     const recipes = storage.getAllRecipes();
     // eslint-disable-next-line no-console
     console.log(`Total Recipes: ${recipes.length}`);
+    return;
+  }
+
+  if (searchFlag && searchQuery) {
+    // eslint-disable-next-line no-console
+    console.log(`Searching for recipes matching: "${searchQuery}"...`);
+    const storage = new JSONStorage();
+    const recipes = storage.getAllRecipes();
+    const results = recipes.filter(r =>
+      r.recipe_name.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
+
+    // eslint-disable-next-line no-console
+    console.log(`Found ${results.length} matches:`);
+    results.slice(0, 10).forEach(r => console.log(`- ${r.recipe_name} (${r.source_url})`));
     return;
   }
 

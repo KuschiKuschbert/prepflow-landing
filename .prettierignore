@@ -112,3 +112,4 @@ next-env.d.ts
 
 # Protected curbos area (excluded from all formatting)
 app/curbos/
+data/recipe-database/*.json

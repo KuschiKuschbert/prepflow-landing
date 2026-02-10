@@ -8,13 +8,14 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { triggerRecipeSync } from '@/lib/square/sync/hooks';
+import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 import { buildQuery } from './helpers/buildQuery';
 import { checkExistingRecipe } from './helpers/checkExistingRecipe';
 import { createRecipe } from './helpers/createRecipe';
 import { filterRecipes } from './helpers/filterRecipes';
 import { safeParseBody } from './helpers/parseBody';
-import { createRecipeSchema, RecipeResponse } from './helpers/schemas';
+import { CreateRecipeInput, createRecipeSchema, RecipeResponse } from './helpers/schemas';
 import { updateRecipe } from './helpers/updateRecipe';
 import { validateRequest } from './helpers/validateRequest';
 
@@ -122,8 +123,11 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function handleExistingRecipe(request: NextRequest, existingRecipe: any, recipeData: any) {
+async function handleExistingRecipe(
+  request: NextRequest,
+  existingRecipe: { id: string | number },
+  recipeData: CreateRecipeInput,
+) {
   // Update existing recipe
   const { recipe: updatedRecipe, error: updateError } = await updateRecipe(
     existingRecipe.id,
@@ -138,6 +142,9 @@ async function handleExistingRecipe(request: NextRequest, existingRecipe: any, r
   // Trigger Square sync hook (non-blocking)
   triggerSyncHook(request, existingRecipe.id, 'update');
 
+  // Invalidate cache
+  revalidateTag('recipes', 'default');
+
   return NextResponse.json({
     success: true,
     recipe: updatedRecipe,
@@ -145,8 +152,11 @@ async function handleExistingRecipe(request: NextRequest, existingRecipe: any, r
   } satisfies RecipeResponse);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function handleNewRecipe(request: NextRequest, recipeData: any, userId: string) {
+async function handleNewRecipe(
+  request: NextRequest,
+  recipeData: CreateRecipeInput,
+  userId: string,
+) {
   const { recipe: newRecipe, error: createError } = await createRecipe(
     recipeData.recipe_name,
     recipeData,
@@ -158,7 +168,7 @@ async function handleNewRecipe(request: NextRequest, recipeData: any, userId: st
     logger.error('[Recipes API] Database error creating recipe:', {
       error: safeError.message || String(createError),
       code: safeError.code,
-      context: { endpoint: '/api/recipes', operation: 'POST', recipeName: recipeData.name },
+      context: { endpoint: '/api/recipes', operation: 'POST', recipeName: recipeData.recipe_name },
     });
     const apiError = ApiErrorHandler.fromSupabaseError(createError, 500);
     return NextResponse.json(apiError, { status: apiError.status || 500 });
@@ -167,6 +177,8 @@ async function handleNewRecipe(request: NextRequest, recipeData: any, userId: st
   // Trigger Square sync hook (non-blocking)
   if (newRecipe) {
     triggerSyncHook(request, newRecipe.id, 'create');
+    // Invalidate cache
+    revalidateTag('recipes', 'default');
   }
 
   return NextResponse.json({

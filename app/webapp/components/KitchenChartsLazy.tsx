@@ -82,9 +82,7 @@ export default function KitchenChartsLazy({
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm transition-all hover:shadow-md">
           <div className="mb-6 flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold text-[var(--foreground)]">
-                Temperature Checks
-              </h3>
+              <h3 className="text-lg font-semibold text-[var(--foreground)]">Temperature Checks</h3>
               <p className="text-sm text-[var(--foreground-muted)]">Daily compliance activity</p>
             </div>
           </div>

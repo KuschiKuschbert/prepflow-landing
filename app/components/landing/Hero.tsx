@@ -114,9 +114,7 @@ export default function Hero({ onTourClick: _onTourClick, trackEngagement }: Her
         {/* LCP OPTIMIZATION: Removed ScrollReveal to prevent 0.4s delay. Image loads immediately. */}
         <div className="mt-24 flex items-center justify-center">
           <div className="w-full max-w-6xl">
-            <div
-              className="bg-surface/30 relative overflow-hidden rounded-3xl border border-white/10 shadow-2xl backdrop-blur-sm transition-transform duration-300 hover:scale-[1.02]"
-            >
+            <div className="bg-surface/30 relative overflow-hidden rounded-3xl border border-white/10 shadow-2xl backdrop-blur-sm transition-transform duration-300 hover:scale-[1.02]">
               <Image
                 src="/images/dashboard-screenshot.png"
                 alt="PrepFlow Dashboard showing kitchen management overview"

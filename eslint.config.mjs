@@ -1,4 +1,5 @@
 import nextConfig from 'eslint-config-next/core-web-vitals';
+import playwright from 'eslint-plugin-playwright';
 import unusedImports from 'eslint-plugin-unused-imports';
 import { defineConfig } from 'eslint/config';
 import rsiConfig from './rsi.eslint.config.mjs';
@@ -39,8 +40,8 @@ export default defineConfig([
       'unused-imports': unusedImports,
     },
     rules: {
-      // Warns on usage of 'any' to encourage fixing, but prevents build breakage
-      '@typescript-eslint/no-explicit-any': 'warn',
+      // Enforce no-explicit-any to strictly prevent usage of 'any' type
+      '@typescript-eslint/no-explicit-any': 'error',
       // Disable base no-unused-vars in favor of unused-imports plugin
       '@typescript-eslint/no-unused-vars': 'off',
       // Auto-fixable unused imports and vars
@@ -123,11 +124,15 @@ export default defineConfig([
     },
   },
   {
-    // Allow console in e2e tests (test debugging)
+    // Playwright recommended configuration
+    ...playwright.configs['flat/recommended'],
     files: ['e2e/**/*.ts', 'e2e/**/*.js'],
     rules: {
+      ...playwright.configs['flat/recommended'].rules,
       'no-console': 'off',
       'react-hooks/rules-of-hooks': 'off', // Playwright fixtures use 'use' which conflicts with React hooks rule
+      'playwright/no-skipped-test': 'warn', // Warn instead of error for skipped tests
+      'playwright/no-focused-test': 'error', // Error on focused tests (only)
     },
   },
 ]);
