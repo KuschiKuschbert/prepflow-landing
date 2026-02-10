@@ -18,8 +18,8 @@ export async function generatePDF(html: string): Promise<Uint8Array> {
       chromium.setGraphicsMode = false;
       const executablePath = await chromium.executablePath();
 
-      console.log('[generatePDF] Production Environment Detected'); // eslint-disable-line no-console
-      console.log('[generatePDF] Chromium Executable Path:', executablePath); // eslint-disable-line no-console
+      logger.info('[generatePDF] Production Environment Detected');
+      logger.info('[generatePDF] Chromium Executable Path:', executablePath);
 
       if (!executablePath) {
         throw new Error(
@@ -28,12 +28,11 @@ export async function generatePDF(html: string): Promise<Uint8Array> {
       }
 
       const chromiumArgs = (chromium as any).args;
-      console.log('[generatePDF] Chromium Args:', chromiumArgs); // eslint-disable-line no-console
+      logger.info('[generatePDF] Chromium Args:', chromiumArgs);
 
       // Log memory usage before launch
       const memoryUsage = process.memoryUsage();
-      console.log('[generatePDF] Memory Usage (Startup):', {
-        // eslint-disable-line no-console
+      logger.info('[generatePDF] Memory Usage (Startup):', {
         heapUsed: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)}MB`,
         rss: `${Math.round(memoryUsage.rss / 1024 / 1024)}MB`,
       });
@@ -45,10 +44,9 @@ export async function generatePDF(html: string): Promise<Uint8Array> {
           executablePath,
           headless: (chromium as any).headless,
         });
-        console.log('[generatePDF] Browser launched successfully'); // eslint-disable-line no-console
+        logger.info('[generatePDF] Browser launched successfully');
       } catch (launchError) {
-        console.error('[generatePDF] FATAL: Browser launch failed:', {
-          // eslint-disable-line no-console
+        logger.error('[generatePDF] FATAL: Browser launch failed:', {
           message: launchError instanceof Error ? launchError.message : String(launchError),
           stack: launchError instanceof Error ? launchError.stack : undefined,
         });
@@ -101,8 +99,7 @@ export async function generatePDF(html: string): Promise<Uint8Array> {
     const errorMessage = error instanceof Error ? error.message : String(error);
     const errorStack = error instanceof Error ? error.stack : undefined;
 
-    console.error('[generatePDF] CRITICAL FAILURE:', {
-      // eslint-disable-line no-console
+    logger.error('[generatePDF] CRITICAL FAILURE:', {
       error: errorMessage,
       stack: errorStack,
       env: process.env.VERCEL ? 'PRODUCTION' : 'DEVELOPMENT',

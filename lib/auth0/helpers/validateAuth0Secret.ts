@@ -13,7 +13,7 @@ export function validateAndGetAuth0Secret(): string {
     const isDev = process.env.NODE_ENV === 'development';
 
     if (isVercel || isDev) {
-      console.log('[Auth0 SDK] V5-EXTREME - Using emergency local fallback for AUTH0_SECRET');
+      logger.warn('[Auth0 SDK] V5-EXTREME - Using emergency local fallback for AUTH0_SECRET');
       return 'a96e66d7e6093809ce713dca2355edccc44046dbf1bdb99d36508ba8cdf85df0';
     }
 
@@ -50,7 +50,7 @@ export function getValidatedSecret(): string {
     }
 
     // DEBUG: Log environment state
-    console.log('[Auth0 SDK DEBUG] Final Fallback Triggered. Env state:', {
+    logger.error('[Auth0 SDK DEBUG] Final Fallback Triggered. Env state:', {
       VERCEL_ENV: process.env.VERCEL_ENV,
       NODE_ENV: process.env.NODE_ENV,
       VERCEL: process.env.VERCEL,
