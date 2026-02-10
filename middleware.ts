@@ -15,25 +15,30 @@ export default async function middleware(req: NextRequest) {
   const isDevelopment = process.env.NODE_ENV === 'development';
   const authBypassDev = process.env.AUTH0_BYPASS_DEV === 'true';
 
-  // 0. Performance test bypass - MUST BE FIRST to skip Auth0 loops
+  // 0. V5 EXTREME DIAGNOSTIC LOGGING
   const perfTokenEnv = process.env.PERFORMANCE_TEST_TOKEN;
   const perfTokenHeader =
     req.headers.get('performance-test-token') || req.headers.get('x-perf-test-token');
   const perfTokenQuery = req.nextUrl.searchParams.get('performance-test-token');
 
   const isPerfTest =
-    (perfTokenEnv && perfTokenEnv === 'perf-test-secret') ||
-    (perfTokenHeader && perfTokenHeader === 'perf-test-secret') ||
-    (perfTokenQuery && perfTokenQuery === 'perf-test-secret');
+    perfTokenQuery === 'perf-test-secret' ||
+    perfTokenHeader === 'perf-test-secret' ||
+    perfTokenEnv === 'perf-test-secret';
+
+  // LOG EVERYTHING TO CONSOLE ERROR SO IT SHOWS UP RED/BRIGHT IN VERCEL
+  console.log(
+    `[Middleware V5] Path: ${pathname} | isPerfTest: ${isPerfTest} | QueryToken: ${perfTokenQuery ? 'PRESENT' : 'MISSING'}`,
+  );
 
   if (isPerfTest) {
-    console.log('[Middleware] Performance Test Bypass TRIGGERED for:', pathname);
+    console.error(`[Middleware V5] !!! BYPASS TRIGGERED !!! for: ${pathname}`);
     const { applySecurityHeaders } = await import('@/lib/security/SecurityHeaders');
     return applySecurityHeaders(req, NextResponse.next());
   }
 
   if (isDevelopment && authBypassDev) {
-    console.log('[Middleware] Dev Auth bypass enabled');
+    console.log(`[Middleware V5] Dev Auth bypass enabled for: ${pathname}`);
     const { applySecurityHeaders } = await import('@/lib/security/SecurityHeaders');
     return applySecurityHeaders(req, NextResponse.next());
   }

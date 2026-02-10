@@ -13,7 +13,7 @@ export function validateAndGetAuth0Secret(): string {
     const isDev = process.env.NODE_ENV === 'development';
 
     if (isVercel || isDev) {
-      console.log('[Auth0 SDK] V3 - Using emergency local fallback for AUTH0_SECRET');
+      console.log('[Auth0 SDK] V5-EXTREME - Using emergency local fallback for AUTH0_SECRET');
       return 'a96e66d7e6093809ce713dca2355edccc44046dbf1bdb99d36508ba8cdf85df0';
     }
 
