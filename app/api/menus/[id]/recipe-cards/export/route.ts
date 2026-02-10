@@ -7,15 +7,22 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { checkFeatureAccess } from '@/lib/api-feature-gate';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
+import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { createSupabaseAdmin } from '@/lib/supabase';
+import { resolveMenuId } from '../../helpers/resolveMenuId';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { generateCSV, type RecipeCardData } from './helpers/generateCSV';
 import { generateHTML } from './helpers/generateHTML';
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { id: menuId } = await context.params;
+    const { id: menuIdParam } = await context.params;
+    const { userId } = await getAuthenticatedUser(request);
+    const menuId = await resolveMenuId(menuIdParam, userId);
+
     const { searchParams } = new URL(request.url);
+
     const format = searchParams.get('format') || 'html';
     const theme = (searchParams.get('theme') || 'cyber-carrot') as any;
 

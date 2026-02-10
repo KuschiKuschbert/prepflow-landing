@@ -30,12 +30,28 @@ export async function generatePDF(html: string): Promise<Uint8Array> {
       const chromiumArgs = (chromium as any).args;
       console.log('[generatePDF] Chromium Args:', chromiumArgs);
 
-      browser = await puppeteerCore.launch({
-        args: [...chromiumArgs, '--disable-dev-shm-usage', '--no-sandbox', '--disable-gpu'],
-        defaultViewport: (chromium as any).defaultViewport,
-        executablePath,
-        headless: (chromium as any).headless,
+      // Log memory usage before launch
+      const memoryUsage = process.memoryUsage();
+      console.log('[generatePDF] Memory Usage (Startup):', {
+        heapUsed: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)}MB`,
+        rss: `${Math.round(memoryUsage.rss / 1024 / 1024)}MB`,
       });
+
+      try {
+        browser = await puppeteerCore.launch({
+          args: [...chromiumArgs, '--disable-dev-shm-usage', '--no-sandbox', '--disable-gpu'],
+          defaultViewport: (chromium as any).defaultViewport,
+          executablePath,
+          headless: (chromium as any).headless,
+        });
+        console.log('[generatePDF] Browser launched successfully');
+      } catch (launchError) {
+        console.error('[generatePDF] FATAL: Browser launch failed:', {
+          message: launchError instanceof Error ? launchError.message : String(launchError),
+          stack: launchError instanceof Error ? launchError.stack : undefined,
+        });
+        throw launchError;
+      }
     } else {
       // Development: Use standard puppeteer (installed in devDependencies)
       // Dynamic import to avoid bundling it in production
@@ -81,10 +97,14 @@ export async function generatePDF(html: string): Promise<Uint8Array> {
     return pdfBuffer;
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    logger.error('[generatePDF] Error generating PDF:', {
+    const errorStack = error instanceof Error ? error.stack : undefined;
+
+    console.error('[generatePDF] CRITICAL FAILURE:', {
       error: errorMessage,
-      stack: error instanceof Error ? error.stack : undefined,
+      stack: errorStack,
+      env: process.env.VERCEL ? 'PRODUCTION' : 'DEVELOPMENT',
     });
+
     throw error;
   } finally {
     if (browser) {

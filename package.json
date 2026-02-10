@@ -9,7 +9,7 @@
     "dev": "next dev --turbopack",
     "dev:legacy": "node server.js",
     "dev:http": "next dev --turbopack",
-    "verify-config": "tsx scripts/verify-build-config.ts",
+    "verify-config": "npx tsx scripts/verify-build-config.ts",
     "build": "npm run verify-config && next build",
     "start": "next start",
     "lint": "eslint .",

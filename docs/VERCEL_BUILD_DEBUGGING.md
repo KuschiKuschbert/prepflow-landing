@@ -217,7 +217,15 @@ grep -r "use client" app --include="*.tsx" -A 20 | grep -E "(fs|path|os|process\
 
 ## Systematic Debugging Workflow
 
-### Step 1: Run Diagnostic Script
+### Step 1: Check Environment Variables (Tier 1)
+
+Before diving into code, **ALWAYS** check for missing or invalid secrets:
+
+1.  **Local Check**: Look at `.env.local` or run `grep "VAR_NAME" .env.local` to see if the secret is already known in the workspace.
+2.  **Dashboard Check**: Go to Vercel Dashboard → Project → Settings → Environment Variables.
+3.  **Log Check**: Look for "is required but missing or empty" errors in Runtime Logs.
+
+### Step 2: Run Diagnostic Script
 
 ```bash
 npm run diagnose:build

@@ -12,13 +12,18 @@ import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { NextRequest, NextResponse } from 'next/server';
 import { EnrichedMenuItem } from '../../../types';
 import { fetchMenuWithItems } from '../../helpers/fetchMenuWithItems';
+import { resolveMenuId } from '../../helpers/resolveMenuId';
 import { generateHTML } from './helpers/generateHTML';
 import { generateCSV, processMenuItemsToMatrix } from './helpers/processMatrixData';
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { id: menuId } = await context.params;
+    const { id: menuIdParam } = await context.params;
+    const { userId } = await getAuthenticatedUser(request);
+    const menuId = await resolveMenuId(menuIdParam, userId);
+
     const { searchParams } = new URL(request.url);
+
     const format = searchParams.get('format') || 'html';
     const theme = (searchParams.get('theme') || 'cyber-carrot') as any;
 
@@ -54,9 +59,8 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       }
     }
 
-    const { userId } = await getAuthenticatedUser(request);
-
     // Fetch menu with items
+
     const menu = await fetchMenuWithItems(menuId, userId);
 
     if (!menu) {
