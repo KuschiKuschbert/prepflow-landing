@@ -158,8 +158,13 @@ export default async function middleware(req: NextRequest) {
   }
 
   // Development bypass: Skip all auth checks if configured
-  // ALSO allow bypass if specifically running a performance test with the correct token env var
-  const isPerfTest = process.env.PERFORMANCE_TEST_TOKEN === 'perf-test-secret';
+  // ALSO allow bypass if specifically running a performance test with the correct token env var OR header
+  const perfTokenEnv = process.env.PERFORMANCE_TEST_TOKEN;
+  const perfTokenHeader =
+    req.headers.get('performance-test-token') || req.headers.get('x-perf-test-token');
+  const isPerfTest =
+    (perfTokenEnv && perfTokenEnv === 'perf-test-secret') ||
+    (perfTokenHeader && perfTokenHeader === 'perf-test-secret');
 
   if ((isDevelopment && authBypassDev) || isPerfTest) {
     logger.dev('[Middleware] Auth bypass enabled (Dev/Perf) - skipping authentication');
