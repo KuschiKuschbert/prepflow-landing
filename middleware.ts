@@ -15,21 +15,11 @@ export default async function middleware(req: NextRequest) {
   const isDevelopment = process.env.NODE_ENV === 'development';
   const authBypassDev = process.env.AUTH0_BYPASS_DEV === 'true';
 
-  // 0. V5 EXTREME DIAGNOSTIC LOGGING
-  const perfTokenEnv = process.env.PERFORMANCE_TEST_TOKEN;
-  const perfTokenHeader =
-    req.headers.get('performance-test-token') || req.headers.get('x-perf-test-token');
-  const perfTokenQuery = req.nextUrl.searchParams.get('performance-test-token');
+  // 0. V5-ROBUST BYPASS
+  const rawUrl = req.url || '';
+  const isPerfTest = rawUrl.includes('performance-test-token=perf-test-secret');
 
-  const isPerfTest =
-    perfTokenQuery === 'perf-test-secret' ||
-    perfTokenHeader === 'perf-test-secret' ||
-    perfTokenEnv === 'perf-test-secret';
-
-  // LOG EVERYTHING TO CONSOLE ERROR SO IT SHOWS UP RED/BRIGHT IN VERCEL
-  console.log(
-    `[Middleware V5] Path: ${pathname} | isPerfTest: ${isPerfTest} | QueryToken: ${perfTokenQuery ? 'PRESENT' : 'MISSING'}`,
-  );
+  console.log(`[Middleware V5] Path: ${pathname} | isPerfTest: ${isPerfTest} | URL: ${rawUrl}`);
 
   if (isPerfTest) {
     console.error(`[Middleware V5] !!! BYPASS TRIGGERED !!! for: ${pathname}`);
