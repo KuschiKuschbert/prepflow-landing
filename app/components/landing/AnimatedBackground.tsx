@@ -77,12 +77,31 @@ function useCanvasAnimation(canvasRef: React.RefObject<HTMLCanvasElement | null>
       prefersReducedMotion = false;
     }
 
-    // Animation loop
-    const animate = () => {
+    // Animation loop with visibility check and throttling
+    let lastFrameTime = 0;
+    const targetFPS = 30; // Cap at 30 FPS for background effect
+    const frameInterval = 1000 / targetFPS;
+
+    const animate = (timestamp: number) => {
       try {
         if (!canvas || !ctx || typeof window === 'undefined') {
           return;
         }
+
+        // Stop if tab is hidden
+        if (document.hidden) {
+           animationFrameRef.current = requestAnimationFrame(animate);
+           return;
+        }
+
+        // Throttle frame rate
+        const elapsed = timestamp - lastFrameTime;
+        if (elapsed < frameInterval) {
+          animationFrameRef.current = requestAnimationFrame(animate);
+          return;
+        }
+
+        lastFrameTime = timestamp - (elapsed % frameInterval);
 
         if (prefersReducedMotion) {
           // Static background for reduced motion - don't draw waves
@@ -101,8 +120,9 @@ function useCanvasAnimation(canvasRef: React.RefObject<HTMLCanvasElement | null>
 
         const { phase, speed } = waveRef.current;
         waveRef.current.phase += speed;
-        const waveCenterX = displayWidth * 0.8;
-        const waveCenterY = displayHeight * 0.45;
+        // Adjust center slightly based on phase for organic movement
+        const waveCenterX = displayWidth * 0.8 + Math.sin(phase * 0.5) * 20;
+        const waveCenterY = displayHeight * 0.45 + Math.cos(phase * 0.3) * 20;
         const numRings = 4;
 
         // Theme-aware opacity - more visible in light mode, subtle in dark mode
@@ -150,7 +170,7 @@ function useCanvasAnimation(canvasRef: React.RefObject<HTMLCanvasElement | null>
       }
     };
 
-    animate();
+    animationFrameRef.current = requestAnimationFrame(animate); // Start loop using RAF time handling
 
     return () => {
       if (typeof window !== 'undefined') {

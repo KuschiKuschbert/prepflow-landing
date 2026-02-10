@@ -4,7 +4,6 @@ import { MagneticButton } from '@/components/ui/MagneticButton';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { logger } from '@/lib/logger';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { motion } from 'framer-motion';
 import Image from 'next/image';
 
 interface HeroProps {
@@ -111,16 +110,12 @@ export default function Hero({ onTourClick: _onTourClick, trackEngagement }: Her
         </ScrollReveal>
 
         {/* Dashboard Screenshot - MacBook Pro Style */}
-        <ScrollReveal
-          variant="scale-up"
-          delay={0.4}
-          className="mt-24 flex items-center justify-center"
-        >
+        {/* Dashboard Screenshot - MacBook Pro Style */}
+        {/* LCP OPTIMIZATION: Removed ScrollReveal to prevent 0.4s delay. Image loads immediately. */}
+        <div className="mt-24 flex items-center justify-center">
           <div className="w-full max-w-6xl">
-            <motion.div
-              className="bg-surface/30 relative overflow-hidden rounded-3xl border border-white/10 shadow-2xl backdrop-blur-sm"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.3 }}
+            <div
+              className="bg-surface/30 relative overflow-hidden rounded-3xl border border-white/10 shadow-2xl backdrop-blur-sm transition-transform duration-300 hover:scale-[1.02]"
             >
               <Image
                 src="/images/dashboard-screenshot.png"
@@ -129,12 +124,14 @@ export default function Hero({ onTourClick: _onTourClick, trackEngagement }: Her
                 height={1080}
                 className="h-auto w-full"
                 priority
-                quality={90}
+                decoding="sync" // Force synchronous decoding for LCP
+                fetchPriority="high" // Explicit hint for LCP
+                quality={80} // Reduced from 90 for performance
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1152px"
               />
-            </motion.div>
+            </div>
           </div>
-        </ScrollReveal>
+        </div>
 
         {/* Smooth Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">

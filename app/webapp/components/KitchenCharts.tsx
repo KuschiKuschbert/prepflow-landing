@@ -5,6 +5,8 @@ import dynamic from 'next/dynamic';
 import { Component, ErrorInfo, ReactNode } from 'react';
 import { useKitchenChartsData } from './hooks/useKitchenChartsData';
 
+import { useInView } from 'react-intersection-observer';
+
 // Error boundary component for chart loading errors
 class ChartErrorBoundary extends Component<
   { children: ReactNode },
@@ -41,17 +43,26 @@ const KitchenChartsContent = dynamic(() => import('./KitchenChartsLazy'), {
 
 export default function KitchenCharts() {
   const { performanceData, temperatureChecks, loading } = useKitchenChartsData();
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+    rootMargin: '200px', // Start loading 200px before items come into view
+  });
 
   if (loading) {
     return null; // Don't show skeleton, charts are non-critical
   }
 
   return (
-    <ChartErrorBoundary>
-      <KitchenChartsContent
-        performanceData={performanceData}
-        temperatureChecks={temperatureChecks}
-      />
-    </ChartErrorBoundary>
+    <div ref={ref} className="min-h-[300px]">
+      {inView && (
+        <ChartErrorBoundary>
+          <KitchenChartsContent
+            performanceData={performanceData}
+            temperatureChecks={temperatureChecks}
+          />
+        </ChartErrorBoundary>
+      )}
+    </div>
   );
 }

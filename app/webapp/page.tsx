@@ -4,10 +4,10 @@ import { DashboardSection } from '@/components/ui/DashboardSection';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { getUserFirstName } from '@/lib/user-name';
-import { LayoutDashboard } from 'lucide-react';
 import { useUser } from '@auth0/nextjs-auth0/client';
+import { LayoutDashboard } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { PageHeader } from './components/static/PageHeader';
 
 // Static imports - needed immediately
@@ -50,7 +50,27 @@ const KitchenCharts = dynamic(() => import('./components/KitchenCharts'), {
 });
 
 export default function WebAppDashboard() {
-  // ErrorBoundary is already in app/webapp/layout.tsx wrapping all children
+  // Staggered hydration state - mounting widgets in sequence to reduce TBT
+  // OPTIMIZATION: Start at stage 1 to render stats immediately
+  const [mountStage, setMountStage] = useState(1);
+
+  useEffect(() => {
+    // Stage 2: Operations & Menus (very short delay)
+    const t1 = setTimeout(() => setMountStage(2), 50);
+
+    // Stage 3: Alerts & Temp
+    const t2 = setTimeout(() => setMountStage(3), 150);
+
+    // Stage 4: Insights & Charts
+    const t3 = setTimeout(() => setMountStage(4), 300);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, []);
+
   const { user } = useUser();
   const displayName = getUserFirstName({
     name: user?.name,
@@ -76,7 +96,7 @@ export default function WebAppDashboard() {
         {/* Dynamic Content - Loads After Initial Render */}
         <DashboardSection>
           <Suspense fallback={<PageSkeleton />}>
-            <DashboardStatsClient />
+            {mountStage >= 1 && <DashboardStatsClient />}
           </Suspense>
         </DashboardSection>
 
@@ -85,33 +105,33 @@ export default function WebAppDashboard() {
           {/* Row 1: Kitchen Operations + Menu Overview */}
           <div className="tablet:gap-8 desktop:grid-cols-2 desktop:gap-10 large-desktop:gap-12 grid grid-cols-1 gap-6 xl:gap-14 2xl:gap-16">
             <Suspense fallback={<PageSkeleton />}>
-              <KitchenOperations />
+              {mountStage >= 2 ? <KitchenOperations /> : <PageSkeleton />}
             </Suspense>
             <Suspense fallback={<PageSkeleton />}>
-              <MenuOverview />
+              {mountStage >= 2 ? <MenuOverview /> : <PageSkeleton />}
             </Suspense>
           </div>
 
           {/* Row 2: Kitchen Alerts + Temperature Status */}
           <div className="tablet:gap-8 desktop:grid-cols-2 desktop:gap-10 large-desktop:gap-12 grid grid-cols-1 gap-6 xl:gap-14 2xl:gap-16">
             <Suspense fallback={<PageSkeleton />}>
-              <KitchenAlerts />
+              {mountStage >= 3 ? <KitchenAlerts /> : <PageSkeleton />}
             </Suspense>
             <Suspense fallback={<PageSkeleton />}>
-              <TemperatureStatus />
+              {mountStage >= 3 ? <TemperatureStatus /> : <PageSkeleton />}
             </Suspense>
           </div>
 
           {/* Row 3: Chef Performance Insights */}
           <div className="tablet:gap-8 desktop:gap-10 large-desktop:gap-12 grid grid-cols-1 gap-6 xl:gap-14 2xl:gap-16">
             <Suspense fallback={<PageSkeleton />}>
-              <ChefPerformanceInsights />
+              {mountStage >= 4 ? <ChefPerformanceInsights /> : <PageSkeleton />}
             </Suspense>
           </div>
 
           {/* Row 4: Kitchen Charts */}
           <Suspense fallback={null}>
-            <KitchenCharts />
+            {mountStage >= 4 && <KitchenCharts />}
           </Suspense>
         </div>
       </div>

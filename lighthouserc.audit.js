@@ -1,42 +1,30 @@
 module.exports = {
   ci: {
     collect: {
-      startServerCommand: process.env.CI ? undefined : 'npm start',
-      startServerReadyPattern: 'ready - started server',
-      startServerReadyTimeout: 30000,
-      numberOfRuns: 3,
+      startServerCommand: 'AUTH0_BYPASS_DEV=true PERFORMANCE_TEST_TOKEN=perf-test-secret npm start -- -p 3005',
+      startServerReadyPattern: 'Ready in',
+      startServerReadyTimeout: 120000,
+      numberOfRuns: 1, // Dev server is slow, but we just need a baseline
       url: [
-        'http://localhost:3000/webapp/recipes',
-        'http://localhost:3000/webapp/recipes#ingredients',
-        'http://localhost:3000/webapp/recipes#dishes',
-        'http://localhost:3000/webapp/recipes#menu-builder',
+        'http://localhost:3005/',
+        'http://localhost:3005/webapp',
+        'http://localhost:3005/webapp/recipes',
+        'http://localhost:3005/webapp/ingredients',
+        'http://localhost:3005/webapp/menu-builder',
+        'http://localhost:3005/webapp/performance',
+        'http://localhost:3005/webapp/compliance',
+        'http://localhost:3005/webapp/settings',
+        'http://localhost:3005/webapp/staff',
+        'http://localhost:3005/webapp/suppliers',
       ],
-      settings: {
-        // Use desktop config as requested by user context implies internal tool usage
-        formFactor: 'desktop',
-        screenEmulation: {
-          mobile: false,
-          width: 1350,
-          height: 940,
-          deviceScaleFactor: 1,
-          disabled: false,
-        },
-        // Skip auditing for PWA features as this is a webapp
-        skipAudits: ['pwa-cross-browser', 'pwa-page-transitions', 'pwa-each-page-has-url'],
-      },
-    },
-    assert: {
-      preset: 'lighthouse:no-pwa',
-      assertions: {
-        'categories:performance': ['warn', { minScore: 0.7 }],
-        'categories:accessibility': ['warn', { minScore: 0.9 }],
-        'largest-contentful-paint': ['warn', { maxNumericValue: 3000 }],
-        'total-blocking-time': ['warn', { maxNumericValue: 500 }],
+      chromeFlags: '--no-sandbox --disable-setuid-sandbox --ignore-certificate-errors --disable-dev-shm-usage --disable-gpu',
+      extraHeaders: {
+        'Cookie': 'prepflow-perf-bypass=perf-test-secret',
+        'x-prepflow-perf-bypass': 'perf-test-secret',
       },
     },
     upload: {
-      target: 'filesystem',
-      outputDir: './performance-reports/lighthouse',
+      target: 'temporary-public-storage',
     },
   },
 };

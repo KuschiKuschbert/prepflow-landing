@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 interface LogoWatermarkProps {
@@ -32,6 +31,7 @@ interface LogoWatermarkProps {
  * Multiple instances for depth effect
  */
 export function LogoWatermark({
+  // src prop is now ignored in favor of CSS shape
   src = '/images/prepflow-logo.png',
   count = 3,
   opacity = 0.03,
@@ -93,12 +93,9 @@ export function LogoWatermark({
             delay: pos.id * 1.5,
           }}
         >
-          <Image
-            src={src}
-            alt=""
-            width={size}
-            height={size}
-            className="h-auto w-auto"
+          <div
+            className="rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--accent)] opacity-50 blur-xl"
+            style={{ width: size, height: size }}
             aria-hidden={true}
           />
         </motion.div>

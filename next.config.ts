@@ -126,10 +126,8 @@ const nextConfig: NextConfig = {
       '@dnd-kit/sortable',
       '@tanstack/react-query',
     ],
-    // Enable modern bundling (disabled for Turbopack compatibility)
-    // esmExternals: true, // Disabled - causes module import errors with Turbopack
-    // Optimize CSS loading to prevent unused preloads
-    optimizeCss: false,
+    // Let Next.js handle optimization CSS in production
+    optimizeCss: process.env.NODE_ENV === 'production',
   },
 
   outputFileTracingExcludes: {
@@ -342,8 +340,9 @@ const nextConfig: NextConfig = {
         key: 'Permissions-Policy',
         value: 'camera=(), microphone=(), geolocation=()',
       },
-      // Only include HSTS in production (causes issues with HTTP dev server)
-      ...(isProduction
+      // Only include HSTS in actual production deployments (Vercel)
+      // This prevents HSTS redirects on localhost which block Lighthouse audits
+      ...(isProduction && process.env.VERCEL
         ? [
             {
               key: 'Strict-Transport-Security',
@@ -354,7 +353,7 @@ const nextConfig: NextConfig = {
       {
         key: 'Content-Security-Policy',
         value:
-          "default-src 'self'; img-src 'self' data: blob: https: *.allrecipes.com *.foodnetwork.com *.epicurious.com *.bonappetit.com *.tasty.co *.seriouseats.com *.food52.com *.simplyrecipes.com *.smittenkitchen.com *.thekitchn.com *.delish.com *.cloudinary.com *.imgix.net *.amazonaws.com *.auth0.com *.googleusercontent.com *.gravatar.com *.supabase.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://vercel.live https://va.vercel-scripts.com; connect-src 'self' https: wss: https://*.supabase.co wss://*.supabase.co https://*.supabase.co/realtime/v1/websocket https://vercel.live https://dev-7myakdl4itf644km.us.auth0.com *.auth0.com *.google-analytics.com; frame-src 'self' https://vercel.live https://dev-7myakdl4itf644km.us.auth0.com; frame-ancestors 'none'",
+          `default-src 'self'; img-src 'self' data: blob: https: *.allrecipes.com *.foodnetwork.com *.epicurious.com *.bonappetit.com *.tasty.co *.seriouseats.com *.food52.com *.simplyrecipes.com *.smittenkitchen.com *.thekitchn.com *.delish.com *.cloudinary.com *.imgix.net *.amazonaws.com *.auth0.com *.googleusercontent.com *.gravatar.com *.gravatar.com *.supabase.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://vercel.live https://va.vercel-scripts.com; connect-src 'self' https: wss: https://*.supabase.co wss://*.supabase.co https://*.supabase.co/realtime/v1/websocket https://vercel.live https://dev-7myakdl4itf644km.us.auth0.com *.auth0.com *.google-analytics.com; frame-src 'self' https://vercel.live https://dev-7myakdl4itf644km.us.auth0.com; frame-ancestors 'none'; ${isProduction && process.env.VERCEL ? 'upgrade-insecure-requests;' : ''}`,
       },
     ];
 

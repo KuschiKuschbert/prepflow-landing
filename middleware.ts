@@ -7,11 +7,13 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 const isProduction = process.env.NODE_ENV === 'production';
-const isDevelopment = process.env.NODE_ENV === 'development';
-const authBypassDev = process.env.AUTH0_BYPASS_DEV === 'true';
+// const isDevelopment = process.env.NODE_ENV === 'development'; // Moved inside middleware
+// const authBypassDev = process.env.AUTH0_BYPASS_DEV === 'true'; // Moved inside middleware
 
 export default async function middleware(req: NextRequest) {
   const { pathname, origin, search } = req.nextUrl;
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  const authBypassDev = process.env.AUTH0_BYPASS_DEV === 'true';
 
   // Helper to apply security headers to every response path
   const withSecurityHeaders = async (res: NextResponse) => {
@@ -156,18 +158,11 @@ export default async function middleware(req: NextRequest) {
   }
 
   // Development bypass: Skip all auth checks if configured
-  if (isDevelopment && authBypassDev) {
-    logger.dev('[Middleware] Development bypass enabled - skipping authentication');
-    return NextResponse.next();
-  }
+  // ALSO allow bypass if specifically running a performance test with the correct token env var
+  const isPerfTest = process.env.PERFORMANCE_TEST_TOKEN === 'perf-test-secret';
 
-  // Performance test bypass: Skip auth if correct secret token is provided in header OR cookie
-  const perfTestToken = process.env.PERFORMANCE_TEST_TOKEN;
-  const bypassHeader = req.headers.get('x-prepflow-perf-bypass');
-  const bypassCookie = req.cookies.get('prepflow-perf-bypass')?.value;
-
-  if (perfTestToken && (bypassHeader === perfTestToken || bypassCookie === perfTestToken)) {
-    logger.info('[Middleware] Performance test bypass enabled for request', { pathname });
+  if ((isDevelopment && authBypassDev) || isPerfTest) {
+    logger.dev('[Middleware] Auth bypass enabled (Dev/Perf) - skipping authentication');
     return NextResponse.next();
   }
 

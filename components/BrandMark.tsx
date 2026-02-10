@@ -3,8 +3,8 @@
 'use client';
 
 import OptimizedImage from '@/components/OptimizedImage';
-import { checkSeasonalMatch } from '@/lib/personality/utils';
 import { logger } from '@/lib/logger';
+import { checkSeasonalMatch } from '@/lib/personality/utils';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
@@ -31,7 +31,14 @@ interface BrandMarkProps {
   /**
    * Animation intensity (0-1)
    */
+  /**
+   * Animation intensity (0-1)
+   */
   animationIntensity?: number;
+  /**
+   * Prioritize loading (LCP optimization)
+   */
+  priority?: boolean;
 }
 
 export function BrandMark({
@@ -47,6 +54,7 @@ export function BrandMark({
   onMouseUp,
   onMouseLeave,
   floating = false,
+  priority = false, // Default to false
   glowOnHover = true,
   animationIntensity = 1,
 }: BrandMarkProps) {
@@ -151,7 +159,7 @@ export function BrandMark({
           width={width}
           height={height}
           sizes={`${width}px`}
-          priority={true}
+          priority={priority} // Use prop
           style={{
             width: '100%',
             height: '100%',

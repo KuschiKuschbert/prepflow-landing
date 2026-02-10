@@ -96,6 +96,7 @@ export const BottomNavBar = memo(function BottomNavBar({
             <Link
               key={item.href}
               href={item.href}
+              prefetch={false} // Disable prefetch for non-critical mobile links to save bandwidth
               onClick={() => trackNavigation(item.href)}
               className="group flex min-h-[44px] min-w-[44px] items-center justify-center transition-transform duration-200 focus:outline-none active:scale-95"
               style={{ transitionTimingFunction: 'var(--easing-spring)' }}

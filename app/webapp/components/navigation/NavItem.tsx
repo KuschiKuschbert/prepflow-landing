@@ -83,6 +83,7 @@ export function NavItem({
     return (
       <Link
         href={href}
+        prefetch={false} // Disable prefetch to save bandwidth
         onClick={handleClick}
         onMouseEnter={() => prefetchRoute(href)}
         className={`group flex min-h-[44px] items-center py-3 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none ${
@@ -145,6 +146,7 @@ export function NavItem({
   return (
     <Link
       href={href}
+      prefetch={false} // Disable prefetch to save bandwidth
       onClick={onClick}
       onMouseEnter={() => prefetchRoute(href)}
       className={`${showLabel ? 'group' : ''} flex ${showLabel ? 'min-h-[44px]' : ''} items-center ${showLabel ? 'py-3' : 'py-0'} ${

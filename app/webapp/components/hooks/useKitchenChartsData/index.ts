@@ -5,30 +5,19 @@ import { logger } from '@/lib/logger';
 import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 
-interface PerformanceSummary {
-  topSellers: Array<{
-    id: string;
-    name: string;
-    number_sold: number;
-  }>;
-}
-
-interface TemperatureCheck {
-  date: string;
-  count: number;
-}
+import { DashboardTemperatureCheck, PerformanceData } from '@/lib/types/dashboard';
 
 export function useKitchenChartsData() {
-  const [performanceData, setPerformanceData] = useState<PerformanceSummary | null>(
-    () => getCachedData<PerformanceSummary>('dashboard_performance_summary') || null,
+  const [performanceData, setPerformanceData] = useState<PerformanceData | null>(
+    () => getCachedData<PerformanceData>('dashboard_performance_summary') || null,
   );
-  const [temperatureChecks, setTemperatureChecks] = useState<TemperatureCheck[]>([]);
+  const [temperatureChecks, setTemperatureChecks] = useState<DashboardTemperatureCheck[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       // Initialize with cached data
-      const cachedPerformance = getCachedData<PerformanceSummary>('dashboard_performance_summary');
+      const cachedPerformance = getCachedData<PerformanceData>('dashboard_performance_summary');
       if (cachedPerformance) setPerformanceData(cachedPerformance);
 
       try {

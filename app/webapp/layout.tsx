@@ -94,7 +94,12 @@ const DemoWelcomeToast = dynamic(
   { ssr: false },
 );
 
-const inter = Inter({ subsets: ['latin'] });
+// Google Fonts with performance-optimized configuration
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap', // Prevents layout shift by showing fallback font until Inter loads
+  preload: true,
+});
 
 export default function WebAppLayout({
   children,
@@ -103,6 +108,23 @@ export default function WebAppLayout({
   children: React.ReactNode;
   params?: Promise<Record<string, string | string[]>>;
 }>) {
+  // Navigation preconnect optimization
+  useEffect(() => {
+    // Preconnect to critical domains after initial hydration
+    const criticalDomains = [
+      'https://fonts.googleapis.com',
+      'https://fonts.gstatic.com',
+      'https://dev-7myakdl4itf644km.us.auth0.com',
+    ];
+
+    criticalDomains.forEach(domain => {
+      const link = document.createElement('link');
+      link.rel = 'preconnect';
+      link.href = domain;
+      document.head.appendChild(link);
+    });
+  }, []);
+
   const { t: _t } = useTranslation();
   // Initialize theme system - applies data-theme attribute to document root
   useTheme();

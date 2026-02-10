@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+import { Partytown } from '@builder.io/partytown/react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
@@ -39,6 +40,8 @@ export const metadata: Metadata = {
     'restaurant management',
     'menu costing',
     'profit analysis',
+    'worldwide restaurant software',
+    'worldwide restaurant software',
     'worldwide restaurant software',
   ],
   authors: [{ name: 'PrepFlow Team' }],
@@ -119,8 +122,6 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://dev-7myakdl4itf644km.us.auth0.com" />
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
 
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.google-analytics.com" crossOrigin="anonymous" />
@@ -129,10 +130,9 @@ export default function RootLayout({
           href="https://dev-7myakdl4itf644km.us.auth0.com"
           crossOrigin="anonymous"
         />
-        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
         <ThemeInitializer />
+        <Partytown debug={process.env.NODE_ENV === 'development'} forward={['dataLayer.push', 'gtag']} />
       </head>
       <body className="geist-sans-variable geist-mono-variable antialiased">
         <ErrorBoundary>

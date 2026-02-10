@@ -5,8 +5,10 @@
  */
 
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { TablePagination } from '@/components/ui/TablePagination';
 import { useTranslation } from '@/lib/useTranslation';
 import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
 import type { PriceListFormData, Supplier, SupplierFormData, SupplierPriceList } from '../types';
 
 // Lazy load supplier components to reduce initial bundle size
@@ -79,6 +81,18 @@ export function SuppliersContent({
 }: SuppliersContentProps) {
   const { t } = useTranslation();
 
+  // Pagination state for suppliers
+  const [page, setPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(12);
+
+  // Reset page when suppliers change (e.g. added new one)
+  useEffect(() => {
+    setPage(1);
+  }, [suppliers.length]);
+
+  const paginatedSuppliers = suppliers.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+  const totalPages = Math.ceil(suppliers.length / itemsPerPage);
+
   const renderSuppliersView = () => (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -97,7 +111,18 @@ export function SuppliersContent({
         />
       )}
 
-      <SuppliersGrid suppliers={suppliers} />
+      <div className="flex flex-col gap-6">
+        <SuppliersGrid suppliers={paginatedSuppliers} />
+
+        <TablePagination
+          page={page}
+          totalPages={totalPages}
+          total={suppliers.length}
+          onPageChange={setPage}
+          itemsPerPage={itemsPerPage}
+          onItemsPerPageChange={setItemsPerPage}
+        />
+      </div>
     </div>
   );
 

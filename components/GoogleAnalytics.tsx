@@ -81,11 +81,12 @@ function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
     <>
       {/* Load Google Analytics script */}
       <Script
+        type="text/partytown"
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
         onLoad={() => {
-          logger.dev('📥 Google Analytics script loaded');
-          initializeGtag();
+          logger.dev('📥 Google Analytics script loaded (Partytown)');
+          // Initialization handled by Partytown forwarding
         }}
         onError={() => {
           logger.error('❌ Failed to load Google Analytics script');
@@ -94,6 +95,7 @@ function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
       {/* Initialize gtag function */}
       <Script
         id="google-analytics-init"
+        type="text/partytown"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
@@ -107,10 +109,6 @@ function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
             });
             // Google Analytics gtag function initialized
           `,
-        }}
-        onLoad={() => {
-          logger.dev('✅ Google Analytics initialization script loaded');
-          initializeGtag();
         }}
       />
     </>

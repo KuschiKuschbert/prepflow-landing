@@ -19,7 +19,7 @@ export function applySecurityHeaders(request: NextRequest, response: NextRespons
     base-uri 'self';
     form-action 'self' *.auth0.com;
     frame-ancestors 'none';
-    upgrade-insecure-requests;
+    ${process.env.NODE_ENV === 'production' && process.env.VERCEL ? 'upgrade-insecure-requests;' : ''}
   `
     .replace(/\s{2,}/g, ' ')
     .trim();
@@ -36,7 +36,9 @@ export function applySecurityHeaders(request: NextRequest, response: NextRespons
   );
 
   // 3. Strict-Transport-Security (HSTS) - 2 years
-  if (process.env.NODE_ENV === 'production') {
+  // Only include HSTS in actual production deployments (Vercel)
+  // This prevents HSTS redirects on localhost which block Lighthouse audits
+  if (process.env.NODE_ENV === 'production' && process.env.VERCEL) {
     response.headers.set(
       'Strict-Transport-Security',
       'max-age=63072000; includeSubDomains; preload',

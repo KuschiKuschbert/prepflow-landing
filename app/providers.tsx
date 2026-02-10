@@ -19,7 +19,7 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <Auth0Provider>
       <QueryClientProvider client={queryClient}>
-        <SeasonalEvaluator />
+        <SafeSeasonalEvaluator />
         <Toaster richColors closeButton position="top-center" />
         {children}
       </QueryClientProvider>
@@ -31,16 +31,39 @@ export function Providers({ children }: { children: ReactNode }) {
 function useGlobalErrorHandlers(): void {
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    initializeClientErrorHandlers();
+
+    // Defer initialization to idle time
+    const deferInit = (window.requestIdleCallback || ((cb: any) => setTimeout(cb, 1000))) as any;
+
+    deferInit(() => {
+      initializeClientErrorHandlers();
+      logger.dev('[Providers] Global error handlers initialized (deferred)');
+    });
   }, []);
+}
+
+// Safe wrapper for SeasonalEvaluator to prevent hydration jitter
+function SafeSeasonalEvaluator() {
+  const [mounted, setMounted] = (require('react') as any).useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+  return <SeasonalEvaluator />;
 }
 
 // One-time client migration: purge very stale drafts and re-key "new" drafts with stable IDs
 function useDraftMigration(): void {
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    try {
-      const now = Date.now();
+
+    // Defer migration to idle time - non-critical for initial render
+    const deferMigrate = (window.requestIdleCallback || ((cb: any) => setTimeout(cb, 2000))) as any;
+
+    deferMigrate(() => {
+      try {
+        const now = Date.now();
       const drafts = getAllDrafts(null);
       drafts.forEach(d => {
         const age = now - d.timestamp;
@@ -67,11 +90,13 @@ function useDraftMigration(): void {
           }
         }
       });
+      logger.dev('[Providers] Draft migration completed (deferred)');
     } catch (e) {
       // Migration should never block UI, but log for debugging
       logger.dev('[Providers] Draft migration error (non-blocking):', {
         error: e instanceof Error ? e.message : String(e),
       });
     }
+    });
   }, []);
 }

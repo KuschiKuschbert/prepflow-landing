@@ -1,7 +1,9 @@
 'use client';
 
 import { TablePagination } from '@/components/ui/TablePagination';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { Recipe, RecipePriceData } from '@/lib/types/recipes';
+import { useEffect, useState } from 'react';
 import { RecipeFilters } from '../hooks/useRecipeFiltering';
 import RecipeCard from './RecipeCard';
 import { RecipeFilterBar } from './RecipeFilterBar';
@@ -40,6 +42,15 @@ export function RecipesContent({
   handleDeleteRecipe,
   capitalizeRecipeName,
 }: RecipesContentProps) {
+  // Use media query to determine view, default to false (mobile first) to match server render if possible,
+  // but since we want to avoid hydration mismatch, we'll use a mounted check.
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <div className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow">
       <RecipeFilterBar
@@ -94,7 +105,28 @@ export function RecipesContent({
         className="mb-4"
       />
 
-      <div className="desktop:hidden block">
+      {/* Conditionally render based on viewport to avoid double DOM nodes */}
+      {!mounted ? (
+        // Skeleton or hidden during hydration
+        <div className="p-4 text-center text-[var(--foreground-muted)]">Loading recipes...</div>
+      ) : isDesktop ? (
+        <RecipeTable
+          recipes={paginatedRecipes}
+          recipePrices={recipePrices}
+          selectedRecipes={selectedRecipes}
+          onSelectAll={handleSelectAll}
+          onSelectRecipe={recipeId => handleSelectRecipe(recipeId)}
+          onPreviewRecipe={handlePreviewRecipe}
+          onEditRecipe={handleEditRecipeFromCard}
+          onDeleteRecipe={handleDeleteRecipe}
+          capitalizeRecipeName={capitalizeRecipeName}
+          sortField={filters.sortField}
+          sortDirection={filters.sortDirection}
+          onSortChange={(field, direction) =>
+            updateFilters({ sortField: field, sortDirection: direction })
+          }
+        />
+      ) : (
         <div className="divide-y divide-[var(--muted)]">
           {paginatedRecipes.map(recipe => (
             <RecipeCard
@@ -110,23 +142,7 @@ export function RecipesContent({
             />
           ))}
         </div>
-      </div>
-      <RecipeTable
-        recipes={paginatedRecipes}
-        recipePrices={recipePrices}
-        selectedRecipes={selectedRecipes}
-        onSelectAll={handleSelectAll}
-        onSelectRecipe={recipeId => handleSelectRecipe(recipeId)}
-        onPreviewRecipe={handlePreviewRecipe}
-        onEditRecipe={handleEditRecipeFromCard}
-        onDeleteRecipe={handleDeleteRecipe}
-        capitalizeRecipeName={capitalizeRecipeName}
-        sortField={filters.sortField}
-        sortDirection={filters.sortDirection}
-        onSortChange={(field, direction) =>
-          updateFilters({ sortField: field, sortDirection: direction })
-        }
-      />
+      )}
 
       <TablePagination
         page={filters.currentPage}

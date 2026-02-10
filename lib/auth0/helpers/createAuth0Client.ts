@@ -1,8 +1,8 @@
-import { Auth0Client } from '@auth0/nextjs-auth0/server';
 import { syncUserFromAuth0 } from '@/lib/auth-user-sync';
 import { logger } from '@/lib/logger';
-import { getBaseUrl } from './getBaseUrl';
+import { Auth0Client } from '@auth0/nextjs-auth0/server';
 import { getAuth0Domain } from './getAuth0Domain';
+import { getBaseUrl } from './getBaseUrl';
 import { getValidatedSecret } from './validateAuth0Secret';
 
 /**

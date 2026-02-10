@@ -2,10 +2,10 @@
  * Auth0 SDK Client Instance
  * Auth0 SDK v4 uses a singleton client instance
  */
-import { logger } from './logger';
 import { createAuth0Client } from './auth0/helpers/createAuth0Client';
-import { validateAuth0Config } from './auth0/helpers/validateAuth0Config';
 import { getBaseUrl } from './auth0/helpers/getBaseUrl';
+import { validateAuth0Config } from './auth0/helpers/validateAuth0Config';
+import { logger } from './logger';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -14,6 +14,7 @@ if (!configValidation.isValid) {
   logger.error('[Auth0 SDK] Configuration validation failed:', configValidation);
 }
 
+// Create base client
 export const auth0 = createAuth0Client();
 
 /**

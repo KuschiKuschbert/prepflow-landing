@@ -6,6 +6,8 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import { ErrorTypeSchema, errorMessages } from './error-messages';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * Custom Auth0 Error Page
  * Styled with Cyber Carrot Design System

@@ -77,6 +77,7 @@ function GoogleTagManagerInner({
       {/* Google Tag Manager */}
       <Script
         id="gtm-script"
+        type="text/partytown"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
@@ -88,15 +89,8 @@ function GoogleTagManagerInner({
           `,
         }}
         onLoad={() => {
-          logger.dev('📥 Google Tag Manager loaded');
-
-          // Initialize gtag function for backward compatibility
-          if (typeof window !== 'undefined' && !window.gtag) {
-            window.gtag = function (..._args: unknown[]) {
-              window.dataLayer.push(arguments as unknown as Record<string, unknown>);
-            };
-            logger.dev('🔧 gtag function initialized for GTM compatibility');
-          }
+          logger.dev('📥 Google Tag Manager loaded (Partytown)');
+          // Initialization handled by Partytown forwarding
         }}
         onError={() => {
           logger.error('❌ Failed to load Google Tag Manager');

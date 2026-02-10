@@ -1,19 +1,107 @@
 'use client';
 
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
-import { HelpSupportPanel } from './components/HelpSupportPanel';
 import SettingsNavigation from './components/SettingsNavigation';
-import { AdvancedSection } from './components/sections/AdvancedSection';
-import { BillingSection } from './components/sections/BillingSection';
-import { DataBackupSection } from './components/sections/DataBackupSection';
-import { ExportSection } from './components/sections/ExportSection';
-import { FAQSection } from './components/sections/FAQSection';
-import { FeatureFlagsSection } from './components/sections/FeatureFlagsSection';
-import { PreferencesSection } from './components/sections/PreferencesSection';
-import { PrivacyLegalSection } from './components/sections/PrivacyLegalSection';
-import { ProfileAccountSection } from './components/sections/ProfileAccountSection';
-import { QRCodesSection } from './components/sections/QRCodesSection';
-import { SecuritySection } from './components/sections/SecuritySection';
+
+// Dynamic imports for settings sections to reduce initial bundle size
+const ProfileAccountSection = dynamic(
+  () =>
+    import('./components/sections/ProfileAccountSection').then(mod => mod.ProfileAccountSection),
+  {
+    loading: () => <PageSkeleton />,
+    ssr: false,
+  },
+);
+
+const BillingSection = dynamic(
+  () => import('./components/sections/BillingSection').then(mod => mod.BillingSection),
+  {
+    loading: () => <PageSkeleton />,
+    ssr: false,
+  },
+);
+
+const PreferencesSection = dynamic(
+  () => import('./components/sections/PreferencesSection').then(mod => mod.PreferencesSection),
+  {
+    loading: () => <PageSkeleton />,
+    ssr: false,
+  },
+);
+
+const SecuritySection = dynamic(
+  () => import('./components/sections/SecuritySection').then(mod => mod.SecuritySection),
+  {
+    loading: () => <PageSkeleton />,
+    ssr: false,
+  },
+);
+
+const PrivacyLegalSection = dynamic(
+  () =>
+    import('./components/sections/PrivacyLegalSection').then(mod => mod.PrivacyLegalSection),
+  {
+    loading: () => <PageSkeleton />,
+    ssr: false,
+  },
+);
+
+const ExportSection = dynamic(
+  () => import('./components/sections/ExportSection').then(mod => mod.ExportSection),
+  {
+    loading: () => <PageSkeleton />,
+    ssr: false,
+  },
+);
+
+const DataBackupSection = dynamic(
+  () => import('./components/sections/DataBackupSection').then(mod => mod.DataBackupSection),
+  {
+    loading: () => <PageSkeleton />,
+    ssr: false,
+  },
+);
+
+const QRCodesSection = dynamic(
+  () => import('./components/sections/QRCodesSection').then(mod => mod.QRCodesSection),
+  {
+    loading: () => <PageSkeleton />,
+    ssr: false,
+  },
+);
+
+const AdvancedSection = dynamic(
+  () => import('./components/sections/AdvancedSection').then(mod => mod.AdvancedSection),
+  {
+    loading: () => <PageSkeleton />,
+    ssr: false,
+  },
+);
+
+const FeatureFlagsSection = dynamic(
+  () =>
+    import('./components/sections/FeatureFlagsSection').then(mod => mod.FeatureFlagsSection),
+  {
+    loading: () => <PageSkeleton />,
+    ssr: false,
+  },
+);
+
+// Help section components need to be imported individually if managed inside the page
+// or wrapped in a separate component file if possible.
+// Since HelpSupportPanel and FAQSection are small, we can dynamic import them or keep them if they are small.
+// Let's dynamic import them to be consistent.
+const HelpSupportPanel = dynamic(
+  () => import('./components/HelpSupportPanel').then(mod => mod.HelpSupportPanel),
+  { ssr: false },
+);
+
+const FAQSection = dynamic(
+  () => import('./components/sections/FAQSection').then(mod => mod.FAQSection),
+  { ssr: false },
+);
 
 type SettingsSection =
   | 'profile'

@@ -10,8 +10,8 @@ if (!fs.existsSync(reportsDir)) {
   fs.mkdirSync(reportsDir, { recursive: true });
 }
 
-console.log('🚀 Starting Performance Audit for Recipes App...');
-console.log('   Targeting: Recipes, Dishes, Menu Builder');
+console.log('🚀 Starting Codebase-Wide Performance Audit...');
+console.log('   Targeting: Landing Page, Dashboard, Recipes, Ingredients, Menus, etc.');
 
 try {
   // Check if build exists, if not run it
@@ -22,7 +22,7 @@ try {
 
   // Run Lighthouse CI with custom config
   console.log('🔍 Running Lighthouse Audit...');
-  execSync('lhci autorun --config=./lighthouserc.audit.js', { stdio: 'inherit' });
+  execSync('npx lhci autorun --config=./lighthouserc.audit.js', { stdio: 'inherit' });
 
   console.log('✅ Audit Complete!');
   console.log(`📊 Reports generated in: ${path.join(reportsDir, 'lighthouse')}`);
