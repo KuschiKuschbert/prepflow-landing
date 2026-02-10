@@ -18,8 +18,20 @@ export async function generatePDF(html: string): Promise<Uint8Array> {
       chromium.setGraphicsMode = false;
       const executablePath = await chromium.executablePath();
 
+      console.log('[generatePDF] Production Environment Detected');
+      console.log('[generatePDF] Chromium Executable Path:', executablePath);
+
+      if (!executablePath) {
+        throw new Error(
+          'Chromium executablePath is null or undefined. @sparticuz/chromium failed to resolve.',
+        );
+      }
+
+      const chromiumArgs = (chromium as any).args;
+      console.log('[generatePDF] Chromium Args:', chromiumArgs);
+
       browser = await puppeteerCore.launch({
-        args: [...(chromium as any).args, '--disable-dev-shm-usage', '--no-sandbox'],
+        args: [...chromiumArgs, '--disable-dev-shm-usage', '--no-sandbox', '--disable-gpu'],
         defaultViewport: (chromium as any).defaultViewport,
         executablePath,
         headless: (chromium as any).headless,

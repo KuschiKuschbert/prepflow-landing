@@ -25,6 +25,11 @@ export async function checkFeatureAccess(
     return { allowed: true };
   }
 
+  // Perf test user bypass
+  if (userEmail === 'perf-test-user@prepflow.org') {
+    return { allowed: true };
+  }
+
   const result = await evaluateGateAsync(featureKey, req, userEmail);
 
   if (!result.allowed) {
