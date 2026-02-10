@@ -15,6 +15,7 @@ export default defineConfig([
       '**/build',
       '**/dist',
       '**/app/curbos/**', // Exclude curbos area from all linting
+      '**/public/~partytown/**', // Exclude generated partytown files
     ],
   },
   ...nextConfig,

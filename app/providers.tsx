@@ -8,7 +8,7 @@ import { logger } from '@/lib/logger';
 import { queryClient } from '@/lib/react-query';
 import { Auth0Provider } from '@auth0/nextjs-auth0/client';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Toaster } from 'sonner';
 
 export function Providers({ children }: { children: ReactNode }) {
@@ -44,7 +44,7 @@ function useGlobalErrorHandlers(): void {
 
 // Safe wrapper for SeasonalEvaluator to prevent hydration jitter
 function SafeSeasonalEvaluator() {
-  const [mounted, setMounted] = (require('react') as any).useState(false);
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -64,39 +64,39 @@ function useDraftMigration(): void {
     deferMigrate(() => {
       try {
         const now = Date.now();
-      const drafts = getAllDrafts(null);
-      drafts.forEach(d => {
-        const age = now - d.timestamp;
-        // Purge drafts older than 7 days
-        if (age > 7 * 24 * 60 * 60 * 1000) {
-          clearDraft(d.entityType, d.entityId, d.userId);
-          return;
-        }
-        // Re-key temporary ids
-        if (d.entityId === 'new' || String(d.entityId).startsWith('tmp_')) {
-          const data = (d.data || {}) as Record<string, unknown>;
-          const keyFields: Array<string | number> = [];
-          if (d.entityType === 'ingredients') {
-            keyFields.push(String(data['ingredient_name'] || ''));
-            keyFields.push(String(data['supplier'] || ''));
-            keyFields.push(String(data['product_code'] || ''));
-          } else if (d.entityType === 'recipes') {
-            keyFields.push(String(data['name'] || ''));
-          }
-          const stableId = deriveAutosaveId(d.entityType, null, keyFields);
-          if (stableId !== d.entityId) {
-            saveDraft(d.entityType, stableId, d.data, d.userId);
+        const drafts = getAllDrafts(null);
+        drafts.forEach(d => {
+          const age = now - d.timestamp;
+          // Purge drafts older than 7 days
+          if (age > 7 * 24 * 60 * 60 * 1000) {
             clearDraft(d.entityType, d.entityId, d.userId);
+            return;
           }
-        }
-      });
-      logger.dev('[Providers] Draft migration completed (deferred)');
-    } catch (e) {
-      // Migration should never block UI, but log for debugging
-      logger.dev('[Providers] Draft migration error (non-blocking):', {
-        error: e instanceof Error ? e.message : String(e),
-      });
-    }
+          // Re-key temporary ids
+          if (d.entityId === 'new' || String(d.entityId).startsWith('tmp_')) {
+            const data = (d.data || {}) as Record<string, unknown>;
+            const keyFields: Array<string | number> = [];
+            if (d.entityType === 'ingredients') {
+              keyFields.push(String(data['ingredient_name'] || ''));
+              keyFields.push(String(data['supplier'] || ''));
+              keyFields.push(String(data['product_code'] || ''));
+            } else if (d.entityType === 'recipes') {
+              keyFields.push(String(data['name'] || ''));
+            }
+            const stableId = deriveAutosaveId(d.entityType, null, keyFields);
+            if (stableId !== d.entityId) {
+              saveDraft(d.entityType, stableId, d.data, d.userId);
+              clearDraft(d.entityType, d.entityId, d.userId);
+            }
+          }
+        });
+        logger.dev('[Providers] Draft migration completed (deferred)');
+      } catch (e) {
+        // Migration should never block UI, but log for debugging
+        logger.dev('[Providers] Draft migration error (non-blocking):', {
+          error: e instanceof Error ? e.message : String(e),
+        });
+      }
     });
   }, []);
 }

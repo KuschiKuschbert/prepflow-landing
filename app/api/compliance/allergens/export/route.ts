@@ -62,7 +62,16 @@ export async function GET(request: NextRequest) {
     if (format === 'csv') return generateCSVExport(filteredItems);
     return generateHTMLExport(filteredItems, format === 'pdf', theme);
   } catch (err) {
-    logger.error('[Compliance Allergen Export] Error:', err);
+    // Pass through NextResponse errors (e.g. from checkFeatureAccess or requireAuth)
+    if (err instanceof NextResponse) {
+      return err;
+    }
+
+    logger.error('[Compliance Allergen Export] Error:', {
+      message: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      raw: err,
+    });
     return NextResponse.json(
       ApiErrorHandler.createError('Failed to export allergen overview', 'SERVER_ERROR', 500),
       { status: 500 },

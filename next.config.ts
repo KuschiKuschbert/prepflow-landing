@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   generateEtags: true,
 
-  serverExternalPackages: ['puppeteer', 'fs', 'path'],
+  serverExternalPackages: ['puppeteer', 'puppeteer-core', '@sparticuz/chromium', 'fs', 'path'],
 
   // Image optimization with advanced settings
   images: {
@@ -352,8 +352,7 @@ const nextConfig: NextConfig = {
         : []),
       {
         key: 'Content-Security-Policy',
-        value:
-          `default-src 'self'; img-src 'self' data: blob: https: *.allrecipes.com *.foodnetwork.com *.epicurious.com *.bonappetit.com *.tasty.co *.seriouseats.com *.food52.com *.simplyrecipes.com *.smittenkitchen.com *.thekitchn.com *.delish.com *.cloudinary.com *.imgix.net *.amazonaws.com *.auth0.com *.googleusercontent.com *.gravatar.com *.gravatar.com *.supabase.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://vercel.live https://va.vercel-scripts.com; connect-src 'self' https: wss: https://*.supabase.co wss://*.supabase.co https://*.supabase.co/realtime/v1/websocket https://vercel.live https://dev-7myakdl4itf644km.us.auth0.com *.auth0.com *.google-analytics.com; frame-src 'self' https://vercel.live https://dev-7myakdl4itf644km.us.auth0.com; frame-ancestors 'none'; ${isProduction && process.env.VERCEL ? 'upgrade-insecure-requests;' : ''}`,
+        value: `default-src 'self'; img-src 'self' data: blob: https: *.allrecipes.com *.foodnetwork.com *.epicurious.com *.bonappetit.com *.tasty.co *.seriouseats.com *.food52.com *.simplyrecipes.com *.smittenkitchen.com *.thekitchn.com *.delish.com *.cloudinary.com *.imgix.net *.amazonaws.com *.auth0.com *.googleusercontent.com *.gravatar.com *.gravatar.com *.supabase.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://vercel.live https://va.vercel-scripts.com; connect-src 'self' https: wss: https://*.supabase.co wss://*.supabase.co https://*.supabase.co/realtime/v1/websocket https://vercel.live https://dev-7myakdl4itf644km.us.auth0.com *.auth0.com *.google-analytics.com; frame-src 'self' https://vercel.live https://dev-7myakdl4itf644km.us.auth0.com; frame-ancestors 'none'; ${isProduction && process.env.VERCEL ? 'upgrade-insecure-requests;' : ''}`,
       },
     ];
 

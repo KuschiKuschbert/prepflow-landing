@@ -64,5 +64,11 @@
   "lib/recipes/utils/recipe-processor.ts",
   "lib/recipes/utils/sitemap-parser.ts",
   "lib/auth0-api-helpers.ts",
-  "app/webapp/ingredients/components/hooks/useIngredientsClientController.ts"
+  "app/webapp/ingredients/components/hooks/useIngredientsClientController.ts",
+  "app/webapp/layout.tsx",
+  "public/~partytown/debug/partytown-atomics.js",
+  "public/~partytown/debug/partytown-media.js",
+  "public/~partytown/debug/partytown-sandbox-sw.js",
+  "public/~partytown/debug/partytown-ww-atomics.js",
+  "public/~partytown/debug/partytown-ww-sw.js"
 ]

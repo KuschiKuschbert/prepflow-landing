@@ -13,7 +13,7 @@ export async function generatePDF(html: string): Promise<Uint8Array> {
   try {
     logger.dev('[generatePDF] Launching browser...');
 
-    if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
+    if (process.env.VERCEL) {
       // Production (Vercel): Use puppeteer-core + @sparticuz/chromium
       chromium.setGraphicsMode = false;
       const executablePath = await chromium.executablePath();
