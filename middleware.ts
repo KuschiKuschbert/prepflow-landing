@@ -15,6 +15,23 @@ export default async function middleware(req: NextRequest) {
   const isDevelopment = process.env.NODE_ENV === 'development';
   const authBypassDev = process.env.AUTH0_BYPASS_DEV === 'true';
 
+  // 0. Performance test bypass - MUST BE FIRST to skip Auth0 loops
+  const perfTokenEnv = process.env.PERFORMANCE_TEST_TOKEN;
+  const perfTokenHeader =
+    req.headers.get('performance-test-token') || req.headers.get('x-perf-test-token');
+  const perfTokenQuery = req.nextUrl.searchParams.get('performance-test-token');
+
+  const isPerfTest =
+    (perfTokenEnv && perfTokenEnv === 'perf-test-secret') ||
+    (perfTokenHeader && perfTokenHeader === 'perf-test-secret') ||
+    (perfTokenQuery && perfTokenQuery === 'perf-test-secret');
+
+  if ((isDevelopment && authBypassDev) || isPerfTest) {
+    logger.dev('[Middleware] Auth bypass enabled (Dev/Perf) - skipping entirely');
+    const { applySecurityHeaders } = await import('@/lib/security/SecurityHeaders');
+    return applySecurityHeaders(req, NextResponse.next());
+  }
+
   // Helper to apply security headers to every response path
   const withSecurityHeaders = async (res: NextResponse) => {
     const { applySecurityHeaders } = await import('@/lib/security/SecurityHeaders');
@@ -154,23 +171,6 @@ export default async function middleware(req: NextRequest) {
     pathname.startsWith('/api/order/status') ||
     pathname.startsWith('/api/curbos/auth/exchange-token')
   ) {
-    return NextResponse.next();
-  }
-
-  // Development bypass: Skip all auth checks if configured
-  // ALSO allow bypass if specifically running a performance test with the correct token env var OR header OR query param
-  const perfTokenEnv = process.env.PERFORMANCE_TEST_TOKEN;
-  const perfTokenHeader =
-    req.headers.get('performance-test-token') || req.headers.get('x-perf-test-token');
-  const perfTokenQuery = req.nextUrl.searchParams.get('performance-test-token');
-
-  const isPerfTest =
-    (perfTokenEnv && perfTokenEnv === 'perf-test-secret') ||
-    (perfTokenHeader && perfTokenHeader === 'perf-test-secret') ||
-    (perfTokenQuery && perfTokenQuery === 'perf-test-secret');
-
-  if ((isDevelopment && authBypassDev) || isPerfTest) {
-    logger.dev('[Middleware] Auth bypass enabled (Dev/Perf) - skipping authentication');
     return NextResponse.next();
   }
 
