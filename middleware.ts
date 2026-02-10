@@ -19,16 +19,18 @@ export default async function middleware(req: NextRequest) {
   const rawUrl = req.url || '';
   const isPerfTest = rawUrl.includes('performance-test-token=perf-test-secret');
 
-  console.log(`[Middleware V5] Path: ${pathname} | isPerfTest: ${isPerfTest} | URL: ${rawUrl}`);
+  console.log(`[Middleware V5] Path: ${pathname} | isPerfTest: ${isPerfTest} | URL: ${rawUrl}`); // eslint-disable-line no-console
 
   if (isPerfTest) {
-    console.error(`[Middleware V5] !!! BYPASS TRIGGERED !!! for: ${pathname}`);
+    console.error(`[Middleware V5] !!! BYPASS TRIGGERED !!! for: ${pathname}`); // eslint-disable-line no-console
+
     const { applySecurityHeaders } = await import('@/lib/security/SecurityHeaders');
     return applySecurityHeaders(req, NextResponse.next());
   }
 
   if (isDevelopment && authBypassDev) {
-    console.log(`[Middleware V5] Dev Auth bypass enabled for: ${pathname}`);
+    console.log(`[Middleware V5] Dev Auth bypass enabled for: ${pathname}`); // eslint-disable-line no-console
+
     const { applySecurityHeaders } = await import('@/lib/security/SecurityHeaders');
     return applySecurityHeaders(req, NextResponse.next());
   }
