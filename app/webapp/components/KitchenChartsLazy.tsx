@@ -66,7 +66,7 @@ export default function KitchenChartsLazy({
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       {/* Top Sellers Chart */}
       {topDishesData.length > 0 && (
-        <div className="rounded-2xl glass-surface border border-[var(--border)]/30 p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:border-[var(--primary)]/30">
+        <div className="glass-surface rounded-2xl border border-[var(--border)]/30 p-6 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30 hover:shadow-md">
           <div className="mb-6 flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold text-[var(--foreground)]">Top Selling Dishes</h3>
@@ -79,7 +79,7 @@ export default function KitchenChartsLazy({
 
       {/* Temperature Checks Chart */}
       {temperatureData.length > 0 && (
-        <div className="rounded-2xl glass-surface border border-[var(--border)]/30 p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:border-[var(--primary)]/30">
+        <div className="glass-surface rounded-2xl border border-[var(--border)]/30 p-6 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30 hover:shadow-md">
           <div className="mb-6 flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold text-[var(--foreground)]">Temperature Checks</h3>

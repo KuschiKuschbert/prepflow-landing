@@ -80,7 +80,7 @@ export default function ChefPerformanceInsights() {
 
   if (loading && !data) {
     return (
-      <div className="tablet:rounded-3xl tablet:p-6 rounded-2xl glass-surface border border-[var(--border)]/30 p-4 shadow-lg">
+      <div className="tablet:rounded-3xl tablet:p-6 glass-surface rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
         <div className="animate-pulse space-y-4">
           <div className="h-6 w-32 rounded bg-[var(--muted)]" />
           <div className="space-y-2">
@@ -94,7 +94,7 @@ export default function ChefPerformanceInsights() {
 
   if (error && !data) {
     return (
-      <div className="tablet:rounded-3xl tablet:p-6 rounded-2xl glass-surface border border-[var(--border)]/30 p-4 shadow-lg">
+      <div className="tablet:rounded-3xl tablet:p-6 glass-surface rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
         <p className="text-sm text-[var(--color-error)]">{error}</p>
       </div>
     );
@@ -105,7 +105,7 @@ export default function ChefPerformanceInsights() {
   }
 
   return (
-    <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl glass-surface border border-[var(--border)]/30 p-4 shadow-lg">
+    <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 glass-surface mb-6 rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
       <div className="tablet:mb-6 mb-4 flex items-center justify-between">
         <div>
           <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">
@@ -127,7 +127,7 @@ export default function ChefPerformanceInsights() {
       <div className="space-y-4">
         {/* Top Sellers */}
         {data.topSellers.length > 0 && (
-          <div className="tablet:rounded-2xl tablet:p-4 rounded-xl glass-panel border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
+          <div className="tablet:rounded-2xl tablet:p-4 glass-panel rounded-xl border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
             <div className="mb-2 flex items-center gap-2">
               <Icon
                 icon={TrendingUp}
@@ -146,7 +146,7 @@ export default function ChefPerformanceInsights() {
               {data.topSellers.map((item, index) => (
                 <div
                   key={`top-seller-${item.id}`}
-                  className="tablet:p-3 flex items-center justify-between rounded-lg glass-panel border border-[var(--border)]/30 p-2"
+                  className="tablet:p-3 glass-panel flex items-center justify-between rounded-lg border border-[var(--border)]/30 p-2"
                 >
                   <div className="flex items-center gap-2">
                     <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-success)]/20 text-xs font-medium text-[var(--color-success)]">
@@ -167,7 +167,7 @@ export default function ChefPerformanceInsights() {
 
         {/* Items Needing Attention */}
         {data.bottomSellers.length > 0 && (
-          <div className="tablet:rounded-2xl tablet:p-4 rounded-xl glass-panel border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
+          <div className="tablet:rounded-2xl tablet:p-4 glass-panel rounded-xl border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
             <div className="mb-2 flex items-center gap-2">
               <Icon
                 icon={TrendingDown}
@@ -186,7 +186,7 @@ export default function ChefPerformanceInsights() {
               {data.bottomSellers.map((item, index) => (
                 <div
                   key={`bottom-seller-${item.id}`}
-                  className="tablet:p-3 flex items-center justify-between rounded-lg glass-panel border border-[var(--border)]/30 p-2"
+                  className="tablet:p-3 glass-panel flex items-center justify-between rounded-lg border border-[var(--border)]/30 p-2"
                 >
                   <div className="flex items-center gap-2">
                     <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-error)]/20 text-xs font-medium text-[var(--color-error)]">
@@ -207,7 +207,7 @@ export default function ChefPerformanceInsights() {
 
         {/* Hidden Gems */}
         {data.hiddenGems.length > 0 && (
-          <div className="tablet:rounded-2xl tablet:p-4 rounded-xl glass-panel border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
+          <div className="tablet:rounded-2xl tablet:p-4 glass-panel rounded-xl border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
             <div className="mb-2 flex items-center gap-2">
               <Icon
                 icon={Sparkles}
@@ -227,7 +227,7 @@ export default function ChefPerformanceInsights() {
                 <Link
                   key={`hidden-gem-${item.id}`}
                   href="/webapp/recipes#menu-builder"
-                  className="tablet:p-3 flex items-center justify-between rounded-lg glass-panel border border-[var(--border)]/30 p-2 transition-all duration-300 hover:bg-[var(--surface-variant)]/40"
+                  className="tablet:p-3 glass-panel flex items-center justify-between rounded-lg border border-[var(--border)]/30 p-2 transition-all duration-300 hover:bg-[var(--surface-variant)]/40"
                 >
                   <div className="flex items-center gap-2">
                     <span className="text-fluid-xs tablet:text-fluid-sm font-medium text-[var(--foreground)]">
@@ -253,12 +253,12 @@ export default function ChefPerformanceInsights() {
         )}
 
         {/* Category Summary */}
-        <div className="tablet:rounded-2xl tablet:p-4 rounded-xl glass-panel border border-[var(--border)]/30 p-3">
+        <div className="tablet:rounded-2xl tablet:p-4 glass-panel rounded-xl border border-[var(--border)]/30 p-3">
           <h3 className="text-fluid-sm tablet:text-fluid-base mb-3 font-medium text-[var(--foreground)]">
             Category Breakdown
           </h3>
           <div className="tablet:grid-cols-4 grid grid-cols-2 gap-2">
-            <div className="tablet:p-3 rounded-lg glass-panel border border-[var(--border)]/30 p-2 text-center">
+            <div className="tablet:p-3 glass-panel rounded-lg border border-[var(--border)]/30 p-2 text-center">
               <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground-muted)]">
                 Chef&apos;s Kiss
               </p>
@@ -266,7 +266,7 @@ export default function ChefPerformanceInsights() {
                 {data.categoryCounts.chefsKiss}
               </p>
             </div>
-            <div className="tablet:p-3 rounded-lg glass-panel border border-[var(--border)]/30 p-2 text-center">
+            <div className="tablet:p-3 glass-panel rounded-lg border border-[var(--border)]/30 p-2 text-center">
               <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground-muted)]">
                 Hidden Gem
               </p>
@@ -274,7 +274,7 @@ export default function ChefPerformanceInsights() {
                 {data.categoryCounts.hiddenGem}
               </p>
             </div>
-            <div className="tablet:p-3 rounded-lg glass-panel border border-[var(--border)]/30 p-2 text-center">
+            <div className="tablet:p-3 glass-panel rounded-lg border border-[var(--border)]/30 p-2 text-center">
               <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground-muted)]">
                 Bargain Bucket
               </p>
@@ -282,7 +282,7 @@ export default function ChefPerformanceInsights() {
                 {data.categoryCounts.bargainBucket}
               </p>
             </div>
-            <div className="tablet:p-3 rounded-lg glass-panel border border-[var(--border)]/30 p-2 text-center">
+            <div className="tablet:p-3 glass-panel rounded-lg border border-[var(--border)]/30 p-2 text-center">
               <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground-muted)]">
                 Burnt Toast
               </p>

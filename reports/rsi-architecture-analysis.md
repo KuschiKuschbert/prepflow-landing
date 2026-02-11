@@ -1,9 +1,9 @@
 # 🏗️ RSI Architecture Analysis Report
 
-**Date:** 2/9/2026, 4:01:40 PM
+**Date:** 2/12/2026, 7:04:15 AM
 
 **Detected Design Patterns:** 6
-**Detected Anti-Patterns:** 484
+**Detected Anti-Patterns:** 464
 
 ## ⚠️ Anti-Patterns Detected
 
@@ -131,12 +131,6 @@
 
 **File:** `app/api/ai-specials/search/route.ts`
 **Description:** Found 12 magic numbers
-**Suggestion:** Extract magic numbers to named constants
-
-### Magic Numbers (MEDIUM)
-
-**File:** `app/api/auth/error/page.tsx`
-**Description:** Found 25 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
@@ -555,42 +549,6 @@
 
 ### Magic Numbers (MEDIUM)
 
-**File:** `app/api/recipe-scraper/process-recipes/route.ts`
-**Description:** Found 11 magic numbers
-**Suggestion:** Extract magic numbers to named constants
-
-### Spaghetti Code (HIGH)
-
-**File:** `app/api/recipe-scraper/recipes/route.ts`
-**Description:** Code has 7 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
-
-**File:** `app/api/recipe-scraper/resume/route.ts`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
-
-**File:** `app/api/recipe-scraper/scrape/route.ts`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Magic Numbers (MEDIUM)
-
-**File:** `app/api/recipe-scraper/scrape/route.ts`
-**Description:** Found 15 magic numbers
-**Suggestion:** Extract magic numbers to named constants
-
-### Spaghetti Code (HIGH)
-
-**File:** `app/api/recipe-scraper/stop/route.ts`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Magic Numbers (MEDIUM)
-
 **File:** `app/api/recipes/[id]/dietary-suitability/route.ts`
 **Description:** Found 12 magic numbers
 **Suggestion:** Extract magic numbers to named constants
@@ -791,6 +749,12 @@
 
 **File:** `app/api/webhook/stripe/route.ts`
 **Description:** Found 12 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
+**File:** `app/auth/error/page.tsx`
+**Description:** Found 25 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
@@ -1054,7 +1018,7 @@
 ### Spaghetti Code (HIGH)
 
 **File:** `app/providers.tsx`
-**Description:** Code has 6 levels of nesting
+**Description:** Code has 7 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
 ### Spaghetti Code (HIGH)
@@ -1203,8 +1167,14 @@
 
 ### Magic Numbers (MEDIUM)
 
-**File:** `app/webapp/components/TemperatureStatus.tsx`
+**File:** `app/webapp/components/RecipeReadiness.tsx`
 **Description:** Found 13 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
+**File:** `app/webapp/components/TemperatureStatus.tsx`
+**Description:** Found 16 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
@@ -1786,7 +1756,7 @@
 ### Spaghetti Code (HIGH)
 
 **File:** `app/webapp/recipes/components/hooks/useDishesClientData.ts`
-**Description:** Code has 7 levels of nesting
+**Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
 ### Spaghetti Code (HIGH)
@@ -2445,97 +2415,7 @@
 
 ### Spaghetti Code (HIGH)
 
-**File:** `lib/recipes/jobs/comprehensive-scraper.ts`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
-
 **File:** `lib/recipes/parsers/schema-validator.ts`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
-
-**File:** `lib/recipes/scrapers/allrecipes-scraper.ts`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
-
-**File:** `lib/recipes/scrapers/base-scraper.ts`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
-
-**File:** `lib/recipes/scrapers/bbc-good-food-scraper.ts`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
-
-**File:** `lib/recipes/scrapers/bon-appetit-scraper.ts`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
-
-**File:** `lib/recipes/scrapers/delish-scraper.ts`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
-
-**File:** `lib/recipes/scrapers/epicurious-scraper.ts`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
-
-**File:** `lib/recipes/scrapers/food-and-wine-scraper.ts`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
-
-**File:** `lib/recipes/scrapers/food-network-scraper.ts`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
-
-**File:** `lib/recipes/scrapers/food52-scraper.ts`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
-
-**File:** `lib/recipes/scrapers/serious-eats-scraper.ts`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
-
-**File:** `lib/recipes/scrapers/simply-recipes-scraper.ts`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
-
-**File:** `lib/recipes/scrapers/smitten-kitchen-scraper.ts`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
-
-**File:** `lib/recipes/scrapers/tasty-scraper.ts`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
-
-**File:** `lib/recipes/scrapers/the-kitchn-scraper.ts`
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
@@ -2951,7 +2831,7 @@
 🔄 Checking for Circular Dependencies...
 
 🛡️  Checking Client/Server Boundaries...
-Scanning 2661 files for boundaries...
+Scanning 2643 files for boundaries...
 ✅ Client/Server boundaries respected.
 
 📚 Checking Lib vs Components Boundaries...

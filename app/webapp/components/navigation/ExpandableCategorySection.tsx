@@ -172,7 +172,7 @@ export function ExpandableCategorySection({
 
                 {/* Recursive sub-navigation */}
                 {hasChildren && isActive(item.href) && (
-                  <div className="ml-9 mt-1 space-y-1 border-l border-[var(--border)]/30 pl-3">
+                  <div className="mt-1 ml-9 space-y-1 border-l border-[var(--border)]/30 pl-3">
                     {item.children?.map((child, childIdx) => (
                       <NavItem
                         key={child.href}

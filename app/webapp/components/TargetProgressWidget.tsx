@@ -1,6 +1,5 @@
 'use client';
 
-
 interface CircularProgressProps {
   value: number; // 0-100
   label: string;
@@ -23,10 +22,10 @@ export function CircularProgress({
   const offset = circumference - (value / 100) * circumference;
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 glass-surface rounded-3xl premium-card-hover group">
+    <div className="glass-surface premium-card-hover group flex flex-col items-center justify-center rounded-3xl p-4">
       <div className="relative" style={{ width: size, height: size }}>
         {/* Background Circle */}
-        <svg className="w-full h-full transform -rotate-90">
+        <svg className="h-full w-full -rotate-90 transform">
           <circle
             cx={size / 2}
             cy={size / 2}

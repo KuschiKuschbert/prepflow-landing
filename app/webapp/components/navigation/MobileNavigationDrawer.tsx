@@ -136,7 +136,7 @@ export const MobileNavigationDrawer = memo(function MobileNavigationDrawer({
       {/* Drawer */}
       <div
         ref={menuRef}
-        className="fixed top-0 right-0 bottom-0 z-[70] flex w-[85%] max-w-[320px] flex-col glass-panel shadow-2xl"
+        className="glass-panel fixed top-0 right-0 bottom-0 z-[70] flex w-[85%] max-w-[320px] flex-col shadow-2xl"
         style={{
           animation: 'slideInRight 0.3s var(--easing-standard) forwards',
         }}

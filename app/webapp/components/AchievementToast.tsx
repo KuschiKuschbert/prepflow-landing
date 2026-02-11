@@ -94,7 +94,7 @@ export function AchievementToast() {
   return (
     <div className="animate-in fade-in slide-in-from-top-4 fixed top-20 left-1/2 z-[60] -translate-x-1/2 duration-300">
       <div className="rounded-2xl border border-[var(--tertiary)]/30 bg-gradient-to-r from-[var(--tertiary)]/20 via-[var(--accent)]/20 to-[var(--primary)]/20 p-[1px] shadow-xl">
-        <div className="flex items-center gap-3 rounded-2xl glass-panel px-4 py-3">
+        <div className="glass-panel flex items-center gap-3 rounded-2xl px-4 py-3">
           {currentAchievement.icon && (
             <span className="text-2xl" aria-hidden="true">
               {currentAchievement.icon}

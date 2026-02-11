@@ -11,7 +11,7 @@ export default function TemperatureStatus() {
 
   if (loading) {
     return (
-      <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl glass-surface border border-[var(--border)]/30 p-4 shadow-lg">
+      <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 glass-surface mb-6 rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
         <div className="animate-pulse space-y-4">
           <div className="h-6 w-32 rounded bg-[var(--muted)]" />
           <div className="tablet:grid-cols-3 grid grid-cols-1 gap-3">
@@ -49,7 +49,7 @@ export default function TemperatureStatus() {
   };
 
   return (
-    <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl glass-surface border border-[var(--border)]/30 p-4 shadow-lg">
+    <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 glass-surface mb-6 rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
       <div className="tablet:mb-6 mb-4 flex items-center justify-between">
         <div>
           <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">
@@ -72,7 +72,7 @@ export default function TemperatureStatus() {
 
       <div className="tablet:grid-cols-3 tablet:gap-4 grid grid-cols-1 gap-3">
         {/* Food Items Checked Today */}
-        <div className="tablet:rounded-2xl tablet:p-4 rounded-xl glass-panel border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
+        <div className="tablet:rounded-2xl tablet:p-4 glass-panel rounded-xl border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
           <div className="mb-2 flex items-center gap-2">
             <div
               className={`tablet:h-10 tablet:w-10 tablet:rounded-xl flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br ${
@@ -123,7 +123,7 @@ export default function TemperatureStatus() {
         </div>
 
         {/* Equipment Status */}
-        <div className="tablet:rounded-2xl tablet:p-4 rounded-xl glass-panel border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
+        <div className="tablet:rounded-2xl tablet:p-4 glass-panel rounded-xl border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
           <div className="mb-2 flex items-center gap-2">
             <div className="tablet:h-10 tablet:w-10 tablet:rounded-xl flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--color-info)]/20 to-[var(--color-info)]/10">
               <Icon
@@ -152,7 +152,7 @@ export default function TemperatureStatus() {
         </div>
 
         {/* Out of Range Alerts */}
-        <div className="tablet:rounded-2xl tablet:p-4 rounded-xl glass-panel border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
+        <div className="tablet:rounded-2xl tablet:p-4 glass-panel rounded-xl border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
           <div className="mb-2 flex items-center gap-2">
             <div
               className={`tablet:h-10 tablet:w-10 tablet:rounded-xl flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br ${
@@ -194,7 +194,7 @@ export default function TemperatureStatus() {
       </div>
 
       {lastCheckTime && (
-        <div className="tablet:mt-6 tablet:rounded-2xl tablet:p-4 mt-4 rounded-xl glass-panel border border-[var(--border)]/30 p-3">
+        <div className="tablet:mt-6 tablet:rounded-2xl tablet:p-4 glass-panel mt-4 rounded-xl border border-[var(--border)]/30 p-3">
           <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground-muted)]">
             Last check:{' '}
             <span className="text-[var(--foreground)]">{formatLastCheckTime(lastCheckTime)}</span>

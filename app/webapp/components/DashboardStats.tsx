@@ -19,7 +19,7 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
   const { t: _t } = useTranslation();
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 tablet:mb-8 desktop:mb-10 mb-6">
+    <div className="tablet:mb-8 desktop:mb-10 mb-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       <DashboardCard
         title="Total Ingredients"
         value={stats.totalIngredients}
@@ -52,7 +52,7 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
           icon={UtensilsCrossed}
           iconColor="text-[var(--primary)]"
           badge={stats.totalMenuDishes > 0 ? { text: 'Ready', variant: 'success' } : undefined}
-          onClick={() => window.location.href = '/webapp/recipes#menu-builder'}
+          onClick={() => (window.location.href = '/webapp/recipes#menu-builder')}
         />
       )}
 
@@ -63,8 +63,12 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
           subtitle="Complete recipes ready to cook"
           icon={BookOpen}
           iconColor="text-[var(--color-info)]"
-          badge={stats.recipesReady > 0 ? { text: 'Ready', variant: 'success' } : { text: 'Needs Attention', variant: 'warning' }}
-          onClick={() => window.location.href = '/webapp/recipes'}
+          badge={
+            stats.recipesReady > 0
+              ? { text: 'Ready', variant: 'success' }
+              : { text: 'Needs Attention', variant: 'warning' }
+          }
+          onClick={() => (window.location.href = '/webapp/recipes')}
         />
       )}
 
@@ -74,9 +78,15 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
           value={stats.ingredientsLowStock}
           subtitle="Ingredients needing restock"
           icon={AlertTriangle}
-          iconColor={stats.ingredientsLowStock > 0 ? 'text-[var(--color-warning)]' : 'text-[var(--primary)]'}
-          badge={stats.ingredientsLowStock > 0 ? { text: 'Low Stock', variant: 'error' } : { text: 'Ready', variant: 'success' }}
-          onClick={() => window.location.href = '/webapp/recipes#ingredients'}
+          iconColor={
+            stats.ingredientsLowStock > 0 ? 'text-[var(--color-warning)]' : 'text-[var(--primary)]'
+          }
+          badge={
+            stats.ingredientsLowStock > 0
+              ? { text: 'Low Stock', variant: 'error' }
+              : { text: 'Ready', variant: 'success' }
+          }
+          onClick={() => (window.location.href = '/webapp/recipes#ingredients')}
         />
       )}
     </div>

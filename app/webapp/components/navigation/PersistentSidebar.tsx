@@ -102,7 +102,7 @@ export default function PersistentSidebar() {
 
         {/* Collapsible content */}
         <div
-          className={`flex-1 overflow-y-auto custom-scrollbar ${isExpanded ? 'tablet:p-4 desktop:p-5 p-3' : 'p-2'}`}
+          className={`custom-scrollbar flex-1 overflow-y-auto ${isExpanded ? 'tablet:p-4 desktop:p-5 p-3' : 'p-2'}`}
         >
           {mounted &&
             Object.entries(groupedItems).map(([category, items]) => {
@@ -134,24 +134,30 @@ export default function PersistentSidebar() {
 
         {/* User Info / Settings Section (Bottom) */}
         <div className="mt-auto border-t border-[var(--border)]/30 p-4">
-          <div className={cn(
-            "flex items-center gap-3 rounded-2xl p-2 transition-all duration-300",
-            isExpanded ? "hover:bg-[var(--surface-variant)]" : "justify-center"
-          )}>
+          <div
+            className={cn(
+              'flex items-center gap-3 rounded-2xl p-2 transition-all duration-300',
+              isExpanded ? 'hover:bg-[var(--surface-variant)]' : 'justify-center',
+            )}
+          >
             <div className="relative">
               {mounted && (
                 <div className="h-10 w-10 overflow-hidden rounded-full border-2 border-[var(--primary)]/30">
                   {/* Reuse avatar logic or show initials */}
-                  <div className="flex h-full w-full items-center justify-center bg-[var(--primary)]/10 text-xs font-bold text-[var(--primary)] text-center">
+                  <div className="flex h-full w-full items-center justify-center bg-[var(--primary)]/10 text-center text-xs font-bold text-[var(--primary)]">
                     {displayName ? displayName[0].toUpperCase() : '?'}
                   </div>
                 </div>
               )}
             </div>
             {isExpanded && mounted && (
-              <div className="flex flex-col min-w-0">
-                <span className="text-sm font-semibold truncate text-[var(--foreground)]">{displayName || 'Chef'}</span>
-                <span className="text-xs text-[var(--foreground-muted)] truncate">{user?.email || 'Kitchen'}</span>
+              <div className="flex min-w-0 flex-col">
+                <span className="truncate text-sm font-semibold text-[var(--foreground)]">
+                  {displayName || 'Chef'}
+                </span>
+                <span className="truncate text-xs text-[var(--foreground-muted)]">
+                  {user?.email || 'Kitchen'}
+                </span>
               </div>
             )}
           </div>

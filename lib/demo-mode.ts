@@ -1,15 +1,15 @@
 import { logger } from '@/lib/logger';
 import {
-    populateBasicData,
-    populateCleaningData,
-    populateComplianceData,
-    populateDishes,
-    populateKitchenSections,
-    populateMenuDishes,
-    populateMenus,
-    populateSalesData,
-    populateStaff,
-    populateTemperatureData,
+  populateBasicData,
+  populateCleaningData,
+  populateComplianceData,
+  populateDishes,
+  populateKitchenSections,
+  populateMenuDishes,
+  populateMenus,
+  populateSalesData,
+  populateStaff,
+  populateTemperatureData,
 } from '@/lib/populate-helpers';
 import { supabaseAdmin } from '@/lib/supabase';
 

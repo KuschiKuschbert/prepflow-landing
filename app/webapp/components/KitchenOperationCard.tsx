@@ -24,10 +24,10 @@ export function KitchenOperationCard({ operation }: KitchenOperationCardProps) {
   return (
     <Link
       href={href}
-      className="group tablet:rounded-2xl tablet:p-5 relative rounded-xl glass-panel border border-[var(--border)]/30 p-4 transition-all duration-300 hover:border-[var(--primary)]/50 hover:shadow-[var(--primary)]/10 hover:shadow-xl active:scale-[0.98]"
+      className="group tablet:rounded-2xl tablet:p-5 glass-panel relative rounded-xl border border-[var(--border)]/30 p-4 transition-all duration-300 hover:border-[var(--primary)]/50 hover:shadow-[var(--primary)]/10 hover:shadow-xl active:scale-[0.98]"
     >
       {/* Glow effect on hover */}
-      <div className="absolute inset-0 -z-10 rounded-xl bg-gradient-to-br from-[var(--primary)]/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 tablet:rounded-2xl" />
+      <div className="tablet:rounded-2xl absolute inset-0 -z-10 rounded-xl bg-gradient-to-br from-[var(--primary)]/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       <div className="flex items-center justify-between">
         <div className="min-w-0 flex-1">
           <div className="mb-1 flex flex-wrap items-center gap-2">

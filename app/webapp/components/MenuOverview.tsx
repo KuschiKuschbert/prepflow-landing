@@ -60,7 +60,7 @@ export default function MenuOverview() {
 
   if (loading && !data) {
     return (
-      <div className="tablet:rounded-3xl tablet:p-6 rounded-2xl glass-surface border border-[var(--border)]/30 p-4 shadow-lg">
+      <div className="tablet:rounded-3xl tablet:p-6 glass-surface rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
         <div className="animate-pulse space-y-4">
           <div className="h-6 w-32 rounded bg-[var(--muted)]" />
           <div className="space-y-2">
@@ -74,7 +74,7 @@ export default function MenuOverview() {
 
   if (error && !data) {
     return (
-      <div className="tablet:rounded-3xl tablet:p-6 rounded-2xl glass-surface border border-[var(--border)]/30 p-4 shadow-lg">
+      <div className="tablet:rounded-3xl tablet:p-6 glass-surface rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
         <p className="text-sm text-[var(--color-error)]">{error}</p>
       </div>
     );
@@ -87,7 +87,7 @@ export default function MenuOverview() {
   const hasIssues = data.dishesWithoutRecipes > 0 || data.dishesWithoutCosts > 0;
 
   return (
-    <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl glass-surface border border-[var(--border)]/30 p-4 shadow-lg">
+    <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 glass-surface mb-6 rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
       <div className="tablet:mb-6 mb-4 flex items-center justify-between">
         <div>
           <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">
@@ -108,7 +108,7 @@ export default function MenuOverview() {
 
       <div className="desktop:grid-cols-4 desktop:gap-4 grid grid-cols-2 gap-3">
         {/* Active Menus */}
-        <div className="tablet:rounded-2xl tablet:p-4 min-w-0 rounded-xl glass-panel border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
+        <div className="tablet:rounded-2xl tablet:p-4 glass-panel min-w-0 rounded-xl border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
           <div className="mb-2 flex items-center gap-2">
             <div className="tablet:h-10 tablet:w-10 tablet:rounded-xl flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
               <Icon
@@ -137,7 +137,7 @@ export default function MenuOverview() {
         </div>
 
         {/* Total Dishes Available */}
-        <div className="tablet:rounded-2xl tablet:p-4 min-w-0 rounded-xl glass-panel border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
+        <div className="tablet:rounded-2xl tablet:p-4 glass-panel min-w-0 rounded-xl border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
           <div className="mb-2 flex items-center gap-2">
             <div className="tablet:h-10 tablet:w-10 tablet:rounded-xl flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--color-info)]/20 to-[var(--color-info)]/10">
               <Icon
@@ -166,7 +166,7 @@ export default function MenuOverview() {
         </div>
 
         {/* Dishes Without Recipes */}
-        <div className="tablet:rounded-2xl tablet:p-4 min-w-0 rounded-xl glass-panel border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
+        <div className="tablet:rounded-2xl tablet:p-4 glass-panel min-w-0 rounded-xl border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
           <div className="mb-2 flex items-center gap-2">
             <div
               className={`tablet:h-10 tablet:w-10 tablet:rounded-xl flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br ${
@@ -211,7 +211,7 @@ export default function MenuOverview() {
         </div>
 
         {/* Dishes Without Costs */}
-        <div className="tablet:rounded-2xl tablet:p-4 min-w-0 rounded-xl glass-panel border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
+        <div className="tablet:rounded-2xl tablet:p-4 glass-panel min-w-0 rounded-xl border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
           <div className="mb-2 flex items-center gap-2">
             <div
               className={`tablet:h-10 tablet:w-10 tablet:rounded-xl flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br ${
@@ -280,7 +280,7 @@ export default function MenuOverview() {
       <div className="tablet:mt-6 mt-4">
         <Link
           href="/webapp/recipes#menu-builder"
-          className="text-fluid-xs tablet:px-6 tablet:py-3 tablet:text-fluid-sm flex items-center justify-center gap-2 rounded-lg glass-panel border border-[var(--border)]/30 px-4 py-2 font-medium text-[var(--foreground)] transition-colors hover:border-[var(--primary)]/50"
+          className="text-fluid-xs tablet:px-6 tablet:py-3 tablet:text-fluid-sm glass-panel flex items-center justify-center gap-2 rounded-lg border border-[var(--border)]/30 px-4 py-2 font-medium text-[var(--foreground)] transition-colors hover:border-[var(--primary)]/50"
         >
           <Icon icon={Plus} size="sm" aria-hidden={true} />
           Add Dish to Menu

@@ -70,5 +70,9 @@
   "public/~partytown/debug/partytown-media.js",
   "public/~partytown/debug/partytown-sandbox-sw.js",
   "public/~partytown/debug/partytown-ww-atomics.js",
-  "public/~partytown/debug/partytown-ww-sw.js"
+  "public/~partytown/debug/partytown-ww-sw.js",
+  "app/api/recipes/route.ts",
+  "lib/demo-mode.ts",
+  "public/~partytown/partytown-atomics.js",
+  "public/~partytown/partytown-media.js"
 ]

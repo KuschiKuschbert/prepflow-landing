@@ -118,14 +118,16 @@ function NavigationHeaderBase({
     <>
       <header
         className={cn(
-          'fixed inset-x-0 top-0 z-50 flex h-16 transition-all duration-300 desktop:h-20',
+          'desktop:h-20 fixed inset-x-0 top-0 z-50 flex h-16 transition-all duration-300',
           shouldHideHeader && '-translate-y-full',
-          isScrolled ? 'glass-surface border-b border-[var(--border)]/30 shadow-md' : 'bg-transparent',
+          isScrolled
+            ? 'glass-surface border-b border-[var(--border)]/30 shadow-md'
+            : 'bg-transparent',
           className,
         )}
       >
-        <div className="mx-auto flex h-full w-full max-w-[2560px] items-center justify-between px-4 tablet:px-6 desktop:px-8">
-          <div className="flex items-center gap-4 desktop:gap-8">
+        <div className="tablet:px-6 desktop:px-8 mx-auto flex h-full w-full max-w-[2560px] items-center justify-between px-4">
+          <div className="desktop:gap-8 flex items-center gap-4">
             <LogoSection
               handleLogoClick={handleLogoClick}
               handleLogoTouchStart={handleLogoTouchStart}
@@ -147,7 +149,7 @@ function NavigationHeaderBase({
             )}
           </div>
 
-          <div className="flex items-center gap-2 desktop:gap-4">
+          <div className="desktop:gap-4 flex items-center gap-2">
             <button
               onClick={onSearchClick}
               className={cn(
@@ -161,7 +163,7 @@ function NavigationHeaderBase({
 
             <NavbarStats onClick={onAchievementsClick} />
 
-            <div className="h-6 w-px bg-[var(--border)] desktop:h-8" />
+            <div className="desktop:h-8 h-6 w-px bg-[var(--border)]" />
 
             <UserAvatarButton
               buttonRef={buttonRef}

@@ -47,7 +47,7 @@ export default function QuickActions() {
   ];
 
   return (
-    <div className="desktop:mb-8 desktop:rounded-3xl desktop:p-6 mb-6 rounded-2xl glass-surface border border-[var(--border)]/30 p-4 shadow-lg">
+    <div className="desktop:mb-8 desktop:rounded-3xl desktop:p-6 glass-surface mb-6 rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
       <div className="desktop:mb-6 mb-4">
         <h2
           className={`${LANDING_TYPOGRAPHY.xl} desktop:mb-2 desktop:${LANDING_TYPOGRAPHY['2xl']} mb-1 flex items-center gap-2 font-semibold text-[var(--foreground)]`}
@@ -73,10 +73,10 @@ export default function QuickActions() {
             <GlowCard glowColor={action.glowColor} className="h-full">
               <Link
                 href={action.href}
-                className="group desktop:rounded-2xl desktop:p-6 relative min-h-[44px] rounded-xl glass-panel border border-[var(--border)]/30 p-3 transition-all duration-300 hover:border-[var(--primary)]/50 hover:shadow-[var(--primary)]/10 hover:shadow-xl active:scale-[0.98]"
+                className="group desktop:rounded-2xl desktop:p-6 glass-panel relative min-h-[44px] rounded-xl border border-[var(--border)]/30 p-3 transition-all duration-300 hover:border-[var(--primary)]/50 hover:shadow-[var(--primary)]/10 hover:shadow-xl active:scale-[0.98]"
               >
                 {/* Subtle glow on hover */}
-                <div className="absolute inset-0 -z-10 rounded-xl bg-gradient-to-br from-[var(--primary)]/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 desktop:rounded-2xl" />
+                <div className="desktop:rounded-2xl absolute inset-0 -z-10 rounded-xl bg-gradient-to-br from-[var(--primary)]/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <div className="desktop:space-y-4 flex flex-col items-center space-y-2 text-center">
                   <div
                     className={`desktop:h-16 desktop:w-16 desktop:rounded-2xl h-10 w-10 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center transition-transform duration-200 group-hover:scale-110`}

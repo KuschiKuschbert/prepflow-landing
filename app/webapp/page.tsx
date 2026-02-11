@@ -94,7 +94,7 @@ export default function WebAppDashboard() {
         <QuickActions />
 
         {/* Dynamic Content - Loads After Initial Render */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+        <div className="mb-10 grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <Suspense fallback={<PageSkeleton />}>
               {mountStage >= 1 && <DashboardStatsClient />}

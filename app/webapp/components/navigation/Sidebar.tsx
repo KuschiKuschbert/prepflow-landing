@@ -91,7 +91,7 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
         transitionTimingFunction: 'var(--easing-emphasized)',
       }}
     >
-      <div className="flex h-full flex-col overflow-y-auto rounded-r-3xl glass-panel">
+      <div className="glass-panel flex h-full flex-col overflow-y-auto rounded-r-3xl">
         <div
           className={cn(
             'flex',

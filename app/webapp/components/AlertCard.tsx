@@ -2,12 +2,12 @@
 
 import { Icon } from '@/components/ui/Icon';
 import {
-    AlertTriangle,
-    BookOpen,
-    ClipboardCheck,
-    LucideIcon,
-    Package,
-    Thermometer,
+  AlertTriangle,
+  BookOpen,
+  ClipboardCheck,
+  LucideIcon,
+  Package,
+  Thermometer,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -68,7 +68,7 @@ export function AlertCard({ alert }: AlertCardProps) {
 
   return (
     <div
-      className={`relative overflow-hidden rounded-xl glass-panel border border-[var(--border)]/30 tablet:rounded-2xl tablet:p-4 p-3 transition-all duration-300 hover:border-[var(--primary)]/30 hover:shadow-lg`}
+      className={`glass-panel tablet:rounded-2xl tablet:p-4 relative overflow-hidden rounded-xl border border-[var(--border)]/30 p-3 transition-all duration-300 hover:border-[var(--primary)]/30 hover:shadow-lg`}
     >
       {/* Background glow based on severity */}
       <div className={`absolute inset-0 -z-10 bg-gradient-to-br ${styles.iconBg} opacity-5`} />

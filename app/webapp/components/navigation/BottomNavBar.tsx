@@ -80,7 +80,7 @@ export const BottomNavBar = memo(function BottomNavBar({
 
   return (
     <nav
-      className="fixed bottom-4 left-4 right-4 z-[60] h-[var(--bottom-navbar-height)] rounded-3xl glass-surface shadow-2xl transition-transform duration-300 tablet:hidden"
+      className="glass-surface tablet:hidden fixed right-4 bottom-4 left-4 z-[60] h-[var(--bottom-navbar-height)] rounded-3xl shadow-2xl transition-transform duration-300"
       style={{
         transform: isVisible ? 'translateY(0)' : 'translateY(calc(100% + 1rem))',
         transitionTimingFunction: 'var(--easing-emphasized)',
