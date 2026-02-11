@@ -14,7 +14,7 @@ const VULNERABILITY_THRESHOLD = 'high'; // low, moderate, high, critical
 const LEVELS = ['low', 'moderate', 'high', 'critical'];
 
 interface AuditReport {
-  vulnerabilities: Record<string, any>;
+  vulnerabilities: Record<string, unknown>;
   metadata: {
     vulnerabilities: {
       info: number;
@@ -43,9 +43,9 @@ try {
       stdio: ['pipe', 'pipe', 'ignore'],
     });
     auditJson = JSON.parse(output);
-  } catch (e: any) {
+  } catch (e: unknown) {
     // npm audit returns non-zero exit code if vulnerabilities found
-    if (e.stdout) {
+    if (e && typeof e === 'object' && 'stdout' in e && typeof e.stdout === 'string') {
       auditJson = JSON.parse(e.stdout);
     } else {
       throw e;
@@ -62,7 +62,7 @@ try {
   let failed = false;
 
   LEVELS.forEach((level, index) => {
-    if (index >= thresholdIndex && (v as any)[level] > 0) {
+    if (index >= thresholdIndex && (v as Record<string, number>)[level] > 0) {
       console.error(`   ❌ FAILURE: Found ${level} vulnerabilities!`);
       failed = true;
     }

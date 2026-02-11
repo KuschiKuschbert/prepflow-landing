@@ -81,7 +81,7 @@ async function resolveUserEmail(userId: string) {
     } else if (user) {
       console.log(`-> Email for ${userId}: ${user.email}`);
     }
-  } catch (e) {
+  } catch (_e) {
     console.log(`Exception resolving email for ${userId}`);
   }
 }
