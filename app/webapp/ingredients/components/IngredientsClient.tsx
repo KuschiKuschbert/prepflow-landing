@@ -72,20 +72,21 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     availableUnits,
   } = useIngredientsClientController();
 
-  if (loading || isLoading) {
-    return (
-      <ResponsivePageContainer>
-        <div className="space-y-4">
-          {!hideHeader && (
-            <div className="mb-6 flex items-center justify-between">
-              <div className="h-8 w-48 animate-pulse rounded-lg bg-[var(--muted)]" />
-              <div className="h-10 w-32 animate-pulse rounded-lg bg-[var(--muted)]" />
-            </div>
-          )}
-          <TableSkeleton rows={10} columns={6} />
-        </div>
-      </ResponsivePageContainer>
+  if (loading || isLoading || !isHydrated) {
+    const skeleton = (
+      <div className="space-y-4">
+        {!hideHeader && (
+          <div className="mb-6 flex items-center justify-between">
+            <div className="h-8 w-48 animate-pulse rounded-lg bg-[var(--muted)]" />
+            <div className="h-10 w-32 animate-pulse rounded-lg bg-[var(--muted)]" />
+          </div>
+        )}
+        <TableSkeleton rows={10} columns={6} />
+      </div>
     );
+
+    if (hideHeader) return skeleton;
+    return <ResponsivePageContainer>{skeleton}</ResponsivePageContainer>;
   }
 
   return (

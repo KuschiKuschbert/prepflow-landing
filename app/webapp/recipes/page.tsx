@@ -70,7 +70,7 @@ export default async function RecipesPage() {
           <PageHeader
             title="Recipe & Cost Management"
             subtitle="Manage recipes, build dishes, and calculate costs"
-            icon={UtensilsCrossed}
+            icon={<UtensilsCrossed />}
             showLogo={true}
           />
 

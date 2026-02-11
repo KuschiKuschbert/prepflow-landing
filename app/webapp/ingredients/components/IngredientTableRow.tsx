@@ -8,7 +8,8 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
 import { Edit, Trash2 } from 'lucide-react';
-import { memo, useState } from 'react';
+import { Fragment, memo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useLongPress } from '../hooks/useLongPress';
 import {
   IngredientBrandCell,
@@ -115,112 +116,118 @@ function IngredientTableRowComponent({
   };
 
   return (
-    <tr
-      className={`border-l-2 border-[var(--accent)]/30 bg-[var(--accent)]/2 transition-colors duration-200 ${
-        isSelectionMode ? 'cursor-pointer' : 'cursor-pointer hover:bg-[var(--accent)]/5'
-      } ${isSelected && isSelectionMode ? 'bg-[var(--accent)]/10' : ''}`}
-      onClick={handleRowClick}
-      title={isSelectionMode ? 'Tap to select' : 'Click to edit ingredient'}
-      onTouchStart={isSelectionMode ? undefined : longPressHandlers.onTouchStart}
-      onTouchMove={isSelectionMode ? undefined : longPressHandlers.onTouchMove}
-      onTouchEnd={isSelectionMode ? undefined : longPressHandlers.onTouchEnd}
-    >
-      <td className="desktop:table-cell hidden px-6 py-4 whitespace-nowrap">
-        <button
-          onClick={e => {
-            e.stopPropagation();
-            const isCurrentlySelected = selectedIngredients.has(ingredient.id);
-            const willBeSelected = !isCurrentlySelected;
-
-            // Enter selection mode when selecting an item (not deselecting)
-            if (willBeSelected && !isSelectionMode && onEnterSelectionMode) {
-              onEnterSelectionMode();
-            }
-
-            onSelectIngredient(ingredient.id, willBeSelected);
-          }}
-          onTouchStart={e => {
-            if (isSelectionMode) {
+    <Fragment>
+      <tr
+        className={`border-l-2 border-[var(--accent)]/30 bg-[var(--accent)]/2 transition-colors duration-200 ${
+          isSelectionMode ? 'cursor-pointer' : 'cursor-pointer hover:bg-[var(--accent)]/5'
+        } ${isSelected && isSelectionMode ? 'bg-[var(--accent)]/10' : ''}`}
+        onClick={handleRowClick}
+        title={isSelectionMode ? 'Tap to select' : 'Click to edit ingredient'}
+        onTouchStart={isSelectionMode ? undefined : longPressHandlers.onTouchStart}
+        onTouchMove={isSelectionMode ? undefined : longPressHandlers.onTouchMove}
+        onTouchEnd={isSelectionMode ? undefined : longPressHandlers.onTouchEnd}
+      >
+        <td className="desktop:table-cell hidden px-6 py-4 whitespace-nowrap">
+          <button
+            onClick={e => {
               e.stopPropagation();
-            }
-          }}
-          className="flex items-center justify-center transition-colors hover:text-[var(--primary)]"
-          aria-label={`${selectedIngredients.has(ingredient.id) ? 'Deselect' : 'Select'} ingredient ${ingredient.ingredient_name}`}
-        >
-          {selectedIngredients.has(ingredient.id) ? (
-            <svg
-              className="h-4 w-4 text-[var(--primary)]"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-          ) : (
-            <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
-          )}
-        </button>
-      </td>
-      <IngredientNameCell ingredient={ingredient} />
-      <IngredientBrandCell ingredient={ingredient} className="desktop:table-cell hidden" />
-      <IngredientPackSizeCell ingredient={ingredient} className="desktop:table-cell hidden" />
-      <IngredientCostCell ingredient={ingredient} displayUnit={displayUnit} />
-      <IngredientSupplierCell ingredient={ingredient} className="desktop:table-cell hidden" />
-      <IngredientStockCell ingredient={ingredient} className="desktop:table-cell hidden" />
-      <td className="desktop:table-cell hidden px-6 py-4 text-sm text-[var(--foreground-secondary)]">
-        {ingredient.created_at ? formatRecipeDate(ingredient.created_at) : '—'}
-      </td>
-      <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handleEditClick}
-            disabled={isSelectionMode}
-            className={`text-[var(--primary)] transition-all duration-200 hover:text-[var(--primary)] hover:drop-shadow-[0_0_8px_rgba(41,231,205,0.6)] ${isSelectionMode ? 'cursor-not-allowed opacity-50' : ''}`}
-            aria-label={`Edit ${ingredient.ingredient_name}`}
+              const isCurrentlySelected = selectedIngredients.has(ingredient.id);
+              const willBeSelected = !isCurrentlySelected;
+
+              // Enter selection mode when selecting an item (not deselecting)
+              if (willBeSelected && !isSelectionMode && onEnterSelectionMode) {
+                onEnterSelectionMode();
+              }
+
+              onSelectIngredient(ingredient.id, willBeSelected);
+            }}
+            onTouchStart={e => {
+              if (isSelectionMode) {
+                e.stopPropagation();
+              }
+            }}
+            className="flex items-center justify-center transition-colors hover:text-[var(--primary)]"
+            aria-label={`${selectedIngredients.has(ingredient.id) ? 'Deselect' : 'Select'} ingredient ${ingredient.ingredient_name}`}
           >
-            <Icon
-              icon={Edit}
-              size="sm"
-              className="text-[var(--primary)] transition-all duration-200 hover:drop-shadow-[0_0_8px_rgba(41,231,205,0.6)]"
-              aria-hidden={true}
-            />
-          </button>
-          <button
-            onClick={handleDeleteClick}
-            disabled={deletingId === ingredient.id || isSelectionMode}
-            className={`text-[var(--color-error)] transition-all duration-200 hover:text-red-300 hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.6)] disabled:opacity-50 ${isSelectionMode ? 'cursor-not-allowed' : ''}`}
-            aria-label={`Delete ${ingredient.ingredient_name}`}
-          >
-            {deletingId === ingredient.id ? (
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--color-error)] border-t-transparent"></div>
+            {selectedIngredients.has(ingredient.id) ? (
+              <svg
+                className="h-4 w-4 text-[var(--primary)]"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
             ) : (
-              <Icon
-                icon={Trash2}
-                size="sm"
-                className="text-[var(--color-error)] transition-all duration-200 hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.6)]"
-                aria-hidden={true}
-              />
+              <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
             )}
           </button>
-        </div>
-      </td>
-      {/* Confirm Delete Dialog */}
-      <ConfirmDialog
-        isOpen={showDeleteConfirm}
-        title="Delete Ingredient"
-        message={`Are you sure you want to delete "${ingredient.ingredient_name}"? This action can't be undone.`}
-        confirmLabel="Delete"
-        cancelLabel="Cancel"
-        onConfirm={confirmDelete}
-        onCancel={() => setShowDeleteConfirm(false)}
-        variant="danger"
-      />
-    </tr>
+        </td>
+        <IngredientNameCell ingredient={ingredient} />
+        <IngredientBrandCell ingredient={ingredient} className="desktop:table-cell hidden" />
+        <IngredientPackSizeCell ingredient={ingredient} className="desktop:table-cell hidden" />
+        <IngredientCostCell ingredient={ingredient} displayUnit={displayUnit} />
+        <IngredientSupplierCell ingredient={ingredient} className="desktop:table-cell hidden" />
+        <IngredientStockCell ingredient={ingredient} className="desktop:table-cell hidden" />
+        <td className="desktop:table-cell hidden px-6 py-4 text-sm text-[var(--foreground-secondary)]">
+          {ingredient.created_at ? formatRecipeDate(ingredient.created_at) : '—'}
+        </td>
+        <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleEditClick}
+              disabled={isSelectionMode}
+              className={`text-[var(--primary)] transition-all duration-200 hover:text-[var(--primary)] hover:drop-shadow-[0_0_8px_rgba(41,231,205,0.6)] ${isSelectionMode ? 'cursor-not-allowed opacity-50' : ''}`}
+              aria-label={`Edit ${ingredient.ingredient_name}`}
+            >
+              <Icon
+                icon={Edit}
+                size="sm"
+                className="text-[var(--primary)] transition-all duration-200 hover:drop-shadow-[0_0_8px_rgba(41,231,205,0.6)]"
+                aria-hidden={true}
+              />
+            </button>
+            <button
+              onClick={handleDeleteClick}
+              disabled={deletingId === ingredient.id || isSelectionMode}
+              className={`text-[var(--color-error)] transition-all duration-200 hover:text-red-300 hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.6)] disabled:opacity-50 ${isSelectionMode ? 'cursor-not-allowed' : ''}`}
+              aria-label={`Delete ${ingredient.ingredient_name}`}
+            >
+              {deletingId === ingredient.id ? (
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--color-error)] border-t-transparent"></div>
+              ) : (
+                <Icon
+                  icon={Trash2}
+                  size="sm"
+                  className="text-[var(--color-error)] transition-all duration-200 hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.6)]"
+                  aria-hidden={true}
+                />
+              )}
+            </button>
+          </div>
+        </td>
+      </tr>
+      {showDeleteConfirm &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <ConfirmDialog
+            isOpen={showDeleteConfirm}
+            title="Delete Ingredient"
+            message={`Are you sure you want to delete "${ingredient.ingredient_name}"? This action can't be undone.`}
+            confirmLabel="Delete"
+            cancelLabel="Cancel"
+            onConfirm={confirmDelete}
+            onCancel={() => setShowDeleteConfirm(false)}
+            variant="danger"
+          />,
+          document.body,
+        )}
+    </Fragment>
   );
 }
 
@@ -228,8 +235,12 @@ function IngredientTableRowComponent({
 export const IngredientTableRow = memo(IngredientTableRowComponent, (prevProps, nextProps) => {
   // Only re-render if relevant props actually changed
   return (
-    prevProps.ingredient.id === nextProps.ingredient.id &&
-    prevProps.selectedIngredients === nextProps.selectedIngredients &&
+    // Deep comparison of ingredient object
+    JSON.stringify(prevProps.ingredient) === JSON.stringify(nextProps.ingredient) &&
+    // Check selection state specifically
+    prevProps.selectedIngredients.has(prevProps.ingredient.id) ===
+      nextProps.selectedIngredients.has(nextProps.ingredient.id) &&
+    // Check other scalar props
     prevProps.isSelectionMode === nextProps.isSelectionMode &&
     prevProps.displayUnit === nextProps.displayUnit &&
     prevProps.deletingId === nextProps.deletingId

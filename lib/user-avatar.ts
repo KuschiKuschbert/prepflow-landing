@@ -4,7 +4,6 @@
  */
 
 import { getAvatarById, isValidAvatar } from './avatars';
-import { logger } from './logger';
 import { getInitialsFromUserObject } from './user-avatar/helpers/getInitials';
 import { getInitialsFromString } from './user-avatar/helpers/getInitialsFromString';
 
@@ -43,12 +42,11 @@ export function getDefaultAvatar(
 ): string {
   // Handle user object format (preferred - uses database first_name/last_name)
   if (userNameOrUser && typeof userNameOrUser === 'object') {
-    logger.dev('[getDefaultAvatar] Input object:', userNameOrUser);
     return getInitialsFromUserObject(userNameOrUser);
   }
 
   // Handle string format (backward compatibility)
-  logger.dev('[getDefaultAvatar] Input string:', userNameOrUser);
+
   return getInitialsFromString(userNameOrUser || 'U');
 }
 

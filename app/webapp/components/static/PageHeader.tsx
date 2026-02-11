@@ -5,12 +5,12 @@ import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { WEBAPP_LANDING_PRESETS } from '@/lib/landing-styles';
 import { ArrowLeft, LucideIcon } from 'lucide-react';
 import Image from 'next/image';
-import { ReactNode } from 'react';
+import { ReactNode, isValidElement } from 'react';
 
 interface PageHeaderProps {
   title: string | ReactNode;
   subtitle?: string;
-  icon?: LucideIcon; // Use LucideIcon instead of emoji string
+  icon?: LucideIcon | ReactNode; // Allow both LucideIcon component or rendered ReactNode
   showLogo?: boolean;
   backButton?: boolean;
   onBack?: () => void;
@@ -42,6 +42,27 @@ export function PageHeader({
 
   // Icon color uses theme-aware primary color
   const iconColor = 'text-[var(--primary)]';
+
+  // Helper to render the icon based on its type
+  const renderIcon = () => {
+    if (!icon) return null;
+
+    // Check if icon is a valid React element (already rendered)
+    if (isValidElement(icon)) {
+      // Clone element to add class if it doesn't have one, or just return it
+      // For simple icons, we might want to enforce the color class
+      return <span className={iconColor}>{icon}</span>;
+    }
+
+    // Assume it's a LucideIcon component function if it's not a React element
+    // This is a bit of a loose check but works for the union type
+    if (typeof icon === 'function' || typeof icon === 'object') {
+      const IconComponent = icon as LucideIcon;
+      return <Icon icon={IconComponent} size="lg" className={iconColor} aria-hidden={true} />;
+    }
+
+    return null;
+  };
 
   // Container component - wrap with ScrollReveal if landing styles enabled
   const Container = useLandingStyles ? ScrollReveal : 'div';
@@ -76,7 +97,7 @@ export function PageHeader({
               </div>
             )}
             <h1 className={titleClasses}>
-              {icon && <Icon icon={icon} size="lg" className={iconColor} aria-hidden={true} />}
+              {renderIcon()}
               {title}
             </h1>
           </div>
