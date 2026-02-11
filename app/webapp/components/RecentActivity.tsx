@@ -15,7 +15,7 @@ function RecentActivityContent() {
   // Show loading state only if we have no data and are loading
   if (loading && !activities) {
     return (
-      <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg">
+      <div className="rounded-3xl glass-surface border border-[var(--border)]/30 p-6 shadow-lg">
         <LoadingSkeleton variant="list" count={5} height="64px" />
       </div>
     );
@@ -28,7 +28,7 @@ function RecentActivityContent() {
         error={ApiErrorHandler.createError(error)}
         context="Recent Activity"
         onRetry={refetch}
-        className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg"
+        className="rounded-3xl glass-surface border border-[var(--border)]/30 p-6 shadow-lg"
       />
     );
   }
@@ -36,7 +36,7 @@ function RecentActivityContent() {
   // Show empty state
   if (!activities || activities.length === 0) {
     return (
-      <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg">
+      <div className="rounded-3xl glass-surface border border-[var(--border)]/30 p-6 shadow-lg">
         <div className="mb-4 flex items-center justify-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]">
             <Icon
@@ -60,7 +60,7 @@ function RecentActivityContent() {
   }
 
   return (
-    <div className="tablet:rounded-3xl tablet:p-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
+    <div className="tablet:rounded-3xl tablet:p-6 rounded-2xl glass-surface border border-[var(--border)]/30 p-4 shadow-lg">
       <div className="tablet:mb-6 mb-4 flex items-center justify-between">
         <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">
           Recent Activity

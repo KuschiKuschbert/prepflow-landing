@@ -5,7 +5,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { Icon } from '@/components/ui/Icon';
 import { prefetchRoute } from '@/lib/cache/prefetch-config';
 import { getUserGreeting } from '@/lib/user-name';
-import { CreditCard, Settings, Settings2, Shield, User, Globe } from 'lucide-react';
+import { CreditCard, Globe, Settings, Settings2, Shield, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -49,7 +49,7 @@ export function UserMenu({
         right: `${dropdownPosition.right}px`,
       }}
     >
-      <div className="rounded-xl bg-[var(--surface-variant)] p-4">
+      <div className="rounded-xl glass-panel p-4">
         {/* Header: Centered Profile */}
         <div className="flex flex-col items-center space-y-2 pb-4">
           <div className="relative">

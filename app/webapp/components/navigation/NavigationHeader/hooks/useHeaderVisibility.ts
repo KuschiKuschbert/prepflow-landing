@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { useScrollDirection } from '@/hooks/useScrollDirection';
+import { useEffect, useState } from 'react';
 
 /**
  * Hook for managing header visibility (auto-hide on mobile/tablet scroll)
@@ -30,5 +30,6 @@ export function useHeaderVisibility() {
   return {
     isVisible,
     isDesktop,
+    isScrolled: !isAtTop,
   };
 }

@@ -1,6 +1,5 @@
 'use client';
 
-import { DashboardSection } from '@/components/ui/DashboardSection';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { getUserFirstName } from '@/lib/user-name';
@@ -12,6 +11,7 @@ import { PageHeader } from './components/static/PageHeader';
 
 // Static imports - needed immediately
 import QuickActions from './components/QuickActions';
+import { TargetProgressWidget } from './components/TargetProgressWidget';
 
 // Dynamic imports - lazy load heavy dashboard components
 const DashboardStatsClient = dynamic(() => import('./components/DashboardStatsClient'), {
@@ -94,11 +94,18 @@ export default function WebAppDashboard() {
         <QuickActions />
 
         {/* Dynamic Content - Loads After Initial Render */}
-        <DashboardSection>
-          <Suspense fallback={<PageSkeleton />}>
-            {mountStage >= 1 && <DashboardStatsClient />}
-          </Suspense>
-        </DashboardSection>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+          <div className="lg:col-span-2">
+            <Suspense fallback={<PageSkeleton />}>
+              {mountStage >= 1 && <DashboardStatsClient />}
+            </Suspense>
+          </div>
+          <div className="lg:col-span-1">
+            <Suspense fallback={<PageSkeleton />}>
+              {mountStage >= 1 && <TargetProgressWidget />}
+            </Suspense>
+          </div>
+        </div>
 
         {/* Widget-Based Dashboard Layout - Enhanced spacing for large screens */}
         <div className="tablet:space-y-8 desktop:space-y-10 large-desktop:space-y-12 space-y-6 xl:space-y-14 2xl:space-y-16">

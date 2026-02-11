@@ -10,7 +10,7 @@ interface RecentActivityItemProps {
 
 export function RecentActivityItem({ activity }: RecentActivityItemProps) {
   return (
-    <div className="tablet:space-x-4 tablet:rounded-2xl tablet:p-3 flex items-center space-x-3 rounded-xl bg-[var(--surface)]/30 p-4 transition-colors duration-200 hover:bg-[var(--surface)]/50">
+    <div className="tablet:space-x-4 tablet:rounded-2xl tablet:p-3 flex items-center space-x-3 rounded-xl glass-panel border border-[var(--border)]/30 p-4 transition-all duration-300 hover:border-[var(--primary)]/30 hover:bg-[var(--surface-variant)]/40">
       <div className="flex-shrink-0">
         <div
           className={`tablet:h-10 tablet:w-10 flex h-8 w-8 items-center justify-center rounded-full ${

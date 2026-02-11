@@ -1,4 +1,5 @@
 'use client';
+
 import { NavbarStats } from '@/components/Arcade/NavbarStats';
 import { Icon } from '@/components/ui/Icon';
 import { useUserAvatar } from '@/hooks/useUserAvatar';
@@ -24,7 +25,6 @@ interface NavigationHeaderProps {
   pathname: string;
   navigationItems: Array<{ href: string; label: string }>;
   isActive: (href: string) => boolean;
-  // Logo interaction handlers from parent
   handleLogoClick: (e: React.MouseEvent) => void;
   handleLogoTouchStart: (e: React.TouchEvent) => void;
   handleLogoTouchEnd: (e: React.TouchEvent) => void;
@@ -32,22 +32,13 @@ interface NavigationHeaderProps {
   handleLogoMouseUp: () => void;
   handleLogoMouseLeave: () => void;
   shouldPreventNavigation: React.RefObject<boolean | null>;
-  // Ref for user button (for popover positioning)
   userButtonRef?: React.RefObject<HTMLButtonElement | null>;
-  // Gamification handlers
   onAchievementsClick?: () => void;
 }
 
 const cn = (...classes: (string | undefined | null | false)[]): string =>
   classes.filter(Boolean).join(' ');
 
-/**
- * Navigation header component for webapp.
- * Displays logo, breadcrumbs (desktop), search button, and user info.
- * Auto-hides on mobile/tablet when scrolling down, shows on scroll up or at top.
- *
- * @component
- */
 function NavigationHeaderBase({
   className = '',
   onSearchClick,
@@ -67,18 +58,15 @@ function NavigationHeaderBase({
 }: NavigationHeaderProps) {
   const [isMounted, setIsMounted] = useState(false);
   const { user, error: userError, isLoading: userLoading } = useUser();
-  // Handle nested user structure: user.user.email (Auth0 SDK sometimes returns nested structure)
   const authUser = user as unknown as Record<string, unknown> | undefined;
   const nestedUser = authUser?.user as Record<string, unknown> | undefined;
   const userEmail = user?.email || (nestedUser?.email as string) || '';
   const auth0UserName = user?.name || (nestedUser?.name as string) || '';
 
-  // Prevent hydration mismatch by only computing user-dependent values after mount
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Log Auth0 useUser() result in NavigationHeader
   useEffect(() => {
     logger.dev('[NavigationHeader] Auth0 useUser() result:', {
       hasUser: !!user,
@@ -94,7 +82,6 @@ function NavigationHeaderBase({
 
   const { profile } = useUserProfile();
 
-  // Priority: Database first_name/last_name → Auth0 session name → Email prefix
   const userNameInput = useMemo(
     () => ({
       first_name: profile?.first_name,
@@ -107,11 +94,9 @@ function NavigationHeaderBase({
 
   const userName = isMounted ? getUserDisplayName(userNameInput) : '';
   const { avatar: userAvatar } = useUserAvatar();
-  const { isVisible, isDesktop } = useHeaderVisibility();
+  const { isVisible, isDesktop, isScrolled } = useHeaderVisibility();
   const { seasonalEffect, bannerText, bannerColor } = useSeasonalEffects();
 
-  // Ensure consistent initial render to prevent hydration mismatches
-  // Use isVisible only after mount to avoid server/client differences
   const shouldHideHeader = isMounted ? !isVisible : false;
 
   const {
@@ -126,21 +111,21 @@ function NavigationHeaderBase({
     userButtonRef,
   });
 
-  // Get avatar URL or default initials
   const avatarUrl = useMemo(() => getAvatarUrl(userAvatar), [userAvatar]);
   const initials = useMemo(() => getDefaultAvatar(userNameInput), [userNameInput]);
 
   return (
     <>
-      <div
+      <header
         className={cn(
-          'desktop:h-20 fixed inset-x-0 top-0 z-50 flex h-16 transform items-center border-b border-[var(--border)]/50 bg-[var(--background)]/80 backdrop-blur-md transition-all duration-300',
+          'fixed inset-x-0 top-0 z-50 flex h-16 transition-all duration-300 desktop:h-20',
           shouldHideHeader && '-translate-y-full',
+          isScrolled ? 'glass-surface border-b border-[var(--border)]/30 shadow-md' : 'bg-transparent',
           className,
         )}
       >
-        <div className="desktop:px-6 mx-auto flex h-full w-full max-w-7xl items-center justify-between px-4">
-          <div className="desktop:gap-8 flex items-center gap-4">
+        <div className="mx-auto flex h-full w-full max-w-[2560px] items-center justify-between px-4 tablet:px-6 desktop:px-8">
+          <div className="flex items-center gap-4 desktop:gap-8">
             <LogoSection
               handleLogoClick={handleLogoClick}
               handleLogoTouchStart={handleLogoTouchStart}
@@ -162,7 +147,7 @@ function NavigationHeaderBase({
             )}
           </div>
 
-          <div className="desktop:gap-4 flex items-center gap-2">
+          <div className="flex items-center gap-2 desktop:gap-4">
             <button
               onClick={onSearchClick}
               className={cn(
@@ -176,7 +161,7 @@ function NavigationHeaderBase({
 
             <NavbarStats onClick={onAchievementsClick} />
 
-            <div className="desktop:h-8 h-6 w-px bg-[var(--border)]" />
+            <div className="h-6 w-px bg-[var(--border)] desktop:h-8" />
 
             <UserAvatarButton
               buttonRef={buttonRef}
@@ -202,7 +187,7 @@ function NavigationHeaderBase({
           avatarUrl={avatarUrl}
           defaultInitials={initials}
         />
-      </div>
+      </header>
     </>
   );
 }

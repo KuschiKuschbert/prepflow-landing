@@ -80,10 +80,10 @@ export const BottomNavBar = memo(function BottomNavBar({
 
   return (
     <nav
-      className="fixed right-0 bottom-0 left-0 z-[60] h-[var(--bottom-navbar-height)] border-t border-[var(--border)]/30 bg-[var(--surface)]/90 pb-[var(--safe-area-inset-bottom)] backdrop-blur-xl transition-transform duration-300"
+      className="fixed bottom-4 left-4 right-4 z-[60] h-[var(--bottom-navbar-height)] rounded-3xl glass-surface shadow-2xl transition-transform duration-300 tablet:hidden"
       style={{
-        transform: isVisible ? 'translateY(0)' : 'translateY(100%)',
-        transitionTimingFunction: 'var(--easing-standard)',
+        transform: isVisible ? 'translateY(0)' : 'translateY(calc(100% + 1rem))',
+        transitionTimingFunction: 'var(--easing-emphasized)',
       }}
       aria-label="Bottom navigation"
       suppressHydrationWarning

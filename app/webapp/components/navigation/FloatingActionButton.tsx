@@ -83,7 +83,7 @@ export function FloatingActionButton() {
             'mb-2',
             'w-64',
             'rounded-2xl',
-            'bg-[var(--surface)]',
+            'glass-panel',
             'border',
             'border-[var(--border)]',
             'shadow-xl',

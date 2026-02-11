@@ -142,9 +142,12 @@ export function ExpandableCategorySection({
         <div className="space-y-1">
           {items.map((item, index) => {
             const reducedMotion = prefersReducedMotion();
+            const hasChildren = item.children && item.children.length > 0;
+
             return (
               <div
                 key={item.href}
+                className="space-y-1"
                 style={{
                   animationName: reducedMotion ? 'none' : 'fadeInUp',
                   animationDuration: reducedMotion ? '0s' : '0.3s',
@@ -164,7 +167,30 @@ export function ExpandableCategorySection({
                   onTrack={onTrack}
                   iconSize="md"
                   showLabel={true}
+                  className={isActive(item.href) ? 'glow-primary glow-border-primary' : ''}
                 />
+
+                {/* Recursive sub-navigation */}
+                {hasChildren && isActive(item.href) && (
+                  <div className="ml-9 mt-1 space-y-1 border-l border-[var(--border)]/30 pl-3">
+                    {item.children?.map((child, childIdx) => (
+                      <NavItem
+                        key={child.href}
+                        href={child.href}
+                        label={child.label}
+                        icon={child.icon}
+                        color={child.color}
+                        isActive={isActive(child.href)}
+                        onClick={onItemClick ? () => onItemClick(child.href) : undefined}
+                        onTrack={onTrack}
+                        iconSize="sm"
+                        showLabel={true}
+                        className="opacity-80 hover:opacity-100"
+                        compact={true}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             );
           })}

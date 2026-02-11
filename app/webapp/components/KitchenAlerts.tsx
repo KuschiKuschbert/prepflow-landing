@@ -6,16 +6,16 @@ import { AlertCard } from './AlertCard';
 import { useKitchenAlerts } from './hooks/useKitchenAlerts';
 
 const CONTAINER_CLASSES =
-  'tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg';
+  'tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl glass-surface border border-[var(--border)]/30 p-4 shadow-lg';
 
 function LoadingState() {
   return (
     <div className={CONTAINER_CLASSES}>
       <div className="animate-pulse space-y-4">
-        <div className="h-6 w-32 rounded bg-[var(--surface)]" />
+        <div className="h-6 w-32 rounded bg-[var(--muted)]" />
         <div className="space-y-2">
-          <div className="h-16 rounded-xl bg-[var(--surface)]" />
-          <div className="h-16 rounded-xl bg-[var(--surface)]" />
+          <div className="h-16 rounded-xl bg-[var(--muted)]/50" />
+          <div className="h-16 rounded-xl bg-[var(--muted)]/50" />
         </div>
       </div>
     </div>

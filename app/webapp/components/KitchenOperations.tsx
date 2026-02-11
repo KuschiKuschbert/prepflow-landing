@@ -9,12 +9,12 @@ export default function KitchenOperations() {
 
   if (loading) {
     return (
-      <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
+      <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl glass-surface border border-[var(--border)]/30 p-4 shadow-lg">
         <div className="animate-pulse space-y-4">
-          <div className="h-6 w-32 rounded bg-[var(--surface)]" />
-          <div className="tablet:grid-cols-2 tablet:gap-4 desktop:[grid-template-columns:repeat(auto-fit,minmax(240px,1fr))] grid grid-cols-1 gap-3">
-            {[1, 2, 3, 4, 5].map(i => (
-              <div key={i} className="h-24 rounded-xl bg-[var(--surface)]" />
+          <div className="h-6 w-32 rounded bg-[var(--muted)]" />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="h-24 rounded-xl bg-[var(--muted)]/50" />
             ))}
           </div>
         </div>
@@ -71,7 +71,7 @@ export default function KitchenOperations() {
   ];
 
   return (
-    <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
+    <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl glass-surface border border-[var(--border)]/30 p-4 shadow-lg">
       <div className="tablet:mb-6 mb-4">
         <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">
           Kitchen Operations

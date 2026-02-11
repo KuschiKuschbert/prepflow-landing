@@ -2,12 +2,12 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
-import { X } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { type Achievement } from '@/lib/personality/achievements';
 import { usePersonality } from '@/lib/personality/store';
 import confetti from 'canvas-confetti';
+import { X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 // Vegetable-themed colors for confetti (reuse from mise-en-place)
 const VEGETABLE_COLORS = [
@@ -94,7 +94,7 @@ export function AchievementToast() {
   return (
     <div className="animate-in fade-in slide-in-from-top-4 fixed top-20 left-1/2 z-[60] -translate-x-1/2 duration-300">
       <div className="rounded-2xl border border-[var(--tertiary)]/30 bg-gradient-to-r from-[var(--tertiary)]/20 via-[var(--accent)]/20 to-[var(--primary)]/20 p-[1px] shadow-xl">
-        <div className="flex items-center gap-3 rounded-2xl bg-[var(--surface-variant)] px-4 py-3">
+        <div className="flex items-center gap-3 rounded-2xl glass-panel px-4 py-3">
           {currentAchievement.icon && (
             <span className="text-2xl" aria-hidden="true">
               {currentAchievement.icon}
@@ -111,7 +111,7 @@ export function AchievementToast() {
           </div>
           <button
             onClick={handleDismiss}
-            className="rounded-lg p-1 text-[var(--foreground)]/60 transition-colors hover:bg-[var(--surface)] hover:text-[var(--foreground)]"
+            className="rounded-lg p-1 text-[var(--foreground)]/60 transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
             aria-label="Dismiss achievement notification"
           >
             <Icon icon={X} size="sm" />

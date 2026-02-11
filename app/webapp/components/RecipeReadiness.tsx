@@ -1,7 +1,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { AlertTriangle, CheckCircle, TrendingUp, ExternalLink } from 'lucide-react';
+import { AlertTriangle, CheckCircle, ExternalLink, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { useRecipeReadiness } from './hooks/useRecipeReadiness';
 
@@ -10,7 +10,7 @@ export default function RecipeReadiness() {
 
   if (loading && !data) {
     return (
-      <div className="tablet:rounded-3xl tablet:p-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
+      <div className="tablet:rounded-3xl tablet:p-6 rounded-2xl glass-surface border border-[var(--border)]/30 p-4 shadow-lg">
         <div className="animate-pulse space-y-4">
           <div className="h-6 w-32 rounded bg-[var(--muted)]" />
           <div className="space-y-2">
@@ -24,7 +24,7 @@ export default function RecipeReadiness() {
 
   if (error && !data) {
     return (
-      <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
+      <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl glass-surface border border-[var(--border)]/30 p-4 shadow-lg">
         <div className="tablet:mb-6 mb-4">
           <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">
             Recipe Readiness
@@ -48,7 +48,7 @@ export default function RecipeReadiness() {
   }
 
   return (
-    <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
+    <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl glass-surface border border-[var(--border)]/30 p-4 shadow-lg">
       <div className="tablet:mb-6 mb-4 flex items-center justify-between">
         <div>
           <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">
@@ -69,7 +69,7 @@ export default function RecipeReadiness() {
 
       <div className="tablet:grid-cols-3 tablet:gap-4 grid grid-cols-1 gap-3">
         {/* Complete Recipes */}
-        <div className="tablet:rounded-2xl tablet:p-4 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-3">
+        <div className="tablet:rounded-2xl tablet:p-4 rounded-xl glass-panel border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
           <div className="mb-2 flex items-center gap-2">
             <div className="tablet:h-10 tablet:w-10 tablet:rounded-xl flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-green-500/20 to-green-500/10">
               <Icon
@@ -98,7 +98,7 @@ export default function RecipeReadiness() {
         </div>
 
         {/* Incomplete Recipes */}
-        <div className="tablet:rounded-2xl tablet:p-4 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-3">
+        <div className="tablet:rounded-2xl tablet:p-4 rounded-xl glass-panel border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
           <div className="mb-2 flex items-center gap-2">
             <div
               className={`tablet:h-10 tablet:w-10 tablet:rounded-xl flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br ${
@@ -143,7 +143,7 @@ export default function RecipeReadiness() {
         </div>
 
         {/* Recipes Without Costs */}
-        <div className="tablet:rounded-2xl tablet:p-4 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-3">
+        <div className="tablet:rounded-2xl tablet:p-4 rounded-xl glass-panel border border-[var(--border)]/30 p-3">
           <div className="mb-2 flex items-center gap-2">
             <div
               className={`tablet:h-10 tablet:w-10 tablet:rounded-xl flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br ${
@@ -190,7 +190,7 @@ export default function RecipeReadiness() {
 
       {/* Most Used Recipes */}
       {data.mostUsedRecipes.length > 0 && (
-        <div className="tablet:mt-6 tablet:rounded-2xl tablet:p-4 mt-4 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-3">
+        <div className="tablet:mt-6 tablet:rounded-2xl tablet:p-4 mt-4 rounded-xl glass-panel border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
           <div className="mb-3 flex items-center gap-2">
             <Icon
               icon={TrendingUp}
@@ -206,7 +206,7 @@ export default function RecipeReadiness() {
             {data.mostUsedRecipes.map((recipe, index) => (
               <div
                 key={recipe.id}
-                className="tablet:p-3 flex items-center justify-between rounded-lg bg-[var(--surface)] p-2"
+                className="tablet:p-3 flex items-center justify-between rounded-lg glass-panel border border-[var(--border)]/30 p-2"
               >
                 <div className="flex items-center gap-2">
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--primary)]/20 text-xs font-medium text-[var(--primary)]">

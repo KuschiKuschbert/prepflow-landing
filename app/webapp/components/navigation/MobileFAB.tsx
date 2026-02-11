@@ -91,7 +91,7 @@ export const MobileFAB = memo(function MobileFAB() {
       {isOpen && (
         <div
           ref={menuRef}
-          className="mb-3 flex flex-col gap-2 rounded-2xl border border-[var(--border)] bg-[var(--surface-variant)] p-2 shadow-2xl backdrop-blur-sm landscape:gap-1 landscape:p-1.5"
+          className="mb-3 flex flex-col gap-2 rounded-2xl border border-[var(--border)] glass-panel p-2 shadow-2xl landscape:gap-1 landscape:p-1.5"
           style={{ animation: 'scaleIn 0.2s var(--easing-spring) forwards' }}
         >
           <button

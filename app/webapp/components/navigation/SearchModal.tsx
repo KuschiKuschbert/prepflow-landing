@@ -127,7 +127,7 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
       >
         <div className="mx-4 w-full max-w-2xl">
           <div className="rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-xl">
-            <div className="rounded-2xl bg-[var(--surface)]/95">
+            <div className="rounded-2xl glass-panel">
               <div className="desktop:p-4 border-b border-[var(--border)] p-3">
                 <div className="relative">
                   <h2 id="search-modal-title" className="sr-only">

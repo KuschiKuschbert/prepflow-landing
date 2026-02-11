@@ -8,23 +8,23 @@ import { optimizeNavigationItems } from '@/lib/navigation-optimization/optimizer
 import { useAdaptiveNavSettings } from '@/lib/navigation-optimization/store';
 import { useTranslation } from '@/lib/useTranslation';
 import {
-  BarChart3,
-  BookOpen,
-  Calendar,
-  ChefHat,
-  ClipboardCheck,
-  FileText,
-  LayoutDashboard,
-  ListChecks,
-  Package2,
-  Settings,
-  Settings2,
-  Sparkles,
-  Square,
-  Thermometer,
-  Truck,
-  Users,
-  UtensilsCrossed,
+    BarChart3,
+    BookOpen,
+    Calendar,
+    ChefHat,
+    ClipboardCheck,
+    FileText,
+    LayoutDashboard,
+    ListChecks,
+    Package2,
+    Settings,
+    Settings2,
+    Sparkles,
+    Square,
+    Thermometer,
+    Truck,
+    Users,
+    UtensilsCrossed,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -36,6 +36,7 @@ export interface NavigationItemConfig {
   icon: React.ReactNode;
   color: string;
   category?: string;
+  children?: NavigationItemConfig[];
 }
 
 /**
