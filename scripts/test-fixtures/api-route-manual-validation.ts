@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
-const db = { create: async (d: any) => d };
+const db = { create: async (d: unknown) => d };
 
 const postSchema = z.object({
   email: z.string(),

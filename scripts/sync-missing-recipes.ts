@@ -36,8 +36,8 @@ interface LocalRecipe {
   file_path: string;
   recipe_name: string;
   description?: string;
-  instructions?: any[];
-  ingredients?: any[];
+  instructions?: unknown[];
+  ingredients?: Record<string, unknown>[];
   source?: string;
   image_url?: string;
   yield?: number | string;
@@ -150,10 +150,12 @@ async function syncRecipes() {
         const instructions = recipe.instructions || [];
         const ingredients = recipe.ingredients || [];
         const ingredientsOld =
-          recipe.ingredients?.map((ing: any) => ing.original_text || ing.name) || [];
+          recipe.ingredients?.map(
+            (ing: Record<string, unknown>) => ing.original_text || ing.name,
+          ) || [];
         // Generate ingredient tags for search
         const ingredientTags = ingredients
-          .map((ing: any) => ing.original_text || ing.name)
+          .map((ing: Record<string, unknown>) => ing.original_text || ing.name)
           .filter(Boolean);
 
         recordsToInsert.push({
