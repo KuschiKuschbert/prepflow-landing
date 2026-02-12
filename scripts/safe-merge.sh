@@ -22,17 +22,39 @@ if [ "$CURRENT_BRANCH" == "main" ]; then
     exit 1
 fi
 
+# Handle flags
+FAST_MODE=false
+SKIP_LINT=false
+for arg in "$@"; do
+    if [ "$arg" == "--fast" ]; then
+        FAST_MODE=true
+    fi
+    if [ "$arg" == "--skip-lint" ]; then
+        SKIP_LINT=true
+    fi
+done
+
 echo -e "${YELLOW}📍 Merging branch: $CURRENT_BRANCH${NC}"
+if [ "$FAST_MODE" == "true" ]; then
+    echo -e "${YELLOW}⚡ FAST MODE enabled. Skipping full build.${NC}"
+fi
+if [ "$SKIP_LINT" == "true" ]; then
+    echo -e "${YELLOW}⚠️  SKIP_LINT enabled. Skipping lint verification.${NC}"
+fi
 
 # 1. Verification Phase
 echo -e "\n${YELLOW}🔍 Phase 1: Verification${NC}"
 
 echo -n "Running Lint... "
-if npm run lint; then
-    echo -e "${GREEN}Passed${NC}"
+if [ "$SKIP_LINT" == "true" ]; then
+    echo -e "${YELLOW}Skipped (--skip-lint)${NC}"
 else
-    echo -e "${RED}Failed${NC}"
-    exit 1
+    if npm run lint; then
+        echo -e "${GREEN}Passed${NC}"
+    else
+        echo -e "${RED}Failed${NC}"
+        exit 1
+    fi
 fi
 
 echo -n "Running Tests... "
@@ -73,11 +95,15 @@ else
 fi
 
 echo -n "Running Build... "
-if npm run build; then
-    echo -e "${GREEN}Passed${NC}"
+if [ "$FAST_MODE" == "true" ]; then
+    echo -e "${YELLOW}Skipped (--fast)${NC}"
 else
-    echo -e "${RED}Failed${NC}"
-    exit 1
+    if npm run build; then
+        echo -e "${GREEN}Passed${NC}"
+    else
+        echo -e "${RED}Failed${NC}"
+        exit 1
+    fi
 fi
 
 # 2. Merge Phase

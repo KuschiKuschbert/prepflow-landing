@@ -1,0 +1,21 @@
+# 🎨 Coding Style (Strict)
+
+- **Next.js 15**:
+  - **Server Components**: Async by default.
+  - **Params**: ALWAYS unwrap params (`await params` or `use(params)`).
+  - **Client Components**: Use `'use client'` at the very top.
+- **Formatting**: Code MUST be formatted with Prettier before saving (`npm run format`).
+- **Styling**: Vanilla CSS or Tailwind (if requested). No CSS-in-JS libraries.
+- **Structure**:
+  - `components/`: Reusable UI only.
+  - `lib/`: Business logic, helpers, API clients.
+  - `hooks/`: React state logic.
+  - `scripts/`: Automation (The Brain).
+- **Complexity**:
+  - **No Spaghetti Code**: Deep nesting (> 4-5 levels) is forbidden.
+  - **Decomposition**: Extract logic into small, single-purpose helper functions and separate components.
+  - **Custom Hooks**: Extract complex `useEffect` or state logic into `hooks/`.
+- **Performance (Memoization)**:
+  - **Industry Standard**: Use `React.memo`, `useMemo`, and `useCallback` to prevent unnecessary re-renders in heavy components.
+  - **Stable References**: CUSTOM HOOKS MUST return memoized objects if they are consumed by multiple components or provide stable handlers.
+  - **Heavy Operations**: Any synchronous calculation > 1ms (e.g., grouping, allergen processing) MUST be wrapped in `useMemo`.

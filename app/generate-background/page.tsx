@@ -32,7 +32,6 @@ export default function GenerateBackgroundPage() {
       const canvas = await html2canvas(containerRef.current, {
         width: 1920,
         height: 1080,
-        // @ts-expect-error - scale is valid but not in types
         scale: 2, // Higher quality
         useCORS: true,
         backgroundColor: '#0a0a0a',
