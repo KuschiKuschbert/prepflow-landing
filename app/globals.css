@@ -49,9 +49,16 @@
   --surface: var(--color-surface);
 
   /* Dark theme contrast levels */
-  --foreground-secondary: rgba(255, 255, 255, 0.85);
-  --foreground-muted: rgba(255, 255, 255, 0.65);
-  --foreground-subtle: rgba(255, 255, 255, 0.45);
+  --foreground-secondary: rgba(255, 255, 255, 0.9);
+  --foreground-muted: rgba(255, 255, 255, 0.75);
+  --foreground-subtle: rgba(255, 255, 255, 0.6);
+
+  /* Background gradient - dark mode (pure black base with subtle depth) */
+  --background-gradient: linear-gradient(
+    180deg,
+    #000000 0%,
+    #050505 100%
+  );
 
   /* Active states */
   --button-active-bg: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
@@ -502,7 +509,7 @@ nav[aria-label='Bottom navigation'] {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--glass-border);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
 }
 
 .glow-primary {
