@@ -235,10 +235,12 @@ function WebAppLayoutContent({
     }
   }, [hasWarnings]);
 
+  const { theme } = useTheme();
+
   return (
     <div className={`${inter.className} min-h-screen bg-transparent text-[var(--foreground)]`}>
       {/* Pulsating Concentric Circles Background */}
-      <SafeAnimatedBackground />
+      <SafeAnimatedBackground theme={theme} />
 
       {/* Webapp Background Effects (spotlight, grid, glows, particles) */}
       <WebappBackground

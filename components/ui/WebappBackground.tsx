@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
 import { backgroundTheme } from '@/lib/theme';
-import { LogoWatermark } from './LogoWatermark';
-import { FloatingParticles } from './FloatingParticles';
 import { useTheme } from '@/lib/theme/useTheme';
+import { useEffect, useState } from 'react';
+import { FloatingParticles } from './FloatingParticles';
+import { LogoWatermark } from './LogoWatermark';
 
 interface WebappBackgroundProps {
   /**
@@ -111,11 +111,11 @@ export function WebappBackground({
           style={{
             backgroundImage: `linear-gradient(${
               theme === 'light'
-                ? `rgba(26, 157, 138, ${backgroundTheme.gridCyanOpacity * 1.5})`
+                ? `rgba(26, 157, 138, ${backgroundTheme.gridCyanOpacity * 3})`
                 : `rgba(41, 231, 205, ${backgroundTheme.gridCyanOpacity})`
             } 1px, transparent 1px), linear-gradient(90deg, ${
               theme === 'light'
-                ? `rgba(42, 100, 198, ${backgroundTheme.gridBlueOpacity * 1.5})`
+                ? `rgba(42, 100, 198, ${backgroundTheme.gridBlueOpacity * 3})`
                 : `rgba(59, 130, 246, ${backgroundTheme.gridBlueOpacity})`
             } 1px, transparent 1px)`,
             backgroundSize: `${backgroundTheme.gridSizePx}px ${backgroundTheme.gridSizePx}px`,
