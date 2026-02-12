@@ -1,8 +1,8 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Core Colors */
-  --color-background: #0a0a0a;
+  /* Core Colors - Base is Dark Theme */
+  --color-background: #000000;
   --color-foreground: #ffffff;
   --color-primary: #29e7cd;
   --color-secondary: #3b82f6;
@@ -13,9 +13,9 @@
   --color-electric-lime: #29e7cd;
   --color-magenta-pulse: #d925c7;
   --color-prepflow-blue: #3b82f6;
-  --color-muted: #2a2a2a;
-  --color-border: #3a3a3a;
-  --color-surface: #3a3a3a;
+  --color-muted: #121212;
+  --color-border: #1a1a1a;
+  --color-surface: #1a1a1a;
   --color-surface-variant: rgba(58, 58, 58, 0.5);
 
   /* Semantic Colors */
@@ -37,18 +37,21 @@
 }
 
 :root {
-  /* Legacy/Dynamic variables mapping to theme tokens */
+  /* Primary variables mapping to theme tokens */
   --background: var(--color-background);
   --foreground: var(--color-foreground);
   --primary: var(--color-primary);
   --secondary: var(--color-secondary);
   --accent: var(--color-accent);
   --tertiary: var(--color-tertiary);
+  --muted: var(--color-muted);
+  --border: var(--color-border);
+  --surface: var(--color-surface);
 
-  /* Text contrast levels */
-  --foreground-secondary: rgba(255, 255, 255, 0.9);
-  --foreground-muted: rgba(255, 255, 255, 0.75);
-  --foreground-subtle: rgba(255, 255, 255, 0.6);
+  /* Dark theme contrast levels */
+  --foreground-secondary: rgba(255, 255, 255, 0.85);
+  --foreground-muted: rgba(255, 255, 255, 0.65);
+  --foreground-subtle: rgba(255, 255, 255, 0.45);
 
   /* Active states */
   --button-active-bg: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
@@ -60,30 +63,39 @@
   /* Safe Area */
   --safe-area-inset-top: env(safe-area-inset-top, 0px);
   --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* Glassmorphism support */
+  --glass-bg: rgba(58, 58, 58, 0.4);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-panel-bg: rgba(20, 20, 20, 0.7);
 }
 
 [data-theme='light'] {
-  --background: #f5f5f5;
-  --foreground: #1a1a1a;
+  --background: #ffffff;
+  --foreground: #000000;
   --primary: #1a9d8a;
+  --secondary: #2563eb;
   --accent: #a01a8a;
-  --muted: #d8d8d8;
-  --border: #c0c0c0;
-  --surface: #e8e8e8;
+  --muted: #f3f4f6;
+  --border: #e5e7eb;
+  --surface: #ffffff;
 
-  --foreground-secondary: rgba(26, 26, 26, 0.9);
-  --foreground-muted: rgba(26, 26, 26, 0.8);
-  --foreground-subtle: rgba(26, 26, 26, 0.65);
+  --foreground-secondary: rgba(0, 0, 0, 0.8);
+  --foreground-muted: rgba(0, 0, 0, 0.6);
+  --foreground-subtle: rgba(0, 0, 0, 0.4);
 
-  /* QR Code colors - always white background, black foreground for maximum contrast */
-  --qr-background: #ffffff;
   --qr-foreground: #000000;
 
-  /* Background gradient - light mode (subtle gradient for depth) */
+  /* Glassmorphism - Light Mode overrides */
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-panel-bg: rgba(255, 255, 255, 0.85);
+
+  /* Background gradient - light mode */
   --background-gradient: linear-gradient(
     180deg,
-    rgba(245, 245, 245, 1) 0%,
-    rgba(240, 240, 242, 1) 100%
+    #ffffff 0%,
+    #f9fafb 100%
   );
 }
 
@@ -479,18 +491,18 @@ nav[aria-label='Bottom navigation'] {
 
 /* Modern Glassmorphism & Glow Effects */
 .glass-surface {
-  background: rgba(58, 58, 58, 0.4);
+  background: var(--glass-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
 }
 
 .glass-panel {
-  background: rgba(20, 20, 20, 0.7);
+  background: var(--glass-panel-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
 }
 
 .glow-primary {
@@ -790,6 +802,7 @@ nav[aria-label='Bottom navigation'] {
   --color-accent: var(--accent);
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --color-surface: var(--surface);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
