@@ -5,7 +5,9 @@ import {
   populateBasicData,
   populateCleaningData,
   populateComplianceData,
+  populateCustomers,
   populateDishes,
+  populateFunctions,
   populateKitchenSections,
   populateMenuDishes,
   populateMenus,
@@ -120,6 +122,15 @@ export async function POST(request: NextRequest) {
     // Step 15: Populate sales data (for Performance page)
     logger.dev('📊 Populating sales data...');
     await populateSalesData(supabaseAdmin, results, recipesData || []);
+
+    // Step 16: Populate customers (CRM)
+    logger.dev('👤 Populating customers...');
+    const customerRecords = await populateCustomers(supabaseAdmin, results);
+
+    // Step 17: Populate functions / events (requires customers for FK linkage)
+    logger.dev('🎪 Populating functions...');
+    const customerIds = customerRecords.map(c => c.id);
+    await populateFunctions(supabaseAdmin, results, customerIds);
 
     const totalPopulated = results.populated.reduce((sum, item) => sum + item.count, 0);
 

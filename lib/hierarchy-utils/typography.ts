@@ -10,9 +10,9 @@
  * Maps semantic names to CSS classes and properties
  */
 export const TYPOGRAPHY_HIERARCHY = {
-  // Display - Largest, hero sections, landing page headlines
+  // Display - Largest, hero sections, landing page headlines (globals.css defines xs-4xl only)
   display: {
-    size: 'text-fluid-5xl tablet:text-fluid-6xl desktop:text-fluid-7xl',
+    size: 'text-fluid-4xl',
     weight: 'font-light',
     lineHeight: 'leading-tight',
     usage: 'Hero headlines, landing page titles',

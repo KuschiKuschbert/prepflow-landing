@@ -176,8 +176,8 @@ function Toast({ type, message }: ToastProps) {
         onClick={() => setIsVisible(false)}
         className={`transition-colors ${
           isPersonality
-            ? 'text-[var(--foreground)]/70 hover:text-[var(--foreground)]'
-            : 'text-[var(--foreground)]/60 hover:text-[var(--foreground)]'
+            ? 'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
+            : 'text-[var(--foreground-subtle)] hover:text-[var(--foreground)]'
         }`}
         aria-label="Close notification"
       >

@@ -10,6 +10,7 @@
  */
 
 import { useState, useRef, useEffect } from 'react';
+import { Icon } from '@/components/ui/Icon';
 import { MoreVertical, X } from 'lucide-react';
 import type { Action } from './ResponsiveCardActions';
 
@@ -115,7 +116,7 @@ export function ResponsiveCardActionsMenu({
           className={`rounded-full p-2 shadow-xl backdrop-blur-md transition-all active:scale-90 ${styles.toggleButton}`}
           aria-label="Show actions"
         >
-          <MoreVertical size={20} />
+          <Icon icon={MoreVertical} size="md" aria-hidden />
         </button>
       ) : (
         <div
@@ -129,11 +130,11 @@ export function ResponsiveCardActionsMenu({
             className={`rounded-full p-2 backdrop-blur-md transition-transform active:scale-95 ${styles.closeButton}`}
             aria-label="Close menu"
           >
-            <X size={16} />
+            <Icon icon={X} size="sm" aria-hidden />
           </button>
           <div className={`my-0.5 h-px w-4 ${styles.divider}`} />
           {actions.map(action => {
-            const Icon = action.icon;
+            const ActionIcon = action.icon;
             const buttonClass =
               action.variant === 'primary'
                 ? styles.buttonPrimary
@@ -154,7 +155,7 @@ export function ResponsiveCardActionsMenu({
                 }`}
                 aria-label={action.label}
               >
-                <Icon size={16} strokeWidth={2.5} />
+                <Icon icon={ActionIcon} size="sm" aria-hidden />
               </button>
             );
           })}

@@ -55,7 +55,7 @@ export function SpecialsFilters({
               className={`block h-6 w-10 rounded-full transition-colors ${readyToCook ? 'bg-landing-primary' : 'bg-[#3a3a3a]'}`}
             ></div>
             <div
-              className={`dot absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform ${readyToCook ? 'translate-x-4 transform' : ''}`}
+              className={`dot bg-foreground absolute top-1 left-1 h-4 w-4 rounded-full transition-transform ${readyToCook ? 'translate-x-4 transform' : ''}`}
             ></div>
           </div>
         </label>

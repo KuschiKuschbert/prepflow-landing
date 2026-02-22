@@ -31,7 +31,7 @@ export function MethodologyTooltip({
   return createPortal(
     <div
       ref={methodologyTooltipRef}
-      className="fixed z-[100] w-80 -translate-x-1/2 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 text-xs text-[var(--foreground-secondary)] shadow-lg"
+      className="fixed z-[80] w-80 -translate-x-1/2 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 text-xs text-[var(--foreground-secondary)] shadow-lg"
       style={{
         top: `${methodologyTooltipPos.top - 320}px`,
         left: `${methodologyTooltipPos.left}px`,

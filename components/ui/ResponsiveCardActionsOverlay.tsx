@@ -35,7 +35,7 @@ export function ResponsiveCardActionsOverlay({
   const themeStyles = {
     curbos: {
       container: 'bg-black/40 backdrop-blur-[2px]',
-      buttonPrimary: 'bg-[#C0FF02] text-black hover:bg-white',
+      buttonPrimary: 'bg-[#C0FF02] text-black hover:bg-background',
       buttonSecondary: 'bg-neutral-900/90 text-white',
       buttonDanger:
         'bg-red-500/20 text-red-500 border border-red-500/50 hover:bg-red-500 hover:text-white',

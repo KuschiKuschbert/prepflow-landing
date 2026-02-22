@@ -23,9 +23,15 @@ export default function LanguageSwitcher({
   const availableLangs = getAvailableLanguages();
 
   const sizeClasses = {
-    sm: 'px-2 py-1 text-fluid-xs',
-    md: 'px-3 py-2 text-fluid-sm',
-    lg: 'px-4 py-3 text-fluid-base',
+    sm: 'py-1 pl-2 text-xs',
+    md: 'py-2 pl-3 text-fluid-sm',
+    lg: 'py-3 pl-4 text-fluid-base',
+  };
+
+  const paddingRightBySize = {
+    sm: '1.75rem',
+    md: '2.5rem',
+    lg: '2.5rem',
   };
 
   return (
@@ -33,13 +39,13 @@ export default function LanguageSwitcher({
       <select
         value={currentLanguage}
         onChange={e => changeLanguage(e.target.value)}
-        className={` ${sizeClasses[size]} cursor-pointer appearance-none rounded-lg border border-[var(--primary)]/30 bg-[var(--muted)] pl-3 text-[var(--foreground)] transition-all duration-200 hover:border-[var(--primary)]/50 focus:border-transparent focus:ring-2 focus:ring-[var(--primary)] focus:outline-none`}
+        className={`min-w-0 ${sizeClasses[size]} cursor-pointer appearance-none rounded-lg border border-[var(--border)] bg-[var(--muted)] text-[var(--foreground)] transition-all duration-200 hover:border-[var(--primary)]/50 focus:border-transparent focus:ring-2 focus:ring-[var(--primary)] focus:outline-none`}
         style={{
           backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
-          backgroundPosition: 'right 0.5rem center',
+          backgroundPosition: 'right 0.35rem center',
           backgroundRepeat: 'no-repeat',
-          backgroundSize: '1.5em 1.5em',
-          paddingRight: '2.5rem',
+          backgroundSize: size === 'sm' ? '1em 1em' : '1.5em 1.5em',
+          paddingRight: paddingRightBySize[size],
         }}
       >
         {availableLangs.map(lang => (

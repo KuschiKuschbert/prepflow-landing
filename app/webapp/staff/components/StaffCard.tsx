@@ -3,11 +3,11 @@
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Icon } from '@/components/ui/Icon';
 import { useNotification } from '@/contexts/NotificationContext';
+import type { Employee, QualificationType } from '@/lib/types/roster';
 import { ShieldCheck, User } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import type { Employee, QualificationType } from '@/lib/types/roster';
 
 interface StaffCardProps {
   member: Employee;
@@ -33,7 +33,7 @@ export function StaffCard({
       case 'terminated':
         return 'bg-red-500/10 text-red-500 border-red-500/20';
       default:
-        return 'bg-gray-500/10 text-gray-400 border-gray-500/20';
+        return 'bg-[var(--foreground-subtle)]/10 text-[var(--foreground-muted)] border-[var(--foreground-subtle)]/20';
     }
   };
 

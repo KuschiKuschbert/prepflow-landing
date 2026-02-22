@@ -2,6 +2,7 @@
 
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Button } from '@/components/ui/Button';
+import { Icon } from '@/components/ui/Icon';
 import { Thermometer, Plus } from 'lucide-react';
 
 interface EquipmentEmptyStateProps {
@@ -23,7 +24,7 @@ export function EquipmentEmptyState({ onAddEquipment }: EquipmentEmptyStateProps
           glow={true}
           className="flex items-center gap-2"
         >
-          <Plus size={20} />
+          <Icon icon={Plus} size="md" aria-hidden />
           Add Your First Equipment
         </Button>
       }

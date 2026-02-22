@@ -84,13 +84,13 @@ export default function TestErrorPage() {
 
       {/* Preview overlays */}
       {previewMode === 'kitchen-fire' && (
-        <div className="fixed inset-0 z-[100]">
+        <div className="fixed inset-0 z-[80]">
           <KitchenOnFire />
         </div>
       )}
 
       {previewMode === 'train-off-track' && (
-        <div className="fixed inset-0 z-[100]">
+        <div className="fixed inset-0 z-[80]">
           <TrainOffTrack />
         </div>
       )}

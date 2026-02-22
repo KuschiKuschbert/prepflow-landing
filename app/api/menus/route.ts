@@ -99,9 +99,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { menu_name, description } = validationResult.data;
+    const { menu_name, description, menu_type, food_per_person_kg } = validationResult.data;
 
-    const newMenu = await createNewMenu(supabaseAdmin, menu_name, userId, description);
+    const newMenu = await createNewMenu(
+      supabaseAdmin,
+      menu_name,
+      userId,
+      description,
+      menu_type,
+      food_per_person_kg,
+    );
 
     return NextResponse.json({
       success: true,

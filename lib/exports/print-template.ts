@@ -12,6 +12,7 @@ import { generateDefaultVariant } from './print-template/helpers/generateDefault
 import { generateKitchenVariant } from './print-template/helpers/generateKitchenVariant';
 import { generateMenuVariant } from './print-template/helpers/generateMenuVariant';
 import { generateRecipeVariant } from './print-template/helpers/generateRecipeVariant';
+import { generateRunsheetVariant } from './print-template/helpers/generateRunsheetVariant';
 import { generateSupplierVariant } from './print-template/helpers/generateSupplierVariant';
 import { printWithTemplate as printWithTemplateHelper } from './print-template/helpers/printWithTemplate';
 
@@ -23,7 +24,8 @@ export type TemplateVariant =
   | 'compliance'
   | 'compact'
   | 'menu'
-  | 'recipe';
+  | 'recipe'
+  | 'runsheet';
 
 import type { ExportTheme } from './themes';
 
@@ -77,6 +79,8 @@ export function generatePrintTemplate({
       return generateMenuVariant(title, subtitle, content, theme);
     case 'recipe':
       return generateRecipeVariant(title, subtitle, content, theme);
+    case 'runsheet':
+      return generateRunsheetVariant(title, subtitle, content, theme, logoSrc);
     default:
       return generateDefaultVariant(title, subtitle, content, totalItems, customMeta, theme);
   }

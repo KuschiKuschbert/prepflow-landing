@@ -18,6 +18,8 @@ const unusedImportsCheck = require('./cleanup/checks/unused-imports');
 const typescriptRefTypesCheck = require('./cleanup/checks/typescript-ref-types');
 const jsdocCheck = require('./cleanup/checks/jsdoc');
 const iconsCheck = require('./cleanup/checks/icons');
+const zIndexCheck = require('./cleanup/checks/z-index');
+const themeConsistencyCheck = require('./cleanup/checks/theme-consistency');
 const namingCheck = require('./cleanup/checks/naming');
 const prettierCheck = require('./cleanup/checks/prettier');
 const eslintCheck = require('./cleanup/checks/eslint');
@@ -57,6 +59,8 @@ const CHECK_MODULES = [
   typescriptRefTypesCheck,
   jsdocCheck,
   iconsCheck,
+  zIndexCheck,
+  themeConsistencyCheck,
   namingCheck,
   prettierCheck,
   eslintCheck,

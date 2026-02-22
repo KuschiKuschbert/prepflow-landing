@@ -22,7 +22,7 @@ export function CSVImportErrors({ parseErrors, validationErrors }: CSVImportErro
             <Icon icon={AlertCircle} size="sm" aria-hidden={true} />
             <span>CSV Parse Errors ({parseErrors.length})</span>
           </div>
-          <div className="max-h-32 space-y-1 overflow-y-auto text-xs text-red-300">
+          <div className="max-h-32 space-y-1 overflow-y-auto text-xs text-[var(--color-error)]/90">
             {parseErrors.slice(0, 10).map((error, index) => (
               <div key={index}>
                 Row {error.row}: {error.error}
@@ -40,7 +40,7 @@ export function CSVImportErrors({ parseErrors, validationErrors }: CSVImportErro
             <Icon icon={AlertCircle} size="sm" aria-hidden={true} />
             <span>Validation Errors ({validationErrors.size})</span>
           </div>
-          <div className="max-h-32 space-y-1 overflow-y-auto text-xs text-yellow-300">
+          <div className="max-h-32 space-y-1 overflow-y-auto text-xs text-[var(--color-warning)]/90">
             {Array.from(validationErrors.entries())
               .slice(0, 10)
               .map(([index, error]) => (

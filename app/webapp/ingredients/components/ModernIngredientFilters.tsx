@@ -1,11 +1,11 @@
 'use client';
 
-import { useMemo, useState, useEffect, useCallback } from 'react';
-import { Store, MapPin, Type, DollarSign, ChevronDown } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { useDebounce } from '@/hooks/useDebounce';
-import { FilterDropdown } from './FilterDropdown';
+import { ChevronDown, DollarSign, MapPin, Store, Type } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ActiveFilterChips } from './ActiveFilterChips';
+import { FilterDropdown } from './FilterDropdown';
 
 interface Ingredient {
   id: string;
@@ -264,7 +264,7 @@ export default function ModernIngredientFilters({
         {activeFilterCount > 0 && (
           <button
             onClick={handleClearAll}
-            className="tablet:w-auto flex w-full items-center justify-center gap-2 rounded-xl border border-gray-600/30 bg-gray-600/10 px-4 py-2.5 text-sm font-medium text-[var(--foreground-muted)] transition-all duration-200 hover:border-gray-500/50 hover:bg-gray-500/20 hover:text-[var(--foreground)]"
+            className="tablet:w-auto flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--foreground-subtle)]/30 bg-[var(--foreground-subtle)]/10 px-4 py-2.5 text-sm font-medium text-[var(--foreground-muted)] transition-all duration-200 hover:border-[var(--foreground-subtle)]/50 hover:bg-[var(--foreground-subtle)]/20 hover:text-[var(--foreground)]"
           >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path

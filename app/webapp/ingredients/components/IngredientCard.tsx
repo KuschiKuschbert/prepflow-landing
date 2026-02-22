@@ -125,7 +125,7 @@ export function IngredientCard({
         {/* Header: Name and Cost */}
         <div className="mb-2 flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
-            <h3 className="truncate text-base font-semibold text-[var(--foreground)]">
+            <h3 className="text-fluid-base truncate font-semibold text-[var(--foreground)]">
               {ingredient.ingredient_name}
             </h3>
             {ingredient.product_code && (

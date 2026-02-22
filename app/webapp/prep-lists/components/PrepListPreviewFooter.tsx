@@ -38,7 +38,7 @@ export function PrepListPreviewFooter({ saving, onCancel, onSave }: PrepListPrev
       >
         {saving ? (
           <>
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Icon icon={Loader2} size="sm" className="animate-spin" aria-hidden />
             {t('prepLists.saving', 'Saving...')}
           </>
         ) : (

@@ -25,6 +25,7 @@ export const PREFETCH_MAP: Record<string, string[]> = {
     '/api/ingredients?page=1&pageSize=50',
   ],
   '/webapp/ai-specials': ['/api/ai-specials'],
+  '/webapp/functions': ['/api/functions', '/api/customers'],
   '/webapp/menu-builder': ['/api/menus', '/api/dishes?pageSize=1000', '/api/recipes?pageSize=1000'],
   '/webapp/settings': [
     '/api/user/profile',

@@ -1,10 +1,10 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
+import { logger } from '@/lib/logger';
+import { Menu } from '@/lib/types/menu-builder';
 import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Menu } from '@/lib/types/menu-builder';
-import { logger } from '@/lib/logger';
 
 interface MenuFormProps {
   menu?: Menu | null;
@@ -15,12 +15,15 @@ interface MenuFormProps {
 export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
   const [menuName, setMenuName] = useState('');
   const [description, setDescription] = useState('');
+  const [menuType, setMenuType] = useState('a_la_carte');
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (menu) {
       setMenuName(menu.menu_name);
       setDescription(menu.description || '');
+      const type = menu.menu_type || 'a_la_carte';
+      setMenuType(type === 'a_la_carte' ? 'a_la_carte' : 'function');
     }
   }, [menu]);
 
@@ -43,6 +46,7 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
         body: JSON.stringify({
           menu_name: menuName.trim(),
           description: description.trim() || null,
+          menu_type: menuType,
         }),
       });
 
@@ -118,6 +122,21 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
                 rows={3}
                 className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
               />
+            </div>
+
+            <div className="mb-6">
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+                Menu Type
+              </label>
+              <select
+                value={menuType}
+                onChange={e => setMenuType(e.target.value)}
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
+                disabled={!!menu}
+              >
+                <option value="a_la_carte">A La Carte Menu</option>
+                <option value="function">Function Menu</option>
+              </select>
             </div>
 
             <div className="flex gap-3">

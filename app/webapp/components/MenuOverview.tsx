@@ -3,9 +3,10 @@
 import { Icon } from '@/components/ui/Icon';
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
-import { AlertTriangle, ExternalLink, Plus, UtensilsCrossed } from 'lucide-react';
+import { AlertTriangle, Plus, UtensilsCrossed } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { DashboardWidget } from './DashboardWidget';
 
 interface MenuSummary {
   activeMenus: number;
@@ -60,7 +61,7 @@ export default function MenuOverview() {
 
   if (loading && !data) {
     return (
-      <div className="tablet:rounded-3xl tablet:p-6 glass-surface rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
+      <DashboardWidget title="Menu Overview" icon={UtensilsCrossed} className="h-full">
         <div className="animate-pulse space-y-4">
           <div className="h-6 w-32 rounded bg-[var(--muted)]" />
           <div className="space-y-2">
@@ -68,15 +69,15 @@ export default function MenuOverview() {
             <div className="h-4 w-3/4 rounded bg-[var(--muted)]" />
           </div>
         </div>
-      </div>
+      </DashboardWidget>
     );
   }
 
   if (error && !data) {
     return (
-      <div className="tablet:rounded-3xl tablet:p-6 glass-surface rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
+      <DashboardWidget title="Menu Overview" icon={UtensilsCrossed} className="h-full">
         <p className="text-sm text-[var(--color-error)]">{error}</p>
-      </div>
+      </DashboardWidget>
     );
   }
 
@@ -87,25 +88,12 @@ export default function MenuOverview() {
   const hasIssues = data.dishesWithoutRecipes > 0 || data.dishesWithoutCosts > 0;
 
   return (
-    <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 glass-surface mb-6 rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
-      <div className="tablet:mb-6 mb-4 flex items-center justify-between">
-        <div>
-          <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">
-            Menu Overview
-          </h2>
-          <p className="text-fluid-xs tablet:text-fluid-sm mt-1 text-[var(--foreground-muted)]">
-            What&apos;s available to serve
-          </p>
-        </div>
-        <Link
-          href="/webapp/recipes#menu-builder"
-          className="text-fluid-xs tablet:text-fluid-sm flex items-center gap-1 text-[var(--primary)] transition-colors hover:text-[var(--accent)]"
-        >
-          View Menus
-          <Icon icon={ExternalLink} size="xs" aria-hidden={true} />
-        </Link>
-      </div>
-
+    <DashboardWidget
+      title="Menu Overview"
+      icon={UtensilsCrossed}
+      className="h-full"
+      action={{ label: 'View Menus', href: '/webapp/recipes#menu-builder' }}
+    >
       <div className="desktop:grid-cols-4 desktop:gap-4 grid grid-cols-2 gap-3">
         {/* Active Menus */}
         <div className="tablet:rounded-2xl tablet:p-4 glass-panel min-w-0 rounded-xl border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
@@ -286,6 +274,6 @@ export default function MenuOverview() {
           Add Dish to Menu
         </Link>
       </div>
-    </div>
+    </DashboardWidget>
   );
 }

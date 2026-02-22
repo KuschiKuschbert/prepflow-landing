@@ -1,16 +1,16 @@
 'use client';
 
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { getCachedData, prefetchApi } from '@/lib/cache/data-cache';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEquipmentStatus } from '../hooks/useEquipmentStatus';
+import { useSampleDataGeneration } from '../hooks/useSampleDataGeneration';
 import { TemperatureEquipment, TemperatureLog } from '../types';
 import { EquipmentDetailDrawer } from './EquipmentDetailDrawer';
 import { EquipmentStatusCard } from './EquipmentStatusCard';
-import { TemperatureTimeFilter } from './TemperatureTimeFilter';
-import { TemperatureAnalyticsEmptyState } from './TemperatureAnalyticsEmptyState';
 import { GenerateSampleDataButton } from './GenerateSampleDataButton';
-import { useEquipmentStatus } from '../hooks/useEquipmentStatus';
-import { useSampleDataGeneration } from '../hooks/useSampleDataGeneration';
-import { prefetchApi, getCachedData } from '@/lib/cache/data-cache';
+import { TemperatureAnalyticsEmptyState } from './TemperatureAnalyticsEmptyState';
+import { TemperatureTimeFilter } from './TemperatureTimeFilter';
 import { useTemperatureFilters } from './useTemperatureFilters';
 
 interface TemperatureAnalyticsTabProps {
@@ -149,7 +149,7 @@ export default function TemperatureAnalyticsTab({
         {/* Time Period Filter Skeleton */}
         <div className="flex flex-wrap gap-2 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
           {['24h', '7d', '30d', 'all'].map(filter => (
-            <div key={filter} className="h-8 w-20 rounded-xl bg-gray-700 px-4 py-2"></div>
+            <div key={filter} className="h-8 w-20 rounded-xl bg-[var(--muted)] px-4 py-2"></div>
           ))}
         </div>
 

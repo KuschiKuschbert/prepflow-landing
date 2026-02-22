@@ -1,9 +1,11 @@
 'use client';
+import { Icon } from '@/components/ui/Icon';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
-import { memo } from 'react';
 import { Menu } from '@/lib/types/menu-builder';
+import { Cake, Heart, PartyPopper, Users } from 'lucide-react';
+import { memo } from 'react';
 import CategoryManager from './CategoryManager';
 import DishPalette from './DishPalette';
 import { useCategoryOperations } from './hooks/useCategoryOperations';
@@ -168,13 +170,40 @@ function MenuEditorComponent({ menu, onMenuUpdated }: MenuEditorProps) {
       />
     );
   }
+  const isFunctionMenu = menu.menu_type && menu.menu_type.startsWith('function_');
+  const funcTypeConfig: Record<string, { icon: typeof Heart; label: string }> = {
+    function_wedding: { icon: Heart, label: 'Wedding Menu' },
+    function_birthday: { icon: Cake, label: 'Birthday Menu' },
+    function_corporate: { icon: Users, label: 'Corporate Menu' },
+    function_other: { icon: PartyPopper, label: 'Function Menu' },
+  };
+  const funcConfig = isFunctionMenu
+    ? funcTypeConfig[menu.menu_type || ''] || funcTypeConfig.function_other
+    : null;
+
   return (
     <div>
+      {funcConfig && (
+        <div className="mb-4 flex items-center gap-3 rounded-2xl border border-[var(--primary)]/20 bg-gradient-to-r from-[var(--primary)]/10 via-[var(--accent)]/5 to-[var(--primary)]/10 p-4">
+          <Icon icon={funcConfig.icon} size="lg" className="text-[var(--primary)]" />
+          <div>
+            <span className="text-xs font-semibold tracking-wider text-[var(--primary)] uppercase">
+              {funcConfig.label}
+            </span>
+            <p className="text-sm text-[var(--foreground-muted)]">{menu.menu_name}</p>
+          </div>
+        </div>
+      )}
       <MenuLockButton lockLoading={lockLoading} onLock={handleLockMenu} />
       <div className="large-desktop:grid-cols-4 grid grid-cols-1 gap-6">
         {/* Desktop: DishPalette in sidebar */}
         <div className="large-desktop:col-span-1 large-desktop:order-1 order-4">
-          <DishPalette dishes={dishes} recipes={recipes} onItemTap={handleItemTap} />
+          <DishPalette
+            dishes={dishes}
+            recipes={recipes}
+            onItemTap={handleItemTap}
+            menuType={menu.menu_type}
+          />
         </div>
         {/* Main content area */}
         <div className="large-desktop:col-span-3 large-desktop:order-2 order-1 space-y-6">

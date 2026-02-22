@@ -27,6 +27,9 @@ The print template system supports multiple variants for different use cases:
 - **`compliance`** - Audit-ready, formal layout
 - **`kitchen`** - Minimal branding, compact layout (for kitchen prep lists)
 - **`compact`** - Compact layout, minimal spacing
+- **`menu`** - Menu-specific layout
+- **`recipe`** - Recipe card layout
+- **`runsheet`** - Restaurant/catering runsheet format: event info (type, attendees, date/time, location, client, contact, notes) and runsheet table (Time | Description | Type | Linked Dish/Recipe/Menu)
 
 ### Usage Pattern
 
@@ -385,14 +388,29 @@ See `lib/imports/supplier-import.ts` for a complete example.
 
 ### Template Variants Reference
 
-| Variant      | Use Case              | Branding            | Layout                |
-| ------------ | --------------------- | ------------------- | --------------------- |
-| `default`    | General documents     | Full branding       | Standard spacing      |
-| `customer`   | Customer-facing menus | Polished, marketing | Photo-ready           |
-| `supplier`   | Purchase orders       | Formal              | Purchase order format |
-| `compliance` | Audit reports         | Formal              | Audit-ready           |
-| `kitchen`    | Kitchen prep lists    | Minimal             | Compact               |
-| `compact`    | Space-efficient       | Minimal             | Minimal spacing       |
+| Variant      | Use Case              | Branding            | Layout                      |
+| ------------ | --------------------- | ------------------- | --------------------------- |
+| `default`    | General documents     | Full branding       | Standard spacing            |
+| `customer`   | Customer-facing menus | Polished, marketing | Photo-ready                 |
+| `supplier`   | Purchase orders       | Formal              | Purchase order format       |
+| `compliance` | Audit reports         | Formal              | Audit-ready                 |
+| `kitchen`    | Kitchen prep lists    | Minimal             | Compact                     |
+| `compact`    | Space-efficient       | Minimal             | Minimal spacing             |
+| `runsheet`   | Event runsheets       | Cyber Carrot        | Event info + timeline table |
+
+### Runsheet Export Flow
+
+The function runsheet export uses the `runsheet` template variant:
+
+- **API**: `GET /api/functions/[id]/export?day=N&theme=T`
+  - `day` (optional) – Export single day; omit for full runsheet (all days).
+  - `theme` (optional) – Export theme (`cyber-carrot`, `electric-lemon`, `phantom-pepper`, `cosmic-blueberry`); defaults from `getSavedExportTheme()` on client.
+- **Helper**: `buildRunsheetContent(func, items, dayNumber)` in `app/api/functions/[id]/export/helpers/buildRunsheetContent.ts`
+  - Produces event info block (two-column grid: Event Details | Client & Contact; Notes full-width) and runsheet table HTML.
+  - Full runsheet adds a Day column when `dayNumber` is null.
+- **Client**: `ExportDayButton` in `RunsheetPanel` – passes theme, supports per-day or full export.
+- **Theme visibility**: Runsheet CSS uses export themes prominently (table header `background: var(--pf-color-primary)`, event info left border, alternating row stripes, importance-based row accents for meal/setup).
+- **Preview**: Runsheet is available in Settings > Export > Preview Layout dropdown for theme preview before export.
 
 ### Common Patterns
 

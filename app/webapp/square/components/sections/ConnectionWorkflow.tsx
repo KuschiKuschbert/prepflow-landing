@@ -103,9 +103,11 @@ export function ConnectionWorkflow({ onConnectClick }: ConnectionWorkflowProps) 
       {/* Fees Disclaimer */}
       <div className="rounded-2xl border border-yellow-500/30 bg-yellow-500/10 p-6">
         <div className="flex items-start gap-4">
-          <Icon icon={AlertCircle} size="lg" className="mt-0.5 text-yellow-400" />
+          <Icon icon={AlertCircle} size="lg" className="mt-0.5 text-[var(--color-warning)]" />
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-yellow-400">Important: Square Fees</h3>
+            <h3 className="text-lg font-semibold text-[var(--color-warning)]">
+              Important: Square Fees
+            </h3>
             <p className="mt-2 text-sm text-[var(--foreground-muted)]">
               Square charges fees for payment processing and other services. These fees are separate
               from PrepFlow subscription fees. Please review Square&apos;s pricing at{' '}
@@ -121,7 +123,7 @@ export function ConnectionWorkflow({ onConnectClick }: ConnectionWorkflowProps) 
             </p>
             <button
               onClick={() => setShowDisclaimers(!showDisclaimers)}
-              className="mt-4 text-sm font-medium text-yellow-400 underline hover:text-yellow-300"
+              className="mt-4 text-sm font-medium text-[var(--color-warning)] underline hover:text-[var(--color-warning)]"
             >
               {showDisclaimers ? 'Hide' : 'Show'} More Information
             </button>

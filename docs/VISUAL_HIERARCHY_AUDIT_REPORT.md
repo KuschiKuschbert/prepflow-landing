@@ -4,6 +4,8 @@
 **Scope:** Full application audit (Landing page + Webapp)  
 **Auditor:** Automated hierarchy audit system
 
+> **Note (Design Hierarchy Reconciliation):** Audit rules have been scoped by area (landing vs webapp). Historical violation counts may include false positives from patterns that are now accepted (e.g. `text-xs`/`text-sm` in webapp tables per design.mdc). Run `npm run audit:hierarchy` for current scoped results.
+
 ## Executive Summary
 
 This audit analyzed the visual hierarchy across the entire PrepFlow application, identifying inconsistencies in typography, spacing, color contrast, and component sizing. The audit found **moderate inconsistencies** that, when addressed, will significantly improve UX/UI appeal and user experience.

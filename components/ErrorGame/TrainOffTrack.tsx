@@ -177,7 +177,7 @@ const TrainOffTrack: React.FC = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="text-fluid-base desktop:text-fluid-lg mb-8 text-[var(--foreground)]/60"
+                  className="text-fluid-base desktop:text-fluid-lg mb-8 text-[var(--foreground-subtle)]"
                 >
                   i like trains
                 </motion.p>
@@ -221,7 +221,7 @@ const TrainOffTrack: React.FC = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="text-fluid-lg mb-8 text-[var(--foreground)]/60"
+                  className="text-fluid-lg mb-8 text-[var(--foreground-subtle)]"
                 >
                   All aboard!
                 </motion.p>

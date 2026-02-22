@@ -1,3 +1,4 @@
+import { Icon } from '@/components/ui/Icon';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { generatePrintTemplate, type TemplateVariant } from '../print-template';
@@ -58,7 +59,7 @@ export function ThemePreview({ theme, variant = 'customer' }: ThemePreviewProps)
       <div className="relative flex-1 overflow-hidden">
         {loading && (
           <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80 backdrop-blur-sm">
-            <Loader2 className="text-primary h-8 w-8 animate-spin" />
+            <Icon icon={Loader2} size="xl" className="text-primary animate-spin" aria-hidden />
           </div>
         )}
         <iframe

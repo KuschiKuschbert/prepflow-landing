@@ -67,7 +67,7 @@ export const NavbarStats: React.FC<NavbarStatsProps> = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="tablet:gap-1.5 desktop:gap-2 flex items-center gap-1 rounded-lg px-2 py-1 text-[var(--foreground)]/80 transition-colors hover:bg-[var(--surface)]/50 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none"
+      className="tablet:gap-1.5 desktop:gap-2 flex items-center gap-1 rounded-lg px-2 py-1 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--surface)]/50 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none"
       aria-label="Open achievements and stats"
       title="Click to view achievements and stats"
     >

@@ -1,10 +1,10 @@
 'use client';
 
-import { usePerformanceInsights } from '../hooks/usePerformanceInsights';
-import { PerformanceItem } from '@/lib/types/performance';
-import { Lightbulb, TrendingUp, AlertTriangle, Award } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { PerformanceItem } from '@/lib/types/performance';
+import { AlertTriangle, Award, Lightbulb, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
+import { usePerformanceInsights } from '../hooks/usePerformanceInsights';
 
 interface PerformanceInsightsProps {
   performanceItems: PerformanceItem[];
@@ -63,7 +63,7 @@ export default function PerformanceInsights({
       case 'chefs_kiss':
         return 'border-[var(--color-success)]/30 bg-[var(--color-success)]/10';
       default:
-        return 'border-gray-500/30 bg-gray-500/10';
+        return 'border-[var(--foreground-subtle)]/30 bg-[var(--foreground-subtle)]/10';
     }
   };
 

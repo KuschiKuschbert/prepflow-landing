@@ -57,7 +57,7 @@ function ProfileInformationPanelComponent() {
 
   if (loading) {
     return (
-      <div className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
+      <div className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
         <LoadingSkeleton variant="text" className="h-6 w-48" />
         <LoadingSkeleton variant="text" className="h-4 w-64" />
       </div>
@@ -65,9 +65,9 @@ function ProfileInformationPanelComponent() {
   }
 
   return (
-    <div className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
+    <div className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
       <div>
-        <h2 className="text-xl font-semibold">Profile Information</h2>
+        <h2 className="text-xl font-semibold text-[var(--foreground)]">Profile Information</h2>
         <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
           Manage your personal information and account details.
         </p>

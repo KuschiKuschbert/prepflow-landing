@@ -3,11 +3,13 @@
 > **Instructions**: This is the entry point. To save tokens, only read the relevant modules in `docs/brain/`.
 
 ### 4. Dead Code Pruning
+
 - Removed unused exports and helper files identified by the Janitor audit:
   - `menuDisplayStyles.ts`
   - `updateFlagState.ts`
 
 ### 5. LLM Token & Productivity Optimization
+
 - **Modular Brain**: Refactored `docs/AI_RULES.md` into 7 specific modules in `docs/brain/` (`STYLE.md`, `GIT.md`, `PERFORMANCE.md`, etc.). This allows the AI to only read what it needs, saving thousands of tokens per session.
 - **Smart Teleport**: Updated `scripts/teleport.sh` with modular context selection:
   - Default: Essential rules only.
@@ -19,6 +21,7 @@
 ## Verification Results
 
 ### Automated Tests
+
 - ✅ **Type Check**: `npm run type-check` passed after restoring necessary types.
 - ✅ **Production Build**: `npm run build` completed successfully.
 - ✅ **Scaffold Test**: Verified `npm run scaffold component` generates correct patterns.
@@ -27,12 +30,14 @@
 ## Core Modules
 
 - [SSOT & Commands](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/brain/SSOT.md)
+- **Print/Export**: See `docs/PRINT_EXPORT_IMPORT_PATTERNS.md` for template variants (default, kitchen, runsheet, etc.), runsheet export flow, and import patterns.
 - [Coding Style](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/brain/STYLE.md)
 - [The Brain's Laws](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/brain/LAWS.md)
 - [Memory Bank](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/brain/MEMORY.md)
 - [Methodology](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/brain/METHODOLOGY.md)
 - [Git Workflow](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/brain/GIT.md)
 - [Performance](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/brain/PERFORMANCE.md)
+- **Design**: design.mdc is source of truth for required patterns; `docs/VISUAL_HIERARCHY_STANDARDS.md` provides hierarchy guidance (landing strict, webapp flexible).
 
 ## SSOT Overview
 

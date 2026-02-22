@@ -3,9 +3,10 @@
 import { Icon } from '@/components/ui/Icon';
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
-import { ExternalLink, Sparkles, TrendingDown, TrendingUp } from 'lucide-react';
+import { Sparkles, TrendingDown, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { DashboardWidget } from './DashboardWidget';
 
 interface PerformanceSummary {
   topSellers: Array<{
@@ -80,7 +81,7 @@ export default function ChefPerformanceInsights() {
 
   if (loading && !data) {
     return (
-      <div className="tablet:rounded-3xl tablet:p-6 glass-surface rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
+      <DashboardWidget title="Performance Insights" icon={TrendingUp} className="h-full">
         <div className="animate-pulse space-y-4">
           <div className="h-6 w-32 rounded bg-[var(--muted)]" />
           <div className="space-y-2">
@@ -88,15 +89,15 @@ export default function ChefPerformanceInsights() {
             <div className="h-4 w-3/4 rounded bg-[var(--muted)]" />
           </div>
         </div>
-      </div>
+      </DashboardWidget>
     );
   }
 
   if (error && !data) {
     return (
-      <div className="tablet:rounded-3xl tablet:p-6 glass-surface rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
+      <DashboardWidget title="Performance Insights" icon={TrendingUp} className="h-full">
         <p className="text-sm text-[var(--color-error)]">{error}</p>
-      </div>
+      </DashboardWidget>
     );
   }
 
@@ -105,25 +106,12 @@ export default function ChefPerformanceInsights() {
   }
 
   return (
-    <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 glass-surface mb-6 rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
-      <div className="tablet:mb-6 mb-4 flex items-center justify-between">
-        <div>
-          <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">
-            Performance Insights
-          </h2>
-          <p className="text-fluid-xs tablet:text-fluid-sm mt-1 text-[var(--foreground-muted)]">
-            What to cook more/less of this week
-          </p>
-        </div>
-        <Link
-          href="/webapp/performance"
-          className="text-fluid-xs tablet:text-fluid-sm flex items-center gap-1 text-[var(--primary)] transition-colors hover:text-[var(--accent)]"
-        >
-          View Full
-          <Icon icon={ExternalLink} size="xs" aria-hidden={true} />
-        </Link>
-      </div>
-
+    <DashboardWidget
+      title="Performance Insights"
+      icon={TrendingUp}
+      className="h-full"
+      action={{ label: 'View Full', href: '/webapp/performance' }}
+    >
       <div className="space-y-4">
         {/* Top Sellers */}
         {data.topSellers.length > 0 && (
@@ -293,6 +281,6 @@ export default function ChefPerformanceInsights() {
           </div>
         </div>
       </div>
-    </div>
+    </DashboardWidget>
   );
 }

@@ -80,7 +80,7 @@ export default function FinalCTA({ trackEngagement }: FinalCTAProps) {
           {isAuthenticated ? (
             <MagneticButton
               onClick={handleGoToDashboard}
-              className="text-fluid-lg rounded-full border border-white/20 bg-white px-8 py-4 font-medium text-black transition-all hover:bg-gray-100 focus:ring-2 focus:ring-white/50 focus:outline-none"
+              className="text-fluid-lg rounded-full border border-white/20 bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] px-8 py-4 font-medium text-white transition-all hover:opacity-90 focus:ring-2 focus:ring-white/50 focus:outline-none"
               aria-label="Go to Dashboard"
               strength={0.4}
               maxDistance={15}
@@ -91,7 +91,7 @@ export default function FinalCTA({ trackEngagement }: FinalCTAProps) {
             <>
               <MagneticButton
                 onClick={handleRegister}
-                className="text-fluid-lg rounded-full border border-white/20 bg-white px-8 py-4 font-medium text-black transition-all hover:bg-gray-100 focus:ring-2 focus:ring-white/50 focus:outline-none"
+                className="text-fluid-lg rounded-full border border-white/20 bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] px-8 py-4 font-medium text-white transition-all hover:opacity-90 focus:ring-2 focus:ring-white/50 focus:outline-none"
                 aria-label="Register for PrepFlow"
                 strength={0.4}
                 maxDistance={15}

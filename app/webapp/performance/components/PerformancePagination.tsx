@@ -18,7 +18,7 @@ export default function PerformancePagination({
       <button
         onClick={() => onPageChange(Math.max(1, currentPage - 1))}
         disabled={currentPage === 1}
-        className="rounded-lg bg-gray-600 px-4 py-2 text-[var(--foreground)] transition-colors hover:bg-gray-700 disabled:bg-gray-800 disabled:text-[var(--foreground-subtle)]"
+        className="rounded-lg bg-[var(--muted)] px-4 py-2 text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]/80 disabled:bg-[var(--muted)]/50 disabled:text-[var(--foreground-subtle)]"
       >
         Previous
       </button>
@@ -28,7 +28,7 @@ export default function PerformancePagination({
       <button
         onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
         disabled={currentPage === totalPages}
-        className="rounded-lg bg-gray-600 px-4 py-2 text-[var(--foreground)] transition-colors hover:bg-gray-700 disabled:bg-gray-800 disabled:text-[var(--foreground-subtle)]"
+        className="rounded-lg bg-[var(--muted)] px-4 py-2 text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]/80 disabled:bg-[var(--muted)]/50 disabled:text-[var(--foreground-subtle)]"
       >
         Next
       </button>

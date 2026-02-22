@@ -1,9 +1,9 @@
 'use client';
 
+import { Icon } from '@/components/ui/Icon';
 import { useTranslation } from '@/lib/useTranslation';
 import { BarChart3 } from 'lucide-react';
 import { useMemo } from 'react';
-import { Icon } from '@/components/ui/Icon';
 
 interface Ingredient {
   id: string;
@@ -200,7 +200,7 @@ export default function IngredientFilters({
                   onSupplierFilterChange('');
                   onStorageFilterChange('');
                 }}
-                className="inline-flex items-center rounded-full border border-gray-600/20 bg-gray-600/10 px-2 py-1 text-xs font-medium text-[var(--foreground-muted)] transition-colors hover:border-gray-500/40 hover:text-[var(--foreground)]"
+                className="inline-flex items-center rounded-full border border-[var(--foreground-subtle)]/20 bg-[var(--foreground-subtle)]/10 px-2 py-1 text-xs font-medium text-[var(--foreground-muted)] transition-colors hover:border-[var(--foreground-subtle)]/40 hover:text-[var(--foreground)]"
               >
                 Clear All
               </button>

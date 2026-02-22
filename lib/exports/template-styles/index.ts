@@ -21,6 +21,7 @@ import {
   getMatrixVariantCSS,
   getMenuVariantCSS,
   getRecipeVariantCSS,
+  getRunsheetVariantCSS,
   getSupplierVariantCSS,
 } from './helpers/variantStyles';
 
@@ -43,6 +44,7 @@ export {
   getMatrixVariantCSS,
   getMenuVariantCSS,
   getRecipeVariantCSS,
+  getRunsheetVariantCSS,
   getSupplierVariantCSS,
 };
 
@@ -110,6 +112,11 @@ export function getAllTemplateStyles(
       return `
         ${baseStyles}
         ${getMatrixVariantCSS()}
+      `;
+    case 'runsheet':
+      return `
+        ${baseStyles}
+        ${getRunsheetVariantCSS()}
       `;
     default:
       return `

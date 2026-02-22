@@ -2,6 +2,7 @@
 
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Button } from '@/components/ui/Button';
+import { Icon } from '@/components/ui/Icon';
 import { BarChart3, Sparkles } from 'lucide-react';
 
 interface TemperatureAnalyticsEmptyStateProps {
@@ -28,7 +29,12 @@ export function TemperatureAnalyticsEmptyState({
           glow={true}
           className="group flex items-center gap-3"
         >
-          <Sparkles size={20} className="transition-transform duration-300 group-hover:rotate-12" />
+          <Icon
+            icon={Sparkles}
+            size="md"
+            className="transition-transform duration-300 group-hover:rotate-12"
+            aria-hidden
+          />
           <span>{isGenerating ? 'Generating Sample Data...' : 'Generate Sample Data'}</span>
           {!isGenerating && (
             <span className="text-sm opacity-75">(5 entries per equipment, last 2 weeks)</span>

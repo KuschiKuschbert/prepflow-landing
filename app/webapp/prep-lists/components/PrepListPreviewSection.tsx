@@ -4,6 +4,7 @@
  * Section component for PrepListPreview.
  */
 
+import { Icon } from '@/components/ui/Icon';
 import { Loader2 } from 'lucide-react';
 import { PrepListAggregatedView } from './PrepListAggregatedView';
 import { PrepListRecipeGroupedView } from './PrepListRecipeGroupedView';
@@ -147,7 +148,7 @@ export function PrepListPreviewSection({
       {loadingPrepDetails && !section.prepTechniques && (
         <div className="mt-6 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
           <div className="flex items-center gap-2 text-[var(--foreground-muted)]">
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Icon icon={Loader2} size="sm" className="animate-spin" aria-hidden />
             <span className="text-sm">Analyzing prep techniques...</span>
           </div>
         </div>

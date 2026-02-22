@@ -229,13 +229,13 @@ export function CSVImportModal<T = any>({
                 <h2 className="desktop:text-2xl text-xl font-bold text-[var(--foreground)]">
                   Import {config.entityName} from CSV
                 </h2>
-                <p className="mt-1 text-sm text-[var(--foreground)]/60">
+                <p className="mt-1 text-sm text-[var(--foreground-subtle)]">
                   Upload a CSV file or download our template to get started
                 </p>
               </div>
               <button
                 onClick={handleClose}
-                className="rounded-full bg-[var(--muted)] p-2 text-[var(--foreground)]/60 transition-colors hover:bg-[var(--border)] hover:text-[var(--foreground)]"
+                className="rounded-full bg-[var(--muted)] p-2 text-[var(--foreground-subtle)] transition-colors hover:bg-[var(--border)] hover:text-[var(--foreground)]"
                 aria-label="Close import modal"
               >
                 <Icon icon={X} size="md" aria-hidden={true} />

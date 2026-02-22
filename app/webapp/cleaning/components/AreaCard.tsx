@@ -63,7 +63,7 @@ function AreaCardComponent({ area, onAddTask, onViewTasks, onDelete }: AreaCardP
             className={`rounded-full px-3 py-1 text-xs font-medium ${
               area.is_active
                 ? 'border border-[var(--color-success)]/20 bg-[var(--color-success)]/10 text-[var(--color-success)]'
-                : 'border border-gray-400/20 bg-gray-400/10 text-[var(--foreground-muted)]'
+                : 'border border-[var(--foreground-subtle)]/20 bg-[var(--foreground-subtle)]/10 text-[var(--foreground-muted)]'
             }`}
           >
             {area.is_active ? 'Active' : 'Inactive'}

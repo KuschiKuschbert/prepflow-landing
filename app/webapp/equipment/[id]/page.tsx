@@ -130,7 +130,7 @@ export default function EquipmentPage() {
               <p className="mb-2 text-sm text-[var(--foreground-muted)]">Status</p>
               <div className="flex items-center gap-2">
                 <div
-                  className={`h-3 w-3 rounded-full ${status.color === 'green' ? 'bg-[var(--color-success)]' : status.color === 'red' ? 'bg-[var(--color-error)]' : 'bg-gray-500'}`}
+                  className={`h-3 w-3 rounded-full ${status.color === 'green' ? 'bg-[var(--color-success)]' : status.color === 'red' ? 'bg-[var(--color-error)]' : 'bg-[var(--foreground-subtle)]'}`}
                 />
                 <p
                   className={`font-semibold ${status.color === 'green' ? 'text-[var(--color-success)]' : status.color === 'red' ? 'text-[var(--color-error)]' : 'text-[var(--foreground-muted)]'}`}
@@ -201,7 +201,7 @@ export default function EquipmentPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         <div
-                          className={`h-2 w-2 rounded-full ${logStatus.color === 'green' ? 'bg-[var(--color-success)]' : logStatus.color === 'red' ? 'bg-[var(--color-error)]' : 'bg-gray-500'}`}
+                          className={`h-2 w-2 rounded-full ${logStatus.color === 'green' ? 'bg-[var(--color-success)]' : logStatus.color === 'red' ? 'bg-[var(--color-error)]' : 'bg-[var(--foreground-subtle)]'}`}
                         />
                         <span
                           className={`text-xs font-semibold ${logStatus.color === 'green' ? 'text-[var(--color-success)]' : logStatus.color === 'red' ? 'text-[var(--color-error)]' : 'text-[var(--foreground-muted)]'}`}

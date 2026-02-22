@@ -152,10 +152,10 @@ export default function PersistentSidebar() {
             </div>
             {isExpanded && mounted && (
               <div className="flex min-w-0 flex-col">
-                <span className="truncate text-sm font-semibold text-[var(--foreground)]">
+                <span className="text-fluid-sm truncate font-semibold text-[var(--foreground)]">
                   {displayName || 'Chef'}
                 </span>
-                <span className="truncate text-xs text-[var(--foreground-muted)]">
+                <span className="text-fluid-xs truncate text-[var(--foreground-muted)]">
                   {user?.email || 'Kitchen'}
                 </span>
               </div>

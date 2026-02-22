@@ -50,7 +50,7 @@ export function getStatusColor(status: 'active' | 'expired' | 'pending_renewal')
     case 'pending_renewal':
       return 'border-[var(--color-warning)]/20 bg-[var(--color-warning)]/10 text-[var(--color-warning)]';
     default:
-      return 'border-gray-400/20 bg-gray-400/10 text-[var(--foreground-muted)]';
+      return 'border-[var(--foreground-subtle)]/20 bg-[var(--foreground-subtle)]/10 text-[var(--foreground-muted)]';
   }
 }
 

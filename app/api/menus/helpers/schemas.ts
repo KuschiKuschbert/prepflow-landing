@@ -15,6 +15,11 @@ export const menuSchema = z.object({
   is_locked: z.boolean().optional(),
   locked_at: z.string().nullable().optional(),
   locked_by: z.string().nullable().optional(),
+  menu_type: z
+    .enum(['a_la_carte', 'function', 'function_wedding', 'function_birthday', 'function_other'])
+    .or(z.string())
+    .default('a_la_carte'),
+  food_per_person_kg: z.number().nullable().optional(),
 });
 
 export const menuItemSchema = z.object({
@@ -45,6 +50,11 @@ export const createMenuSchema = z.object({
   menu_name: z.string().min(1, 'Menu name is required'),
   description: z.string().optional(),
   currency: z.string().optional().default('AUD'),
+  menu_type: z
+    .enum(['a_la_carte', 'function', 'function_wedding', 'function_birthday', 'function_other'])
+    .or(z.string())
+    .default('a_la_carte'),
+  food_per_person_kg: z.number().optional(),
 });
 
 export const updateMenuSchema = z.object({
@@ -52,6 +62,11 @@ export const updateMenuSchema = z.object({
   description: z.string().nullable().optional(),
   status: z.enum(['active', 'archived', 'draft']).or(z.string()).optional(),
   currency: z.string().optional(),
+  menu_type: z
+    .enum(['a_la_carte', 'function', 'function_wedding', 'function_birthday', 'function_other'])
+    .or(z.string())
+    .optional(),
+  food_per_person_kg: z.number().nullable().optional(),
 });
 
 // --- Inferred Types ---

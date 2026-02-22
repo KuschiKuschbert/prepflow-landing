@@ -103,7 +103,10 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
             'desktop:p-4',
           )}
         >
-          <h2 id="sidebar-title" className="text-lg font-semibold text-[var(--foreground)]">
+          <h2
+            id="sidebar-title"
+            className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]"
+          >
             Navigation
           </h2>
           <button
@@ -188,7 +191,7 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-[var(--foreground-secondary)]">Language</span>
-                <LanguageSwitcher />
+                <LanguageSwitcher size="sm" showName={false} />
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-[var(--foreground-secondary)]">Account</span>

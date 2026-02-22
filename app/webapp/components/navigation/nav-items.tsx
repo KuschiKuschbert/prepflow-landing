@@ -10,7 +10,9 @@ import { useTranslation } from '@/lib/useTranslation';
 import {
   BarChart3,
   BookOpen,
+  Building,
   Calendar,
+  CalendarDays,
   ChefHat,
   ClipboardCheck,
   FileText,
@@ -68,6 +70,8 @@ function getCategoryForWorkflow(href: string, workflow: WorkflowType): string {
       '/webapp/guide': 'tools',
       '/webapp/setup': 'tools',
       '/webapp/settings': 'tools',
+      '/webapp/functions': 'planning',
+      '/webapp/customers': 'planning',
       '/curbos': 'tools',
     },
     'setup-planning-operations': {
@@ -90,6 +94,8 @@ function getCategoryForWorkflow(href: string, workflow: WorkflowType): string {
       '/webapp/guide': 'tools',
       '/webapp/setup': 'setup',
       '/webapp/settings': 'setup',
+      '/webapp/functions': 'operations',
+      '/webapp/customers': 'operations',
       '/curbos': 'tools',
     },
     'menu-first': {
@@ -112,6 +118,8 @@ function getCategoryForWorkflow(href: string, workflow: WorkflowType): string {
       '/webapp/guide': 'tools',
       '/webapp/setup': 'tools',
       '/webapp/settings': 'tools',
+      '/webapp/functions': 'operations',
+      '/webapp/customers': 'operations',
       '/curbos': 'tools',
     },
   };
@@ -150,6 +158,18 @@ export function useNavigationItems(
         label: t('nav.dishesAndRecipes', 'Dishes & Recipes') as string,
         icon: <Icon icon={UtensilsCrossed} size="sm" className="text-current" aria-hidden={true} />,
         color: 'text-[var(--primary)]',
+      },
+      {
+        href: '/webapp/functions',
+        label: t('nav.functions', 'Functions & Events') as string,
+        icon: <Icon icon={CalendarDays} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[var(--accent)]',
+      },
+      {
+        href: '/webapp/customers',
+        label: t('nav.customers', 'CRM (Clients)') as string,
+        icon: <Icon icon={Building} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[var(--color-info)]',
       },
       {
         href: '/webapp/performance',

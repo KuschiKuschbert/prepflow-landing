@@ -70,6 +70,60 @@ npm run detect-breakpoints
 
 ---
 
+### Visual Hierarchy Audit
+
+**Script:** `scripts/audit-hierarchy.js`
+**Command:** `npm run audit:hierarchy`
+**Referenced in:** `design.mdc`, `docs/VISUAL_HIERARCHY_STANDARDS.md`
+
+Scans the codebase for visual hierarchy violations. Rules are scoped by area (landing strict, webapp flexible per design.mdc). Includes icon consistency checks (direct Lucide usage, emoji icons). Advisory only; does not block pre-deploy or CI.
+
+**Categories:** typography, color, componentSizing, icon (direct Lucide, emoji)
+
+**Usage:**
+
+```bash
+npm run audit:hierarchy              # Scan all (landing + webapp)
+npm run audit:hierarchy -- --scope=landing   # Landing only (strict)
+npm run audit:hierarchy -- --scope=webapp    # Webapp only
+npm run audit:hierarchy -- --json            # JSON output
+```
+
+**Options:**
+
+- `--scope=landing|webapp|all` - Limit scan to scope (default: all)
+- `--json` - Output results as JSON
+- `--verbose` - Show detailed violation information
+
+**Integration:** Advisory. Run during design reviews; fix high-priority violations when touching affected files.
+
+---
+
+### Icon Audit (In-Depth)
+
+**Script:** `scripts/audit-icons.js`
+**Command:** `npm run audit:icons`
+**Referenced in:** `design.mdc` (Icon Standards)
+
+In-depth icon consistency audit per design system. Scans for direct Lucide usage (without Icon wrapper) and emoji icons. Use for detailed remediation planning.
+
+**Usage:**
+
+```bash
+npm run audit:icons              # Detailed report (default)
+npm run audit:icons -- --format=short   # Compact summary
+npm run audit:icons -- --json           # JSON output
+```
+
+**Checks:**
+
+- **Direct Lucide:** Lucide icons used as `<IconName className=` or `<IconName size=` — should use `<Icon icon={IconName} size="sm" />`
+- **Emoji icons:** 🏪 📍 ✨ 📊 📋 🎯 ⚡ etc. — should use Lucide icons with Icon wrapper
+
+**Integration:** Advisory. Run alongside `audit:hierarchy` for design compliance reviews.
+
+---
+
 ### CHANGELOG Generation
 
 **Script:** `scripts/generate-changelog.js`
@@ -376,6 +430,36 @@ node scripts/populate-ingredients.js
 
 ---
 
+### Link Data to Users
+
+**Script:** `scripts/link-data-to-users.ts`
+**Command:** `npm run link:data`
+
+Links orphan data (ingredients, recipes, dishes, menus, suppliers with `null` user_id) to one or more user accounts. Use when existing data is not visible after login because it has no `user_id` set.
+
+**Usage:**
+
+```bash
+# Reassign all orphan data to one user
+npm run link:data -- --to you@example.com
+
+# Copy orphan data to multiple users (test, your account, admin)
+npm run link:data -- --copy-to test@example.com,you@example.com,admin@example.com
+
+# Preview without making changes
+npm run link:data -- --to you@example.com --dry-run
+```
+
+**Options:**
+
+- `--to <email>` - Reassign all data with null user_id to this user
+- `--copy-to <email1>,<email2>,...` - Copy orphan data to each listed user (so all can see it)
+- `--dry-run` - Show what would be done without making changes
+
+**Note:** Requires Supabase credentials in `.env.local`. Users are created in Supabase Auth via JIT if they do not exist.
+
+---
+
 ### Batch Database Repair
 
 **Example Script:** `scripts/fix-fts.ts`
@@ -470,15 +554,18 @@ bash scripts/replace-screenshots.sh
 
 **MANDATORY:** Run before pushing to `main` to verify your code will deploy successfully on Vercel.
 
-Runs all checks that Vercel and CI run during deployment:
+Runs the same deploy-critical checks as CI (`.github/workflows/ci-cd.yml`). Order:
 
-- Node version check (>=22.0.0)
-- Dependencies installation (`npm ci`)
-- Lint check (`npm run lint`)
-- Type check (`npm run type-check`)
-- Format check (`npm run format:check`)
-- Cleanup check (`npm run cleanup:check`)
-- Build check (`npm run build`) - **Most important, this is what Vercel runs**
+1. Node version check (>=22.0.0)
+2. Dependencies installation (`npm ci`)
+3. Security audit (`npm audit --audit-level=moderate`)
+4. Lint check (`npm run lint`)
+5. Type check (`npm run type-check`)
+6. Format check (`npm run format:check`)
+7. Script audit (`npm run audit:scripts`)
+8. Cleanup check (`npm run cleanup:check`) - **Advisory only** (non-blocking)
+9. Build check (`npm run build`) - Most important, this is what Vercel runs
+10. Bundle budget check (`npm run check:bundle`)
 
 **Usage:**
 
@@ -492,7 +579,7 @@ npm run pre-deploy
 - `0` - All checks passed, safe to deploy
 - `1` - One or more checks failed, fix issues before deploying
 
-**Integration:** Should be run manually before pushing to `main`. Consider adding to pre-push hook (future enhancement).
+**Integration:** Should be run manually before pushing to `main`. Pre-deploy mirrors CI blocking checks—passing locally indicates CI will pass. Consider adding to pre-push hook (future enhancement).
 
 **See Also:**
 

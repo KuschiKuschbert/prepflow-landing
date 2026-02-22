@@ -3,8 +3,27 @@
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
 import { Menu } from '@/lib/types/menu-builder';
-import { Check, Edit2, Lock, Printer, Trash2, X } from 'lucide-react';
+import {
+  Cake,
+  Check,
+  Edit2,
+  Heart,
+  Lock,
+  PartyPopper,
+  Printer,
+  Trash2,
+  Users,
+  X,
+} from 'lucide-react';
 import { memo } from 'react';
+
+const FUNCTION_TYPE_CONFIG: Record<string, { icon: typeof Heart; label: string; accent: string }> =
+  {
+    function_wedding: { icon: Heart, label: 'Wedding Menu', accent: 'text-pink-400' },
+    function_birthday: { icon: Cake, label: 'Birthday Menu', accent: 'text-amber-400' },
+    function_corporate: { icon: Users, label: 'Corporate Menu', accent: 'text-blue-400' },
+    function_other: { icon: PartyPopper, label: 'Function Menu', accent: 'text-[var(--primary)]' },
+  };
 
 interface MenuCardProps {
   menu: Menu;
@@ -61,8 +80,11 @@ export const MenuCard = memo(function MenuCard({
   onPrintClick,
 }: MenuCardProps) {
   const isLocked = menu.is_locked || false;
+  const isFunctionMenu = menu.menu_type && menu.menu_type.startsWith('function_');
+  const functionConfig = isFunctionMenu
+    ? FUNCTION_TYPE_CONFIG[menu.menu_type || ''] || FUNCTION_TYPE_CONFIG.function_other
+    : null;
 
-  // Debug logging for print button visibility
   if (isLocked) {
     logger.dev('[MenuCard] Menu is locked, print button should be visible', {
       menuId: menu.id,
@@ -75,9 +97,11 @@ export const MenuCard = memo(function MenuCard({
     <div
       key={menu.id}
       className={`group relative cursor-pointer overflow-visible rounded-2xl border p-6 transition-all hover:shadow-lg ${
-        isLocked
-          ? 'border-[var(--color-warning)]/50 bg-[var(--color-warning)]/10 hover:border-[var(--color-warning)]/70'
-          : 'border-[var(--border)] bg-[var(--surface)] hover:border-[var(--primary)]/50'
+        isFunctionMenu
+          ? 'border-l-4 border-t-[var(--border)] border-r-[var(--border)] border-b-[var(--border)] border-l-[var(--primary)] bg-gradient-to-br from-[var(--primary)]/5 via-[var(--surface)] to-[var(--accent)]/5 hover:border-l-[var(--accent)]'
+          : isLocked
+            ? 'border-[var(--color-warning)]/50 bg-[var(--color-warning)]/10 hover:border-[var(--color-warning)]/70'
+            : 'border-[var(--border)] bg-[var(--surface)] hover:border-[var(--primary)]/50'
       }`}
       onClick={() => {
         if (!isEditingThisMenu) {
@@ -85,6 +109,18 @@ export const MenuCard = memo(function MenuCard({
         }
       }}
     >
+      {/* Function Menu Badge */}
+      {functionConfig && (
+        <div className="mb-3 flex items-center gap-2">
+          <Icon icon={functionConfig.icon} size="sm" className={functionConfig.accent} />
+          <span
+            className={`text-xs font-semibold tracking-wider uppercase ${functionConfig.accent}`}
+          >
+            {functionConfig.label}
+          </span>
+        </div>
+      )}
+
       {/* Editable Title */}
       <div className="mb-4 flex items-start gap-2 overflow-visible">
         {isEditingTitle ? (

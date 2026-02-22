@@ -1,9 +1,9 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
+import { COGSCalculation } from '@/lib/types/cogs';
 import { Check, Edit, Trash2, X } from 'lucide-react';
 import React, { useState } from 'react';
-import { COGSCalculation } from '@/lib/types/cogs';
 
 interface IngredientsListProps {
   calculations: COGSCalculation[];
@@ -135,7 +135,7 @@ export const IngredientsList: React.FC<IngredientsListProps> = ({
                       setEditingIngredient(null);
                       setEditQuantity(0);
                     }}
-                    className="rounded-lg bg-gray-600 p-1 text-[var(--foreground)] transition-colors hover:bg-gray-500"
+                    className="rounded-lg bg-[var(--muted)] p-1 text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]/80"
                     aria-label="Cancel"
                   >
                     <Icon icon={X} size="xs" aria-hidden={true} />

@@ -169,7 +169,7 @@ export function InputDialog({
           {/* Message */}
           <p
             id="dialog-description"
-            className="text-fluid-sm mb-4 text-center text-[var(--foreground)]/70"
+            className="text-fluid-sm mb-4 text-center text-[var(--foreground-muted)]"
           >
             {message}
           </p>
@@ -209,7 +209,7 @@ export function InputDialog({
             <button
               ref={cancelButtonRef}
               onClick={onCancel}
-              className="flex-1 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/40 px-4 py-3 font-semibold text-[var(--foreground)]/70 transition-all duration-200 hover:bg-[var(--muted)]/60 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none"
+              className="flex-1 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/40 px-4 py-3 font-semibold text-[var(--foreground-muted)] transition-all duration-200 hover:bg-[var(--muted)]/60 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none"
             >
               {cancelLabel}
             </button>

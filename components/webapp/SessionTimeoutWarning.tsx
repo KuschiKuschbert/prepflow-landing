@@ -57,7 +57,7 @@ export const SessionTimeoutWarning: React.FC<SessionTimeoutWarningProps> = ({
                 <h2 className="text-fluid-2xl mb-2 font-bold text-[var(--foreground)]">
                   Session Timeout Warning
                 </h2>
-                <p className="text-[var(--foreground)]/60">
+                <p className="text-[var(--foreground-subtle)]">
                   You&apos;ve been inactive for a while. You&apos;ll be logged out soon for
                   security.
                 </p>
@@ -67,7 +67,7 @@ export const SessionTimeoutWarning: React.FC<SessionTimeoutWarningProps> = ({
               <div className="mb-6 flex items-center justify-center">
                 <div className="rounded-xl border border-[var(--accent)]/50 bg-[var(--accent)]/10 px-8 py-4">
                   <div className="text-center">
-                    <div className="text-fluid-xs mb-1 text-[var(--foreground)]/60">
+                    <div className="text-fluid-xs mb-1 text-[var(--foreground-subtle)]">
                       Time remaining
                     </div>
                     <div className="text-fluid-4xl font-bold text-[var(--accent)]">
@@ -85,7 +85,7 @@ export const SessionTimeoutWarning: React.FC<SessionTimeoutWarningProps> = ({
                 >
                   Stay Active
                 </button>
-                <p className="text-fluid-xs text-center text-[var(--foreground)]/60">
+                <p className="text-fluid-xs text-center text-[var(--foreground-subtle)]">
                   Click the button or interact with the page to continue your session
                 </p>
               </div>

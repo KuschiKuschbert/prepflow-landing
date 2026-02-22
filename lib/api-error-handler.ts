@@ -131,6 +131,6 @@ export class ApiErrorHandler {
     if (error instanceof Error) {
       return { message: error.message };
     }
-    return { message: 'An unexpected error occurred' };
+    return { message: 'Something went wrong on our end. Give it another go, chef?' };
   }
 }

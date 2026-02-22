@@ -37,7 +37,7 @@ export const GameOverScreen: React.FC<GameOverScreenProps> = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
-        className="text-fluid-lg mb-8 text-[var(--foreground)]/60"
+        className="text-fluid-lg mb-8 text-[var(--foreground-subtle)]"
       >
         You extinguished the fire in {playTime} seconds!
         {fastestTime !== null && playTime === fastestTime && (
@@ -62,7 +62,7 @@ export const GameOverScreen: React.FC<GameOverScreenProps> = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="text-fluid-sm mt-6 text-[var(--foreground)]/40"
+          className="text-fluid-sm mt-6 text-[var(--foreground-subtle)]"
         >
           Took your time, but you got there! 👨‍🍳
         </motion.p>

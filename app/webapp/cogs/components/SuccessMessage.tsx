@@ -17,7 +17,7 @@ export function SuccessMessage({ message, onClose }: SuccessMessageProps) {
   // Smaller notification for recipe loaded
   if (isRecipeLoaded) {
     return (
-      <div className="animate-in slide-in-from-top-2 mb-4 rounded-lg border border-[var(--color-success)]/50 bg-[var(--color-success)]/20 px-4 py-2.5 text-sm text-green-200 shadow-md transition-all duration-200">
+      <div className="animate-in slide-in-from-top-2 mb-4 rounded-lg border border-[var(--color-success)]/50 bg-[var(--color-success)]/20 px-4 py-2.5 text-sm text-[var(--color-success)] shadow-md transition-all duration-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <svg
@@ -37,7 +37,7 @@ export function SuccessMessage({ message, onClose }: SuccessMessageProps) {
           </div>
           <button
             onClick={onClose}
-            className="ml-2 rounded-full p-1 text-green-300 transition-colors hover:bg-[var(--color-success)]/30 hover:text-green-200"
+            className="ml-2 rounded-full p-1 text-[var(--color-success)] transition-colors hover:bg-[var(--color-success)]/30 hover:text-[var(--color-success)]"
           >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -77,14 +77,14 @@ export function SuccessMessage({ message, onClose }: SuccessMessageProps) {
         <div className="flex-1">
           <p className="text-lg font-bold text-[var(--foreground)]">{message}</p>
           {isRecipeSaved && (
-            <p className="mt-1 text-sm font-medium text-green-100">
+            <p className="mt-1 text-sm font-medium text-[var(--color-success)]">
               Your recipe has been added to the Recipe Book and is ready to use!
             </p>
           )}
         </div>
         <button
           onClick={onClose}
-          className="flex-shrink-0 rounded-full p-2 text-[var(--foreground)]/80 transition-all duration-200 hover:bg-white/20 hover:text-[var(--foreground)]"
+          className="flex-shrink-0 rounded-full p-2 text-[var(--foreground-muted)] transition-all duration-200 hover:bg-white/20 hover:text-[var(--foreground)]"
         >
           <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path

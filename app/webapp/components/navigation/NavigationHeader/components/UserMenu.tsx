@@ -49,7 +49,7 @@ export function UserMenu({
         right: `${dropdownPosition.right}px`,
       }}
     >
-      <div className="glass-panel rounded-xl p-4">
+      <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-2xl">
         {/* Header: Centered Profile */}
         <div className="flex flex-col items-center space-y-2 pb-4">
           <div className="relative">
@@ -93,7 +93,7 @@ export function UserMenu({
                 'Hi',
               )}
             </div>
-            <div className="text-sm text-[var(--foreground)]/60">{userEmail}</div>
+            <div className="text-sm text-[var(--foreground-subtle)]">{userEmail}</div>
           </div>
 
           <Link
@@ -115,9 +115,9 @@ export function UserMenu({
             href="/webapp/settings#preferences"
             onClick={onClose}
             onMouseEnter={() => prefetchRoute('/webapp/settings')}
-            className="flex w-full items-center space-x-3 rounded-xl px-4 py-3 text-sm font-medium text-[var(--foreground)]/80 transition-colors hover:bg-[var(--surface)] hover:text-[var(--foreground)]"
+            className="flex w-full items-center space-x-3 rounded-xl px-4 py-3 text-sm font-medium text-[var(--foreground-muted)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--foreground)]"
           >
-            <Icon icon={Settings2} size="sm" className="text-[var(--foreground)]/60" />
+            <Icon icon={Settings2} size="sm" className="text-[var(--foreground-subtle)]" />
             <span>App Preferences</span>
           </Link>
 
@@ -125,9 +125,9 @@ export function UserMenu({
             href="/webapp/settings#security"
             onClick={onClose}
             onMouseEnter={() => prefetchRoute('/webapp/settings')}
-            className="flex w-full items-center space-x-3 rounded-xl px-4 py-3 text-sm font-medium text-[var(--foreground)]/80 transition-colors hover:bg-[var(--surface)] hover:text-[var(--foreground)]"
+            className="flex w-full items-center space-x-3 rounded-xl px-4 py-3 text-sm font-medium text-[var(--foreground-muted)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--foreground)]"
           >
-            <Icon icon={Shield} size="sm" className="text-[var(--foreground)]/60" />
+            <Icon icon={Shield} size="sm" className="text-[var(--foreground-subtle)]" />
             <span>Security</span>
           </Link>
 
@@ -135,9 +135,9 @@ export function UserMenu({
             href="/webapp/settings/billing"
             onClick={onClose}
             onMouseEnter={() => prefetchRoute('/webapp/settings/billing')}
-            className="flex w-full items-center space-x-3 rounded-xl px-4 py-3 text-sm font-medium text-[var(--foreground)]/80 transition-colors hover:bg-[var(--surface)] hover:text-[var(--foreground)]"
+            className="flex w-full items-center space-x-3 rounded-xl px-4 py-3 text-sm font-medium text-[var(--foreground-muted)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--foreground)]"
           >
-            <Icon icon={CreditCard} size="sm" className="text-[var(--foreground)]/60" />
+            <Icon icon={CreditCard} size="sm" className="text-[var(--foreground-subtle)]" />
             <span>Subscription & Billing</span>
           </Link>
 
@@ -145,24 +145,24 @@ export function UserMenu({
             href="/webapp/setup"
             onClick={onClose}
             onMouseEnter={() => prefetchRoute('/webapp/setup')}
-            className="flex w-full items-center space-x-3 rounded-xl px-4 py-3 text-sm font-medium text-[var(--foreground)]/80 transition-colors hover:bg-[var(--surface)] hover:text-[var(--foreground)]"
+            className="flex w-full items-center space-x-3 rounded-xl px-4 py-3 text-sm font-medium text-[var(--foreground-muted)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--foreground)]"
           >
-            <Icon icon={Settings} size="sm" className="text-[var(--foreground)]/60" />
+            <Icon icon={Settings} size="sm" className="text-[var(--foreground-subtle)]" />
             <span>Setup</span>
           </Link>
 
-          <div className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-[var(--foreground)]/80 transition-colors hover:bg-[var(--surface)] hover:text-[var(--foreground)]">
+          <div className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-[var(--foreground-muted)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--foreground)]">
             <div className="flex items-center space-x-3">
               <Icon
                 icon={Globe}
                 size="sm"
-                className="text-[var(--foreground)]/60"
+                className="text-[var(--foreground-subtle)]"
                 aria-hidden={true}
               />
               <span>Language</span>
             </div>
             <div className="ml-auto">
-              <LanguageSwitcher />
+              <LanguageSwitcher size="sm" showName={false} />
             </div>
           </div>
 
@@ -174,12 +174,12 @@ export function UserMenu({
         </div>
 
         {/* Footer */}
-        <div className="text-fluid-xs mt-4 flex justify-center text-[var(--foreground)]/60">
-          <Link href="/privacy" className="mx-2 hover:text-[var(--foreground)]/80">
+        <div className="text-fluid-xs mt-4 flex justify-center text-[var(--foreground-subtle)]">
+          <Link href="/privacy" className="mx-2 hover:text-[var(--foreground-muted)]">
             Privacy Policy
           </Link>
           <span>•</span>
-          <Link href="/terms" className="mx-2 hover:text-[var(--foreground)]/80">
+          <Link href="/terms" className="mx-2 hover:text-[var(--foreground-muted)]">
             Terms of Service
           </Link>
         </div>

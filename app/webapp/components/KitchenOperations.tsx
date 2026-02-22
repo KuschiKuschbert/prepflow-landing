@@ -1,6 +1,14 @@
 'use client';
 
-import { AlertTriangle, BookOpen, Sparkles, Thermometer, UtensilsCrossed } from 'lucide-react';
+import {
+  AlertTriangle,
+  BookOpen,
+  Settings,
+  Sparkles,
+  Thermometer,
+  UtensilsCrossed,
+} from 'lucide-react';
+import { DashboardWidget } from './DashboardWidget';
 import { useKitchenStats } from './hooks/useKitchenStats';
 import { KitchenOperation, KitchenOperationCard } from './KitchenOperationCard';
 
@@ -9,7 +17,7 @@ export default function KitchenOperations() {
 
   if (loading) {
     return (
-      <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 glass-surface mb-6 rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
+      <DashboardWidget title="Kitchen Operations" icon={Settings} className="h-full">
         <div className="animate-pulse space-y-4">
           <div className="h-6 w-32 rounded bg-[var(--muted)]" />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -18,7 +26,7 @@ export default function KitchenOperations() {
             ))}
           </div>
         </div>
-      </div>
+      </DashboardWidget>
     );
   }
 
@@ -71,20 +79,12 @@ export default function KitchenOperations() {
   ];
 
   return (
-    <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 glass-surface mb-6 rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
-      <div className="tablet:mb-6 mb-4">
-        <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">
-          Kitchen Operations
-        </h2>
-        <p className="text-fluid-xs tablet:text-fluid-sm mt-1 text-[var(--foreground-muted)]">
-          Current operational status and readiness
-        </p>
-      </div>
+    <DashboardWidget title="Kitchen Operations" icon={Settings} className="h-full">
       <div className="tablet:grid-cols-2 tablet:gap-4 desktop:[grid-template-columns:repeat(auto-fit,minmax(240px,1fr))] grid grid-cols-1 gap-3">
         {operations.map(op => (
           <KitchenOperationCard key={op.title} operation={op} />
         ))}
       </div>
-    </div>
+    </DashboardWidget>
   );
 }

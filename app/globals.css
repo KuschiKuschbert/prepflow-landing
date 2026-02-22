@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* Dark mode: apply dark: utilities when data-theme="dark" (matches ThemeInitializer) */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
 @theme {
   /* Core Colors - Base is Dark Theme */
   --color-background: #000000;
@@ -14,6 +17,7 @@
   --color-magenta-pulse: #d925c7;
   --color-prepflow-blue: #3b82f6;
   --color-muted: #121212;
+  --color-muted-foreground: rgba(255, 255, 255, 0.75);
   --color-border: #1a1a1a;
   --color-surface: #1a1a1a;
   --color-surface-variant: rgba(58, 58, 58, 0.5);
@@ -38,15 +42,16 @@
 
 :root {
   /* Primary variables mapping to theme tokens */
-  --background: var(--color-background);
-  --foreground: var(--color-foreground);
-  --primary: var(--color-primary);
-  --secondary: var(--color-secondary);
-  --accent: var(--color-accent);
-  --tertiary: var(--color-tertiary);
-  --muted: var(--color-muted);
-  --border: var(--color-border);
-  --surface: var(--color-surface);
+  --background: #000000;
+  --foreground: #ffffff;
+  --primary: #29e7cd;
+  --secondary: #3b82f6;
+  --accent: #d925c7;
+  --tertiary: #ff6b00;
+  --muted: #121212;
+  --muted-foreground: rgba(255, 255, 255, 0.75);
+  --border: #1a1a1a;
+  --surface: #1a1a1a;
 
   /* Dark theme contrast levels */
   --foreground-secondary: rgba(255, 255, 255, 0.9);
@@ -54,11 +59,8 @@
   --foreground-subtle: rgba(255, 255, 255, 0.6);
 
   /* Background gradient - dark mode (pure black base with subtle depth) */
-  --background-gradient: linear-gradient(
-    180deg,
-    #000000 0%,
-    #050505 100%
-  );
+  --background-gradient: linear-gradient(180deg, #000000 0%, #050505 100%);
+  --webapp-bg-gradient: linear-gradient(to bottom, #0a0a0a, #08080a);
 
   /* Active states */
   --button-active-bg: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
@@ -71,15 +73,16 @@
   --safe-area-inset-top: env(safe-area-inset-top, 0px);
   --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
 
-  /* Glassmorphism support */
-  --glass-bg: rgba(58, 58, 58, 0.4);
+  /* Glassmorphism support - solid for readability over animated background */
+  --glass-bg: #1f1f1f;
   --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-panel-bg: rgba(20, 20, 20, 0.7);
+  --glass-panel-bg: #1f1f1f;
 }
 
 [data-theme='light'] {
   --background: #ffffff;
   --foreground: #000000;
+  --muted-foreground: rgba(0, 0, 0, 0.6);
   --primary: #1a9d8a;
   --secondary: #2563eb;
   --accent: #a01a8a;
@@ -93,17 +96,23 @@
 
   --qr-foreground: #000000;
 
-  /* Glassmorphism - Light Mode overrides */
-  --glass-bg: rgba(255, 255, 255, 0.6);
+  /* Glassmorphism - Light Mode overrides - semi-transparent so background effects show through */
+  --glass-bg: rgba(255, 255, 255, 0.88);
   --glass-border: rgba(0, 0, 0, 0.08);
   --glass-panel-bg: rgba(255, 255, 255, 0.85);
 
   /* Background gradient - light mode */
-  --background-gradient: linear-gradient(
+  --background-gradient: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+  --webapp-bg-gradient: linear-gradient(
     180deg,
-    #ffffff 0%,
-    #f9fafb 100%
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(249, 250, 251, 0.9) 100%
   );
+}
+
+body {
+  color: var(--foreground);
+  background-color: var(--background);
 }
 
 /* Hover capability detection for device-appropriate UI */
@@ -496,12 +505,15 @@ nav[aria-label='Bottom navigation'] {
   }
 }
 
-/* Modern Glassmorphism & Glow Effects */
+/* Modern Glassmorphism & Glow Effects - semi-transparent to let background effects show */
 .glass-surface {
   background: var(--glass-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.3),
+    0 4px 6px -4px rgba(0, 0, 0, 0.2);
 }
 
 .glass-panel {
@@ -510,6 +522,17 @@ nav[aria-label='Bottom navigation'] {
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--glass-border);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Light mode: softer shadows and stronger blur for readability */
+[data-theme='light'] .glass-surface {
+  box-shadow:
+    0 4px 12px -2px rgba(0, 0, 0, 0.08),
+    0 2px 4px -2px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme='light'] .glass-panel {
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.06);
 }
 
 .glow-primary {
@@ -536,8 +559,12 @@ nav[aria-label='Bottom navigation'] {
 .premium-card-hover:hover {
   transform: translateY(-4px) scale(1.01);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  background: rgba(58, 58, 58, 0.6);
-  border-color: rgba(255, 255, 255, 0.15);
+  background: var(--surface);
+  border-color: var(--glass-border);
+}
+
+[data-theme='light'] .premium-card-hover:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
 }
 
 .concentric-bg {
@@ -550,6 +577,10 @@ nav[aria-label='Bottom navigation'] {
   background: radial-gradient(circle, rgba(41, 231, 205, 0.05) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
+}
+
+[data-theme='light'] .concentric-bg {
+  background: radial-gradient(circle, rgba(26, 157, 138, 0.08) 0%, transparent 70%);
 }
 
 @keyframes float-subtle {
@@ -808,6 +839,7 @@ nav[aria-label='Bottom navigation'] {
   --color-secondary: var(--secondary);
   --color-accent: var(--accent);
   --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   --color-surface: var(--surface);
   --font-sans: var(--font-geist-sans);
@@ -862,11 +894,12 @@ nav[aria-label='Bottom navigation'] {
 }
 
 /* Fluid Typography Utility Classes - Scales from 360px to 4K displays */
-/* Updated minimums to meet 16px mobile readability requirement */
+/* xs (Caption): smaller for hints, fine print, timestamps per design hierarchy */
 .text-fluid-xs {
-  font-size: clamp(1rem, 1.4vw, 1.25rem); /* 16px minimum for mobile readability, scales to 20px */
+  font-size: clamp(0.875rem, 1.2vw, 1rem); /* 14px min - captions, fine print */
 }
 
+/* sm (Label): 16px minimum for accessibility - labels, metadata */
 .text-fluid-sm {
   font-size: clamp(1rem, 1.4vw, 1.25rem); /* 16px minimum for mobile readability, scales to 20px */
 }

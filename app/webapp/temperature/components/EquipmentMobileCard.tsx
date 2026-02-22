@@ -1,7 +1,7 @@
 'use client';
 import { Icon } from '@/components/ui/Icon';
-import { Edit, Power, PowerOff, QrCode, Trash2, LucideIcon, MapPin } from 'lucide-react';
-import React, { memo } from 'react';
+import { Edit, LucideIcon, MapPin, Power, PowerOff, QrCode, Trash2 } from 'lucide-react';
+import { memo } from 'react';
 import { TemperatureEquipment } from '../types';
 import { EquipmentMobileCardEditForm } from './EquipmentMobileCardEditForm';
 
@@ -138,7 +138,7 @@ function EquipmentMobileCardComponent({
           })()}
           <div className="flex items-center gap-2">
             <div
-              className={`h-2 w-2 rounded-full ${item.is_active ? 'animate-pulse bg-[var(--color-success)]' : 'bg-gray-500'}`}
+              className={`h-2 w-2 rounded-full ${item.is_active ? 'animate-pulse bg-[var(--color-success)]' : 'bg-[var(--foreground-subtle)]'}`}
             />
             <span
               className={`text-xs font-semibold ${item.is_active ? 'text-[var(--color-success)]' : 'text-[var(--foreground-muted)]'}`}

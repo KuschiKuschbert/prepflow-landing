@@ -11,3 +11,4 @@ export { getMatrixVariantCSS } from './variantStyles/getMatrixVariantCSS';
 export { getMenuVariantCSS } from './variantStyles/getMenuVariantCSS';
 export { getRecipeVariantCSS } from './variantStyles/getRecipeVariantCSS';
 export { getSupplierVariantCSS } from './variantStyles/getSupplierVariantCSS';
+export { getRunsheetVariantCSS } from './variantStyles/getRunsheetVariantCSS';

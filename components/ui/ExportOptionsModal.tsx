@@ -130,7 +130,7 @@ export function ExportOptionsModal({
           </h2>
           <button
             onClick={onClose}
-            className="rounded-lg p-2 text-[var(--foreground)]/60 transition-colors hover:bg-[var(--border)] hover:text-[var(--foreground)]"
+            className="rounded-lg p-2 text-[var(--foreground-subtle)] transition-colors hover:bg-[var(--border)] hover:text-[var(--foreground)]"
             aria-label="Close export options"
           >
             <Icon icon={X} size="md" aria-hidden={true} />

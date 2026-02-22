@@ -126,8 +126,8 @@ function useCanvasAnimation(canvasRef: React.RefObject<HTMLCanvasElement | null>
         const numRings = 4;
 
         // Theme-aware opacity - more visible in light mode, subtle in dark mode
-        const baseOpacity = theme === 'light' ? 0.15 : 0.12;
-        const opacityStep = theme === 'light' ? 0.025 : 0.02;
+        const baseOpacity = theme === 'light' ? 0.22 : 0.12;
+        const opacityStep = theme === 'light' ? 0.035 : 0.02;
 
         for (let i = 0; i < numRings; i++) {
           const ringPhase = phase + i * 0.4;

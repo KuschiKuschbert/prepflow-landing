@@ -1,10 +1,10 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { logger } from '@/lib/logger';
+import { Icon } from '@/components/ui/Icon';
 import { useNotification } from '@/contexts/NotificationContext';
 import { useConfirm } from '@/hooks/useConfirm';
-import { Icon } from '@/components/ui/Icon';
-import { Loader2, RefreshCw, AlertCircle, Power } from 'lucide-react';
+import { logger } from '@/lib/logger';
+import { AlertCircle, Loader2, Power, RefreshCw } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface FeatureFlag {
   id: string;
@@ -236,8 +236,8 @@ export function FeatureFlagsSection() {
                         <span
                           className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
                             flag.enabled
-                              ? 'bg-green-500/10 text-green-400'
-                              : 'bg-gray-500/10 text-gray-400'
+                              ? 'bg-[var(--color-success)]/10 text-[var(--color-success)]'
+                              : 'bg-[var(--foreground-subtle)]/10 text-[var(--foreground-muted)]'
                           }`}
                         >
                           {flag.enabled ? 'Enabled' : 'Disabled'}
@@ -260,7 +260,7 @@ export function FeatureFlagsSection() {
 
                       <button
                         onClick={() => deleteFlag(flag.flag_key, flag.user_id)}
-                        className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-colors hover:bg-red-500/20"
+                        className="rounded-xl border border-[var(--color-error)]/30 bg-[var(--color-error)]/10 px-4 py-2 text-sm font-medium text-[var(--color-error)] transition-colors hover:bg-[var(--color-error)]/20"
                         aria-label={`Delete ${flag.flag_key}`}
                       >
                         Delete

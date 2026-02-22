@@ -105,13 +105,13 @@ export function AchievementToast() {
               Achievement Unlocked!
             </div>
             <div className="font-semibold text-[var(--foreground)]">{currentAchievement.name}</div>
-            <div className="text-sm text-[var(--foreground)]/60">
+            <div className="text-sm text-[var(--foreground-subtle)]">
               {currentAchievement.description}
             </div>
           </div>
           <button
             onClick={handleDismiss}
-            className="rounded-lg p-1 text-[var(--foreground)]/60 transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
+            className="rounded-lg p-1 text-[var(--foreground-subtle)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
             aria-label="Dismiss achievement notification"
           >
             <Icon icon={X} size="sm" />

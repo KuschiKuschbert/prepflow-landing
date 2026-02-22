@@ -31,7 +31,7 @@ export function CleaningTabs({ activeTab, onTabChange }: CleaningTabsProps) {
               {tab === 'grid' ? (
                 <Icon icon={ClipboardCheck} size="sm" className="mr-2" aria-hidden={true} />
               ) : (
-                <MapPin className="mr-2 inline h-4 w-4" />
+                <Icon icon={MapPin} size="sm" className="mr-2" aria-hidden />
               )}
               {tab === 'grid' ? 'Cleaning Grid' : 'Cleaning Areas'}
             </button>

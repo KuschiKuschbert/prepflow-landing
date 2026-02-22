@@ -1,8 +1,9 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { AlertTriangle, CheckCircle, Plus, Thermometer } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Thermometer } from 'lucide-react';
 import Link from 'next/link';
+import { DashboardWidget } from './DashboardWidget';
 import { useTemperatureStatus } from './hooks/useTemperatureStatus';
 
 export default function TemperatureStatus() {
@@ -11,7 +12,7 @@ export default function TemperatureStatus() {
 
   if (loading) {
     return (
-      <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 glass-surface mb-6 rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
+      <DashboardWidget title="Temperature Status" icon={Thermometer} className="h-full">
         <div className="animate-pulse space-y-4">
           <div className="h-6 w-32 rounded bg-[var(--muted)]" />
           <div className="tablet:grid-cols-3 grid grid-cols-1 gap-3">
@@ -20,7 +21,7 @@ export default function TemperatureStatus() {
             ))}
           </div>
         </div>
-      </div>
+      </DashboardWidget>
     );
   }
 
@@ -49,27 +50,12 @@ export default function TemperatureStatus() {
   };
 
   return (
-    <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 glass-surface mb-6 rounded-2xl border border-[var(--border)]/30 p-4 shadow-lg">
-      <div className="tablet:mb-6 mb-4 flex items-center justify-between">
-        <div>
-          <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">
-            Temperature Status
-          </h2>
-          <p className="text-fluid-xs tablet:text-fluid-sm mt-1 text-[var(--foreground-muted)]">
-            Food safety compliance tracking
-          </p>
-        </div>
-        <Link
-          href="/webapp/temperature"
-          className="tablet:rounded-2xl flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 text-[var(--button-active-text)] transition-all duration-200 hover:shadow-[var(--primary)]/20 hover:shadow-lg active:scale-[0.98]"
-        >
-          <Icon icon={Plus} size="sm" aria-hidden={true} />
-          <span className="text-fluid-xs tablet:inline tablet:text-fluid-sm ml-2 hidden font-medium">
-            Log Temperature
-          </span>
-        </Link>
-      </div>
-
+    <DashboardWidget
+      title="Temperature Status"
+      icon={Thermometer}
+      className="h-full"
+      action={{ label: 'Log Temp', href: '/webapp/temperature' }}
+    >
       <div className="tablet:grid-cols-3 tablet:gap-4 grid grid-cols-1 gap-3">
         {/* Food Items Checked Today */}
         <div className="tablet:rounded-2xl tablet:p-4 glass-panel rounded-xl border border-[var(--border)]/30 p-3 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30">
@@ -210,6 +196,6 @@ export default function TemperatureStatus() {
           View Full Temperature Logs →
         </Link>
       </div>
-    </div>
+    </DashboardWidget>
   );
 }

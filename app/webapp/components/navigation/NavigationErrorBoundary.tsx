@@ -20,7 +20,7 @@ export function NavigationErrorBoundary({ children }: NavigationErrorBoundaryPro
   return (
     <ErrorBoundary
       fallback={
-        <div className="flex items-center justify-center p-4 text-[var(--foreground)]/60">
+        <div className="flex items-center justify-center p-4 text-[var(--foreground-subtle)]">
           <div className="text-center">
             <p className="mb-2 text-sm">Navigation error. Please refresh the page.</p>
             <button

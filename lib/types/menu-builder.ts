@@ -8,6 +8,8 @@ export interface Menu {
   is_locked?: boolean;
   locked_at?: string;
   locked_by?: string;
+  menu_type?: string;
+  food_per_person_kg?: number | null;
 }
 
 export interface MenuItem {

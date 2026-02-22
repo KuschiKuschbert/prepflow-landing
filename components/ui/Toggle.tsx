@@ -78,7 +78,7 @@ export function Toggle({
       type="button"
     >
       <span
-        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-gray-200 shadow-sm ring-0 transition-transform ${
+        className={`bg-background pointer-events-none inline-block h-5 w-5 transform rounded-full shadow-sm ring-0 transition-transform ${
           checked ? 'translate-x-[22px]' : 'translate-x-0.5'
         }`}
       />

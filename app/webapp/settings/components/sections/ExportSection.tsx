@@ -1,5 +1,6 @@
 'use client';
 
+import { Icon } from '@/components/ui/Icon';
 import { ExportThemeSelector } from '@/lib/exports/components/ExportThemeSelector';
 import { FileDown } from 'lucide-react';
 
@@ -8,19 +9,19 @@ export function ExportSection() {
     <div className="animate-in fade-in space-y-6 duration-500">
       <div className="mb-6 flex items-center gap-3">
         <div className="bg-primary/10 rounded-lg p-2">
-          <FileDown className="text-primary h-6 w-6" />
+          <Icon icon={FileDown} size="md" className="text-primary" aria-hidden />
         </div>
         <div>
-          <h2 className="text-foreground text-fluid-xl tablet:text-fluid-2xl font-bold tracking-tight">
+          <h2 className="text-fluid-xl tablet:text-fluid-2xl font-bold tracking-tight text-[var(--foreground)]">
             Export Settings
           </h2>
-          <p className="text-muted-foreground">
+          <p className="text-[var(--foreground-muted)]">
             Customize how your documents look when exported to PDF.
           </p>
         </div>
       </div>
 
-      <div className="bg-card rounded-xl border p-6">
+      <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-6">
         <ExportThemeSelector />
       </div>
     </div>

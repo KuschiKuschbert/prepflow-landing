@@ -52,6 +52,9 @@ jobs:
       - name: 📜 Audit scripts (Hygiene)
         run: npm run audit:scripts
 
+      - name: 🔒 Security audit
+        run: npm audit --audit-level=moderate
+
       - name: 🧪 Run tests
         run: npm run test
         continue-on-error: true
@@ -92,6 +95,9 @@ jobs:
           echo "📊 Build size analysis:"
           du -sh .next/static/chunks/ || echo "No chunks directory found"
           find .next/static -name "*.js" -exec ls -lh {} \; | head -10 || echo "No JS files found"
+
+      - name: 📦 Bundle budget check
+        run: npm run check:bundle
 
   # 🚀 Deploy to Vercel
   deploy:

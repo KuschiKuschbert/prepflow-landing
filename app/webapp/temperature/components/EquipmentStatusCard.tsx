@@ -67,7 +67,7 @@ export function EquipmentStatusCard({
                     : needsSetup
                       ? 'bg-[var(--color-warning)]'
                       : status.status === 'no-data'
-                        ? 'bg-gray-500'
+                        ? 'bg-[var(--foreground-subtle)]'
                         : 'bg-[var(--color-success)]'
                 }`}
               />

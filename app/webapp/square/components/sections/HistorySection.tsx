@@ -54,11 +54,11 @@ export function HistorySection() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'success':
-        return <Icon icon={CheckCircle2} size="sm" className="text-green-400" />;
+        return <Icon icon={CheckCircle2} size="sm" className="text-[var(--color-success)]" />;
       case 'error':
-        return <Icon icon={XCircle} size="sm" className="text-red-400" />;
+        return <Icon icon={XCircle} size="sm" className="text-[var(--color-error)]" />;
       default:
-        return <Icon icon={AlertCircle} size="sm" className="text-yellow-400" />;
+        return <Icon icon={AlertCircle} size="sm" className="text-[var(--color-warning)]" />;
     }
   };
 
@@ -118,7 +118,9 @@ export function HistorySection() {
                   <td className="px-6 py-4 text-sm text-[var(--foreground-muted)]">
                     {new Date(log.created_at).toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 text-sm text-red-400">{log.error_message || '-'}</td>
+                  <td className="px-6 py-4 text-sm text-[var(--color-error)]">
+                    {log.error_message || '-'}
+                  </td>
                 </tr>
               ))}
             </tbody>

@@ -57,7 +57,7 @@ export function EquipmentTemperatureRange({
       </div>
       <div className="flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--muted)]/50 px-3 py-1.5">
         <div
-          className={`h-2 w-2 rounded-full shadow-lg ${isActive ? 'bg-[var(--color-info)]' : 'bg-gray-500'}`}
+          className={`h-2 w-2 rounded-full shadow-lg ${isActive ? 'bg-[var(--color-info)]' : 'bg-[var(--foreground-subtle)]'}`}
         />
         <span className="text-xs font-semibold text-[var(--foreground-secondary)]">
           {isActive ? t('common.active', 'Active') : t('common.inactive', 'Inactive')}

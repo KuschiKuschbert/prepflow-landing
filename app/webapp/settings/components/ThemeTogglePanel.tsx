@@ -31,11 +31,11 @@ export function ThemeTogglePanel() {
   return (
     <div
       ref={ref}
-      className="mb-6 space-y-6 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/50 p-6"
+      className="mb-6 space-y-6 rounded-2xl border border-[var(--border)] bg-[var(--muted)] p-6"
     >
       <div>
         <h2 className="text-xl font-semibold text-[var(--foreground)]">Theme</h2>
-        <p className="mt-1 text-sm text-[var(--foreground)]/60">
+        <p className="mt-1 text-sm text-[var(--foreground-subtle)]">
           Choose your preferred color theme. Light mode uses brighter colors while maintaining the
           Cyber Carrot design system.
         </p>
@@ -59,7 +59,7 @@ export function ThemeTogglePanel() {
                 {displayIsDark ? 'Dark Mode' : 'Light Mode'}
               </label>
             </div>
-            <p className="mt-1 text-xs text-[var(--foreground)]/60" suppressHydrationWarning>
+            <p className="mt-1 text-xs text-[var(--foreground-subtle)]" suppressHydrationWarning>
               {displayIsDark
                 ? 'Dark theme with Cyber Carrot accents'
                 : 'Light theme with brighter colors and Cyber Carrot accents'}

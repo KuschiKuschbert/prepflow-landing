@@ -27,7 +27,7 @@ export function ProfileFormFields({ email, formData, onFieldChange }: ProfileFor
           type="email"
           value={email}
           disabled
-          className="w-full cursor-not-allowed rounded-2xl border border-[var(--border)] bg-[var(--muted)]/50 px-4 py-3 text-[var(--foreground-muted)]"
+          className="w-full cursor-not-allowed rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground-muted)]"
         />
         <p className="mt-1 text-xs text-[var(--foreground-subtle)]">
           Email is managed by your authentication provider and can&apos;t be changed here.

@@ -122,7 +122,7 @@ function NavigationHeaderBase({
           shouldHideHeader && '-translate-y-full',
           isScrolled
             ? 'glass-surface border-b border-[var(--border)]/30 shadow-md'
-            : 'bg-transparent',
+            : 'border-b border-[var(--border)]/30 bg-[var(--background)]',
           className,
         )}
       >

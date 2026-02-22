@@ -67,7 +67,7 @@ export default function PerformanceActions({
       </button>
       <button
         onClick={onToggleCharts}
-        className="tablet:w-auto tablet:px-6 tablet:text-base flex min-h-[36px] w-full items-center justify-center gap-2 rounded-lg bg-gray-600 px-3 py-2 text-sm font-medium text-[var(--foreground)] transition-colors hover:bg-gray-700"
+        className="tablet:w-auto tablet:px-6 tablet:text-base flex min-h-[36px] w-full items-center justify-center gap-2 rounded-lg bg-[var(--muted)] px-3 py-2 text-sm font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]/80"
       >
         <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
           <path

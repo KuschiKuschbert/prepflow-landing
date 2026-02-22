@@ -66,7 +66,7 @@ export function SecurityPanel() {
     return (
       <div
         ref={ref}
-        className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6"
+        className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6"
       >
         <div className="h-6 w-48 animate-pulse rounded bg-[var(--muted)]" />
         <div className="h-4 w-64 animate-pulse rounded bg-[var(--muted)]" />
@@ -79,10 +79,10 @@ export function SecurityPanel() {
       <ConfirmDialog />
       <div
         ref={ref}
-        className="mb-6 space-y-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6"
+        className="mb-6 space-y-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6"
       >
         <div>
-          <h2 className="text-xl font-semibold">Account Security</h2>
+          <h2 className="text-xl font-semibold text-[var(--foreground)]">Account Security</h2>
           <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
             Manage your account security settings and monitor login activity.
           </p>
@@ -105,7 +105,7 @@ export function SecurityPanel() {
 function PasswordSection() {
   return (
     <div className="space-y-3 border-t border-[var(--border)] pt-4">
-      <h3 className="text-lg font-medium">Password</h3>
+      <h3 className="text-lg font-medium text-[var(--foreground)]">Password</h3>
       <p className="text-sm text-[var(--foreground-muted)]">
         Your password is managed by Auth0. To change your password, please visit your Auth0
         dashboard or use the password reset feature.
@@ -125,7 +125,7 @@ function PasswordSection() {
 function TwoFactorSection() {
   return (
     <div className="space-y-3 border-t border-[var(--border)] pt-4">
-      <h3 className="text-lg font-medium">Two-Factor Authentication</h3>
+      <h3 className="text-lg font-medium text-[var(--foreground)]">Two-Factor Authentication</h3>
       <p className="text-sm text-[var(--foreground-muted)]">
         2FA is managed through Auth0. Enable it in your Auth0 dashboard for enhanced security.
       </p>

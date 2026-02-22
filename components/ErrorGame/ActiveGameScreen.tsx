@@ -36,7 +36,7 @@ export const ActiveGameScreen: React.FC<ActiveGameScreenProps> = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
-        className="text-fluid-base desktop:text-fluid-lg mb-8 text-[var(--foreground)]/60"
+        className="text-fluid-base desktop:text-fluid-lg mb-8 text-[var(--foreground-subtle)]"
       >
         <span className="desktop:inline hidden">Click</span>
         <span className="desktop:hidden">Tap</span> to extinguish before service resumes.
@@ -123,7 +123,7 @@ export const ActiveGameScreen: React.FC<ActiveGameScreenProps> = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6 }}
-        className="text-fluid-sm mt-6 text-[var(--foreground)]/40"
+        className="text-fluid-sm mt-6 text-[var(--foreground-subtle)]"
       >
         Time: {playTime}s{fastestTime !== null && ` | Best: ${fastestTime}s`}
       </motion.p>

@@ -129,7 +129,12 @@ export function GenerateFromMenuModal({ onClose, onGenerate }: GenerateFromMenuM
               </label>
               {fetchingMenus ? (
                 <div className="flex items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-8">
-                  <Loader2 className="h-5 w-5 animate-spin text-[var(--primary)]" />
+                  <Icon
+                    icon={Loader2}
+                    size="md"
+                    className="animate-spin text-[var(--primary)]"
+                    aria-hidden
+                  />
                   <span className="ml-2 text-sm text-[var(--foreground-muted)]">
                     Loading menus...
                   </span>

@@ -192,7 +192,7 @@ const GlobalWarning: React.FC<GlobalWarningProps> = ({ onHeightChange }) => {
   return (
     <div
       ref={warningRef}
-      className={`fixed right-0 left-0 z-[45] w-full border-b shadow-lg backdrop-blur-md ${styles.container} desktop:top-[calc(var(--header-height-desktop)+var(--safe-area-inset-top))] top-[calc(var(--header-height-mobile)+var(--safe-area-inset-top))] transition-all duration-300`}
+      className={`fixed right-0 left-0 z-50 w-full border-b shadow-lg backdrop-blur-md ${styles.container} desktop:top-[calc(var(--header-height-desktop)+var(--safe-area-inset-top))] top-[calc(var(--header-height-mobile)+var(--safe-area-inset-top))] transition-all duration-300`}
       style={{ pointerEvents: 'auto' }}
     >
       <div className="mx-auto max-w-7xl px-4 py-2.5">

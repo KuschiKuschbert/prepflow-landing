@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Icon } from '@/components/ui/Icon';
 import { List, X } from 'lucide-react';
 
 interface Section {
@@ -104,7 +105,7 @@ export default function TermsMobileTOC() {
                   className="rounded-full p-2 transition-colors hover:bg-[#2a2a2a]"
                   aria-label="Close table of contents"
                 >
-                  <X className="h-5 w-5 text-gray-300" />
+                  <Icon icon={X} size="md" className="text-gray-300" aria-hidden />
                 </button>
               </div>
 

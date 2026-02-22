@@ -5,7 +5,15 @@ import { Icon } from '@/components/ui/Icon';
 import { LANDING_COLORS, LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
 import { useTranslation } from '@/lib/useTranslation';
 import { motion } from 'framer-motion';
-import { BookOpen, DollarSign, Rocket, ThermometerSun, Utensils } from 'lucide-react';
+import {
+  BookOpen,
+  Calendar,
+  ClipboardList,
+  Rocket,
+  ShieldCheck,
+  Users,
+  Utensils,
+} from 'lucide-react';
 import Link from 'next/link';
 
 export default function QuickActions() {
@@ -13,36 +21,52 @@ export default function QuickActions() {
 
   const actions = [
     {
-      title: 'Add Ingredient',
-      description: 'Add new ingredients to your inventory',
+      title: 'Ingredients',
+      description: 'Manage kitchen inventory',
       icon: Utensils,
-      href: '/webapp/recipes#ingredients', // Use final destination to avoid redirect hydration mismatch
-      color: 'from-[var(--primary)] to-[var(--accent)]', // primary to accent
+      href: '/webapp/recipes#ingredients',
+      color: 'from-[var(--primary)] to-[var(--accent)]',
       glowColor: LANDING_COLORS.primary,
     },
     {
-      title: 'Create Recipe',
-      description: 'Build new recipes with cost calculation',
+      title: 'Recipes',
+      description: 'Build & cost your dishes',
       icon: BookOpen,
-      href: '/webapp/recipes', // Simplified to avoid hydration mismatch
-      color: 'from-[var(--color-info)] to-[var(--primary)]', // secondary to primary
+      href: '/webapp/recipes',
+      color: 'from-[var(--color-info)] to-[var(--primary)]',
       glowColor: LANDING_COLORS.secondary,
     },
     {
-      title: 'Temperature Log',
-      description: 'Log temperature readings for compliance',
-      icon: ThermometerSun,
-      href: '/webapp/temperature', // Simplified to avoid hydration mismatch
-      color: 'from-[var(--color-warning)] to-[#EF4444]', // Keep non-landing colors for this
-      glowColor: '#F59E0B',
+      title: 'Functions',
+      description: 'Schedule events & bookings',
+      icon: Calendar,
+      href: '/webapp/functions',
+      color: 'from-[var(--accent)] to-[var(--color-info)]',
+      glowColor: LANDING_COLORS.accent,
     },
     {
-      title: 'View Performance',
-      description: 'Analyze menu profitability',
-      icon: DollarSign,
-      href: '/webapp/performance',
-      color: 'from-[var(--accent)] to-[var(--color-info)]', // accent to secondary
-      glowColor: LANDING_COLORS.accent,
+      title: 'Customers',
+      description: 'Manage guest profiles',
+      icon: Users,
+      href: '/webapp/customers',
+      color: 'from-[#6366F1] to-[var(--accent)]',
+      glowColor: '#6366F1',
+    },
+    {
+      title: 'Prep Lists',
+      description: 'Organize daily kitchen tasks',
+      icon: ClipboardList,
+      href: '/webapp/prep-lists',
+      color: 'from-[#8B5CF6] to-[#6366F1]',
+      glowColor: '#8B5CF6',
+    },
+    {
+      title: 'Compliance',
+      description: 'Food safety & temperatures',
+      icon: ShieldCheck,
+      href: '/webapp/compliance',
+      color: 'from-[var(--color-warning)] to-[#EF4444]',
+      glowColor: '#F59E0B',
     },
   ];
 
@@ -56,7 +80,7 @@ export default function QuickActions() {
           Quick Actions
         </h2>
         <p
-          className={`${LANDING_TYPOGRAPHY.sm} desktop:${LANDING_TYPOGRAPHY.base} text-[var(--foreground)]/60`}
+          className={`${LANDING_TYPOGRAPHY.sm} desktop:${LANDING_TYPOGRAPHY.base} text-[var(--foreground-subtle)]`}
         >
           Get started with your kitchen management
         </p>
@@ -96,7 +120,7 @@ export default function QuickActions() {
                       {action.title}
                     </h3>
                     <p
-                      className={`${LANDING_TYPOGRAPHY.xs} desktop:${LANDING_TYPOGRAPHY.sm} mt-0.5 text-[var(--foreground)]/60`}
+                      className={`${LANDING_TYPOGRAPHY.xs} desktop:${LANDING_TYPOGRAPHY.sm} mt-0.5 text-[var(--foreground-subtle)]`}
                     >
                       {action.description}
                     </p>

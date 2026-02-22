@@ -126,7 +126,7 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
               <h2 className="text-fluid-2xl font-bold text-[var(--foreground)]">🏆 Achievements</h2>
               <button
                 onClick={onClose}
-                className="rounded-full p-2 text-[var(--foreground)]/80 transition-colors hover:bg-white/10 hover:text-[var(--foreground)]"
+                className="rounded-full p-2 text-[var(--foreground-muted)] transition-colors hover:bg-white/10 hover:text-[var(--foreground)]"
                 aria-label="Close achievements"
               >
                 ✕

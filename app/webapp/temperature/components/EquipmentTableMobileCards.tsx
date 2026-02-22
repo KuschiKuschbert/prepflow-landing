@@ -75,7 +75,7 @@ export function EquipmentTableMobileCards({
                         : needsSetup
                           ? 'bg-[var(--color-warning)]'
                           : hasNoData
-                            ? 'bg-gray-500'
+                            ? 'bg-[var(--foreground-subtle)]'
                             : 'bg-[var(--color-success)]'
                     }`}
                   />

@@ -68,7 +68,7 @@ export function RecipeCard({
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-zinc-600">No Image</div>
+          <div className="flex h-full items-center justify-center text-white/70">No Image</div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#1f1f1f] via-transparent to-transparent opacity-90" />
 
@@ -105,7 +105,7 @@ export function RecipeCard({
           {displayName}
         </h3>
 
-        <div className="flex items-center gap-3 text-xs font-medium text-gray-400">
+        <div className="text-muted-foreground flex items-center gap-3 text-xs font-medium">
           <div className="flex items-center gap-1">
             <span className="i-lucide-clock h-3 w-3" />
             <span>

@@ -1,3 +1,4 @@
+import { Icon } from '@/components/ui/Icon';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Camera, Search, Sparkles, X } from 'lucide-react';
 import React from 'react';
@@ -32,7 +33,7 @@ export function SpecialsHeader({
           className="mb-8 flex justify-center"
         >
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg shadow-black/40">
-            <Sparkles size={32} className="text-landing-primary" />
+            <Icon icon={Sparkles} size="xl" className="text-landing-primary" aria-hidden />
           </div>
         </motion.div>
 
@@ -79,7 +80,7 @@ export function SpecialsHeader({
           transition={{ delay: 0.3 }}
           className="focus-within:border-landing-primary/50 focus-within:ring-landing-primary/20 mx-auto flex max-w-3xl flex-wrap items-center rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-2 shadow-2xl shadow-black/20 transition-all duration-300 focus-within:ring-2"
         >
-          <Search className="mr-3 ml-4 h-5 w-5 text-white/40" />
+          <Icon icon={Search} size="md" className="mr-3 ml-4 text-white/40" aria-hidden />
 
           <div className="flex flex-1 flex-wrap items-center gap-2">
             <AnimatePresence>
@@ -96,7 +97,7 @@ export function SpecialsHeader({
                     onClick={() => removeIngredient(ing)}
                     className="rounded p-0.5 text-white/50 transition-colors hover:bg-white/10 hover:text-white"
                   >
-                    <X size={14} />
+                    <Icon icon={X} size="xs" aria-hidden />
                   </button>
                 </motion.span>
               ))}
@@ -119,7 +120,7 @@ export function SpecialsHeader({
               isAuthenticated ? 'Upload photo of ingredients' : 'Log in to use kitchen scanner'
             }
           >
-            <Camera size={20} />
+            <Icon icon={Camera} size="md" aria-hidden />
           </button>
 
           {inputInternal.length > 3 && (
@@ -129,7 +130,7 @@ export function SpecialsHeader({
               onClick={() => activeSearch(inputInternal)}
               className="bg-landing-primary/10 text-landing-primary hover:bg-landing-primary/20 mr-2 flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-colors"
             >
-              <Sparkles size={16} />
+              <Icon icon={Sparkles} size="sm" aria-hidden />
               Ask AI
             </motion.button>
           )}

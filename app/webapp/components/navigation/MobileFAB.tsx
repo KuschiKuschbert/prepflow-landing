@@ -111,7 +111,7 @@ export const MobileFAB = memo(function MobileFAB() {
               <span className="text-sm font-medium text-[var(--foreground)] landscape:text-xs">
                 New Recipe
               </span>
-              <span className="landscape:text-fluid-xs text-xs text-[var(--foreground)]/60">
+              <span className="landscape:text-fluid-xs text-xs text-[var(--foreground-subtle)]">
                 Create a dish
               </span>
             </div>
@@ -134,7 +134,7 @@ export const MobileFAB = memo(function MobileFAB() {
               <span className="text-sm font-medium text-[var(--foreground)] landscape:text-xs">
                 New Ingredient
               </span>
-              <span className="landscape:text-fluid-xs text-xs text-[var(--foreground)]/60">
+              <span className="landscape:text-fluid-xs text-xs text-[var(--foreground-subtle)]">
                 Add an item
               </span>
             </div>

@@ -115,7 +115,7 @@ export const BottomNavBar = memo(function BottomNavBar({
                 <Icon
                   icon={item.icon}
                   size="sm"
-                  className={`transition-colors duration-200 ${active ? item.color : 'text-[var(--foreground)]/60 group-hover:text-[var(--foreground)]/80'}`}
+                  className={`transition-colors duration-200 ${active ? item.color : 'text-[var(--foreground-subtle)] group-hover:text-[var(--foreground-muted)]'}`}
                   aria-hidden={true}
                 />
               </span>
@@ -134,7 +134,7 @@ export const BottomNavBar = memo(function BottomNavBar({
             <Icon
               icon={Search}
               size="sm"
-              className="text-[var(--foreground)]/60 transition-colors duration-200 group-hover:text-[var(--foreground)]/80"
+              className="text-[var(--foreground-subtle)] transition-colors duration-200 group-hover:text-[var(--foreground-muted)]"
               aria-hidden={true}
             />
           </span>
@@ -152,7 +152,7 @@ export const BottomNavBar = memo(function BottomNavBar({
             <Icon
               icon={Menu}
               size="sm"
-              className="text-[var(--foreground)]/60 transition-colors duration-200 group-hover:text-[var(--foreground)]/80"
+              className="text-[var(--foreground-subtle)] transition-colors duration-200 group-hover:text-[var(--foreground-muted)]"
               aria-hidden={true}
             />
           </span>

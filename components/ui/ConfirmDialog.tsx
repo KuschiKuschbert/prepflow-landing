@@ -153,7 +153,7 @@ export function ConfirmDialog({
   const styles = variantStyles[variant];
 
   return (
-    <div className="fixed inset-0 z-[90] flex items-center justify-center">
+    <div className="fixed inset-0 z-[80] flex items-center justify-center">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/60 backdrop-blur-sm"
@@ -193,7 +193,7 @@ export function ConfirmDialog({
           </h2>
 
           {/* Message */}
-          <p id="dialog-description" className="mb-6 text-center text-[var(--foreground)]/70">
+          <p id="dialog-description" className="mb-6 text-center text-[var(--foreground-muted)]">
             {message}
           </p>
 
@@ -202,7 +202,7 @@ export function ConfirmDialog({
             <button
               ref={cancelButtonRef}
               onClick={onCancel}
-              className="flex-1 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/40 px-4 py-3 font-semibold text-[var(--foreground)]/70 transition-all duration-200 hover:bg-[var(--muted)]/60 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none"
+              className="flex-1 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/40 px-4 py-3 font-semibold text-[var(--foreground-muted)] transition-all duration-200 hover:bg-[var(--muted)]/60 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none"
             >
               {cancelLabel}
             </button>

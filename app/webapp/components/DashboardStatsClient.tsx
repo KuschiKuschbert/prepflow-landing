@@ -9,7 +9,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { DashboardErrorAlert } from './DashboardErrorAlert';
 import DashboardStats from './DashboardStats';
-import RecentActivity from './RecentActivity';
 import { getErrorAlerts } from './helpers/getErrorAlerts';
 import type { DashboardStatsData } from './types/dashboard-stats';
 
@@ -166,7 +165,6 @@ function DashboardStatsClientContent() {
 
       {/* Dashboard Components */}
       <DashboardStats stats={stats} />
-      <RecentActivity />
     </>
   );
 }

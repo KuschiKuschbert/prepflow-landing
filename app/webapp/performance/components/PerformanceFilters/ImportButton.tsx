@@ -51,7 +51,7 @@ export function ImportButton({ onImportClick }: ImportButtonProps) {
         typeof window !== 'undefined' &&
         createPortal(
           <div
-            className="fixed z-[100] w-48 -translate-x-1/2 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-2 text-xs text-[var(--foreground-secondary)] shadow-lg"
+            className="fixed z-[80] w-48 -translate-x-1/2 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-2 text-xs text-[var(--foreground-secondary)] shadow-lg"
             style={{ top: `${importTooltipPos.top - 40}px`, left: `${importTooltipPos.left}px` }}
             onMouseEnter={() => setImportTooltipVisible(true)}
             onMouseLeave={() => setImportTooltipVisible(false)}

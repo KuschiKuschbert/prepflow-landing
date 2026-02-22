@@ -56,9 +56,9 @@ export function WebhooksSection() {
               </p>
             </div>
             {webhookStatus?.enabled ? (
-              <Icon icon={CheckCircle2} size="lg" className="text-green-400" />
+              <Icon icon={CheckCircle2} size="lg" className="text-[var(--color-success)]" />
             ) : (
-              <Icon icon={AlertCircle} size="lg" className="text-yellow-400" />
+              <Icon icon={AlertCircle} size="lg" className="text-[var(--color-warning)]" />
             )}
           </div>
 

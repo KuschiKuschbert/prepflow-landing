@@ -1,10 +1,9 @@
 'use client';
 
-import React from 'react';
+import { Icon } from '@/components/ui/Icon';
 import { useTranslation } from '@/lib/useTranslation';
 import { ComplianceType } from '../types';
 import { getTypeIcon } from '../utils';
-import { Icon } from '@/components/ui/Icon';
 
 interface ComplianceTypesGridProps {
   types: ComplianceType[];
@@ -33,7 +32,7 @@ export function ComplianceTypesGrid({ types }: ComplianceTypesGridProps) {
               className={`rounded-full px-3 py-1 text-xs font-medium ${
                 type.is_active
                   ? 'border border-[var(--color-success)]/20 bg-[var(--color-success)]/10 text-[var(--color-success)]'
-                  : 'border border-gray-400/20 bg-gray-400/10 text-[var(--foreground-muted)]'
+                  : 'border border-[var(--foreground-subtle)]/20 bg-[var(--foreground-subtle)]/10 text-[var(--foreground-muted)]'
               }`}
             >
               {type.is_active

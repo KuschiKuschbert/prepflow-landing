@@ -45,7 +45,11 @@ export function OverviewSection() {
           title="Connection Status"
           value={status.configured && status.credentialsValid ? 'Connected' : 'Not Connected'}
           icon={status.configured && status.credentialsValid ? CheckCircle2 : XCircle}
-          color={status.configured && status.credentialsValid ? 'text-green-400' : 'text-red-400'}
+          color={
+            status.configured && status.credentialsValid
+              ? 'text-[var(--color-success)]'
+              : 'text-[var(--color-error)]'
+          }
         />
         <StatusCard
           title="Environment"
@@ -57,19 +61,29 @@ export function OverviewSection() {
           title="Initial Sync"
           value={status.config?.initial_sync_completed ? 'Completed' : 'Pending'}
           icon={status.config?.initial_sync_completed ? CheckCircle2 : AlertCircle}
-          color={status.config?.initial_sync_completed ? 'text-green-400' : 'text-yellow-400'}
+          color={
+            status.config?.initial_sync_completed
+              ? 'text-[var(--color-success)]'
+              : 'text-[var(--color-warning)]'
+          }
         />
         <StatusCard
           title="Auto Sync"
           value={status.config?.auto_sync_enabled ? 'Enabled' : 'Disabled'}
           icon={RefreshCw}
-          color={status.config?.auto_sync_enabled ? 'text-green-400' : 'text-gray-400'}
+          color={
+            status.config?.auto_sync_enabled
+              ? 'text-[var(--color-success)]'
+              : 'text-[var(--foreground-muted)]'
+          }
         />
         <StatusCard
           title="Recent Errors"
           value={status.errorCount}
           icon={AlertCircle}
-          color={status.errorCount > 0 ? 'text-red-400' : 'text-green-400'}
+          color={
+            status.errorCount > 0 ? 'text-[var(--color-error)]' : 'text-[var(--color-success)]'
+          }
         />
         <StatusCard
           title="Last Sync"
@@ -191,10 +205,10 @@ export function OverviewSection() {
                 <span
                   className={`rounded-full px-2 py-1 text-xs font-medium ${
                     sync.status === 'success'
-                      ? 'bg-green-500/10 text-green-400'
+                      ? 'bg-[var(--color-success)]/10 text-[var(--color-success)]'
                       : sync.status === 'error'
-                        ? 'bg-red-500/10 text-red-400'
-                        : 'bg-yellow-500/10 text-yellow-400'
+                        ? 'bg-[var(--color-error)]/10 text-[var(--color-error)]'
+                        : 'bg-[var(--color-warning)]/10 text-[var(--color-warning)]'
                   }`}
                 >
                   {sync.status}

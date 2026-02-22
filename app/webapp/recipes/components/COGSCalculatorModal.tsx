@@ -40,7 +40,7 @@ export function COGSCalculatorModal({ isOpen, item, onClose }: COGSCalculatorMod
   // and the user can manually select the recipe if needed.
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4">
+    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 p-4">
       <div className="relative max-h-[90vh] w-full max-w-7xl rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl">
         <div className="max-h-[90vh] w-full overflow-hidden rounded-3xl bg-[var(--surface)]/95">
           {/* Modal Header */}

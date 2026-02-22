@@ -111,7 +111,7 @@ export const MobileMenuDrawer = memo(function MobileMenuDrawer({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[74] bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-[75] bg-black/60 backdrop-blur-sm"
             onClick={onClose}
             aria-hidden={true}
           />
@@ -159,7 +159,7 @@ export const MobileMenuDrawer = memo(function MobileMenuDrawer({
                       <Link
                         href={item.href}
                         onClick={item.onClick}
-                        className="flex min-h-[44px] items-center justify-between rounded-xl px-4 py-3 text-base text-white transition-colors hover:bg-white/5 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+                        className="text-fluid-base flex min-h-[44px] items-center justify-between rounded-xl px-4 py-3 text-white transition-colors hover:bg-white/5 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
                       >
                         <span>{item.label}</span>
                         <Icon
@@ -179,7 +179,7 @@ export const MobileMenuDrawer = memo(function MobileMenuDrawer({
                 {user ? (
                   <button
                     onClick={handleGoToDashboard}
-                    className="w-full rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 text-base font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#29E7CD]/20 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+                    className="text-fluid-base w-full rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#29E7CD]/20 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
                   >
                     Go to Dashboard
                   </button>
@@ -187,7 +187,7 @@ export const MobileMenuDrawer = memo(function MobileMenuDrawer({
                   <div className="space-y-3">
                     <button
                       onClick={handleSignIn}
-                      className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-white/10 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+                      className="text-fluid-base w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-3 font-semibold text-white transition-colors hover:bg-white/10 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
                     >
                       Sign In
                     </button>
@@ -197,7 +197,7 @@ export const MobileMenuDrawer = memo(function MobileMenuDrawer({
                         trackEngagement('mobile_drawer_register_click');
                         onClose();
                       }}
-                      className="block w-full rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 text-center text-base font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#29E7CD]/20 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+                      className="text-fluid-base block w-full rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 text-center font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#29E7CD]/20 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
                     >
                       Register
                     </Link>

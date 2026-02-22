@@ -113,7 +113,9 @@ export function ComplianceRecordCard({ record }: ComplianceRecordCardProps) {
         <div className="flex items-center space-x-2">
           <span
             className={`h-2 w-2 rounded-full ${
-              record.reminder_enabled ? 'bg-[var(--color-success)]' : 'bg-gray-400'
+              record.reminder_enabled
+                ? 'bg-[var(--color-success)]'
+                : 'bg-[var(--foreground-subtle)]'
             }`}
           ></span>
           <span className="text-sm text-[var(--foreground-muted)]">

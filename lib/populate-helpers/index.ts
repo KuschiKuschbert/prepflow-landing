@@ -13,13 +13,15 @@ export interface PopulateResults {
 }
 
 export { populateBasicData } from './basic-data';
+export { populateCleaningData } from './cleaning-data';
+export { populateCustomers } from './customers-data';
+export { populateDishes } from './dishes-data';
+export { populateFunctions } from './functions-data';
+export { populateMenuDishes } from './menu-dishes-data';
+export { populateMenus } from './menus-data';
+export { populateComplianceData, populateKitchenSections, populateSalesData } from './other-data';
 export { populateStaff } from './populate-staff';
 export { populateTemperatureData } from './temperature-data';
-export { populateCleaningData } from './cleaning-data';
-export { populateComplianceData, populateKitchenSections, populateSalesData } from './other-data';
-export { populateMenuDishes } from './menu-dishes-data';
-export { populateDishes } from './dishes-data';
-export { populateMenus } from './menus-data';
 
 /**
  * Clean up existing test data
@@ -29,6 +31,7 @@ export async function cleanExistingData(
 ): Promise<number> {
   const tablesToClean = [
     // Child tables first (due to foreign key constraints)
+    'function_runsheet_items',
     'temperature_logs',
     'recipe_ingredients',
     'dish_ingredients',
@@ -39,6 +42,8 @@ export async function cleanExistingData(
     'compliance_records',
     'sales_data',
     // Parent tables
+    'functions',
+    'customers',
     'menu_dishes',
     'dishes',
     'menus',

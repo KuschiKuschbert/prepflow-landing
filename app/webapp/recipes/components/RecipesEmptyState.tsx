@@ -2,6 +2,7 @@
 
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Button } from '@/components/ui/Button';
+import { Icon } from '@/components/ui/Icon';
 import { ChefHat, Plus } from 'lucide-react';
 
 export function RecipesEmptyState() {
@@ -17,7 +18,7 @@ export function RecipesEmptyState() {
           landingStyle={true}
           className="flex items-center gap-2"
         >
-          <Plus size={16} />
+          <Icon icon={Plus} size="sm" aria-hidden />
           Add Your First Recipe
         </Button>
       }

@@ -2,11 +2,10 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { AlertTriangle, Settings } from 'lucide-react';
-import React from 'react';
 import { TemperatureEquipment } from '../types';
-import { EquipmentTablePagination } from './EquipmentTablePagination';
-import { EquipmentTableMobileCards } from './EquipmentTableMobileCards';
 import { getTypeIconComponent, getTypeLabel } from '../utils/temperatureUtils';
+import { EquipmentTableMobileCards } from './EquipmentTableMobileCards';
+import { EquipmentTablePagination } from './EquipmentTablePagination';
 
 interface EquipmentTableProps {
   equipment: TemperatureEquipment[];
@@ -130,7 +129,7 @@ export function EquipmentTable({
                               : needsSetup
                                 ? 'bg-[var(--color-warning)]'
                                 : hasNoData
-                                  ? 'bg-gray-500'
+                                  ? 'bg-[var(--foreground-subtle)]'
                                   : 'bg-[var(--color-success)]'
                           }`}
                         />

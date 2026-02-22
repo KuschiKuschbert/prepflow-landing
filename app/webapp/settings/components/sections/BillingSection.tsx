@@ -116,20 +116,20 @@ export function BillingSection() {
           <div className="space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
             <div>
               <h2 className="text-xl font-semibold text-[var(--foreground)]">Current Plan</h2>
-              <p className="mt-1 text-sm text-[var(--foreground)]/80">
+              <p className="mt-1 text-sm text-[var(--foreground-muted)]">
                 Your active subscription details
               </p>
             </div>
 
             <div className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
               <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
-                <p className="text-xs text-[var(--foreground)]/60">Plan</p>
+                <p className="text-xs text-[var(--foreground-subtle)]">Plan</p>
                 <p className="text-lg font-semibold text-[var(--foreground)] capitalize">
                   {subscriptionData.subscription.tier}
                 </p>
               </div>
               <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
-                <p className="text-xs text-[var(--foreground)]/60">Status</p>
+                <p className="text-xs text-[var(--foreground-subtle)]">Status</p>
                 <div className="flex items-center gap-2">
                   <Icon
                     icon={CheckCircle}
@@ -148,14 +148,14 @@ export function BillingSection() {
               </div>
               {subscriptionData.subscription.expires_at && (
                 <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
-                  <p className="text-xs text-[var(--foreground)]/60">Renewal Date</p>
+                  <p className="text-xs text-[var(--foreground-subtle)]">Renewal Date</p>
                   <p className="text-lg font-semibold text-[var(--foreground)]">
                     {formatDate(subscriptionData.subscription.expires_at)}
                   </p>
                 </div>
               )}
               <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
-                <p className="text-xs text-[var(--foreground)]/60">Member Since</p>
+                <p className="text-xs text-[var(--foreground-subtle)]">Member Since</p>
                 <p className="text-lg font-semibold text-[var(--foreground)]">
                   {formatDate(subscriptionData.subscription.created_at)}
                 </p>
@@ -167,7 +167,7 @@ export function BillingSection() {
           <div className="space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
             <div>
               <h2 className="text-xl font-semibold text-[var(--foreground)]">Usage</h2>
-              <p className="mt-1 text-sm text-[var(--foreground)]/80">Your current data usage</p>
+              <p className="mt-1 text-sm text-[var(--foreground-muted)]">Your current data usage</p>
             </div>
 
             <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-1 gap-4">
@@ -180,7 +180,7 @@ export function BillingSection() {
                     aria-hidden={true}
                   />
                   <div>
-                    <p className="text-xs text-[var(--foreground)]/60">Ingredients</p>
+                    <p className="text-xs text-[var(--foreground-subtle)]">Ingredients</p>
                     <p className="text-2xl font-bold text-[var(--foreground)]">
                       {subscriptionData.usage.ingredients}
                     </p>
@@ -196,7 +196,7 @@ export function BillingSection() {
                     aria-hidden={true}
                   />
                   <div>
-                    <p className="text-xs text-[var(--foreground)]/60">Recipes</p>
+                    <p className="text-xs text-[var(--foreground-subtle)]">Recipes</p>
                     <p className="text-2xl font-bold text-[var(--foreground)]">
                       {subscriptionData.usage.recipes}
                     </p>
@@ -212,7 +212,7 @@ export function BillingSection() {
                     aria-hidden={true}
                   />
                   <div>
-                    <p className="text-xs text-[var(--foreground)]/60">Menu Dishes</p>
+                    <p className="text-xs text-[var(--foreground-subtle)]">Menu Dishes</p>
                     <p className="text-2xl font-bold text-[var(--foreground)]">
                       {subscriptionData.usage.dishes}
                     </p>
@@ -226,7 +226,7 @@ export function BillingSection() {
           <div className="space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
             <div>
               <h2 className="text-xl font-semibold text-[var(--foreground)]">Billing Management</h2>
-              <p className="mt-1 text-sm text-[var(--foreground)]/80">
+              <p className="mt-1 text-sm text-[var(--foreground-muted)]">
                 Manage your payment method, view invoices, and update your subscription.
               </p>
             </div>
@@ -249,7 +249,7 @@ export function BillingSection() {
               </button>
             </div>
 
-            <p className="text-xs text-[var(--foreground)]/60">
+            <p className="text-xs text-[var(--foreground-subtle)]">
               The billing portal allows you to update your payment method, view billing history, and
               manage your subscription.
             </p>

@@ -18,6 +18,8 @@ interface MenuBuilderClientProps {
   onBack: () => void;
 }
 
+type MenuTab = 'a_la_carte' | 'function';
+
 export default function MenuBuilderClient({
   selectedMenu,
   setSelectedMenu,
@@ -37,6 +39,7 @@ export default function MenuBuilderClient({
     fetchMenus,
     cachedMenus,
   } = useMenuData();
+  const [activeTab, setActiveTab] = useState<MenuTab>('a_la_carte');
   const { checkingDb, dbError, setDbError, checkDatabaseTables, cachedDbCheck } =
     useDatabaseCheck();
   const [showMenuForm, setShowMenuForm] = useState(false);
@@ -190,7 +193,30 @@ export default function MenuBuilderClient({
       {error && !dbError && <ErrorBanner error={error} onRetry={handleRetryFetch} />}
       {!dbError && (
         <>
-          <div className="mb-6 flex justify-end">
+          {/* Tab Bar */}
+          <div className="mb-6 flex items-center justify-between">
+            <div className="flex gap-1 rounded-xl bg-[var(--background)] p-1">
+              <button
+                onClick={() => setActiveTab('a_la_carte')}
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
+                  activeTab === 'a_la_carte'
+                    ? 'bg-[var(--muted)] text-[var(--foreground)] shadow-sm'
+                    : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
+                }`}
+              >
+                A La Carte
+              </button>
+              <button
+                onClick={() => setActiveTab('function')}
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
+                  activeTab === 'function'
+                    ? 'bg-[var(--muted)] text-[var(--foreground)] shadow-sm'
+                    : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
+                }`}
+              >
+                Function Menus
+              </button>
+            </div>
             <button
               onClick={handleCreateMenuClick}
               className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-medium text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80 hover:shadow-xl"
@@ -200,7 +226,12 @@ export default function MenuBuilderClient({
           </div>
 
           <MenuList
-            menus={menus}
+            menus={menus.filter(m =>
+              activeTab === 'a_la_carte'
+                ? !m.menu_type || m.menu_type === 'a_la_carte'
+                : m.menu_type === 'function' ||
+                  (m.menu_type && m.menu_type.startsWith('function_')),
+            )}
             onSelectMenu={handleSelectMenu}
             onEditMenu={handleEditMenuClick}
             onDeleteMenu={handleDeleteMenu}

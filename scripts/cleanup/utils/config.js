@@ -55,6 +55,18 @@ const STANDARDS_CONFIG = {
     fixable: false,
     requiredFields: ['description', 'param', 'returns'],
   },
+  'z-index': {
+    name: 'Z-Index Hierarchy',
+    source: 'design.mdc#z-index-hierarchy',
+    severity: 'warning',
+    fixable: false,
+  },
+  'theme-consistency': {
+    name: 'Theme Consistency',
+    source: 'design.mdc#cyber-carrot-design-system',
+    severity: 'warning',
+    fixable: false,
+  },
   icons: {
     name: 'Icon Standards',
     source: 'design.mdc#icon-standards',

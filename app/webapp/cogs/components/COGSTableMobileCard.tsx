@@ -1,8 +1,8 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { Edit, Trash2 } from 'lucide-react';
 import { COGSCalculation } from '@/lib/types/cogs';
+import { Edit, Trash2 } from 'lucide-react';
 
 interface COGSTableMobileCardProps {
   calc: COGSCalculation;
@@ -92,7 +92,7 @@ export function COGSTableMobileCard({
             </button>
             <button
               onClick={onCancelEdit}
-              className="rounded bg-gray-600 px-3 py-1 text-xs text-[var(--foreground)] transition-colors duration-200 hover:bg-gray-500"
+              className="rounded bg-[var(--muted)] px-3 py-1 text-xs text-[var(--foreground)] transition-colors duration-200 hover:bg-[var(--muted)]/80"
             >
               Cancel
             </button>

@@ -26,6 +26,7 @@ alwaysApply: true
   - Body Large: base-lg (Main content)
   - Label Large: sm (Labels & metadata)
   - Label Small: xs (Captions & fine print)
+- **Design Standards:** design.mdc is the source of truth for required patterns. See `docs/VISUAL_HIERARCHY_STANDARDS.md` for detailed hierarchy guidance with landing vs webapp scoping.
 
 ### **Cyber Carrot Component Guidelines**
 

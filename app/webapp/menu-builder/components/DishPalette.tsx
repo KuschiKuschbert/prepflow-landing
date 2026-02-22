@@ -1,10 +1,10 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
+import { Dish, Recipe } from '@/lib/types/menu-builder';
 import { ChefHat, Plus, Search, Utensils, X } from 'lucide-react';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { Dish, Recipe } from '@/lib/types/menu-builder';
 
 interface DishPaletteProps {
   dishes: Dish[];
@@ -13,6 +13,7 @@ interface DishPaletteProps {
     item: { type: 'dish' | 'recipe'; id: string; name: string },
     element: HTMLElement,
   ) => void;
+  menuType?: string;
 }
 
 function TappableDish({
@@ -105,11 +106,19 @@ function TappableRecipe({
   );
 }
 
-export default function DishPalette({ dishes, recipes, onItemTap }: DishPaletteProps) {
+export default function DishPalette({
+  dishes,
+  recipes,
+  onItemTap,
+  menuType = 'a_la_carte',
+}: DishPaletteProps) {
   const [searchQuery, setSearchQuery] = useState('');
+
+  const isFunctionMenu = menuType !== 'a_la_carte';
 
   // Filter dishes and recipes based on search query
   const filteredDishes = useMemo(() => {
+    if (isFunctionMenu) return []; // Function Menus only use Recipes
     if (!searchQuery.trim()) return dishes;
     const query = searchQuery.toLowerCase();
     return dishes.filter(
@@ -130,7 +139,7 @@ export default function DishPalette({ dishes, recipes, onItemTap }: DishPaletteP
     );
   }, [recipes, searchQuery]);
 
-  const hasItems = dishes.length > 0 || recipes.length > 0;
+  const hasItems = (isFunctionMenu ? false : dishes.length > 0) || recipes.length > 0;
   const hasFilteredItems = filteredDishes.length > 0 || filteredRecipes.length > 0;
 
   return (

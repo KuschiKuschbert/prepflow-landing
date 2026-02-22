@@ -1,5 +1,6 @@
 'use client';
 
+import { useTheme } from '@/lib/theme/useTheme';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
@@ -42,7 +43,8 @@ interface FloatingParticlesProps {
   className?: string;
 }
 
-const defaultColors = ['#29E7CD', '#D925C7', '#3B82F6'];
+const darkColors = ['#29E7CD', '#D925C7', '#3B82F6'];
+const lightColors = ['#1a9d8a', '#a01a8a', '#2563eb'];
 
 /**
  * FloatingParticles component creates animated floating particles in the background
@@ -52,13 +54,18 @@ export function FloatingParticles({
   count = 30,
   minSize = 2,
   maxSize = 6,
-  colors = defaultColors,
+  colors = darkColors,
   speed = 1,
   className = '',
 }: FloatingParticlesProps) {
   const [particles, setParticles] = useState<Particle[]>([]);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const { theme } = useTheme();
+
+  // Use theme-aware colors: darker for light mode visibility, neon for dark mode
+  const themeColors =
+    colors === darkColors ? (theme === 'light' ? lightColors : darkColors) : colors;
 
   useEffect(() => {
     setIsMounted(true);
@@ -96,7 +103,7 @@ export function FloatingParticles({
         x: initialX,
         y: initialY,
         size: minSize + Math.random() * (maxSize - minSize),
-        color: colors[Math.floor(Math.random() * colors.length)],
+        color: themeColors[Math.floor(Math.random() * themeColors.length)],
         duration: 20 + Math.random() * 15, // 20-35 seconds for smoother movement
         delay: Math.random() * 3,
         // Store pixel-based movement data for animation
@@ -106,7 +113,7 @@ export function FloatingParticles({
     });
 
     setParticles(newParticles as Particle[]);
-  }, [count, minSize, maxSize, colors, isMounted, reducedMotion]);
+  }, [count, minSize, maxSize, themeColors, isMounted, reducedMotion]);
 
   // Don't render on server to prevent hydration mismatch
   if (!isMounted) {

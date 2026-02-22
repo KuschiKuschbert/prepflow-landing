@@ -46,7 +46,7 @@ export function CookingFocusMode({ isOpen, onClose, title, instructions }: Cooki
   if (!isOpen) return null;
 
   return (
-    <div className="animate-in fade-in fixed inset-0 z-[100] flex flex-col bg-[#111] text-white duration-300">
+    <div className="animate-in fade-in fixed inset-0 z-[80] flex flex-col bg-[#111] text-white duration-300">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-white/10 bg-[#1a1a1a] px-6 py-4">
         <h2 className="max-w-2xl truncate text-xl font-bold">{title}</h2>
@@ -118,7 +118,7 @@ export function CookingFocusMode({ isOpen, onClose, title, instructions }: Cooki
           className={`flex items-center gap-2 rounded-full px-8 py-3 text-lg font-bold shadow-lg transition-all ${
             currentStep === effectiveSteps.length - 1
               ? 'bg-emerald-600 shadow-emerald-900/20 hover:bg-emerald-500'
-              : 'bg-white text-black hover:bg-gray-200'
+              : 'bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--muted)]'
           }`}
         >
           {currentStep === effectiveSteps.length - 1 ? (

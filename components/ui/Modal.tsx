@@ -1,5 +1,6 @@
 'use client';
 
+import { Icon } from '@/components/ui/Icon';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useEffect } from 'react';
@@ -42,7 +43,7 @@ export function Modal({ isOpen, onClose, title, children, maxWidth = '2xl' }: Mo
   return createPortal(
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -62,7 +63,7 @@ export function Modal({ isOpen, onClose, title, children, maxWidth = '2xl' }: Mo
                 onClick={onClose}
                 className="rounded-full bg-[var(--muted)] p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--primary)]/10 hover:text-[var(--primary)]"
               >
-                <X size={20} />
+                <Icon icon={X} size="md" aria-hidden />
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-6">{children}</div>

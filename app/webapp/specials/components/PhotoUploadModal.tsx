@@ -95,7 +95,7 @@ export function PhotoUploadModal({
                   onClick={onClose}
                   className="rounded-lg p-2 text-white/50 transition-colors hover:bg-[#2a2a2a] hover:text-white"
                 >
-                  <X size={20} />
+                  <Icon icon={X} size="md" aria-hidden />
                 </button>
               </div>
 

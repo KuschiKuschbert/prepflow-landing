@@ -7,12 +7,13 @@ This document defines the visual hierarchy standards for the PrepFlow applicatio
 ## Table of Contents
 
 1. [Overview](#overview)
-2. [Typography Hierarchy](#typography-hierarchy)
-3. [Spacing Hierarchy](#spacing-hierarchy)
-4. [Color & Contrast Hierarchy](#color--contrast-hierarchy)
-5. [Component Sizing Hierarchy](#component-sizing-hierarchy)
-6. [Usage Guidelines](#usage-guidelines)
-7. [Implementation Examples](#implementation-examples)
+2. [Scope: Required vs Flexible vs Aspirational](#scope-required-vs-flexible-vs-aspirational)
+3. [Typography Hierarchy](#typography-hierarchy)
+4. [Spacing Hierarchy](#spacing-hierarchy)
+5. [Color & Contrast Hierarchy](#color--contrast-hierarchy)
+6. [Component Sizing Hierarchy](#component-sizing-hierarchy)
+7. [Usage Guidelines](#usage-guidelines)
+8. [Implementation Examples](#implementation-examples)
 
 ---
 
@@ -31,7 +32,38 @@ Visual hierarchy is the arrangement of visual elements to show their order of im
 
 - **Utilities:** Use `lib/hierarchy-utils.ts` for consistent hierarchy application
 - **Standards:** Follow this document for all new components and pages
-- **Audit:** Run `npm run audit:hierarchy` to check for violations
+- **Audit:** Run `npm run audit:hierarchy` to check for violations (advisory; not blocking). Use during design reviews; fix high-priority violations when touching affected files.
+- **Source of Truth:** `.cursor/rules/design.mdc` is the canonical design system; this doc provides detailed hierarchy guidance
+
+---
+
+## Scope: Required vs Flexible vs Aspirational
+
+Rules vary by area. design.mdc is the source of truth; this section clarifies what is enforced where.
+
+### Required (Landing)
+
+- Fluid typography (`text-fluid-*`) for all text
+- Generous spacing for hero sections
+- Cyber Carrot gradients for primary CTAs
+- `font-sans` (Geist) or `font-mono` for code only
+
+### Required (Webapp)
+
+- Cyber Carrot colors and z-index hierarchy
+- Theme tokens: `bg-background`, `text-foreground` (no raw `bg-white`/`bg-black`)
+- Primary buttons: Cyber Carrot gradient
+
+### Flexible (Webapp)
+
+- **Typography:** Standard Tailwind (`text-xs`, `text-sm`, `text-base`) is valid for tables, forms, dense UI per design.mdc Data Tables
+- **Colors:** `text-white`, `text-gray-300`, `text-gray-400`, `text-gray-500` allowed in data tables and forms
+- **Spacing:** 4px base unit (Tailwind default) is acceptable
+
+### Aspirational
+
+- Full fluid typography and `hierarchy-utils` in webapp (nice-to-have, not enforced)
+- Semantic color variables (`text-muted-foreground`) preferred over `text-gray-*` for new code
 
 ---
 
@@ -43,7 +75,7 @@ The typography hierarchy consists of 7 levels, from largest (Display) to smalles
 
 #### 1. Display
 
-- **Size:** `text-fluid-5xl tablet:text-fluid-6xl desktop:text-fluid-7xl`
+- **Size:** `text-fluid-4xl` (landing; xs-4xl defined in globals.css)
 - **Weight:** `font-light` (300)
 - **Line Height:** `leading-tight`
 - **Usage:** Hero headlines, landing page titles, major announcements
@@ -97,12 +129,24 @@ The typography hierarchy consists of 7 levels, from largest (Display) to smalles
 - **Usage:** Captions, hints, fine print, timestamps
 - **Example:** Timestamp "2 hours ago", hint text "Enter ingredient name"
 
+### Typography by Area (Landing vs Webapp)
+
+| Context         | Landing                 | Webapp                       |
+| --------------- | ----------------------- | ---------------------------- |
+| Headlines/hero  | `text-fluid-*` required | Fluid preferred              |
+| Page titles     | `text-fluid-3xl` etc.   | Fluid preferred              |
+| Table headers   | N/A                     | `text-xs` valid (design.mdc) |
+| Table cells     | N/A                     | `text-sm` valid (design.mdc) |
+| Forms, labels   | `text-fluid-sm`         | `text-sm`, `text-base` valid |
+| hierarchy-utils | Encouraged              | Optional                     |
+
 ### Typography Usage Guidelines
 
 1. **Use semantic HTML** - Use `<h1>`, `<h2>`, `<h3>` tags appropriately
 2. **Maintain progression** - Don't skip hierarchy levels (e.g., Display → Title)
 3. **Consistent sizing** - Use the same hierarchy level for similar content types
-4. **Responsive typography** - Always use fluid typography classes (`text-fluid-*`)
+4. **Landing:** Use fluid typography (`text-fluid-*`) for all text
+5. **Webapp:** Fluid typography preferred; `text-xs`, `text-sm`, `text-base` valid for tables, forms, dense UI per design.mdc
 
 ### Implementation
 
@@ -403,9 +447,20 @@ export function IngredientForm() {
 
 ---
 
+## Design Tokens
+
+Prefer semantic tokens for new code:
+
+- **Background:** `bg-background`, `bg-muted`, `bg-surface`
+- **Text:** `text-foreground`, `text-muted-foreground`
+- **Borders:** `border-border`
+- **Avoid:** Raw hex (`bg-[#1f1f1f]`) or `bg-white`/`bg-black` when theme tokens exist
+
+---
+
 ## Related Documentation
 
 - **Hierarchy Utilities:** `lib/hierarchy-utils.ts` - Implementation utilities
 - **Landing Page Styles:** `lib/landing-styles.ts` - Landing page specific styles
-- **Design System:** `.cursor/rules/design.mdc` - Cyber Carrot Design System
+- **Design System:** `.cursor/rules/design.mdc` - Cyber Carrot Design System (source of truth)
 - **Audit Report:** `docs/VISUAL_HIERARCHY_AUDIT_REPORT.md` - Current state analysis

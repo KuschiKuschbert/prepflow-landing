@@ -146,7 +146,7 @@ export function NotificationsPanel() {
     return (
       <div
         ref={ref}
-        className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6"
+        className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6"
       >
         <div className="h-6 w-48 animate-pulse rounded bg-[var(--muted)]" />
         <div className="h-4 w-64 animate-pulse rounded bg-[var(--muted)]" />
@@ -157,10 +157,12 @@ export function NotificationsPanel() {
   return (
     <div
       ref={ref}
-      className="mb-6 space-y-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6"
+      className="mb-6 space-y-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6"
     >
       <div>
-        <h2 className="text-xl font-semibold">Notifications & Preferences</h2>
+        <h2 className="text-xl font-semibold text-[var(--foreground)]">
+          Notifications & Preferences
+        </h2>
         <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
           Control how and when you receive notifications from PrepFlow.
         </p>
@@ -170,7 +172,7 @@ export function NotificationsPanel() {
       <div className="space-y-4 border-t border-[var(--border)] pt-4">
         <div className="flex items-center gap-2">
           <Icon icon={Mail} size="md" className="text-[var(--primary)]" aria-hidden={true} />
-          <h3 className="text-lg font-medium">Email Notifications</h3>
+          <h3 className="text-lg font-medium text-[var(--foreground)]">Email Notifications</h3>
         </div>
         <div className="space-y-4">
           <ToggleSwitch
@@ -204,7 +206,7 @@ export function NotificationsPanel() {
       <div className="space-y-4 border-t border-[var(--border)] pt-4">
         <div className="flex items-center gap-2">
           <Icon icon={Bell} size="md" className="text-[var(--primary)]" aria-hidden={true} />
-          <h3 className="text-lg font-medium">In-App Preferences</h3>
+          <h3 className="text-lg font-medium text-[var(--foreground)]">In-App Preferences</h3>
         </div>
         <div className="space-y-4">
           <ToggleSwitch

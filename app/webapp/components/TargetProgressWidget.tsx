@@ -1,5 +1,7 @@
 'use client';
 
+import { Target } from 'lucide-react';
+import { DashboardWidget } from './DashboardWidget';
 interface CircularProgressProps {
   value: number; // 0-100
   label: string;
@@ -69,19 +71,21 @@ export function CircularProgress({
 
 export function TargetProgressWidget() {
   return (
-    <div className="grid grid-cols-2 gap-4">
-      <CircularProgress
-        value={25}
-        label="Weekly Target"
-        subtitle="25% achieved"
-        color="var(--primary)"
-      />
-      <CircularProgress
-        value={50}
-        label="Monthly Target"
-        subtitle="50% achieved"
-        color="var(--accent)"
-      />
-    </div>
+    <DashboardWidget title="Current Targets" icon={Target} className="h-full">
+      <div className="grid h-full grid-cols-2 gap-4">
+        <CircularProgress
+          value={25}
+          label="Weekly Target"
+          subtitle="25% achieved"
+          color="var(--primary)"
+        />
+        <CircularProgress
+          value={50}
+          label="Monthly Target"
+          subtitle="50% achieved"
+          color="var(--accent)"
+        />
+      </div>
+    </DashboardWidget>
   );
 }

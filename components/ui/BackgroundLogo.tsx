@@ -3,7 +3,7 @@
 export default function BackgroundLogo() {
   return (
     <div
-      className="pointer-events-none fixed inset-0 -z-15 flex items-center justify-center overflow-hidden"
+      className="pointer-events-none fixed inset-0 -z-10 flex items-center justify-center overflow-hidden"
       aria-hidden={true}
     >
       {/* Replaced Image with CSS Gradient for LCP Optimization */}

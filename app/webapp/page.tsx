@@ -44,6 +44,16 @@ const ChefPerformanceInsights = dynamic(() => import('./components/ChefPerforman
   loading: () => <PageSkeleton />,
 });
 
+const UpcomingFunctionsWidget = dynamic(() => import('./components/UpcomingFunctionsWidget'), {
+  ssr: false,
+  loading: () => <PageSkeleton />,
+});
+
+const RecentActivity = dynamic(() => import('./components/RecentActivity'), {
+  ssr: false,
+  loading: () => <PageSkeleton />,
+});
+
 const KitchenCharts = dynamic(() => import('./components/KitchenCharts'), {
   ssr: false,
   loading: () => null, // Charts are non-critical, no loading state
@@ -93,51 +103,54 @@ export default function WebAppDashboard() {
         {/* Static Quick Actions - Renders Instantly */}
         <QuickActions />
 
-        {/* Dynamic Content - Loads After Initial Render */}
-        <div className="mb-10 grid grid-cols-1 gap-8 lg:grid-cols-3">
-          <div className="lg:col-span-2">
+        {/* Unified Dashboard Grid */}
+        <div className="tablet:gap-6 desktop:gap-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-8">
+          {/* Row 1: Immediate Dashboard Status (Stats & Targets) */}
+          <div className="lg:col-span-2 xl:col-span-3">
             <Suspense fallback={<PageSkeleton />}>
               {mountStage >= 1 && <DashboardStatsClient />}
             </Suspense>
           </div>
-          <div className="lg:col-span-1">
-            <Suspense fallback={<PageSkeleton />}>
-              {mountStage >= 1 && <TargetProgressWidget />}
-            </Suspense>
-          </div>
-        </div>
 
-        {/* Widget-Based Dashboard Layout - Enhanced spacing for large screens */}
-        <div className="tablet:space-y-8 desktop:space-y-10 large-desktop:space-y-12 space-y-6 xl:space-y-14 2xl:space-y-16">
-          {/* Row 1: Kitchen Operations + Menu Overview */}
-          <div className="tablet:gap-8 desktop:grid-cols-2 desktop:gap-10 large-desktop:gap-12 grid grid-cols-1 gap-6 xl:gap-14 2xl:gap-16">
-            <Suspense fallback={<PageSkeleton />}>
-              {mountStage >= 2 ? <KitchenOperations /> : <PageSkeleton />}
-            </Suspense>
-            <Suspense fallback={<PageSkeleton />}>
-              {mountStage >= 2 ? <MenuOverview /> : <PageSkeleton />}
-            </Suspense>
+          <div className="col-span-1 lg:col-span-1 xl:col-span-1">
+            <Suspense fallback={null}>{mountStage >= 1 && <TargetProgressWidget />}</Suspense>
           </div>
 
-          {/* Row 2: Kitchen Alerts + Temperature Status */}
-          <div className="tablet:gap-8 desktop:grid-cols-2 desktop:gap-10 large-desktop:gap-12 grid grid-cols-1 gap-6 xl:gap-14 2xl:gap-16">
-            <Suspense fallback={<PageSkeleton />}>
-              {mountStage >= 3 ? <KitchenAlerts /> : <PageSkeleton />}
-            </Suspense>
-            <Suspense fallback={<PageSkeleton />}>
-              {mountStage >= 3 ? <TemperatureStatus /> : <PageSkeleton />}
-            </Suspense>
+          {/* Row 2: Critical Operations & Alerts (Functions, Alerts, Temp) */}
+          <div className="col-span-1 md:col-span-2 xl:col-span-2">
+            <Suspense fallback={null}>{mountStage >= 2 && <UpcomingFunctionsWidget />}</Suspense>
           </div>
 
-          {/* Row 3: Chef Performance Insights */}
-          <div className="tablet:gap-8 desktop:gap-10 large-desktop:gap-12 grid grid-cols-1 gap-6 xl:gap-14 2xl:gap-16">
-            <Suspense fallback={<PageSkeleton />}>
-              {mountStage >= 4 ? <ChefPerformanceInsights /> : <PageSkeleton />}
-            </Suspense>
+          <div className="col-span-1 md:col-span-1 xl:col-span-1">
+            <Suspense fallback={null}>{mountStage >= 3 && <KitchenAlerts />}</Suspense>
           </div>
 
-          {/* Row 4: Kitchen Charts */}
-          <Suspense fallback={null}>{mountStage >= 4 && <KitchenCharts />}</Suspense>
+          <div className="col-span-1 md:col-span-1 xl:col-span-1">
+            <Suspense fallback={null}>{mountStage >= 3 && <TemperatureStatus />}</Suspense>
+          </div>
+
+          {/* Row 3: Daily Task Management (Kitchen Ops & Menu Overview) */}
+          <div className="col-span-1 md:col-span-2 xl:col-span-2">
+            <Suspense fallback={null}>{mountStage >= 2 && <KitchenOperations />}</Suspense>
+          </div>
+
+          <div className="col-span-1 md:col-span-2 xl:col-span-2">
+            <Suspense fallback={null}>{mountStage >= 2 && <MenuOverview />}</Suspense>
+          </div>
+
+          {/* Row 4: Performance & History (Recent Activity & Insights) */}
+          <div className="col-span-1 md:col-span-2 xl:col-span-2">
+            <Suspense fallback={null}>{mountStage >= 4 && <RecentActivity />}</Suspense>
+          </div>
+
+          <div className="col-span-1 md:col-span-2 xl:col-span-2">
+            <Suspense fallback={null}>{mountStage >= 4 && <ChefPerformanceInsights />}</Suspense>
+          </div>
+
+          {/* Row 5: Data Visualization (Full width Charts) */}
+          <div className="col-span-1 mt-4 md:col-span-2 lg:col-span-3 xl:col-span-4">
+            <Suspense fallback={null}>{mountStage >= 4 && <KitchenCharts />}</Suspense>
+          </div>
         </div>
       </div>
     </ResponsivePageContainer>

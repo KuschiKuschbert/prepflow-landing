@@ -14,6 +14,7 @@
  */
 
 import { useState, useRef, useEffect } from 'react';
+import { Icon as IconWrapper } from '@/components/ui/Icon';
 import { MoreVertical, X, type LucideIcon } from 'lucide-react';
 
 export interface Action {
@@ -96,7 +97,7 @@ export function ResponsiveCardActions({
     curbos: {
       overlay: {
         container: 'bg-black/40 backdrop-blur-[2px]',
-        buttonPrimary: 'bg-[#C0FF02] text-black hover:bg-white',
+        buttonPrimary: 'bg-[#C0FF02] text-black hover:bg-background',
         buttonSecondary: 'bg-neutral-900/90 text-white',
         buttonDanger:
           'bg-red-500/20 text-red-500 border border-red-500/50 hover:bg-red-500 hover:text-white',
@@ -141,7 +142,7 @@ export function ResponsiveCardActions({
         className={`hover-capable-show absolute inset-0 ${styles.overlay.container} z-20 translate-y-4 items-center justify-center gap-3 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 ${overlayClassName}`}
       >
         {actions.map(action => {
-          const Icon = action.icon;
+          const ActionIcon = action.icon;
           const buttonClass =
             action.variant === 'primary'
               ? styles.overlay.buttonPrimary
@@ -163,7 +164,7 @@ export function ResponsiveCardActions({
               title={action.label}
               aria-label={action.label}
             >
-              <Icon size={18} strokeWidth={2.5} />
+              <IconWrapper icon={ActionIcon} size="sm" aria-hidden />
             </button>
           );
         })}
@@ -183,7 +184,7 @@ export function ResponsiveCardActions({
             className={`rounded-full p-2 shadow-xl backdrop-blur-md transition-all active:scale-90 ${styles.menu.toggleButton}`}
             aria-label="Show actions"
           >
-            <MoreVertical size={20} />
+            <IconWrapper icon={MoreVertical} size="md" aria-hidden />
           </button>
         ) : (
           <div
@@ -197,11 +198,11 @@ export function ResponsiveCardActions({
               className={`rounded-full p-2 backdrop-blur-md transition-transform active:scale-95 ${styles.menu.closeButton}`}
               aria-label="Close menu"
             >
-              <X size={16} />
+              <IconWrapper icon={X} size="sm" aria-hidden />
             </button>
             <div className={`my-0.5 h-px w-4 ${styles.menu.divider}`} />
             {actions.map(action => {
-              const Icon = action.icon;
+              const ActionIcon = action.icon;
               const buttonClass =
                 action.variant === 'primary'
                   ? styles.menu.buttonPrimary
@@ -222,7 +223,7 @@ export function ResponsiveCardActions({
                   }`}
                   aria-label={action.label}
                 >
-                  <Icon size={16} strokeWidth={2.5} />
+                  <IconWrapper icon={ActionIcon} size="sm" aria-hidden />
                 </button>
               );
             })}

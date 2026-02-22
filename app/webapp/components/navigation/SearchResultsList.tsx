@@ -15,7 +15,7 @@ export function SearchResultsList({ filtered, query, onClose }: SearchResultsLis
   if (filtered.length === 0) {
     return (
       <div
-        className="py-8 text-center text-[var(--foreground)]/50"
+        className="py-8 text-center text-[var(--foreground-subtle)]"
         role="status"
         aria-live="polite"
       >

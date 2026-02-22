@@ -34,7 +34,7 @@ export function DataUsageSection({ dataUsage }: DataUsageSectionProps) {
     <div className="space-y-3 border-t border-[var(--border)] pt-4">
       <div className="flex items-center gap-2">
         <Icon icon={Database} size="md" className="text-[var(--primary)]" aria-hidden={true} />
-        <h3 className="text-lg font-medium">Data Usage</h3>
+        <h3 className="text-lg font-medium text-[var(--foreground)]">Data Usage</h3>
       </div>
       <div className="desktop:grid-cols-2 grid grid-cols-1 gap-3">
         {Object.entries(dataUsage.usage).map(([key, value]) => (

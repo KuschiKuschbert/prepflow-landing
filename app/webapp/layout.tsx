@@ -88,6 +88,16 @@ const WebappBackground = dynamic(
   },
 );
 
+const SafeGradientOrbs = dynamic(() => import('../components/landing/SafeGradientOrbs'), {
+  ssr: false,
+  loading: () => null,
+});
+
+const BackgroundLogo = dynamic(() => import('@/components/ui/BackgroundLogo'), {
+  ssr: false,
+  loading: () => null,
+});
+
 const DemoWelcomeToast = dynamic(
   () =>
     import('@/components/demo/DemoWelcomeToast').then(mod => ({ default: mod.DemoWelcomeToast })),
@@ -239,17 +249,25 @@ function WebAppLayoutContent({
 
   return (
     <div className={`${inter.className} min-h-screen bg-transparent text-[var(--foreground)]`}>
+      {/* Base background - theme-aware (dark: #0a0a0a, light: #ffffff) */}
+      <div className="fixed inset-0 -z-20 bg-[var(--background)]" aria-hidden={true} />
+
       {/* Pulsating Concentric Circles Background */}
       <SafeAnimatedBackground theme={theme} />
 
-      {/* Webapp Background Effects (spotlight, grid, glows, particles) */}
+      {/* Webapp Background Effects (spotlight, grid, glows, watermarks, particles) */}
       <WebappBackground
         spotlight={true}
         grid={true}
-        cornerGlows={false}
-        watermarks={false}
+        cornerGlows={true}
+        watermarks={true}
         particles={true}
+        spotlightIntensity={0.06}
       />
+
+      {/* Supplemental background layers - match landing page */}
+      <SafeGradientOrbs />
+      <BackgroundLogo />
 
       {/* Modern Navigation */}
       <ErrorBoundary>

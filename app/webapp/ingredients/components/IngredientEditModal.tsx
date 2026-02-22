@@ -147,7 +147,7 @@ export default function IngredientEditModal({
   return (
     <div
       ref={backdropRef}
-      className="fixed inset-0 z-[100] flex items-start justify-center p-4 pt-[10vh]"
+      className="fixed inset-0 z-[80] flex items-start justify-center p-4 pt-[10vh]"
       onClick={handleBackdropClick}
       aria-modal="true"
       aria-labelledby="ingredient-edit-modal-title"

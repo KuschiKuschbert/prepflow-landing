@@ -56,7 +56,7 @@ export function getAppError(error: unknown): AppError {
   }
 
   return {
-    message: 'An unknown error occurred',
+    message: 'Something unexpected happened. Try again?',
     originalError: error,
   };
 }

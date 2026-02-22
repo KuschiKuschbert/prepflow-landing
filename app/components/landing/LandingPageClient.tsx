@@ -30,6 +30,11 @@ const LandingFooter = lazy(() => import('./LandingFooter'));
 const SafeAnimatedBackground = lazy(() => import('./SafeAnimatedBackground'));
 const SafeGradientOrbs = lazy(() => import('./SafeGradientOrbs'));
 const BackgroundLogo = lazy(() => import('../../../components/ui/BackgroundLogo'));
+const FloatingParticles = lazy(() =>
+  import('../../../components/ui/FloatingParticles').then(mod => ({
+    default: mod.FloatingParticles,
+  })),
+);
 
 // Hooks and utilities
 import { useEngagementTracking } from '../../../hooks/useEngagementTracking';
@@ -128,6 +133,7 @@ export default function LandingPageClient() {
           <SafeAnimatedBackground />
           <SafeGradientOrbs />
           <BackgroundLogo />
+          <FloatingParticles count={30} />
         </Suspense>
 
         {/* Content overlay - ensures content is above background */}

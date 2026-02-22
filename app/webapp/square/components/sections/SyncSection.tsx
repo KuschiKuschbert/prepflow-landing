@@ -90,11 +90,11 @@ export function SyncSection() {
             {result && (
               <p className="mt-1 text-xs text-[var(--foreground-muted)]">
                 {result.success ? (
-                  <span className="text-green-400">
+                  <span className="text-[var(--color-success)]">
                     Synced {result.details?.syncedCount || 0} items
                   </span>
                 ) : (
-                  <span className="text-red-400">Sync failed</span>
+                  <span className="text-[var(--color-error)]">Sync failed</span>
                 )}
               </p>
             )}
@@ -153,15 +153,15 @@ export function SyncSection() {
                 <div className="flex items-center gap-2">
                   {result.success ? (
                     <>
-                      <Icon icon={CheckCircle2} size="sm" className="text-green-400" />
-                      <span className="text-sm text-green-400">
+                      <Icon icon={CheckCircle2} size="sm" className="text-[var(--color-success)]" />
+                      <span className="text-sm text-[var(--color-success)]">
                         {result.details?.syncedCount || 0} items
                       </span>
                     </>
                   ) : (
                     <>
-                      <Icon icon={XCircle} size="sm" className="text-red-400" />
-                      <span className="text-sm text-red-400">Failed</span>
+                      <Icon icon={XCircle} size="sm" className="text-[var(--color-error)]" />
+                      <span className="text-sm text-[var(--color-error)]">Failed</span>
                     </>
                   )}
                 </div>

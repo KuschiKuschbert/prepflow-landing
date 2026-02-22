@@ -139,12 +139,12 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
                     placeholder="Search navigation&hellip;"
                     value={query}
                     onChange={e => onChange(e.target.value)}
-                    className="w-full rounded-lg border border-[var(--border)] bg-[var(--muted)]/30 px-4 py-3 pl-12 text-lg text-[var(--foreground)] placeholder-[var(--foreground)]/50 focus:border-transparent focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
+                    className="text-fluid-base w-full rounded-lg border border-[var(--border)] bg-[var(--muted)]/30 px-4 py-3 pl-12 text-[var(--foreground)] placeholder-[var(--foreground)]/50 focus:border-transparent focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
                     autoFocus
                     aria-label="Search navigation"
                   />
                   <svg
-                    className="absolute top-3.5 left-4 h-5 w-5 text-[var(--foreground)]/50"
+                    className="absolute top-3.5 left-4 h-5 w-5 text-[var(--foreground-subtle)]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"

@@ -61,10 +61,10 @@ export function PersonalitySettingsPanel() {
   }, []);
 
   return (
-    <div className="mt-8 space-y-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
+    <div className="mt-8 space-y-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold">PrepFlow Personality</h2>
+          <h2 className="text-xl font-semibold text-[var(--foreground)]">PrepFlow Personality</h2>
           <p className="mt-1 text-sm text-[var(--foreground-muted)]">
             Add charming micro-moments, humor, and seasonal flair to your PrepFlow experience.
           </p>

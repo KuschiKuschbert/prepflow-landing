@@ -1,11 +1,11 @@
 'use client';
 
-import React from 'react';
-import { Recipe } from '@/lib/types/recipes';
-import { useAutosave } from '@/hooks/useAutosave';
-import { deriveAutosaveId } from '@/lib/autosave-id';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 import { useNotification } from '@/contexts/NotificationContext';
+import { useAutosave } from '@/hooks/useAutosave';
+import { deriveAutosaveId } from '@/lib/autosave-id';
+import { Recipe } from '@/lib/types/recipes';
+import React from 'react';
 
 interface RecipeFormProps {
   showForm: boolean;
@@ -109,7 +109,7 @@ export default function RecipeForm({
           <button
             type="button"
             onClick={onToggleForm}
-            className="rounded-lg bg-gray-600 px-6 py-2 text-[var(--foreground)] transition-colors hover:bg-gray-700"
+            className="rounded-lg bg-[var(--muted)] px-6 py-2 text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]/80"
           >
             Cancel
           </button>

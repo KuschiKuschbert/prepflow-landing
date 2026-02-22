@@ -78,7 +78,7 @@ export function MobileIngredientCard({
             </button>
             <button
               onClick={onCancel}
-              className="rounded bg-gray-600 px-3 py-1 text-xs text-[var(--foreground)] transition-colors duration-200 hover:bg-gray-500"
+              className="rounded bg-[var(--muted)] px-3 py-1 text-xs text-[var(--foreground)] transition-colors duration-200 hover:bg-[var(--muted)]/80"
             >
               Cancel
             </button>

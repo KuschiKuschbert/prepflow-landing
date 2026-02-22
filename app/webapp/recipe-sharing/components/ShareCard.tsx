@@ -30,7 +30,7 @@ function getStatusColor(status: string) {
     case 'failed':
       return 'text-[var(--color-error)] bg-[var(--color-error)]/10';
     default:
-      return 'text-[var(--foreground-muted)] bg-gray-400/10';
+      return 'text-[var(--foreground-muted)] bg-[var(--foreground-subtle)]/10';
   }
 }
 

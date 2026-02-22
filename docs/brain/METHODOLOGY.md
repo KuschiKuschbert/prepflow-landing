@@ -17,8 +17,8 @@ The RSI system matches the methodology with autonomous tooling.
 
 ### Core RSI Commands
 
-| Command              | Description                                                             |
-| :------------------- | :---------------------------------------------------------------------- |
-| `npm run rsi:status` | Shows active rules and advice for the current codebase state.           |
-| `npm run rsi:fix`    | Automatically applies learned fixes (linting, patterns, safety).        |
-| `npm run rsi:run`    | Triggers the nightly self-improvement loop.                             |
+| Command              | Description                                                      |
+| :------------------- | :--------------------------------------------------------------- |
+| `npm run rsi:status` | Shows active rules and advice for the current codebase state.    |
+| `npm run rsi:fix`    | Automatically applies learned fixes (linting, patterns, safety). |
+| `npm run rsi:run`    | Triggers the nightly self-improvement loop.                      |

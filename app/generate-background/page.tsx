@@ -72,7 +72,7 @@ export default function GenerateBackgroundPage() {
       <AlertDialog />
       <div className="relative min-h-screen bg-[#0a0a0a]">
         {/* Controls */}
-        <div className="fixed top-4 left-4 z-[1000] rounded-xl border border-[#2a2a2a] bg-[#1f1f1f]/95 p-4">
+        <div className="fixed top-4 left-4 z-[80] rounded-xl border border-[#2a2a2a] bg-[#1f1f1f]/95 p-4">
           <button
             onClick={downloadBackground}
             className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-transform hover:scale-105"

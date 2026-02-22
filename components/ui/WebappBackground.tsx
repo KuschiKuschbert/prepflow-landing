@@ -83,20 +83,15 @@ export function WebappBackground({
 
   return (
     <>
-      {/* Base gradient - uses CSS variable for theme-aware background */}
-      <div
-        className="fixed inset-0 -z-20"
-        style={{
-          background: 'var(--background-gradient)',
-        }}
-      />
+      {/* Base gradient - theme-aware; evaluates instantly via CSS variables */}
+      <div className="fixed inset-0 -z-20" style={{ background: 'var(--webapp-bg-gradient)' }} />
 
-      {/* Mouse-following spotlight */}
+      {/* Mouse-following spotlight - stronger in light mode for visibility */}
       {spotlight && (
         <div
           className="pointer-events-none fixed inset-0 -z-10 transition-opacity duration-300"
           style={{
-            background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(41, 231, 205, ${spotlightIntensity}), transparent 40%)`,
+            background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(41, 231, 205, ${theme === 'light' ? spotlightIntensity * 1.5 : spotlightIntensity}), transparent 40%)`,
           }}
         />
       )}
@@ -104,18 +99,18 @@ export function WebappBackground({
       {/* Logo watermarks */}
       {watermarks && <LogoWatermark count={2} opacity={0.015} size={250} />}
 
-      {/* Tron-like neon grid - theme-aware */}
+      {/* Tron-like neon grid - theme-aware, stronger in light mode for visibility */}
       {grid && isHydrated && (
         <div
           className="pointer-events-none fixed inset-0 -z-10"
           style={{
             backgroundImage: `linear-gradient(${
               theme === 'light'
-                ? `rgba(26, 157, 138, ${backgroundTheme.gridCyanOpacity * 3})`
+                ? `rgba(26, 157, 138, ${backgroundTheme.gridCyanOpacity * 5})`
                 : `rgba(41, 231, 205, ${backgroundTheme.gridCyanOpacity})`
             } 1px, transparent 1px), linear-gradient(90deg, ${
               theme === 'light'
-                ? `rgba(42, 100, 198, ${backgroundTheme.gridBlueOpacity * 3})`
+                ? `rgba(42, 100, 198, ${backgroundTheme.gridBlueOpacity * 5})`
                 : `rgba(59, 130, 246, ${backgroundTheme.gridBlueOpacity})`
             } 1px, transparent 1px)`,
             backgroundSize: `${backgroundTheme.gridSizePx}px ${backgroundTheme.gridSizePx}px`,

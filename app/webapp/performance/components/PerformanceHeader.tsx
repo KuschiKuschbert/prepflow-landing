@@ -116,7 +116,12 @@ export default function PerformanceHeader({
           }}
         >
           <div className={`text-2xl font-bold`}>{mounted ? performanceScore : 0}/100</div>
-          <Sparkles className="h-4 w-4 text-[var(--primary)] transition-opacity hover:opacity-80" />
+          <Icon
+            icon={Sparkles}
+            size="sm"
+            className="text-[var(--primary)] transition-opacity hover:opacity-80"
+            aria-hidden
+          />
         </div>
         <PerformanceScoreTooltip
           showTooltip={showTooltip}

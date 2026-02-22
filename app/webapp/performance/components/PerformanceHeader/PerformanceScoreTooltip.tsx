@@ -4,6 +4,7 @@
 'use client';
 
 import { useRef } from 'react';
+import { Icon } from '@/components/ui/Icon';
 import { Sparkles } from 'lucide-react';
 import { generatePerformanceTips } from '@/lib/performance/generatePerformanceTips';
 import type { PerformanceTip } from '@/lib/performance/generatePerformanceTips/tipCategories';
@@ -42,7 +43,7 @@ export function PerformanceScoreTooltip({
       onMouseLeave={onMouseLeave}
     >
       <div className="mb-3 flex items-center gap-2">
-        <Sparkles className="h-4 w-4 text-[var(--primary)]" />
+        <Icon icon={Sparkles} size="sm" className="text-[var(--primary)]" aria-hidden />
         <h4 className="text-sm font-semibold text-[var(--foreground)]">
           AI-Enhanced Improvement Tips
         </h4>

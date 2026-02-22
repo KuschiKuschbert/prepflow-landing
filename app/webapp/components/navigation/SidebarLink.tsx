@@ -60,7 +60,7 @@ export function SidebarLink({
       <span className={cn(isActive ? color : `text-[var(--foreground-muted)]`)}>{icon}</span>
       <span
         className={cn(
-          'text-sm',
+          'text-fluid-sm',
           'font-medium',
           isActive
             ? 'text-[var(--foreground)]'
