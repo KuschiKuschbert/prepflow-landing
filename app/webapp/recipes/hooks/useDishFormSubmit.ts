@@ -1,5 +1,6 @@
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
+import { markFirstDone } from '@/lib/page-help/first-done-storage';
 import type { SelectedIngredient, SelectedRecipe } from '../components/DishEditDrawerTypes';
 import type { Dish } from '@/lib/types/recipes';
 
@@ -24,7 +25,7 @@ export function useDishFormSubmit({
   onSave,
   onClose,
 }: UseDishFormSubmitProps) {
-  const { showWarning, showError, showSuccess } = useNotification();
+  const { showWarning, showError, showSuccess, showInfo } = useNotification();
 
   const handleSave = async () => {
     if (!dishName || !sellingPrice) {
@@ -61,6 +62,14 @@ export function useDishFormSubmit({
       }
 
       showSuccess(dish ? 'Dish updated successfully!' : 'Dish created successfully!');
+      if (selectedIngredients.length === 0 && selectedRecipes.length > 0) {
+        showInfo(
+          "Make sure your recipes have ingredients for accurate cost and COGS. Add ingredients in the COGS Calculator or run 'Populate empty items' later.",
+        );
+      }
+      if (!dish) {
+        markFirstDone('recipes');
+      }
       onSave();
       onClose();
     } catch (err) {

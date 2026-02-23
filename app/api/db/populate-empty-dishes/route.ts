@@ -14,10 +14,14 @@ export async function GET(request: NextRequest) {
   if (authError) return authError;
 
   try {
-    const { data: dishes, error: dishesError } = await supabaseAdmin!
-      .from('dishes')
-      .select('id, dish_name')
-      .order('dish_name');
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId') || undefined;
+
+    let dishesQuery = supabaseAdmin!.from('dishes').select('id, dish_name').order('dish_name');
+    if (userId) {
+      dishesQuery = dishesQuery.eq('user_id', userId);
+    }
+    const { data: dishes, error: dishesError } = await dishesQuery;
 
     if (dishesError) {
       return NextResponse.json(
@@ -73,10 +77,14 @@ export async function POST(request: NextRequest) {
   if (authError) return authError;
 
   try {
-    const { data: dishes, error: dishesError } = await supabaseAdmin!
-      .from('dishes')
-      .select('id, dish_name')
-      .order('dish_name');
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId') || undefined;
+
+    let dishesQuery = supabaseAdmin!.from('dishes').select('id, dish_name').order('dish_name');
+    if (userId) {
+      dishesQuery = dishesQuery.eq('user_id', userId);
+    }
+    const { data: dishes, error: dishesError } = await dishesQuery;
 
     if (dishesError) {
       return NextResponse.json(
@@ -100,10 +108,14 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const { data: ingredients, error: ingredientsError } = await supabaseAdmin!
+    let ingredientsQuery = supabaseAdmin!
       .from('ingredients')
       .select('id, ingredient_name, unit')
       .order('ingredient_name');
+    if (userId) {
+      ingredientsQuery = ingredientsQuery.eq('user_id', userId);
+    }
+    const { data: ingredients, error: ingredientsError } = await ingredientsQuery;
 
     if (ingredientsError) {
       return NextResponse.json(
@@ -124,10 +136,14 @@ export async function POST(request: NextRequest) {
 
     const dishesResult = await populateDishes(dishes, ingredients);
 
-    const { data: recipes, error: recipesError } = await supabaseAdmin!
+    let recipesQuery = supabaseAdmin!
       .from('recipes')
-      .select('id, name')
-      .order('name');
+      .select('id, name, recipe_name')
+      .order('recipe_name');
+    if (userId) {
+      recipesQuery = recipesQuery.eq('user_id', userId);
+    }
+    const { data: recipes, error: recipesError } = await recipesQuery;
 
     let recipesResult: PopulateRecipesResult = { populated: [], skipped: [], errors: [] };
     if (!recipesError && recipes && recipes.length > 0) {

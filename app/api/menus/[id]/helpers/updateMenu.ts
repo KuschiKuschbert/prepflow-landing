@@ -17,6 +17,8 @@ export async function updateMenu(
   updateData: {
     menu_name?: string;
     description?: string | null;
+    menu_type?: string;
+    expected_guests?: number | null;
   },
   userId: string,
 ): Promise<Menu> {

@@ -91,7 +91,7 @@ export function COGSTableDesktop({
             {/* Standalone Ingredients */}
             {standaloneCalculations.map((calc, index) => (
               <COGSTableRow
-                key={`standalone-${calc.ingredientId || calc.id || index}`}
+                key={`standalone-${calc.ingredientId || calc.id}-${index}`}
                 calc={calc}
                 index={index}
                 editingIngredient={editingIngredient}

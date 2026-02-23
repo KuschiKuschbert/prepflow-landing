@@ -96,7 +96,7 @@ export const IngredientsList: React.FC<IngredientsListProps> = ({
       <div className="space-y-1.5">
         {calculations.map((calc, index) => (
           <div
-            key={`${calc.recipeId || 'dish'}-${calc.ingredientId || calc.id || index}`}
+            key={calc.id || `${calc.recipeId || 'dish'}-${calc.ingredientId}-${index}`}
             className="group flex items-center justify-between rounded-lg bg-[var(--surface)]/50 px-2 py-1.5 text-sm transition-colors hover:bg-[var(--muted)]/50"
           >
             <span className="text-[var(--foreground-secondary)]">{calc.ingredientName}</span>

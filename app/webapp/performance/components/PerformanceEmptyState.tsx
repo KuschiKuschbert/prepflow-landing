@@ -1,11 +1,15 @@
 'use client';
+
 import { useState } from 'react';
 import { BarChart3, Sparkles, TrendingUp, ArrowRight } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { Button } from '@/components/ui/Button';
+import { InlineHint } from '@/components/ui/InlineHint';
+import { RescueNudge } from '@/components/ui/RescueNudge';
 import { LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
 import Link from 'next/link';
 import { useNotification } from '@/contexts/NotificationContext';
+import { markFirstDone } from '@/lib/page-help/first-done-storage';
 
 import { logger } from '@/lib/logger';
 
@@ -52,6 +56,7 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
       logger.dev('✅ Response data:', data);
 
       if (data.success) {
+        markFirstDone('performance');
         const successMsg = `Successfully generated sales data for ${data.summary.recipesProcessed} recipes over ${data.summary.daysGenerated} days. ${data.summary.salesRecordsCreated} sales records created.`;
         setSuccessMessage(successMsg);
         showSuccess(successMsg);
@@ -87,98 +92,103 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
   };
 
   return (
-    <div className="tablet:p-12 overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center">
-      <div className="mb-6 flex justify-center">
-        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20">
-          <Icon icon={BarChart3} size="xl" className="text-[var(--primary)]" />
+    <div className="space-y-6">
+      <RescueNudge pageKey="performance" guideId="getting-started" guideStepIndex={4} />
+      <div className="tablet:p-12 overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center">
+        <div className="mb-6 flex justify-center">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20">
+            <Icon icon={BarChart3} size="xl" className="text-[var(--primary)]" />
+          </div>
         </div>
-      </div>
 
-      <h3 className={`${LANDING_TYPOGRAPHY['2xl']} mb-3 font-semibold text-[var(--foreground)]`}>
-        No Performance Data Yet
-      </h3>
-      <p
-        className={`${LANDING_TYPOGRAPHY.base} mx-auto mb-8 max-w-2xl text-[var(--foreground-muted)]`}
-      >
-        Performance analysis helps you understand which menu items are profitable, which are
-        popular, and which need attention. Generate sales data from your recipes to see insights and
-        recommendations.
-      </p>
+        <h3 className={`${LANDING_TYPOGRAPHY['2xl']} mb-3 font-semibold text-[var(--foreground)]`}>
+          1 step to menu profitability insights
+        </h3>
+        <p
+          className={`${LANDING_TYPOGRAPHY.base} mx-auto mb-8 max-w-2xl text-[var(--foreground-muted)]`}
+        >
+          See which items are profitable (Chef&apos;s Kiss), which need marketing (Hidden Gems), and
+          which to adjust (Bargain Bucket, Burnt Toast). Generate sales data from your recipes.
+        </p>
 
-      {/* What You'll Get Section */}
-      <div className="tablet:grid-cols-3 mx-auto mb-8 grid max-w-3xl grid-cols-1 gap-4">
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
-          <Icon icon={Sparkles} size="md" className="mx-auto mb-2 text-[var(--primary)]" />
-          <h4 className="mb-1 text-sm font-semibold text-[var(--foreground)]">Smart Insights</h4>
-          <p className="text-xs text-[var(--foreground-muted)]">
-            Automatic categorization of menu items
-          </p>
-        </div>
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
-          <Icon icon={TrendingUp} size="md" className="mx-auto mb-2 text-[var(--color-info)]" />
-          <h4 className="mb-1 text-sm font-semibold text-[var(--foreground)]">Profit Analysis</h4>
-          <p className="text-xs text-[var(--foreground-muted)]">See which items make you money</p>
-        </div>
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
-          <Icon icon={BarChart3} size="md" className="mx-auto mb-2 text-[var(--accent)]" />
-          <h4 className="mb-1 text-sm font-semibold text-[var(--foreground)]">Recommendations</h4>
-          <p className="text-xs text-[var(--foreground-muted)]">
-            Actionable advice to improve margins
-          </p>
-        </div>
-      </div>
-
-      {successMessage && (
-        <div className="mx-auto mb-6 max-w-md rounded-lg border border-[var(--color-success)]/30 bg-green-900/20 p-4 text-left">
-          <p className="text-sm text-[var(--color-success)]">{successMessage}</p>
-          <p className="mt-2 text-xs text-green-300">Refreshing data...</p>
-        </div>
-      )}
-
-      {error && (
-        <div className="mx-auto mb-6 max-w-md rounded-lg border border-[var(--color-error)]/30 bg-red-900/20 p-4 text-left">
-          <p className="mb-1 text-sm font-semibold text-[var(--color-error)]">
-            Error generating sales data:
-          </p>
-          <p className="text-sm text-red-300">{error}</p>
-          {error.includes('No recipes found') && (
-            <p className="mt-2 text-xs text-red-200">
-              Please create recipes first by visiting the{' '}
-              <Link href="/webapp/recipes" className="underline hover:text-red-100">
-                Recipes page
-              </Link>
-              .
+        {/* What You'll Get Section */}
+        <div className="tablet:grid-cols-3 mx-auto mb-8 grid max-w-3xl grid-cols-1 gap-4">
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
+            <Icon icon={Sparkles} size="md" className="mx-auto mb-2 text-[var(--primary)]" />
+            <h4 className="mb-1 text-sm font-semibold text-[var(--foreground)]">Smart Insights</h4>
+            <p className="text-xs text-[var(--foreground-muted)]">
+              Automatic categorization of menu items
             </p>
-          )}
+          </div>
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
+            <Icon icon={TrendingUp} size="md" className="mx-auto mb-2 text-[var(--color-info)]" />
+            <h4 className="mb-1 text-sm font-semibold text-[var(--foreground)]">Profit Analysis</h4>
+            <p className="text-xs text-[var(--foreground-muted)]">See which items make you money</p>
+          </div>
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
+            <Icon icon={BarChart3} size="md" className="mx-auto mb-2 text-[var(--accent)]" />
+            <h4 className="mb-1 text-sm font-semibold text-[var(--foreground)]">Recommendations</h4>
+            <p className="text-xs text-[var(--foreground-muted)]">
+              Actionable advice to improve margins
+            </p>
+          </div>
         </div>
-      )}
 
-      <div className="tablet:flex-row flex flex-col items-center justify-center gap-4">
-        <Button
-          onClick={handleGenerateSalesData}
-          variant="primary"
-          landingStyle={true}
-          glow={true}
-          className="bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-8 py-4"
-        >
-          Generate Sales Data
-        </Button>
+        {successMessage && (
+          <div className="mx-auto mb-6 max-w-md rounded-lg border border-[var(--color-success)]/30 bg-green-900/20 p-4 text-left">
+            <p className="text-sm text-[var(--color-success)]">{successMessage}</p>
+            <p className="mt-2 text-xs text-green-300">Refreshing data...</p>
+          </div>
+        )}
 
-        <Link
-          href="/webapp/recipes"
-          className="flex items-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-6 py-4 font-semibold text-[var(--foreground)] transition-all hover:border-[var(--primary)]/50 hover:text-[var(--primary)]"
-        >
-          <span>Add Recipes First</span>
-          <Icon icon={ArrowRight} size="sm" />
-        </Link>
+        {error && (
+          <div className="mx-auto mb-6 max-w-md rounded-lg border border-[var(--color-error)]/30 bg-red-900/20 p-4 text-left">
+            <p className="mb-1 text-sm font-semibold text-[var(--color-error)]">
+              Error generating sales data:
+            </p>
+            <p className="text-sm text-red-300">{error}</p>
+            {error.includes('No recipes found') && (
+              <p className="mt-2 text-xs text-red-200">
+                Please create recipes first by visiting the{' '}
+                <Link href="/webapp/recipes" className="underline hover:text-red-100">
+                  Recipes page
+                </Link>
+                .
+              </p>
+            )}
+          </div>
+        )}
+
+        <div className="tablet:flex-row flex flex-col items-center justify-center gap-4">
+          <Button
+            onClick={handleGenerateSalesData}
+            variant="primary"
+            landingStyle={true}
+            glow={true}
+            className="bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-8 py-4"
+          >
+            Generate Sales Data
+          </Button>
+          <InlineHint context="performance">
+            Start here—generate sales data to see profitability insights
+          </InlineHint>
+
+          <Link
+            href="/webapp/recipes"
+            className="flex items-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-6 py-4 font-semibold text-[var(--foreground)] transition-all hover:border-[var(--primary)]/50 hover:text-[var(--primary)]"
+          >
+            <span>Add Recipes First</span>
+            <Icon icon={ArrowRight} size="sm" />
+          </Link>
+        </div>
+
+        <p className="mt-6 text-sm text-[var(--foreground-subtle)]">
+          Or use the browser console:{' '}
+          <code className="rounded bg-[var(--muted)] px-2 py-1 text-xs">
+            fetch(&apos;/api/generate-sales-data&apos;, {'{'} method: &apos;POST&apos; {'}'})
+          </code>
+        </p>
       </div>
-
-      <p className="mt-6 text-sm text-[var(--foreground-subtle)]">
-        Or use the browser console:{' '}
-        <code className="rounded bg-[var(--muted)] px-2 py-1 text-xs">
-          fetch(&apos;/api/generate-sales-data&apos;, {'{'} method: &apos;POST&apos; {'}'})
-        </code>
-      </p>
     </div>
   );
 }

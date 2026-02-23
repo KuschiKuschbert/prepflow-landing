@@ -37,7 +37,7 @@ export const DishIngredientTable: React.FC<DishIngredientTableProps> = React.mem
     }
 
     return (
-      <div className="space-y-4">
+      <div className="space-y-4" data-guide-capture="dish-ingredient-table">
         {/* Mobile Card Layout */}
         <div className="large-desktop:hidden block space-y-3">
           {calculations.map((calc, index) => (

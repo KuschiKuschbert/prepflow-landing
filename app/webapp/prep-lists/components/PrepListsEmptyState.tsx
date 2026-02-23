@@ -4,9 +4,13 @@
  * Empty state component for prep lists page.
  */
 
-import { ListChecks } from 'lucide-react';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { InlineHint } from '@/components/ui/InlineHint';
+import { RescueNudge } from '@/components/ui/RescueNudge';
+import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { useTranslation } from '@/lib/useTranslation';
+import { ListChecks, Plus } from 'lucide-react';
 
 interface PrepListsEmptyStateProps {
   onCreateClick: () => void;
@@ -16,25 +20,35 @@ export function PrepListsEmptyState({ onCreateClick }: PrepListsEmptyStateProps)
   const { t } = useTranslation();
 
   return (
-    <div className="py-12 text-center">
-      <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20">
-        <Icon icon={ListChecks} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
-      </div>
-      <h3 className="mb-2 text-xl font-semibold text-[var(--button-active-text)]">
-        {t('prepLists.noPrepLists', 'No Prep Lists')}
-      </h3>
-      <p className="mb-6 text-[var(--foreground-muted)]">
-        {t(
+    <div className="space-y-6">
+      <RescueNudge pageKey="prep-lists" guideId="prep-lists" guideStepIndex={0} />
+      <EmptyState
+        title={t('prepLists.noPrepLists', 'Your first prep list is one click away')}
+        message={t(
           'prepLists.noPrepListsDesc',
-          'Create your first prep list to organize kitchen preparation',
+          '1 step to organized kitchen prep. Create a prep list to plan what to make and when.',
         )}
-      </p>
-      <button
-        onClick={onCreateClick}
-        className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
-      >
-        {t('prepLists.createFirstPrepList', 'Create Your First Prep List')}
-      </button>
+        icon={ListChecks}
+        actions={
+          <div className="flex flex-col items-center gap-3">
+            <Button
+              onClick={onCreateClick}
+              variant="primary"
+              landingStyle={true}
+              className="flex items-center gap-2"
+            >
+              <Icon icon={Plus} size="sm" aria-hidden />
+              {t('prepLists.createFirstPrepList', 'Create your first prep list')}
+            </Button>
+            <InlineHint context="prep-lists">
+              Start here—create a prep list to plan what to make and when
+            </InlineHint>
+          </div>
+        }
+        useLandingStyles={true}
+        variant="landing"
+        animated={true}
+      />
     </div>
   );
 }

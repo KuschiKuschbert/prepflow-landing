@@ -62,7 +62,7 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
         <div className="space-y-3">
           {calculations.map((calc, index) => (
             <COGSTableMobileCard
-              key={`${calc.recipeId || 'dish'}-${calc.ingredientId || calc.id || index}`}
+              key={calc.id || `${calc.recipeId || 'dish'}-${calc.ingredientId}-${index}`}
               calc={calc}
               index={index}
               editingIngredient={editingIngredient}
@@ -89,7 +89,7 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
             <tbody className="divide-y divide-[var(--muted)] bg-[var(--surface)]">
               {calculations.map((calc, index) => (
                 <COGSTableRow
-                  key={`${calc.recipeId || 'dish'}-${calc.ingredientId || calc.id || index}`}
+                  key={calc.id || `${calc.recipeId || 'dish'}-${calc.ingredientId}-${index}`}
                   calc={calc}
                   index={index}
                   editingIngredient={editingIngredient}

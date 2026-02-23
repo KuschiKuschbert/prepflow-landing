@@ -5,7 +5,6 @@ import { useAutosave } from '@/hooks/useAutosave';
 import { useTranslation } from '@/lib/useTranslation';
 import React from 'react';
 import { PriceListFormData, Supplier } from '../types';
-import { getSupplierIcon } from '../utils';
 
 interface PriceListFormProps {
   formData: PriceListFormData;
@@ -63,7 +62,7 @@ export function PriceListForm({
             </option>
             {suppliers.map(supplier => (
               <option key={supplier.id} value={supplier.id}>
-                {getSupplierIcon(supplier.name || '')} {supplier.name || ''}
+                {supplier.name || ''}
               </option>
             ))}
           </select>

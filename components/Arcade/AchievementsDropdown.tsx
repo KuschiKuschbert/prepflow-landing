@@ -6,15 +6,17 @@
  */
 
 'use client';
-import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { getArcadeStats } from '@/lib/arcadeStats';
+
+import { Icon } from '@/components/ui/Icon';
 import WebAppBackground from '@/components/Arcade/WebAppBackground';
-import { getAllAchievements, getUnlockedAchievements } from '@/lib/gamification/achievements';
-import { AchievementCard } from '@/components/gamification/AchievementCard';
-import { ProgressBar } from '@/components/gamification/ProgressBar';
+import { AchievementsDropdownAchievementsTab } from '@/components/Arcade/AchievementsDropdownAchievementsTab';
+import { AchievementsDropdownArcadeTab } from '@/components/Arcade/AchievementsDropdownArcadeTab';
 import { useGamification } from '@/hooks/useGamification';
-import type { AchievementId } from '@/lib/gamification/types';
+import { getArcadeStats } from '@/lib/arcadeStats';
+import { getAllAchievements, getUnlockedAchievements } from '@/lib/gamification/achievements';
+import { Gamepad2, PartyPopper, Trophy, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
 
 interface AchievementsDropdownProps {
   isOpen: boolean;
@@ -73,22 +75,7 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
     return () => window.removeEventListener('keydown', handleEscape);
   }, [isOpen, onClose]);
 
-  // Show confetti preview if any stat >= 10
   const showConfettiPreview = stats.tomatoes >= 10 || stats.dockets >= 10 || stats.fires >= 10;
-
-  // Group achievements by category
-  const achievementCategories = {
-    'App Usage': [
-      'FIRST_RECIPE',
-      'TEN_INGREDIENTS',
-      'FIRST_DISH',
-      'HUNDRED_SAVES',
-    ] as AchievementId[],
-    Mastery: ['COGS_MASTER', 'PERFORMANCE_GURU', 'TEMPERATURE_PRO'] as AchievementId[],
-    Social: ['RECIPE_SHARER', 'MENU_BUILDER'] as AchievementId[],
-    Consistency: ['WEEKLY_STREAK'] as AchievementId[],
-  };
-
   const unlockedIds = new Set(unlockedAchievements.map(a => a.id));
 
   if (!isOpen) return null;
@@ -123,13 +110,16 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
           >
             {/* Header */}
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-fluid-2xl font-bold text-[var(--foreground)]">🏆 Achievements</h2>
+              <h2 className="text-fluid-2xl flex items-center gap-2 font-bold text-[var(--foreground)]">
+                <Icon icon={Trophy} size="lg" aria-hidden={true} />
+                Achievements
+              </h2>
               <button
                 onClick={onClose}
                 className="rounded-full p-2 text-[var(--foreground-muted)] transition-colors hover:bg-white/10 hover:text-[var(--foreground)]"
                 aria-label="Close achievements"
               >
-                ✕
+                <Icon icon={X} size="md" aria-hidden={true} />
               </button>
             </div>
 
@@ -143,7 +133,10 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
                     : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
                 }`}
               >
-                🎮 Arcade Games
+                <span className="flex items-center gap-2">
+                  <Icon icon={Gamepad2} size="sm" aria-hidden={true} />
+                  Arcade Games
+                </span>
               </button>
               <button
                 onClick={() => setActiveTab('achievements')}
@@ -153,108 +146,22 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
                     : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
                 }`}
               >
-                🏆 App Achievements ({achievementProgress.unlocked}/{achievementProgress.total})
+                <span className="flex items-center gap-2">
+                  <Icon icon={Trophy} size="sm" aria-hidden={true} />
+                  App Achievements ({achievementProgress.unlocked}/{achievementProgress.total})
+                </span>
               </button>
             </div>
 
             {/* Content */}
-            {activeTab === 'arcade' && (
-              <div className="space-y-4">
-                {/* Tomatoes */}
-                <div className="flex items-center justify-between rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-4">
-                  <div className="flex items-center gap-3">
-                    <span className="text-fluid-2xl">🍅</span>
-                    <div>
-                      <div className="font-semibold text-[var(--foreground)]">Tomatoes Thrown</div>
-                      <div className="text-fluid-sm text-[var(--foreground-muted)]">
-                        Frustration splats.
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-fluid-2xl font-bold text-[#4CAF50]">{stats.tomatoes}</div>
-                </div>
-
-                {/* Dockets */}
-                <div className="flex items-center justify-between rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-4">
-                  <div className="flex items-center gap-3">
-                    <span className="text-fluid-2xl">🧾</span>
-                    <div>
-                      <div className="font-semibold text-[var(--foreground)]">Dockets Caught</div>
-                      <div className="text-fluid-sm text-[var(--foreground-muted)]">
-                        Orders snatched.
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-fluid-2xl font-bold text-[#4CAF50]">{stats.dockets}</div>
-                </div>
-
-                {/* Fires */}
-                <div className="flex items-center justify-between rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-4">
-                  <div className="flex items-center gap-3">
-                    <span className="text-fluid-2xl">🔥</span>
-                    <div>
-                      <div className="font-semibold text-[var(--foreground)]">
-                        Fires Extinguished
-                      </div>
-                      <div className="text-fluid-sm text-[var(--foreground-muted)]">
-                        Crises averted.
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-fluid-2xl font-bold text-[#4CAF50]">{stats.fires}</div>
-                </div>
-              </div>
-            )}
-
+            {activeTab === 'arcade' && <AchievementsDropdownArcadeTab stats={stats} />}
             {activeTab === 'achievements' && (
-              <div className="space-y-6">
-                {/* Overall Progress */}
-                <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-4">
-                  <div className="mb-3 flex items-center justify-between">
-                    <h3 className="font-semibold text-[var(--foreground)]">Overall Progress</h3>
-                    <span className="text-sm text-[var(--foreground-muted)]">
-                      {achievementProgress.unlocked} / {achievementProgress.total}
-                    </span>
-                  </div>
-                  <ProgressBar
-                    progress={achievementProgress.percentage}
-                    variant="primary"
-                    size="md"
-                    showPercentage={true}
-                  />
-                  {streak > 0 && (
-                    <div className="mt-3 text-sm text-[var(--tertiary)]">
-                      🔥 {streak} day{streak === 1 ? '' : 's'} streak
-                    </div>
-                  )}
-                </div>
-
-                {/* Achievements by Category */}
-                {Object.entries(achievementCategories).map(([category, achievementIds]) => {
-                  const categoryAchievements = allAchievements.filter(a =>
-                    achievementIds.includes(a.id),
-                  );
-
-                  if (categoryAchievements.length === 0) return null;
-
-                  return (
-                    <div key={category} className="space-y-3">
-                      <h3 className="text-sm font-semibold text-[var(--foreground-secondary)]">
-                        {category}
-                      </h3>
-                      <div className="space-y-2">
-                        {categoryAchievements.map(achievement => (
-                          <AchievementCard
-                            key={achievement.id}
-                            achievement={achievement}
-                            unlocked={unlockedIds.has(achievement.id)}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+              <AchievementsDropdownAchievementsTab
+                allAchievements={allAchievements}
+                unlockedIds={unlockedIds}
+                achievementProgress={achievementProgress}
+                streak={streak}
+              />
             )}
 
             {/* Confetti Preview */}
@@ -264,8 +171,9 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
                 animate={{ opacity: 1, y: 0 }}
                 className="mt-6 rounded-xl border border-[#4CAF50]/30 bg-[#4CAF50]/10 p-4 text-center"
               >
-                <p className="text-fluid-sm text-[#4CAF50]">
-                  🎉 You&apos;ve reached milestone achievements! Keep it up!
+                <p className="text-fluid-sm flex items-center justify-center gap-2 text-[#4CAF50]">
+                  <Icon icon={PartyPopper} size="sm" aria-hidden={true} />
+                  You&apos;ve reached milestone achievements! Keep it up!
                 </p>
               </motion.div>
             )}

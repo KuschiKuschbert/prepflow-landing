@@ -52,6 +52,22 @@ jobs:
       - name: 📜 Audit scripts (Hygiene)
         run: npm run audit:scripts
 
+      - name: 🔒 Security (Auditor)
+        run: npm run check:security
+
+      - name: 🧬 Health (Sentinel)
+        run: npm run check:health
+
+      - name: 🏛️ Architecture (Architect)
+        run: npm run check:architecture
+
+      - name: 📏 File size check
+        run: npm run lint:filesize
+
+      - name: 📄 ADR check
+        run: npm run check:adr
+        continue-on-error: true
+
       - name: 🔒 Security audit
         run: npm audit --audit-level=moderate
 

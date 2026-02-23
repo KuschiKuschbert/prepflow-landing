@@ -49,5 +49,16 @@ export function getDefaultIngredientsForDish(
     matches = matchCommonIngredients(findIngredient);
   }
 
+  // Final fallback: use first 3-5 ingredients when nothing matched
+  if (matches.length === 0 && availableIngredients.length > 0) {
+    const genericCount = Math.min(5, Math.max(3, availableIngredients.length));
+    matches = availableIngredients.slice(0, genericCount).map(ing => ({
+      ingredient_id: ing.id,
+      ingredient_name: ing.ingredient_name,
+      quantity: ing.unit === 'ML' ? 10 : ing.unit === 'PC' ? 1 : 50,
+      unit: ing.unit || 'GM',
+    }));
+  }
+
   return matches;
 }

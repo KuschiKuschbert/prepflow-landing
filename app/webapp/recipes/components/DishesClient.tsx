@@ -1,5 +1,8 @@
 'use client';
+
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { Dish, Recipe } from '@/lib/types/recipes';
 import { DishesBulkActionsSection } from './DishesBulkActionsSection';
 import { ErrorBanner } from './DishesClient/components/ErrorBanner';
@@ -12,9 +15,14 @@ import { useDishesClientController } from './hooks/useDishesClientController';
 interface DishesClientProps {
   initialDishes?: Dish[];
   initialRecipes?: Recipe[];
+  preselectedRecipeId?: string | null;
 }
 
-export default function DishesClient({ initialDishes, initialRecipes }: DishesClientProps = {}) {
+export default function DishesClient({
+  initialDishes,
+  initialRecipes,
+  preselectedRecipeId,
+}: DishesClientProps = {}) {
   const {
     loading,
     error,
@@ -80,7 +88,11 @@ export default function DishesClient({ initialDishes, initialRecipes }: DishesCl
     startLongPress,
     cancelLongPress,
     enterSelectionMode,
-  } = useDishesClientController({ initialDishes, initialRecipes });
+  } = useDishesClientController({
+    initialDishes,
+    initialRecipes,
+    preselectedRecipeId: preselectedRecipeId ?? undefined,
+  });
 
   if (loading) return <PageSkeleton />;
 
@@ -132,6 +144,11 @@ export default function DishesClient({ initialDishes, initialRecipes }: DishesCl
         onEditingRecipeChange={setEditingRecipe}
         onSave={fetchItems}
       />
+      {viewMode === 'list' && allItems.length === 0 && PAGE_TIPS_CONFIG['dish-builder'] && (
+        <div className="mb-6">
+          <PageTipsCard config={PAGE_TIPS_CONFIG['dish-builder']} />
+        </div>
+      )}
       {viewMode === 'list' && (
         <DishesListViewSection
           allItems={allItems}

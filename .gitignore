@@ -143,6 +143,12 @@ architecture_full.txt
 data/recipe-database/**/*.json
 !data/recipe-database/index.json
 
+# Screenshot capture session (Puppeteer user data)
+.screenshot-session/
+
+# Generated guide screenshot regions (from guides.ts)
+scripts/guide-screenshot-regions.json
+
 # Playwright Authentication State
 e2e/auth.json
 performance-reports/

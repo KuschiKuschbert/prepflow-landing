@@ -84,7 +84,7 @@ export function COGSTableMobile({
                 <div className="ml-4 space-y-2 border-l-2 border-[var(--primary)]/20 pl-4">
                   {group.calculations.map((calc, index) => (
                     <COGSTableMobileCard
-                      key={`${calc.recipeId}-${calc.ingredientId || calc.id || index}`}
+                      key={calc.id || `${calc.recipeId}-${calc.ingredientId}-${index}`}
                       calc={calc}
                       index={index}
                       editingIngredient={editingIngredient}
@@ -112,7 +112,7 @@ export function COGSTableMobile({
             </div>
             {standaloneCalculations.map((calc, index) => (
               <COGSTableMobileCard
-                key={`standalone-${calc.ingredientId || calc.id || index}`}
+                key={`standalone-${calc.ingredientId || calc.id}-${index}`}
                 calc={calc}
                 index={index}
                 editingIngredient={editingIngredient}

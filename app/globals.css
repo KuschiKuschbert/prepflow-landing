@@ -77,6 +77,10 @@
   --glass-bg: #1f1f1f;
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-panel-bg: #1f1f1f;
+
+  /* QR code colors - always high contrast for scanability */
+  --qr-foreground: #000000;
+  --qr-background: #ffffff;
 }
 
 [data-theme='light'] {
@@ -95,6 +99,7 @@
   --foreground-subtle: rgba(0, 0, 0, 0.4);
 
   --qr-foreground: #000000;
+  --qr-background: #ffffff;
 
   /* Glassmorphism - Light Mode overrides - semi-transparent so background effects show through */
   --glass-bg: rgba(255, 255, 255, 0.88);

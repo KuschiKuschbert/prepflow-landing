@@ -1,4 +1,4 @@
-/* Partytown 0.10.3-dev1734732935152 - MIT builder.io */
+/* Partytown 0.11.2 - MIT QwikDev */
 Object.freeze(
   (obj => {
     const properties = new Set();
@@ -79,7 +79,7 @@ self.onfetch = ev => {
   if (pathname.endsWith('sw.html')) {
     ev.respondWith(
       response(
-        '<!DOCTYPE html><html><head><meta charset="utf-8"><script src="./partytown-sandbox-sw.js?v=0.10.3-dev1734732935152"><\/script></head></html>',
+        '<!DOCTYPE html><html><head><meta charset="utf-8"><script src="./partytown-sandbox-sw.js?v=0.11.2"><\/script></head></html>',
       ),
     );
   } else {

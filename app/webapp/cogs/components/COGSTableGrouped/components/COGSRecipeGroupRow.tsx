@@ -73,7 +73,7 @@ export function COGSRecipeGroupRow({
       {isExpanded &&
         group.calculations.map((calc, index) => (
           <COGSTableRow
-            key={`${calc.recipeId}-${calc.ingredientId || calc.id || index}`}
+            key={calc.id || `${calc.recipeId}-${calc.ingredientId}-${index}`}
             calc={calc}
             index={index}
             editingIngredient={editingIngredient}

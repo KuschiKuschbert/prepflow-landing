@@ -1,9 +1,12 @@
 'use client';
 
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { useNotification } from '@/contexts/NotificationContext';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { CleaningAreaList } from './components/CleaningAreaList';
@@ -19,7 +22,7 @@ import { useCleaningModals } from './hooks/useCleaningModals';
 import { useCleaningPageData } from './hooks/useCleaningPageData';
 import { useStatsDates } from './hooks/useStatsDates';
 
-export default function CleaningRosterPage() {
+function CleaningRosterContent() {
   const { showSuccess, showError } = useNotification();
   const [activeTab, setActiveTab] = useState<'grid' | 'areas'>('grid');
   const [gridFilter, setGridFilter] = useState<'today' | 'next2days' | 'week' | 'all'>('all');
@@ -49,6 +52,10 @@ export default function CleaningRosterPage() {
   );
   const statsDates = useStatsDates(gridFilter, startDate, endDate);
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const areaParam = searchParams.get('area');
+
   const {
     showAddArea,
     setShowAddArea,
@@ -61,6 +68,19 @@ export default function CleaningRosterPage() {
     selectedArea,
     preselectedAreaId,
   } = useCleaningModals();
+
+  // QR code deep link: open area tasks when ?area=id is in URL
+  const processedAreaRef = useRef(false);
+  useEffect(() => {
+    if (!areaParam || loading || areas.length === 0 || processedAreaRef.current) return;
+    const area = areas.find(a => a.id === areaParam);
+    if (area) {
+      processedAreaRef.current = true;
+      setActiveTab('areas');
+      setShowAreaTasks(area);
+      router.replace('/webapp/cleaning', { scroll: false });
+    }
+  }, [areaParam, loading, areas, setShowAreaTasks, router]);
 
   // CRUD hooks
   const {
@@ -131,6 +151,12 @@ export default function CleaningRosterPage() {
             onAddArea={() => setShowAddArea(true)}
           />
 
+          {PAGE_TIPS_CONFIG.cleaning && (
+            <div className="mb-6">
+              <PageTipsCard config={PAGE_TIPS_CONFIG.cleaning} />
+            </div>
+          )}
+
           <CleaningTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
           {activeTab === 'grid' && (
@@ -178,5 +204,13 @@ export default function CleaningRosterPage() {
         </div>
       </ResponsivePageContainer>
     </>
+  );
+}
+
+export default function CleaningRosterPage() {
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <CleaningRosterContent />
+    </Suspense>
   );
 }

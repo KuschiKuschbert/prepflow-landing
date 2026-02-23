@@ -13,7 +13,7 @@ interface UseGuideNavigationReturn {
   isFirstStep: boolean;
   isLastStep: boolean;
   progress: number; // 0-100
-  setGuide: (guide: Guide | null) => void;
+  setGuide: (guide: Guide | null, initialStepIndex?: number) => void;
   nextStep: () => void;
   prevStep: () => void;
   goToStep: (index: number) => void;
@@ -31,9 +31,18 @@ export function useGuideNavigation(): UseGuideNavigationReturn {
     ? Math.round(((currentStepIndex + 1) / currentGuide.steps.length) * 100)
     : 0;
 
-  const setGuide = useCallback((guide: Guide | null) => {
+  const setGuide = useCallback((guide: Guide | null, initialStepIndex?: number) => {
     setCurrentGuide(guide);
-    setCurrentStepIndex(0);
+    if (
+      guide &&
+      initialStepIndex !== undefined &&
+      initialStepIndex >= 0 &&
+      initialStepIndex < guide.steps.length
+    ) {
+      setCurrentStepIndex(initialStepIndex);
+    } else {
+      setCurrentStepIndex(0);
+    }
   }, []);
 
   const nextStep = useCallback(() => {

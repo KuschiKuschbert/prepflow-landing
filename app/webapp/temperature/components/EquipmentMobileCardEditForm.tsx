@@ -65,7 +65,7 @@ export function EquipmentMobileCardEditForm({
             >
               {temperatureTypes.map(type => (
                 <option key={type.value} value={type.value}>
-                  {type.icon} {type.label}
+                  {type.label}
                 </option>
               ))}
             </select>

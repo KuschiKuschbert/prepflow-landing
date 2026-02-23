@@ -18,6 +18,8 @@ import {
   Users,
 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { PageHeader } from '../components/static/PageHeader';
 import type { CreateFunctionData } from './components/CreateFunctionForm';
 import { CreateFunctionForm } from './components/CreateFunctionForm';
@@ -228,6 +230,8 @@ export default function FunctionsPage() {
               </Button>
             }
           />
+
+          <PageTipsCard config={PAGE_TIPS_CONFIG.functions} className="mb-6" />
 
           {/* Search + mobile calendar toggle */}
           <div className="flex items-center gap-2">

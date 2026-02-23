@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { ANIMATION_DURATION } from '../helpers/animationConstants';
 import { loadImage } from './imageTransitions/helpers/loadImage';
 
 interface Feature {
@@ -7,8 +8,6 @@ interface Feature {
   screenshot: string;
   screenshotAlt: string;
 }
-
-const ANIMATION_DURATION = 500;
 
 export function useImageTransitions(displayFeature: Feature, imageMounted: boolean) {
   const [currentImage, setCurrentImage] = useState<Feature | null>(null);
@@ -40,13 +39,11 @@ export function useImageTransitions(displayFeature: Feature, imageMounted: boole
           }
           setNewImageLoaded(true);
           requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              setCurrentImage(newImage);
-              setTimeout(() => {
-                setPreviousImageOpacity(0);
-                setCurrentImageOpacity(1);
-              }, 50);
-            });
+            setCurrentImage(newImage);
+            setTimeout(() => {
+              setPreviousImageOpacity(0);
+              setCurrentImageOpacity(1);
+            }, 20);
           });
         },
         () => {
@@ -55,7 +52,7 @@ export function useImageTransitions(displayFeature: Feature, imageMounted: boole
           setTimeout(() => {
             setPreviousImageOpacity(0);
             setCurrentImageOpacity(1);
-          }, 50);
+          }, 20);
         },
       );
     } else if (!currentImage) {
@@ -77,7 +74,7 @@ export function useImageTransitions(displayFeature: Feature, imageMounted: boole
         setPreviousImage(null);
         setCurrentImageOpacity(1);
         setNewImageLoaded(false);
-      }, ANIMATION_DURATION + 150);
+      }, ANIMATION_DURATION + 80);
       return () => clearTimeout(timeoutId);
     }
   }, [isImageTransitioning, newImageLoaded, previousImageOpacity]);

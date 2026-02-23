@@ -80,7 +80,7 @@ export function EquipmentForm({
           >
             {equipmentTypes.map(type => (
               <option key={type.value} value={type.value}>
-                {type.icon} {type.label} ({type.category})
+                {type.label} ({type.category})
               </option>
             ))}
           </select>

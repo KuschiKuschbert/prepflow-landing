@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Dish, DishCostData } from '@/lib/types/recipes';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit, Trash2, UtensilsCrossed } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { formatRecipeDate } from '../utils/formatDate';
 import { AllergenDisplay } from '@/components/ui/AllergenDisplay';
@@ -45,7 +45,11 @@ const DishCard = React.memo(function DishCard({
       title="Click to preview dish details"
     >
       <div className="mb-2 flex items-start justify-between">
-        <div className="flex items-center">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-1 rounded-full border border-[var(--primary)]/20 bg-[var(--primary)]/10 px-2 py-0.5 text-xs font-medium text-[var(--primary)]">
+            <Icon icon={UtensilsCrossed} size="xs" aria-hidden={true} />
+            Dish
+          </span>
           <button
             onClick={e => {
               e.stopPropagation();

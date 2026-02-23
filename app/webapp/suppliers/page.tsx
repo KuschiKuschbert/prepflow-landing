@@ -1,13 +1,17 @@
 'use client';
 
+import { Icon } from '@/components/ui/Icon';
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
 import { CSVImportModal } from '@/components/ui/CSVImportModal';
 import { type ExportFormat } from '@/components/ui/ExportButton';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { useNotification } from '@/contexts/NotificationContext';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { supplierImportConfig } from '@/lib/imports/supplier-import';
 import { logger } from '@/lib/logger';
 import { useTranslation } from '@/lib/useTranslation';
+import { Truck } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import { SuppliersActionHeader } from './components/SuppliersActionHeader';
 import { SuppliersContent } from './components/SuppliersContent';
@@ -119,8 +123,9 @@ export default function SuppliersPage() {
     <ResponsivePageContainer>
       <div className="tablet:py-6 min-h-screen bg-transparent py-4">
         <div className="mb-8">
-          <h1 className="mb-2 text-4xl font-bold text-[var(--foreground)]">
-            🚚 {t('suppliers.title', 'Supplier Management')}
+          <h1 className="mb-2 flex items-center gap-3 text-4xl font-bold text-[var(--foreground)]">
+            <Icon icon={Truck} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
+            {t('suppliers.title', 'Supplier Management')}
           </h1>
           <p className="text-[var(--foreground-muted)]">
             {t(
@@ -129,6 +134,12 @@ export default function SuppliersPage() {
             )}
           </p>
         </div>
+
+        {PAGE_TIPS_CONFIG.suppliers && (
+          <div className="mb-6">
+            <PageTipsCard config={PAGE_TIPS_CONFIG.suppliers} />
+          </div>
+        )}
 
         <SuppliersTabs activeTab={activeTab} onTabChange={setActiveTab} />
 

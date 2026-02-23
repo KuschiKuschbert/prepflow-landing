@@ -56,8 +56,8 @@ export function EquipmentQRCodeDisplay({
                       value={equipmentUrl}
                       size={180}
                       level="H"
-                      fgColor="var(--qr-foreground)"
-                      bgColor="var(--qr-background)"
+                      fgColor="#000000"
+                      bgColor="#FFFFFF"
                     />
                   </div>
 

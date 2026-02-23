@@ -7,20 +7,60 @@
 
 import { useState, useMemo } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { Search, BookOpen, Workflow, BookMarked } from 'lucide-react';
+import {
+  Search,
+  BookOpen,
+  Workflow,
+  BookMarked,
+  Rocket,
+  FilePen,
+  DollarSign,
+  Thermometer,
+  ClipboardCheck,
+  Truck,
+  FileText,
+  ClipboardList,
+  Package2,
+  UtensilsCrossed,
+  Users,
+  Sparkles,
+  CalendarDays,
+  Settings,
+  LayoutPanelLeft,
+} from 'lucide-react';
 import { getAllGuides, getGuidesByCategory } from '../data/guides';
-import type { Guide, GuideCategory } from '../data/guide-types';
+import type { Guide, GuideCategory, GuideIconName } from '../data/guide-types';
+
+const GUIDE_ICON_MAP: Record<GuideIconName, typeof Rocket> = {
+  Rocket,
+  FilePen,
+  DollarSign,
+  Thermometer,
+  ClipboardCheck,
+  Truck,
+  FileText,
+  ClipboardList,
+  Package2,
+  UtensilsCrossed,
+  Users,
+  Sparkles,
+  CalendarDays,
+  Settings,
+  LayoutPanelLeft,
+};
 
 interface GuideNavigationProps {
   onSelectGuide: (guide: Guide) => void;
   selectedGuideId?: string;
   guides?: Guide[]; // Optional: provide custom guides list (for public page)
+  getProgress?: (guideId: string) => { currentStepIndex: number; completedAt?: number } | null;
 }
 
 export function GuideNavigation({
   onSelectGuide,
   selectedGuideId,
   guides: providedGuides,
+  getProgress,
 }: GuideNavigationProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<GuideCategory | 'all'>('all');
@@ -119,18 +159,40 @@ export function GuideNavigation({
               }`}
             >
               <div className="flex items-start gap-4">
-                {guide.icon && (
-                  <span className="text-2xl" aria-hidden={true}>
-                    {guide.icon}
-                  </span>
+                {guide.iconName && GUIDE_ICON_MAP[guide.iconName] && (
+                  <Icon
+                    icon={GUIDE_ICON_MAP[guide.iconName]}
+                    size="lg"
+                    className="shrink-0 text-[var(--primary)]"
+                    aria-hidden={true}
+                  />
                 )}
                 <div className="flex-1">
                   <h3 className="font-semibold text-[var(--foreground)]">{guide.title}</h3>
                   <p className="mt-1 text-sm text-[var(--foreground-muted)]">{guide.description}</p>
-                  <div className="mt-2 flex items-center gap-4 text-xs text-[var(--foreground-subtle)]">
+                  <div className="mt-2 flex flex-wrap items-center gap-4 text-xs text-[var(--foreground-subtle)]">
                     {guide.difficulty && <span className="capitalize">{guide.difficulty}</span>}
                     {guide.estimatedTime && <span>{Math.round(guide.estimatedTime / 60)} min</span>}
                     <span>{guide.steps.length} steps</span>
+                    {getProgress &&
+                      (() => {
+                        const p = getProgress(guide.id);
+                        if (p?.completedAt) {
+                          return (
+                            <span className="rounded-full bg-[var(--primary)]/20 px-2 py-0.5 text-[var(--primary)]">
+                              Completed
+                            </span>
+                          );
+                        }
+                        if (p && p.currentStepIndex > 0) {
+                          return (
+                            <span className="rounded-full bg-[var(--primary)]/10 px-2 py-0.5 text-[var(--primary)]">
+                              Resume from step {p.currentStepIndex + 1}
+                            </span>
+                          );
+                        }
+                        return null;
+                      })()}
                   </div>
                 </div>
               </div>

@@ -4,7 +4,9 @@
  * Tab navigation component for suppliers page.
  */
 
+import { Icon } from '@/components/ui/Icon';
 import { useTranslation } from '@/lib/useTranslation';
+import { FileText, Users, type LucideIcon } from 'lucide-react';
 
 interface SuppliersTabsProps {
   activeTab: 'suppliers' | 'priceLists';
@@ -19,13 +21,13 @@ export function SuppliersTabs({ activeTab, onTabChange }: SuppliersTabsProps) {
       <div className="flex space-x-1 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-1">
         <TabButton
           label={t('suppliers.suppliers', 'Suppliers')}
-          icon="👥"
+          icon={Users}
           isActive={activeTab === 'suppliers'}
           onClick={() => onTabChange('suppliers')}
         />
         <TabButton
           label={t('suppliers.priceLists', 'Price Lists')}
-          icon="📄"
+          icon={FileText}
           isActive={activeTab === 'priceLists'}
           onClick={() => onTabChange('priceLists')}
         />
@@ -36,7 +38,7 @@ export function SuppliersTabs({ activeTab, onTabChange }: SuppliersTabsProps) {
 
 interface TabButtonProps {
   label: string;
-  icon: string;
+  icon: LucideIcon;
   isActive: boolean;
   onClick: () => void;
 }
@@ -45,13 +47,14 @@ function TabButton({ label, icon, isActive, onClick }: TabButtonProps) {
   return (
     <button
       onClick={onClick}
-      className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 ${
+      className={`flex items-center gap-2 rounded-xl px-6 py-3 font-medium transition-all duration-200 ${
         isActive
           ? 'bg-[var(--primary)] text-[var(--button-active-text)] shadow-lg'
           : 'text-[var(--foreground-muted)] hover:text-[var(--button-active-text)]'
       }`}
     >
-      {icon} {label}
+      <Icon icon={icon} size="sm" aria-hidden={true} />
+      {label}
     </button>
   );
 }

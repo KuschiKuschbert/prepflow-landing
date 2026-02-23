@@ -6,7 +6,6 @@
 
 import { useState, useCallback } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
-import { getTypeIconEmoji } from '../utils';
 import type { ComplianceType, ComplianceRecord } from '../types';
 import { PrintButton } from '@/components/ui/PrintButton';
 import { ExportButton, type ExportFormat } from '@/components/ui/ExportButton';
@@ -118,7 +117,7 @@ export function ComplianceFilters({
               <option value="all">{t('compliance.allTypes', 'All Types')}</option>
               {types.map(type => (
                 <option key={type.id} value={type.id.toString()}>
-                  {getTypeIconEmoji(type.name)} {type.name}
+                  {type.name}
                 </option>
               ))}
             </select>

@@ -83,11 +83,6 @@ export function AddTemperatureLogForm({
     if (!timeStr) return '';
     return timeStr;
   };
-  /**
-   * Gets the icon string for a given equipment type (for use in select options).
-   * Note: Returns emoji string for select options compatibility (can't use React components in <option>).
-   */
-  const getTypeIcon = (type: string) => temperatureTypes.find(tt => tt.value === type)?.icon || '';
   const getTypeLabel = (type: string) =>
     temperatureTypes.find(tt => tt.value === type)?.label || type;
 
@@ -159,8 +154,7 @@ export function AddTemperatureLogForm({
                   key={`equipment-${item.id ?? index}-${item.equipment_type}-${item.name}`}
                   value={item.equipment_type}
                 >
-                  {getTypeIcon(item.equipment_type)} {item.name} (
-                  {getTypeLabel(item.equipment_type)})
+                  {item.name} ({getTypeLabel(item.equipment_type)})
                 </option>
               ))}
             {temperatureTypes
@@ -172,7 +166,7 @@ export function AddTemperatureLogForm({
               )
               .map(type => (
                 <option key={`type-${type.value}`} value={type.value}>
-                  {type.icon} {type.label} (Food Safety)
+                  {type.label} (Food Safety)
                 </option>
               ))}
           </select>

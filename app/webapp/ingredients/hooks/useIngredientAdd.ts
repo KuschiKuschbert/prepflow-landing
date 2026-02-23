@@ -1,5 +1,6 @@
 'use client';
 
+import { markFirstDone } from '@/lib/page-help/first-done-storage';
 import { useOnIngredientAdded } from '@/lib/personality/hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
@@ -56,6 +57,7 @@ export function useIngredientAdd<
           setNewIngredient,
           DEFAULT_INGREDIENT: DEFAULT_INGREDIENT as unknown as Partial<T>,
         });
+        markFirstDone('ingredients');
         onIngredientAdded();
         await queryClient.invalidateQueries({ queryKey: ['ingredients'] });
       } catch (error: unknown) {

@@ -39,8 +39,8 @@ export function QRCodeCard({ entity, isSelected, onToggle }: QRCodeCardProps) {
           value={entity.destinationUrl}
           size={48}
           level="M"
-          bgColor="var(--qr-background)"
-          fgColor="var(--qr-foreground)"
+          bgColor="#FFFFFF"
+          fgColor="#000000"
         />
       </div>
 

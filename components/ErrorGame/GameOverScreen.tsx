@@ -1,6 +1,8 @@
 'use client';
 
+import { Icon } from '@/components/ui/Icon';
 import { motion } from 'framer-motion';
+import { Check, ChefHat, Trophy } from 'lucide-react';
 import React from 'react';
 
 interface GameOverScreenProps {
@@ -30,7 +32,10 @@ export const GameOverScreen: React.FC<GameOverScreenProps> = ({
         animate={{ opacity: 1, y: 0 }}
         className="text-fluid-4xl desktop:text-fluid-4xl mb-4 font-extrabold text-[var(--primary)]"
       >
-        Fire out! Back to service ✅
+        <span className="flex items-center gap-2">
+          Fire out! Back to service
+          <Icon icon={Check} size="lg" className="text-[var(--primary)]" aria-hidden={true} />
+        </span>
       </motion.h1>
 
       <motion.p
@@ -41,7 +46,10 @@ export const GameOverScreen: React.FC<GameOverScreenProps> = ({
       >
         You extinguished the fire in {playTime} seconds!
         {fastestTime !== null && playTime === fastestTime && (
-          <span className="mt-2 block text-[var(--primary)]">🏆 New record!</span>
+          <span className="mt-2 flex items-center justify-center gap-2 text-[var(--primary)]">
+            <Icon icon={Trophy} size="md" aria-hidden={true} />
+            New record!
+          </span>
         )}
       </motion.p>
 
@@ -64,7 +72,10 @@ export const GameOverScreen: React.FC<GameOverScreenProps> = ({
           transition={{ delay: 0.5 }}
           className="text-fluid-sm mt-6 text-[var(--foreground-subtle)]"
         >
-          Took your time, but you got there! 👨‍🍳
+          <span className="flex items-center gap-2">
+            Took your time, but you got there!
+            <Icon icon={ChefHat} size="sm" aria-hidden={true} />
+          </span>
         </motion.p>
       )}
     </motion.div>

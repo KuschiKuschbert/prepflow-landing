@@ -559,12 +559,13 @@ npm run cleanup:all
 ### **Integration**
 
 **Pre-commit Hook:**
-- Automatically runs `cleanup:staged` on commit
-- Blocks commit on critical violations
-- Auto-fixes safe issues
+- The default pre-commit runs only fast checks (merge conflicts, curbos protection, file size, lint-staged)
+- Run `npm run cleanup:staged` manually before committing to check staged files
+- Blocks commit on critical violations when run
+- Auto-fixes safe issues when run with `cleanup:fix`
 
 **CI Pipeline:**
-- Runs `cleanup:check` on all PRs
+- Runs `cleanup:check` on all PRs (when configured)
 - Generates report artifact
 - Fails build on critical violations
 

@@ -66,7 +66,7 @@ export async function POST(_request: NextRequest) {
       data: {
         recipes_added: 12,
         ingredients_added: additionalIngredientsForRecipes.length,
-        recipe_ingredients_added: sampleRecipeIngredientsForPopulate.length,
+        recipe_ingredients_added: insertedCount,
       },
     });
   } catch (error) {
@@ -127,9 +127,14 @@ async function deleteExistingIngredients(supabaseAdmin: any, recipeIds: string[]
 async function insertRecipeIngredients(supabaseAdmin: any, ingredientMap: Map<string, string>) {
   let insertedCount = 0;
   let notFoundCount = 0;
+  const seen = new Set<string>();
   for (const ri of sampleRecipeIngredientsForPopulate) {
     const ingredientId = ingredientMap.get(ri.ingredient_name);
     if (ingredientId) {
+      const key = `${ri.recipe_id}-${ingredientId}`;
+      if (seen.has(key)) continue; // Skip duplicate (recipe_id, ingredient_id)
+      seen.add(key);
+
       const { error } = await supabaseAdmin.from('recipe_ingredients').insert({
         recipe_id: ri.recipe_id,
         ingredient_id: ingredientId,

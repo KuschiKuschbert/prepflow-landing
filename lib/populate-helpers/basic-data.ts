@@ -315,17 +315,33 @@ export async function populateBasicData(
       });
     }
 
-    if (recipeIngredientsToInsert.length > 0) {
+    // Deduplicate by (recipe_id, ingredient_id), summing quantities
+    const dedupedByKey = new Map<
+      string,
+      { recipe_id: string; ingredient_id: string; quantity: number; unit: string }
+    >();
+    for (const ri of recipeIngredientsToInsert) {
+      const key = `${ri.recipe_id}|${ri.ingredient_id}`;
+      const existing = dedupedByKey.get(key);
+      if (existing) {
+        existing.quantity += ri.quantity;
+      } else {
+        dedupedByKey.set(key, { ...ri });
+      }
+    }
+    const dedupedToInsert = Array.from(dedupedByKey.values());
+
+    if (dedupedToInsert.length > 0) {
       const { error: riError } = await supabaseAdmin
         .from('recipe_ingredients')
-        .insert(recipeIngredientsToInsert);
+        .insert(dedupedToInsert);
 
       if (riError) {
         results.errors.push({ table: 'recipe_ingredients', error: riError.message });
       } else {
         results.populated.push({
           table: 'recipe_ingredients',
-          count: recipeIngredientsToInsert.length,
+          count: dedupedToInsert.length,
         });
       }
     }

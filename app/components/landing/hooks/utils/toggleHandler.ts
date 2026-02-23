@@ -1,3 +1,4 @@
+import { ANIMATION_DURATION } from '../helpers/animationConstants';
 import { calculateExpandedWidth } from './containerDimensions';
 
 interface Feature {
@@ -6,8 +7,6 @@ interface Feature {
   screenshot: string;
   screenshotAlt: string;
 }
-
-const ANIMATION_DURATION = 500;
 
 export function createToggleHandler(
   expandedIndex: number | null,
@@ -43,14 +42,11 @@ export function createToggleHandler(
           return newScales;
         });
         setIsTransitioning(index);
-        // Use double RAF for smoother animation start
         requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            setExpandedIndex(index);
-            setTimeout(() => {
-              setIsTransitioning((prev: number | null) => (prev === index ? null : prev));
-            }, ANIMATION_DURATION + 100);
-          });
+          setExpandedIndex(index);
+          setTimeout(() => {
+            setIsTransitioning((prev: number | null) => (prev === index ? null : prev));
+          }, ANIMATION_DURATION + 50);
         });
       } else {
         setExpandedIndex(index);
@@ -60,7 +56,7 @@ export function createToggleHandler(
       setExpandedIndex(null);
       setTimeout(() => {
         setIsTransitioning((prev: number | null) => (prev === index ? null : prev));
-      }, ANIMATION_DURATION + 50);
+      }, ANIMATION_DURATION);
     }
   };
 }

@@ -1,8 +1,9 @@
 'use client';
+
 import React from 'react';
-import { equipmentTypes } from './equipment-config';
-import { X } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { equipmentTypes } from './equipment-config';
+import { Thermometer, X } from 'lucide-react';
 
 interface EquipmentTypeModalProps {
   isOpen: boolean;
@@ -42,7 +43,12 @@ export function EquipmentTypeModal({ isOpen, onClose, onSelect }: EquipmentTypeM
                 className="rounded-2xl bg-[var(--muted)] p-4 text-left transition-all duration-200 hover:bg-[var(--surface-variant)]"
               >
                 <div className="flex items-center space-x-3">
-                  <span className="text-2xl">{type.icon}</span>
+                  <Icon
+                    icon={Thermometer}
+                    size="lg"
+                    className="text-[var(--primary)]"
+                    aria-hidden={true}
+                  />
                   <div>
                     <h4 className="font-semibold text-[var(--foreground)]">{type.label}</h4>
                     <p className="text-sm text-[var(--foreground-muted)]">{type.category}</p>

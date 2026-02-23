@@ -38,8 +38,23 @@ export async function saveRecipeIngredients(
     }
   }
 
+  // Deduplicate by ingredient_id, summing quantities when the same ingredient appears multiple times
+  const byIngredient = new Map<string, SaveRecipeIngredientInput>();
+  for (const ing of ingredients) {
+    const existing = byIngredient.get(ing.ingredient_id);
+    if (existing) {
+      byIngredient.set(ing.ingredient_id, {
+        ...existing,
+        quantity: existing.quantity + ing.quantity,
+      });
+    } else {
+      byIngredient.set(ing.ingredient_id, { ...ing });
+    }
+  }
+  const deduped = Array.from(byIngredient.values());
+
   // Insert new ingredients
-  const recipeIngredientInserts = ingredients.map(ing => ({
+  const recipeIngredientInserts = deduped.map(ing => ({
     recipe_id: recipeId,
     ingredient_id: ing.ingredient_id,
     quantity: ing.quantity,

@@ -34,7 +34,9 @@ import { COGSEmptyState } from '../components/COGSEmptyState';
 import { COGSErrorDisplay } from '../components/COGSErrorDisplay';
 import { COGSHeader } from '../components/COGSHeader';
 import { RecipeNotFoundWarning } from '../components/RecipeNotFoundWarning';
+import { markFirstDone } from '@/lib/page-help/first-done-storage';
 import { logger } from '@/lib/logger';
+
 export default function CogsClient() {
   const {
     ingredients,
@@ -115,6 +117,12 @@ export default function CogsClient() {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  useEffect(() => {
+    if (calculations.length > 0) {
+      markFirstDone('cogs');
+    }
+  }, [calculations.length]);
   useCOGSEffects({
     setDishPortions,
     setShowSuggestions,

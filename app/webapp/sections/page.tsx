@@ -1,11 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useDishSectionActions } from './hooks/useDishSectionActions';
 import { DishSectionsHeader } from './components/DishSectionsHeader';
 import { SectionFormModal } from './components/SectionFormModal';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
+import { markFirstDone } from '@/lib/page-help/first-done-storage';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { useSectionsData } from './hooks/useSectionsData';
 import { SectionsEmptyState } from './components/SectionsEmptyState';
 import { SectionsList } from './components/SectionsList';
@@ -33,6 +36,11 @@ export default function DishSectionsPage() {
     fetchKitchenSections,
     fetchMenuDishes,
   } = useSectionsData(userId);
+
+  // Mark first done for InlineHint/RescueNudge when user creates first section
+  useEffect(() => {
+    if (kitchenSections.length > 0) markFirstDone('sections');
+  }, [kitchenSections.length]);
 
   const {
     handleSubmit,
@@ -75,6 +83,11 @@ export default function DishSectionsPage() {
     <ResponsivePageContainer>
       <div className="min-h-screen bg-transparent py-8 text-[var(--foreground)]">
         <DishSectionsHeader onAddClick={() => setShowForm(true)} />
+        {PAGE_TIPS_CONFIG.sections && (
+          <div className="mb-6">
+            <PageTipsCard config={PAGE_TIPS_CONFIG.sections} />
+          </div>
+        )}
         {error && (
           <div className="mb-6 rounded-2xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-4">
             <p className="text-[var(--color-error)]">{error}</p>

@@ -7,6 +7,7 @@ export function createCalculation(
   convertedUnit: string,
   conversionNote: string,
   selectedRecipe: string | null,
+  id?: string,
 ): COGSCalculation {
   const isConsumable = ingredientData.category === 'Consumables';
   const baseCostPerUnit =
@@ -17,6 +18,7 @@ export function createCalculation(
   // For consumables: simple calculation (no waste/yield)
   if (isConsumable) {
     return {
+      ...(id !== undefined && { id }),
       recipeId: selectedRecipe || 'temp',
       ingredientId,
       ingredientName: ingredientNameWithNote,
@@ -48,6 +50,7 @@ export function createCalculation(
   const yieldAdjusted = wasteAdjusted / (yieldPercent / 100);
 
   return {
+    ...(id !== undefined && { id }),
     recipeId: selectedRecipe || 'temp',
     ingredientId,
     ingredientName: ingredientNameWithNote,

@@ -3,6 +3,7 @@
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { Dish, Recipe } from '@/lib/types/recipes';
 import dynamic from 'next/dynamic';
+import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 import { IngredientsTab } from './IngredientsTab';
 import { RecipeManagementTabs, type RecipeManagementTab } from './RecipeManagementTabs';
@@ -25,14 +26,22 @@ interface RecipeBookContentProps {
 }
 
 export function RecipeBookContent({ initialDishes, initialRecipes }: RecipeBookContentProps = {}) {
+  const searchParams = useSearchParams();
   // Always start with 'ingredients' to ensure server/client hydration match
   // We'll update from hash in useEffect after mount
   const [activeTab, setActiveTab] = useState<RecipeManagementTab>('ingredients');
+  const preselectedRecipeId = searchParams.get('recipe');
 
-  // Initialize tab from hash after mount to prevent hydration mismatch
+  // Initialize tab from hash and URL params after mount to prevent hydration mismatch
   useEffect(() => {
     const updateTabFromHash = () => {
       if (typeof window === 'undefined') return;
+
+      // QR code deep link: ?recipe=id opens dishes tab with recipe preview
+      if (preselectedRecipeId) {
+        setActiveTab('dishes');
+        return;
+      }
 
       const hash = window.location.hash.slice(1);
       if (hash === 'dishes' || hash === 'ingredients' || hash === 'menu-builder') {
@@ -56,7 +65,7 @@ export function RecipeBookContent({ initialDishes, initialRecipes }: RecipeBookC
 
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+  }, [preselectedRecipeId]);
 
   return (
     <div>
@@ -68,7 +77,11 @@ export function RecipeBookContent({ initialDishes, initialRecipes }: RecipeBookC
         </Suspense>
       )}
       {activeTab === 'dishes' && (
-        <DishesClient initialDishes={initialDishes} initialRecipes={initialRecipes} />
+        <DishesClient
+          initialDishes={initialDishes}
+          initialRecipes={initialRecipes}
+          preselectedRecipeId={preselectedRecipeId}
+        />
       )}
       {activeTab === 'menu-builder' && <MenuBuilderTab />}
     </div>

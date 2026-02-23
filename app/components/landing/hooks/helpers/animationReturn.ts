@@ -1,4 +1,10 @@
-import { ANIMATION_DURATION, ANIMATION_EASING, BORDER_RADIUS_EASING } from './animationConstants';
+import {
+  ANIMATION_DURATION,
+  ANIMATION_EASING,
+  BORDER_RADIUS_EASING,
+  IMAGE_CROSSFADE_DURATION,
+  IMAGE_OPACITY_DURATION,
+} from './animationConstants';
 
 interface Feature {
   title: string;
@@ -94,5 +100,7 @@ export function createAnimationReturn({
     ANIMATION_DURATION,
     ANIMATION_EASING,
     BORDER_RADIUS_EASING,
+    IMAGE_CROSSFADE_DURATION,
+    IMAGE_OPACITY_DURATION,
   };
 }

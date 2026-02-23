@@ -3,7 +3,7 @@
  * Supports multiple content formats: Three.js, interactive demos, screenshots, videos, and hybrids.
  */
 
-export type GuideFormat = 'threejs' | 'interactive' | 'screenshot' | 'video' | 'hybrid';
+export type GuideFormat = 'text' | 'threejs' | 'interactive' | 'screenshot' | 'video' | 'hybrid';
 
 export type GuideCategory = 'onboarding' | 'workflow' | 'reference';
 
@@ -53,13 +53,32 @@ export interface VideoContent {
   chapters?: Array<{ time: number; title: string }>;
 }
 
+/** Lucide icon names for guide cards. Must match GUIDE_ICON_MAP in GuideNavigation. */
+export type GuideIconName =
+  | 'Rocket'
+  | 'FilePen'
+  | 'DollarSign'
+  | 'Thermometer'
+  | 'ClipboardCheck'
+  | 'Truck'
+  | 'FileText'
+  | 'ClipboardList'
+  | 'Package2'
+  | 'UtensilsCrossed'
+  | 'Users'
+  | 'Sparkles'
+  | 'CalendarDays'
+  | 'Settings'
+  | 'LayoutPanelLeft';
+
 export interface Guide {
   id: string;
   title: string;
   category: GuideCategory;
   description: string;
-  icon?: string;
+  iconName?: GuideIconName;
   steps: GuideStep[];
   estimatedTime?: number; // Estimated time in seconds
   difficulty?: Difficulty;
+  relatedGuideIds?: string[];
 }

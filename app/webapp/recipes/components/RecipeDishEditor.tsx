@@ -12,6 +12,7 @@ import { COGSCalculation } from '@/lib/types/recipes';
 import { Dish, Recipe } from '@/lib/types/recipes';
 import { useRecipeDishEditorData } from './hooks/useRecipeDishEditorData';
 import { useRecipeDishIngredientLoading } from './hooks/useRecipeDishIngredientLoading';
+import { useConfirm } from '@/hooks/useConfirm';
 import { useRecipeDishSave } from './hooks/useRecipeDishSave';
 import { EmptyState } from './RecipeDishEditor/components/EmptyState';
 import { IngredientEditorPanel } from './RecipeDishEditor/components/IngredientEditorPanel';
@@ -30,6 +31,7 @@ interface RecipeDishEditorProps {
 
 export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDishEditorProps) {
   const { showError, showSuccess } = useNotification();
+  const { showConfirm, ConfirmDialog } = useConfirm();
   const { allRecipes, allDishes, selectedItem, setSelectedItem, loading, allItems } =
     useRecipeDishEditorData(item, itemType);
   const {
@@ -70,6 +72,17 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
     setCalculations,
   });
 
+  const confirmZeroIngredients = useCallback(async () => {
+    return showConfirm({
+      title: 'No ingredients added',
+      message:
+        'This dish/recipe has no ingredients. Add ingredients for accurate cost calculations. Save anyway?',
+      variant: 'warning',
+      confirmLabel: 'Save anyway',
+      cancelLabel: 'Cancel',
+    });
+  }, [showConfirm]);
+
   const { saving, handleSave } = useRecipeDishSave({
     selectedItem,
     calculations,
@@ -78,6 +91,7 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
     onSave,
     showError,
     showSuccess,
+    confirmZeroIngredients,
   });
   const updateCalculationWrapper = useCallback(
     (ingredientId: string, quantity: number) => {
@@ -152,6 +166,7 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
 
   return (
     <div className="space-y-6">
+      <ConfirmDialog />
       <RecipeDishEditorHeader
         onClose={onClose}
         selectedItem={selectedItem}

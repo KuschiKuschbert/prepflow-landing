@@ -42,7 +42,7 @@ export function useInitialWidthMeasurement(
         }
       });
     };
-    const timeoutId = setTimeout(measureInitialDimensions, 100);
+    const timeoutId = setTimeout(measureInitialDimensions, 50);
     return () => clearTimeout(timeoutId);
   }, [features, initialWidths, buttonHeights, containerRefs, setInitialWidths, setButtonHeights]);
 }

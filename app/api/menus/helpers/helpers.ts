@@ -32,6 +32,7 @@ export async function createNewMenu(
   description?: string,
   menuType?: string,
   foodPerPersonKg?: number,
+  expectedGuests?: number | null,
 ): Promise<Menu> {
   const { data: newMenu, error: createError } = await supabase
     .from('menus')
@@ -41,6 +42,7 @@ export async function createNewMenu(
       user_id: userId,
       menu_type: menuType || 'a_la_carte',
       food_per_person_kg: foodPerPersonKg || null,
+      expected_guests: expectedGuests ?? null,
     })
     .select()
     .single();

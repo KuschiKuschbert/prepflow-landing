@@ -1,6 +1,8 @@
 'use client';
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
 import { TableSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { logger } from '@/lib/logger';
 import CSVImportModal from './CSVImportModal';
 import IngredientEditDrawer from './IngredientEditDrawer';
@@ -92,6 +94,11 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
   return (
     <>
       <IngredientsHeader hideHeader={hideHeader} />
+      {PAGE_TIPS_CONFIG.ingredients && (
+        <div className="mb-6">
+          <PageTipsCard config={PAGE_TIPS_CONFIG.ingredients} />
+        </div>
+      )}
       <IngredientsErrorBanner error={error} />
       <IngredientsBulkActions
         hideHeader={hideHeader}

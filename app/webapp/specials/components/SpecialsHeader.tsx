@@ -1,6 +1,6 @@
 import { Icon } from '@/components/ui/Icon';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Camera, Search, Sparkles, X } from 'lucide-react';
+import { AlertTriangle, Camera, Search, Sparkles, X } from 'lucide-react';
 import React from 'react';
 
 interface SpecialsHeaderProps {
@@ -63,8 +63,9 @@ export function SpecialsHeader({
           className="mx-auto mb-8 max-w-lg rounded-xl border border-white/10 bg-white/5 p-4 shadow-xl shadow-black/10 backdrop-blur-sm"
         >
           <p className="text-center text-sm text-white/70 italic">
-            <span className="text-landing-primary mr-2 mb-1 block font-semibold not-italic">
-              ⚠️ Chef&apos;s Disclaimer
+            <span className="text-landing-primary mr-2 mb-1 flex items-center justify-center gap-1.5 font-semibold not-italic">
+              <Icon icon={AlertTriangle} size="sm" aria-hidden={true} />
+              Chef&apos;s Disclaimer
             </span>
             &quot;For when your creativity has been 86&apos;d.&quot;
             <br />

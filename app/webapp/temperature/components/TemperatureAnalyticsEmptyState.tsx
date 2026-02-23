@@ -16,8 +16,8 @@ export function TemperatureAnalyticsEmptyState({
 }: TemperatureAnalyticsEmptyStateProps) {
   return (
     <EmptyState
-      title="No Temperature Data"
-      message="Generate sample temperature logs to see analytics, charts, and insights for your equipment"
+      title="1 step to temperature analytics"
+      message="Generate sample logs to see charts and trends for your equipment. Uses last 2 weeks of data."
       icon={BarChart3}
       actions={
         <Button

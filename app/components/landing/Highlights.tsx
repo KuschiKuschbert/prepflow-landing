@@ -41,7 +41,8 @@ const highlights: Highlight[] = [
   },
   {
     name: 'Functions & Events',
-    description: 'Catering, weddings, private dining—calendar, runsheets, and clients, all in place.',
+    description:
+      'Catering, weddings, private dining—calendar, runsheets, and clients, all in place.',
     icon: CalendarDays,
     screenshot: '/images/functions-events-screenshot.png',
     color: '#FF6B00',

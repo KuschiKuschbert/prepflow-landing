@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { useTranslation } from '@/lib/useTranslation';
-import { BarChart3 } from 'lucide-react';
+import { BarChart3, MapPin, Search, Store } from 'lucide-react';
 import { useMemo } from 'react';
 
 interface Ingredient {
@@ -98,8 +98,9 @@ export default function IngredientFilters({
         <div className="desktop:grid-cols-4 grid grid-cols-1 gap-4">
           {/* Search */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
-              🔍 Search
+            <label className="mb-2 flex items-center gap-1 text-sm font-medium text-[var(--foreground-secondary)]">
+              <Icon icon={Search} size="xs" className="text-[var(--primary)]" aria-hidden={true} />
+              Search
             </label>
             <input
               type="text"
@@ -112,8 +113,9 @@ export default function IngredientFilters({
 
           {/* Supplier Filter */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
-              🏪 Supplier
+            <label className="mb-2 flex items-center gap-1 text-sm font-medium text-[var(--foreground-secondary)]">
+              <Icon icon={Store} size="xs" className="text-[var(--primary)]" aria-hidden={true} />
+              Supplier
             </label>
             <select
               value={supplierFilter}
@@ -131,8 +133,9 @@ export default function IngredientFilters({
 
           {/* Storage Filter */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
-              📍 Storage
+            <label className="mb-2 flex items-center gap-1 text-sm font-medium text-[var(--foreground-secondary)]">
+              <Icon icon={MapPin} size="xs" className="text-[var(--primary)]" aria-hidden={true} />
+              Storage
             </label>
             <select
               value={storageFilter}

@@ -1,6 +1,8 @@
 'use client';
+
 import { Dish, DishCostData, Recipe, RecipePriceData } from '@/lib/types/recipes';
 import DishCard from './DishCard';
+import { DishesEmptyState } from './DishesEmptyState';
 import { DishesListPagination, DishesListSearch } from './DishesListControls';
 import RecipeCard from './RecipeCard';
 import { UnifiedItem } from '@/lib/types/recipes';
@@ -21,12 +23,14 @@ interface DishesListViewProps {
     itemsPerPage: number;
     sortField: string;
     sortDirection: 'asc' | 'desc';
+    itemType?: 'all' | 'dish' | 'recipe';
   };
   isSelectionMode: boolean;
   capitalizeRecipeName: (name: string) => string;
   onPageChange: (page: number) => void;
   onItemsPerPageChange: (itemsPerPage: number) => void;
   onSearchChange?: (term: string) => void;
+  onItemTypeChange?: (type: 'all' | 'dish' | 'recipe') => void;
   onSelectAll: () => void;
   onSelectItem: (itemId: string) => void;
   onPreviewDish: (dish: Dish) => void;
@@ -57,6 +61,7 @@ export function DishesListView({
   onPageChange,
   onItemsPerPageChange,
   onSearchChange,
+  onItemTypeChange,
   onSelectAll,
   onSelectItem,
   onPreviewDish,
@@ -73,26 +78,22 @@ export function DishesListView({
 }: DishesListViewProps) {
   const totalPages = Math.ceil(allItems.length / filters.itemsPerPage);
   const searchTerm = filters.searchTerm || '';
+  const itemType = filters.itemType ?? 'all';
 
   return (
     <>
-      <DishesListPagination
-        currentPage={filters.currentPage}
-        totalPages={totalPages}
-        totalItems={allItems.length}
-        onPageChange={onPageChange}
-      />
-
       <div className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
         <DishesListSearch
           searchTerm={searchTerm}
           itemsPerPage={filters.itemsPerPage}
+          itemType={itemType}
           onSearchChange={onSearchChange}
           onItemsPerPageChange={onItemsPerPageChange}
+          onItemTypeChange={onItemTypeChange}
         />
 
-        {/* Mobile Card Layout */}
-        <div className="large-desktop:hidden block">
+        {/* Mobile/Tablet Card Layout - hidden at desktop (1025px+) */}
+        <div className="desktop:hidden block">
           <div className="divide-y divide-[var(--muted)]">
             {paginatedItems.map(item => {
               if (item.itemType === 'dish') {
@@ -127,8 +128,8 @@ export function DishesListView({
           </div>
         </div>
 
-        {/* Desktop Table Layout */}
-        <div className="tablet:block hidden p-4">
+        {/* Desktop Table Layout - visible at 1025px+ only */}
+        <div className="desktop:block hidden p-4">
           {paginatedItems.length > 0 ? (
             <UnifiedTable
               items={paginatedItems}
@@ -176,31 +177,19 @@ export function DishesListView({
         </div>
       </div>
 
-      <DishesListPagination
-        currentPage={filters.currentPage}
-        totalPages={totalPages}
-        totalItems={allItems.length}
-        onPageChange={onPageChange}
-      />
+      {/* Single pagination bar - 2026 style, no top/bottom duplication */}
+      <div className="mt-4">
+        <DishesListPagination
+          currentPage={filters.currentPage}
+          totalPages={totalPages}
+          totalItems={allItems.length}
+          itemsPerPage={filters.itemsPerPage}
+          onPageChange={onPageChange}
+        />
+      </div>
 
       {/* Empty State */}
-      {allItems.length === 0 && (
-        <div className="py-12 text-center">
-          <div className="mb-4 text-6xl text-[var(--foreground-muted)]">🍽️</div>
-          <h3 className="mb-2 text-lg font-medium text-[var(--foreground)]">
-            No dishes or recipes yet
-          </h3>
-          <p className="mb-4 text-[var(--foreground-subtle)]">
-            Create your first dish or recipe by combining ingredients.
-          </p>
-          <button
-            onClick={() => onViewModeChange('builder')}
-            className="rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] px-4 py-2 text-[var(--button-active-text)] transition-colors hover:from-[var(--primary)]/80 hover:to-[var(--color-info)]/80"
-          >
-            Create Your First Item
-          </button>
-        </div>
-      )}
+      {allItems.length === 0 && <DishesEmptyState onViewModeChange={onViewModeChange} />}
     </>
   );
 }

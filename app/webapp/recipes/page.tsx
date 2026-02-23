@@ -5,9 +5,10 @@ import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { Dish, Recipe } from '@/lib/types/recipes';
 import { UtensilsCrossed } from 'lucide-react';
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { PageHeader } from '../components/static/PageHeader';
 import { RecipeBookContent } from './components/RecipeBookContent';
-import { RecipeBookDescription } from './components/RecipeBookDescription';
 
 // Force dynamic rendering to prevent SSR hydration issues
 export const dynamic = 'force-dynamic';
@@ -74,8 +75,8 @@ export default async function RecipesPage() {
             showLogo={true}
           />
 
-          {/* Static Description - Renders Instantly */}
-          <RecipeBookDescription />
+          {/* Collapsible, dismissible tips card */}
+          <PageTipsCard config={PAGE_TIPS_CONFIG.recipes} className="mb-6" />
 
           {/* Dynamic Content - Loads After Initial Render */}
           <RecipeBookContent initialDishes={initialDishes} initialRecipes={initialRecipes} />

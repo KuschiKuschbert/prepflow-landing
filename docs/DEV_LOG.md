@@ -2,6 +2,64 @@
 
 ## 2026-02-23 (continued)
 
+- **Guide Screenshots Capture and Crop**: Implemented DOM-driven capture and crop script.
+  - **Capture script**: Replaced fullPage screenshots with main-element clip. Scrolls to top, gets `main` bounding box, clips to top 720px of content. Fallback to viewport if main missing.
+  - **Crop script**: `scripts/crop-guide-screenshots.js` — processes images in `public/images/guides/` taller than 900px; extracts top 720px (skip 64px header). Idempotent. `npm run crop:guide-screenshots`.
+  - Ran crop on existing images: 8 cropped, 2 skipped (recipe-builder, recipe-form already compact).
+  - **Docs**: Updated GUIDE_SCREENSHOTS.md with prerequisites, crop instructions, troubleshooting.
+
+## 2026-02-23 (continued)
+
+- **PageTipsCard on Every Page**: Extended PageTipsCard to all primary webapp pages.
+  - Added PAGE_TIPS_CONFIG for dashboard, ingredients, performance, cogs, recipe-sharing, sections, cleaning, specials, setup.
+  - Rendered PageTipsCard on: dashboard, IngredientsClient, PerformanceClient, recipe-sharing, sections, cleaning, specials, setup. COGS page redirects to recipes; config added for future use.
+  - Tips use PrepFlow voice; guide deep-links where appropriate.
+
+## 2026-02-23 (continued)
+
+- **Tips and First-Time Help Overhaul**: Implemented plan to extend InlineHint, RescueNudge, and PageTipsCard across webapp.
+  - **Phase 1a – Dishes**: Added DishesEmptyState with InlineHint, RescueNudge; markFirstDone("dishes") in useDishesClientController when dishes/recipes exist.
+  - **Phase 1b – Menu-builder**: EmptyMenuList with InlineHint, RescueNudge; markFirstDone("menu-builder") in MenuBuilderClient when menus exist.
+  - **Phase 1c – PageTipsCard tabs**: PageTipsCard with dish-builder and menu-builder config in DishesClient and MenuBuilderClient when list is empty.
+  - **Phase 2a – Performance & COGS**: InlineHint + RescueNudge on PerformanceEmptyState, COGSTableEmptyState; markFirstDone wired.
+  - **Phase 2b – Broader rollout**: InlineHint + RescueNudge on EquipmentEmptyState, TemperatureLogsEmptyState, PrepListsEmptyState, ParLevelEmptyState, SectionsEmptyState, recipe-sharing EmptyState. markFirstDone wired in temperature, prep-lists, sections, par-levels, recipe-sharing pages.
+  - **Phase 3 – PageTipsCard**: Added PAGE_TIPS_CONFIG for suppliers, temperature, prep-lists, par-levels, order-lists. Rendered PageTipsCard on each page.
+  - **Phase 4**: Fixed guideStepIndex (5 → 4) for menu-builder and order-lists to match getting-started steps (0–4). Simplified TemperatureLogsEmptyState JSX to resolve TS1005.
+
+## 2026-02-23 (continued)
+
+- **Duplicate recipe ingredients fix**: Prevent and clean duplicate recipe_ingredient rows.
+  - **saveRecipeIngredients**: Deduplicate by ingredient_id before insert; sum quantities when same ingredient appears multiple times in payload.
+  - **populateBasicData**: Deduplicate by (recipe_id, ingredient_id) before insert; sum quantities. Prevents duplicates from populate-clean-test-data.
+  - **POST /api/db/dedupe-recipe-ingredients**: New endpoint to clean existing duplicates. For each (recipe_id, ingredient_id) with multiple rows: keeps one, sums quantities, deletes extras. Supports `?dry=1` to preview.
+  - **Docs**: Added endpoint to API_ENDPOINTS.md.
+  - **Existing sources**: populateRecipes (populate-empty-dishes) and populate-recipes already had dedup.
+
+## 2026-02-23 (continued)
+
+- **HMR Icon module factory fix**: Resolved "module factory is not available" error during dev hot reloads.
+  - Consolidated Icon implementation into `components/ui/Icon.tsx` (single source of truth); `lib/ui/Icon.tsx` now re-exports. Eliminates re-export chain that confused Turbopack HMR.
+  - Created `docs/TROUBLESHOOTING_LOG.md` documenting this and other dev-time errors (message channel, Partytown).
+
+## 2026-02-23 (continued)
+
+- **Webapp Tutorial & Tips System**: Implemented all 5 phases of the research-backed guidance system.
+  - **Phase 1 – PageHeader help + route-to-guide**: `lib/page-help/page-help-config.ts` (route-to-guide mapping), `usePageHelp.ts`, `PageHeaderHelp.tsx`, extended `PageHeader` with optional help icon. Guide deep-linking via `/webapp/guide?guide=id&step=n`.
+  - **Phase 2 – Empty state redesign**: Single primary CTA and time-to-value copy for IngredientEmptyState, RecipesEmptyState, EquipmentEmptyState, PerformanceEmptyState, TemperatureAnalyticsEmptyState, TemperatureLogsEmptyState, COGSTableEmptyState, PrepListsEmptyState, ParLevelEmptyState.
+  - **Phase 3 – Inline micro-hint**: `InlineHint.tsx` + `first-done-storage.ts`. Shows "Start here" hint until first success. Wired for ingredients (markFirstDone in useIngredientAdd) and recipes (markFirstDone in useDishFormSubmit).
+  - **Phase 4 – PageTipsCard**: `PageTipsCard.tsx` (collapsible, dismissible), `page-tips-content.ts`. Added to settings and compliance pages (no natural empty states). PrepFlow voice, localStorage for dismiss/collapse.
+  - **Phase 5 – Rescue nudges**: `RescueNudge.tsx` – appears after 25s idle on empty page. "Need a hand? [Show me how]". Pilot on ingredients and recipes empty states. Dismissible, never repeated.
+
+## 2026-02-23 (continued)
+
+- **Landing page screenshot replacement plan**: Implemented automated capture and unified format.
+  - **capture-landing-screenshots.js**: Puppeteer script to capture 8 webapp screenshots (dashboard, ingredients, cogs, recipes, performance, temperature, cleaning, settings). Supports `--base-url`, `--headed` for manual login. Persists session to `.screenshot-session/` for headless runs. Output: PNG files in `public/images/`.
+  - **npm run capture:screenshots**: New script. First run: `npm run capture:screenshots -- --headed` to log in; subsequent runs use saved session.
+  - **CloserLook.tsx**: Unified all 7 feature screenshots from `.webp` to `.png`.
+  - **next.config.ts**: Added quality `80` to `images.qualities` for Hero dashboard-screenshot.
+  - **docs/SCRIPTS.md**: Documented capture script, auth flow, and output files.
+  - **.gitignore**: Added `.screenshot-session/`.
+
 - **Icon audit system**: Added icon consistency checks to design compliance tooling.
   - **audit-hierarchy.js**: New `icon` category — `directLucideUsage` (Lucide used without Icon wrapper), `emojiIcons` (emoji in UI). Contributes to hierarchy violation count.
   - **audit-icons.js**: In-depth icon audit script — scans app, components, lib for direct Lucide usage (62 in 29 files) and emoji (289 in 99 files). Reports Icon wrapper usage (1,019).

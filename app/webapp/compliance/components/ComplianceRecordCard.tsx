@@ -3,6 +3,7 @@
 import OptimizedImage from '@/components/OptimizedImage';
 import { Icon } from '@/components/ui/Icon';
 import { useTranslation } from '@/lib/useTranslation';
+import { Camera, FileText, Pencil } from 'lucide-react';
 import { ComplianceRecord } from '../types';
 import { getDaysUntilExpiry, getStatusColor, getStatusIcon, getTypeIcon } from '../utils';
 
@@ -92,9 +93,10 @@ export function ComplianceRecordCard({ record }: ComplianceRecordCardProps) {
               href={record.document_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-xl bg-[var(--primary)] px-4 py-2 font-semibold text-[var(--primary-text)] transition-all duration-200 hover:shadow-lg"
+              className="flex items-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-2 font-semibold text-[var(--primary-text)] transition-all duration-200 hover:shadow-lg"
             >
-              📄 {t('compliance.viewDocument', 'View Document')}
+              <Icon icon={FileText} size="sm" aria-hidden={true} />
+              {t('compliance.viewDocument', 'View Document')}
             </a>
           )}
           {record.photo_url && (
@@ -125,11 +127,13 @@ export function ComplianceRecordCard({ record }: ComplianceRecordCardProps) {
           </span>
         </div>
         <div className="flex space-x-4">
-          <button className="rounded-xl bg-[var(--muted)] px-4 py-2 font-semibold text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)]">
-            📷 {t('compliance.addPhoto', 'Add Photo')}
+          <button className="flex items-center gap-2 rounded-xl bg-[var(--muted)] px-4 py-2 font-semibold text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)]">
+            <Icon icon={Camera} size="sm" aria-hidden={true} />
+            {t('compliance.addPhoto', 'Add Photo')}
           </button>
-          <button className="rounded-xl bg-[var(--muted)] px-4 py-2 font-semibold text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)]">
-            ✏️ {t('compliance.edit', 'Edit')}
+          <button className="flex items-center gap-2 rounded-xl bg-[var(--muted)] px-4 py-2 font-semibold text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)]">
+            <Icon icon={Pencil} size="sm" aria-hidden={true} />
+            {t('compliance.edit', 'Edit')}
           </button>
         </div>
       </div>

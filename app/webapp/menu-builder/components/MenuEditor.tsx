@@ -4,7 +4,7 @@ import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import { Menu } from '@/lib/types/menu-builder';
-import { Cake, Heart, PartyPopper, Users } from 'lucide-react';
+import { PartyPopper } from 'lucide-react';
 import { memo } from 'react';
 import CategoryManager from './CategoryManager';
 import DishPalette from './DishPalette';
@@ -170,16 +170,9 @@ function MenuEditorComponent({ menu, onMenuUpdated }: MenuEditorProps) {
       />
     );
   }
-  const isFunctionMenu = menu.menu_type && menu.menu_type.startsWith('function_');
-  const funcTypeConfig: Record<string, { icon: typeof Heart; label: string }> = {
-    function_wedding: { icon: Heart, label: 'Wedding Menu' },
-    function_birthday: { icon: Cake, label: 'Birthday Menu' },
-    function_corporate: { icon: Users, label: 'Corporate Menu' },
-    function_other: { icon: PartyPopper, label: 'Function Menu' },
-  };
-  const funcConfig = isFunctionMenu
-    ? funcTypeConfig[menu.menu_type || ''] || funcTypeConfig.function_other
-    : null;
+  const isFunctionMenu =
+    menu.menu_type === 'function' || (menu.menu_type && menu.menu_type.startsWith('function_'));
+  const funcConfig = isFunctionMenu ? { icon: PartyPopper, label: 'Function Menu' } : null;
 
   return (
     <div>
@@ -208,7 +201,13 @@ function MenuEditorComponent({ menu, onMenuUpdated }: MenuEditorProps) {
         {/* Main content area */}
         <div className="large-desktop:col-span-3 large-desktop:order-2 order-1 space-y-6">
           {/* Statistics - only show if there are menu items */}
-          {menuItems.length > 0 && <MenuStatisticsPanel statistics={statistics} />}
+          {menuItems.length > 0 && (
+            <MenuStatisticsPanel
+              statistics={statistics}
+              menuType={menu.menu_type}
+              expectedGuests={menu.expected_guests ?? undefined}
+            />
+          )}
           {/* CategoryManager - create categories first */}
           <CategoryManager
             categories={categories}

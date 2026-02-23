@@ -1,9 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/Button';
-import { Icon } from '@/components/ui/Icon';
-import { Calendar } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { CreateFunctionFormDateTimeSection } from './CreateFunctionFormDateTimeSection';
+import { CreateFunctionFormInfoBox } from './CreateFunctionFormInfoBox';
 
 interface CreateFunctionFormProps {
   onSubmit: (data: CreateFunctionData) => Promise<void>;
@@ -157,87 +157,11 @@ export function CreateFunctionForm({
         </select>
       </div>
 
-      {/* Same Day Checkbox */}
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={handleSameDayToggle}
-          className="flex items-center justify-center transition-colors hover:text-[var(--primary)]"
-          aria-label={`${formData.same_day ? 'Uncheck' : 'Check'} same day event`}
-        >
-          {formData.same_day ? (
-            <svg
-              className="h-5 w-5 text-[var(--primary)]"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-          ) : (
-            <div className="h-5 w-5 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
-          )}
-        </button>
-        <span className="text-sm text-[var(--foreground-secondary)]">Same day event</span>
-      </div>
-
-      {/* Date & Time Row */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className={labelClasses}>
-            Start Date <span className="text-[var(--color-error)]">*</span>
-          </label>
-          <input
-            type="date"
-            className={inputClasses}
-            value={formData.start_date}
-            onChange={e => setFormData(prev => ({ ...prev, start_date: e.target.value }))}
-            required
-          />
-        </div>
-        <div>
-          <label className={labelClasses}>Start Time</label>
-          <input
-            type="time"
-            className={inputClasses}
-            value={formData.start_time || ''}
-            onChange={e => setFormData(prev => ({ ...prev, start_time: e.target.value || null }))}
-          />
-        </div>
-      </div>
-
-      {/* End Date & Time (conditional on same_day) */}
-      <div className="grid grid-cols-2 gap-4">
-        {!formData.same_day && (
-          <div>
-            <label className={labelClasses}>
-              End Date <span className="text-[var(--color-error)]">*</span>
-            </label>
-            <input
-              type="date"
-              className={inputClasses}
-              value={formData.end_date || ''}
-              min={formData.start_date || undefined}
-              onChange={e => setFormData(prev => ({ ...prev, end_date: e.target.value || null }))}
-              required={!formData.same_day}
-            />
-          </div>
-        )}
-        <div className={formData.same_day ? 'col-span-2 max-w-[calc(50%-0.5rem)]' : ''}>
-          <label className={labelClasses}>End Time</label>
-          <input
-            type="time"
-            className={inputClasses}
-            value={formData.end_time || ''}
-            onChange={e => setFormData(prev => ({ ...prev, end_time: e.target.value || null }))}
-          />
-        </div>
-      </div>
+      <CreateFunctionFormDateTimeSection
+        formData={formData}
+        setFormData={setFormData}
+        handleSameDayToggle={handleSameDayToggle}
+      />
 
       {/* Location */}
       <div>
@@ -304,24 +228,7 @@ export function CreateFunctionForm({
         />
       </div>
 
-      {/* Info box */}
-      <div className="rounded-xl border border-[var(--border)] bg-[var(--primary)]/5 p-4">
-        <div className="flex items-start gap-3">
-          <Icon
-            icon={Calendar}
-            size="md"
-            className="mt-0.5 flex-shrink-0 text-[var(--primary)]"
-            aria-hidden
-          />
-          <div>
-            <p className="text-sm font-medium text-[var(--foreground)]">What happens next?</p>
-            <p className="mt-1 text-xs text-[var(--foreground-muted)]">
-              Your event will be created and you can build out a detailed runsheet with times,
-              activities, and meal services. You can link function menus to meal entries directly.
-            </p>
-          </div>
-        </div>
-      </div>
+      <CreateFunctionFormInfoBox />
 
       {/* Actions */}
       <div className="flex items-center justify-end gap-3 border-t border-[var(--border)] pt-4">

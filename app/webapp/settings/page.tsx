@@ -1,6 +1,8 @@
 'use client';
 
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import SettingsNavigation from './components/SettingsNavigation';
@@ -217,6 +219,12 @@ export default function SettingsPage() {
       <SettingsNavigation />
       <main className="desktop:ml-64 flex-1 overflow-auto">
         <div className="desktop:p-8 large-desktop:max-w-[1400px] mx-auto max-w-[1400px] p-6 xl:max-w-[1400px] 2xl:max-w-[1600px]">
+          {/* Page tips for settings (no natural empty state) */}
+          {isMounted && PAGE_TIPS_CONFIG.settings && (
+            <div className="mb-6">
+              <PageTipsCard config={PAGE_TIPS_CONFIG.settings} />
+            </div>
+          )}
           {/* Section Content - Render all sections with IDs for hash navigation */}
           {isMounted && (
             <div className="space-y-8">

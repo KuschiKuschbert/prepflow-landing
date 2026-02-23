@@ -33,37 +33,6 @@ export function TemperatureFilters({
   }, []);
 
   /**
-   * Safely converts an icon value to a string for rendering in select options.
-   * Prevents React component objects from being rendered directly.
-   * Returns empty string if icon is a React component or other non-string value.
-   */
-  const getIconString = (icon: unknown): string => {
-    if (typeof icon === 'string') {
-      return icon;
-    }
-    // If it's a React component or other object, return empty string
-    // (can't render React components in <option> elements)
-    return '';
-  };
-
-  /**
-   * Gets the icon string for a given equipment type (for use in select options).
-   * Uses a deterministic lookup to prevent hydration mismatches.
-   * Normalizes the type comparison to ensure consistency between server and client.
-   * Note: Returns emoji string for select options compatibility.
-   */
-  const getTypeIcon = (type: string): string => {
-    if (!type) return '';
-    // Normalize type for comparison (trim and lowercase)
-    const normalizedType = type.trim().toLowerCase();
-    const matched = temperatureTypes.find(
-      tt => tt.value.toLowerCase() === normalizedType || tt.value === type,
-    );
-    // Return emoji string for select options (can't use React components in <option>)
-    return getIconString(matched?.icon) || '';
-  };
-
-  /**
    * Validates and normalizes a date string to ensure it's valid.
    * Returns a valid date string in YYYY-MM-DD format, or today's date if invalid.
    */
@@ -148,10 +117,9 @@ export function TemperatureFilters({
                     item.id !== undefined
                       ? `eq-${item.id}-${item.name}-${index}`
                       : `eq-${item.name}-${item.equipment_type}-${index}`;
-                  const icon = getTypeIcon(item.equipment_type);
                   return (
                     <option key={uniqueKey} value={item.equipment_type}>
-                      {icon} {item.name}
+                      {item.name}
                     </option>
                   );
                 })}
@@ -164,7 +132,7 @@ export function TemperatureFilters({
               )
               .map(type => (
                 <option key={type.value} value={type.value}>
-                  {getIconString(type.icon)} {type.label}
+                  {type.label}
                 </option>
               ))}
           </select>

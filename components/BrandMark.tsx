@@ -3,8 +3,20 @@
 'use client';
 
 import OptimizedImage from '@/components/OptimizedImage';
+import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
 import { checkSeasonalMatch } from '@/lib/personality/utils';
+import {
+  Egg,
+  Flower2,
+  Ghost,
+  Heart,
+  Moon,
+  PartyPopper,
+  Skull,
+  Snowflake,
+  Sparkles,
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
@@ -198,13 +210,13 @@ export function BrandMark({
           {seasonalEffect === 'santaHat' && !reducedMotion && (
             <>
               <div className="pf-snowflake pf-snowflake-1" aria-hidden={true}>
-                ❄️
+                <Icon icon={Snowflake} size="sm" />
               </div>
               <div className="pf-snowflake pf-snowflake-2" aria-hidden={true}>
-                ❄️
+                <Icon icon={Snowflake} size="sm" />
               </div>
               <div className="pf-snowflake pf-snowflake-3" aria-hidden={true}>
-                ❄️
+                <Icon icon={Snowflake} size="sm" />
               </div>
             </>
           )}
@@ -212,13 +224,13 @@ export function BrandMark({
           {seasonalEffect === 'toque' && !reducedMotion && (
             <>
               <div className="pf-chef-sparkle pf-chef-sparkle-1" aria-hidden={true}>
-                ✨
+                <Icon icon={Sparkles} size="sm" />
               </div>
               <div className="pf-chef-sparkle pf-chef-sparkle-2" aria-hidden={true}>
-                ✨
+                <Icon icon={Sparkles} size="sm" />
               </div>
               <div className="pf-chef-sparkle pf-chef-sparkle-3" aria-hidden={true}>
-                ✨
+                <Icon icon={Sparkles} size="sm" />
               </div>
             </>
           )}
@@ -226,13 +238,13 @@ export function BrandMark({
           {(seasonalEffect === 'newYear' || seasonalEffect === 'newYearsEve') && !reducedMotion && (
             <>
               <div className="pf-confetti pf-confetti-1" aria-hidden={true}>
-                🎊
+                <Icon icon={PartyPopper} size="sm" />
               </div>
               <div className="pf-confetti pf-confetti-2" aria-hidden={true}>
-                🎉
+                <Icon icon={PartyPopper} size="sm" />
               </div>
               <div className="pf-confetti pf-confetti-3" aria-hidden={true}>
-                ✨
+                <Icon icon={Sparkles} size="sm" />
               </div>
             </>
           )}
@@ -240,13 +252,13 @@ export function BrandMark({
           {seasonalEffect === 'valentines' && !reducedMotion && (
             <>
               <div className="pf-heart pf-heart-1" aria-hidden={true}>
-                💖
+                <Icon icon={Heart} size="sm" />
               </div>
               <div className="pf-heart pf-heart-2" aria-hidden={true}>
-                💕
+                <Icon icon={Heart} size="sm" />
               </div>
               <div className="pf-heart pf-heart-3" aria-hidden={true}>
-                💗
+                <Icon icon={Heart} size="sm" />
               </div>
             </>
           )}
@@ -254,13 +266,13 @@ export function BrandMark({
           {seasonalEffect === 'easter' && !reducedMotion && (
             <>
               <div className="pf-easter-egg pf-easter-egg-1" aria-hidden={true}>
-                🥚
+                <Icon icon={Egg} size="sm" />
               </div>
               <div className="pf-easter-egg pf-easter-egg-2" aria-hidden={true}>
-                🐣
+                <Icon icon={Egg} size="sm" />
               </div>
               <div className="pf-easter-egg pf-easter-egg-3" aria-hidden={true}>
-                🌸
+                <Icon icon={Flower2} size="sm" />
               </div>
             </>
           )}
@@ -268,13 +280,13 @@ export function BrandMark({
           {seasonalEffect === 'halloween' && !reducedMotion && (
             <>
               <div className="pf-halloween pf-halloween-1" aria-hidden={true}>
-                🦇
+                <Icon icon={Moon} size="sm" />
               </div>
               <div className="pf-halloween pf-halloween-2" aria-hidden={true}>
-                🎃
+                <Icon icon={Skull} size="sm" />
               </div>
               <div className="pf-halloween pf-halloween-3" aria-hidden={true}>
-                👻
+                <Icon icon={Ghost} size="sm" />
               </div>
             </>
           )}

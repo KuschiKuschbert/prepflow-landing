@@ -7,7 +7,9 @@
 
 'use client';
 
+import { Icon } from '@/components/ui/Icon';
 import { useGamification } from '@/hooks/useGamification';
+import { Cherry, FileText, Flame } from 'lucide-react';
 import { ProgressRing } from './ProgressRing';
 
 interface StatsDisplayProps {
@@ -51,9 +53,18 @@ export function StatsDisplay({
       <div className={`flex items-center gap-3 ${className}`}>
         {showArcade && (
           <div className="flex items-center gap-2 text-sm text-[var(--foreground-muted)]">
-            <span>🍅 {stats.arcade.tomatoes}</span>
-            <span>📄 {stats.arcade.dockets}</span>
-            <span>🔥 {stats.arcade.fires}</span>
+            <span className="flex items-center gap-1">
+              <Icon icon={Cherry} size="xs" aria-hidden={true} />
+              {stats.arcade.tomatoes}
+            </span>
+            <span className="flex items-center gap-1">
+              <Icon icon={FileText} size="xs" aria-hidden={true} />
+              {stats.arcade.dockets}
+            </span>
+            <span className="flex items-center gap-1">
+              <Icon icon={Flame} size="xs" aria-hidden={true} />
+              {stats.arcade.fires}
+            </span>
           </div>
         )}
         {showAchievements && (
@@ -117,8 +128,9 @@ export function StatsDisplay({
       {showStreak && streak > 0 && (
         <div>
           <h3 className="mb-2 text-sm font-medium text-[var(--foreground-secondary)]">Streak</h3>
-          <div className="text-lg font-semibold text-[var(--tertiary)]">
-            🔥 {streak} {streak === 1 ? 'day' : 'days'}
+          <div className="flex items-center gap-2 text-lg font-semibold text-[var(--tertiary)]">
+            <Icon icon={Flame} size="sm" aria-hidden={true} />
+            {streak} {streak === 1 ? 'day' : 'days'}
           </div>
         </div>
       )}

@@ -10,6 +10,7 @@ export interface Menu {
   locked_by?: string;
   menu_type?: string;
   food_per_person_kg?: number | null;
+  expected_guests?: number | null;
 }
 
 export interface MenuItem {
@@ -69,6 +70,8 @@ export interface MenuStatistics {
   gross_profit: number;
   average_profit_margin: number;
   food_cost_percent: number;
+  /** Price per person (function menus only): sum of per-serving item prices */
+  price_per_person?: number | null;
 }
 
 export interface Dish {

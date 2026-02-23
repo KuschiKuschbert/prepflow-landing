@@ -18,6 +18,7 @@ interface MenuListProps {
   onDeleteMenu: (deletedMenuId: string) => void;
   onMenuUpdated?: () => void;
   setMenus?: (menus: Menu[] | ((prev: Menu[]) => Menu[])) => void;
+  onCreateMenu?: () => void;
 }
 
 /**
@@ -34,6 +35,7 @@ export default function MenuList({
   onDeleteMenu,
   onMenuUpdated,
   setMenus,
+  onCreateMenu,
 }: MenuListProps) {
   const editing = useMenuEditing({ menus, setMenus, onMenuUpdated });
   const deletion = useMenuDeletion({ menus, setMenus, onDeleteMenu });
@@ -115,7 +117,7 @@ export default function MenuList({
   );
 
   if (menus.length === 0) {
-    return <EmptyMenuList />;
+    return <EmptyMenuList onCreateClick={onCreateMenu} />;
   }
 
   return (

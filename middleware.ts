@@ -177,6 +177,21 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  // Admin-key bypass for dev/db endpoints (reset, dedupe, etc.) - allows curl/scripts without session
+  const adminKeyPaths = [
+    '/api/db/reset',
+    '/api/db/dedupe-recipe-ingredients',
+    '/api/dedupe/preview',
+    '/api/dedupe/execute',
+  ];
+  if (adminKeyPaths.some(p => pathname.startsWith(p))) {
+    const adminKey = req.headers.get('x-admin-key');
+    const seedKey = process.env.SEED_ADMIN_KEY;
+    if (seedKey && adminKey === seedKey) {
+      return withSecurityHeaders(NextResponse.next());
+    }
+  }
+
   // Get session for protected routes
   const session = await auth0.getSession(req);
 

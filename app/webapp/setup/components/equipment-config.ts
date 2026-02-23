@@ -5,7 +5,7 @@ export const equipmentTypes: EquipmentType[] = [
   {
     value: 'fridge',
     label: 'Fridge',
-    icon: '🧊',
+    icon: '',
     defaultMin: 2,
     defaultMax: 8,
     category: 'Cold Storage',
@@ -13,7 +13,7 @@ export const equipmentTypes: EquipmentType[] = [
   {
     value: 'freezer',
     label: 'Freezer',
-    icon: '❄️',
+    icon: '',
     defaultMin: -18,
     defaultMax: -15,
     category: 'Cold Storage',
@@ -21,7 +21,7 @@ export const equipmentTypes: EquipmentType[] = [
   {
     value: 'walk_in_cooler',
     label: 'Walk-in Cooler',
-    icon: '🏠',
+    icon: '',
     defaultMin: 2,
     defaultMax: 8,
     category: 'Cold Storage',
@@ -29,7 +29,7 @@ export const equipmentTypes: EquipmentType[] = [
   {
     value: 'walk_in_freezer',
     label: 'Walk-in Freezer',
-    icon: '🏠',
+    icon: '',
     defaultMin: -18,
     defaultMax: -15,
     category: 'Cold Storage',
@@ -37,7 +37,7 @@ export const equipmentTypes: EquipmentType[] = [
   {
     value: 'reach_in_cooler',
     label: 'Bench Fridge',
-    icon: '🧊',
+    icon: '',
     defaultMin: 2,
     defaultMax: 8,
     category: 'Cold Storage',
@@ -45,7 +45,7 @@ export const equipmentTypes: EquipmentType[] = [
   {
     value: 'ice_machine',
     label: 'Ice Machine',
-    icon: '🧊',
+    icon: '',
     defaultMin: 0,
     defaultMax: 4,
     category: 'Cold Storage',
@@ -54,7 +54,7 @@ export const equipmentTypes: EquipmentType[] = [
   {
     value: 'bain_marie',
     label: 'Bain Marie',
-    icon: '♨️',
+    icon: '',
     defaultMin: 63,
     defaultMax: 75,
     category: 'Hot Holding',
@@ -62,7 +62,7 @@ export const equipmentTypes: EquipmentType[] = [
   {
     value: 'hot_holding_cabinet',
     label: 'Hot Holding Cabinet',
-    icon: '♨️',
+    icon: '',
     defaultMin: 63,
     defaultMax: 75,
     category: 'Hot Holding',
@@ -70,7 +70,7 @@ export const equipmentTypes: EquipmentType[] = [
   {
     value: 'steam_table',
     label: 'Steam Table',
-    icon: '♨️',
+    icon: '',
     defaultMin: 63,
     defaultMax: 75,
     category: 'Hot Holding',
@@ -78,7 +78,7 @@ export const equipmentTypes: EquipmentType[] = [
   {
     value: 'warming_drawer',
     label: 'Warming Drawer',
-    icon: '♨️',
+    icon: '',
     defaultMin: 63,
     defaultMax: 75,
     category: 'Hot Holding',
@@ -86,7 +86,7 @@ export const equipmentTypes: EquipmentType[] = [
   {
     value: 'soup_kettle',
     label: 'Soup Kettle',
-    icon: '🍲',
+    icon: '',
     defaultMin: 63,
     defaultMax: 75,
     category: 'Hot Holding',
@@ -94,7 +94,7 @@ export const equipmentTypes: EquipmentType[] = [
   {
     value: 'rice_cooker',
     label: 'Rice Cooker',
-    icon: '🍚',
+    icon: '',
     defaultMin: 63,
     defaultMax: 75,
     category: 'Hot Holding',
@@ -103,7 +103,7 @@ export const equipmentTypes: EquipmentType[] = [
   {
     value: 'combi_oven',
     label: 'Combi Oven',
-    icon: '🍳',
+    icon: '',
     defaultMin: 60,
     defaultMax: 80,
     category: 'Cooking Equipment',
@@ -111,7 +111,7 @@ export const equipmentTypes: EquipmentType[] = [
   {
     value: 'sous_vide',
     label: 'Sous Vide Bath',
-    icon: '🍳',
+    icon: '',
     defaultMin: 60,
     defaultMax: 80,
     category: 'Cooking Equipment',
@@ -119,7 +119,7 @@ export const equipmentTypes: EquipmentType[] = [
   {
     value: 'proofing_cabinet',
     label: 'Proofing Cabinet',
-    icon: '🍞',
+    icon: '',
     defaultMin: 30,
     defaultMax: 35,
     category: 'Cooking Equipment',
@@ -127,7 +127,7 @@ export const equipmentTypes: EquipmentType[] = [
   {
     value: 'chocolate_tempering',
     label: 'Chocolate Tempering',
-    icon: '🍫',
+    icon: '',
     defaultMin: 30,
     defaultMax: 32,
     category: 'Cooking Equipment',

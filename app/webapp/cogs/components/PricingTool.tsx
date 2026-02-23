@@ -48,7 +48,7 @@ export const PricingTool: React.FC<PricingToolProps> = ({
   };
 
   return (
-    <div className="mt-6 border-t border-[var(--border)] pt-4">
+    <div className="mt-6 border-t border-[var(--border)] pt-4" data-guide-capture="pricing-tool">
       <div className="mb-4">
         {/* Header with Title and Target Gross Profit */}
         <div className="tablet:flex-row tablet:items-center tablet:justify-between mb-4 flex flex-col gap-3">

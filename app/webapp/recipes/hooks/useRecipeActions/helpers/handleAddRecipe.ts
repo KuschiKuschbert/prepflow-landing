@@ -12,6 +12,7 @@ interface HandleAddRecipeParams {
   onRecipeCreated: () => void;
   showErrorNotification: (message: string) => void;
   showSuccess: (message: string) => void;
+  showInfo?: (message: string) => void;
 }
 
 export async function handleAddRecipe({
@@ -21,6 +22,7 @@ export async function handleAddRecipe({
   onRecipeCreated,
   showErrorNotification,
   showSuccess,
+  showInfo,
 }: HandleAddRecipeParams): Promise<boolean> {
   // Store original state for rollback
   const originalRecipes = [...recipes];
@@ -60,6 +62,9 @@ export async function handleAddRecipe({
         prev.map(recipe => (recipe.id === tempId ? insertedRecipe : recipe)),
       );
       showSuccess(`Recipe "${insertedRecipe.recipe_name}" created successfully!`);
+      showInfo?.(
+        "Add ingredients in the COGS Calculator for accurate cost and COGS. Or run 'Populate empty items' later.",
+      );
       onRecipeCreated();
       return true;
     }

@@ -8,6 +8,7 @@
 import { Suspense, lazy } from 'react';
 import { GuideControls } from './GuideControls';
 import { ScreenshotGuide } from './formats/ScreenshotGuide';
+import { TextGuide } from './formats/TextGuide';
 import { InteractiveDemo } from './formats/InteractiveDemo';
 import { VideoGuide } from './formats/VideoGuide';
 import { HybridGuide } from './formats/HybridGuide';
@@ -39,6 +40,8 @@ export function GuideViewer({
 }: GuideViewerProps) {
   const renderContent = () => {
     switch (step.format) {
+      case 'text':
+        return <TextGuide description={step.description} />;
       case 'screenshot':
         if (step.content.screenshot) {
           return <ScreenshotGuide content={step.content.screenshot} />;
@@ -89,10 +92,12 @@ export function GuideViewer({
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Step header */}
+      {/* Step header — for text format, title only; content holds the full description */}
       <div className="space-y-2">
         <h2 className="text-fluid-2xl font-semibold text-[var(--foreground)]">{step.title}</h2>
-        <p className="text-fluid-base text-[var(--foreground-secondary)]">{step.description}</p>
+        {step.format !== 'text' && (
+          <p className="text-fluid-base text-[var(--foreground-secondary)]">{step.description}</p>
+        )}
       </div>
 
       {/* Step content */}

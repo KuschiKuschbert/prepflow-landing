@@ -121,6 +121,7 @@ Complete reference for all PrepFlow API endpoints (59 endpoints total).
 - `POST /api/cleanup-test-data` - Cleanup test data
 - `POST /api/dedupe/preview` - Preview deduplication
 - `POST /api/dedupe/execute` - Execute deduplication
+- `POST /api/db/dedupe-recipe-ingredients` - Remove duplicate recipe_ingredient rows (same recipe_id + ingredient_id). Use `?dry=1` to preview.
 
 **Note:** Database management endpoints require header `X-Admin-Key: $SEED_ADMIN_KEY` and are blocked in production.
 

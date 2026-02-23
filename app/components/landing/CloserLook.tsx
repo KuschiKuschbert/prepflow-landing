@@ -116,8 +116,7 @@ const features: Feature[] = [
       'Plan catering functions, weddings, and special events. Calendar, runsheets, and client management.',
     icon: CalendarDays,
     screenshot: '/images/functions-events-screenshot.png',
-    screenshotAlt:
-      'PrepFlow Functions & Events showing calendar view and event planning',
+    screenshotAlt: 'PrepFlow Functions & Events showing calendar view and event planning',
     details: [
       'Calendar view for scheduling functions and events',
       'Runsheet builder with linked dishes and recipes',

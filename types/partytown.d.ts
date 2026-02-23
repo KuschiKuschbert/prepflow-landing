@@ -1,4 +1,4 @@
-declare module '@builder.io/partytown/react' {
+declare module '@qwik.dev/partytown/react' {
   import { ComponentType } from 'react';
 
   export interface PartytownProps {

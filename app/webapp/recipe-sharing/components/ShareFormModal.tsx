@@ -85,9 +85,9 @@ export function ShareFormModal({
                 className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                 required
               >
-                <option value="pdf">📄 PDF Download</option>
-                <option value="link">🔗 Shareable Link</option>
-                <option value="email">📧 Email Recipe</option>
+                <option value="pdf">PDF Download</option>
+                <option value="link">Shareable Link</option>
+                <option value="email">Email Recipe</option>
               </select>
             </div>
             {formData.shareType === 'email' && (

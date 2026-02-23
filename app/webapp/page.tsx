@@ -1,7 +1,9 @@
 'use client';
 
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { getUserFirstName } from '@/lib/user-name';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { LayoutDashboard } from 'lucide-react';
@@ -99,6 +101,12 @@ export default function WebAppDashboard() {
           subtitle={subtitle}
           icon={LayoutDashboard}
         />
+
+        {PAGE_TIPS_CONFIG.dashboard && (
+          <div className="mb-6">
+            <PageTipsCard config={PAGE_TIPS_CONFIG.dashboard} />
+          </div>
+        )}
 
         {/* Static Quick Actions - Renders Instantly */}
         <QuickActions />

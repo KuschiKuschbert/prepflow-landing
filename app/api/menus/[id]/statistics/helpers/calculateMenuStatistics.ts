@@ -8,10 +8,12 @@ import { processRecipeItem } from './processRecipeItem';
  * Calculate menu statistics from menu items.
  *
  * @param {MenuItemWithRelations[]} menuItems - Menu items with dishes and recipes
- * @returns {Promise<MenuStatistics>} Menu statistics
+ * @param {string} [menuType] - Menu type (e.g. 'a_la_carte', 'function'); if function, adds price_per_person
+ * @returns {Promise<MenuDetailStatistics>} Menu statistics
  */
 export async function calculateMenuStatistics(
   menuItems: MenuItemWithRelations[],
+  menuType?: string,
 ): Promise<MenuDetailStatistics> {
   logger.dev('[calculateMenuStatistics] Starting calculation', { itemCount: menuItems.length });
   let totalCOGS = 0;
@@ -102,7 +104,9 @@ export async function calculateMenuStatistics(
   const safeTotalCOGS = isNaN(totalCOGS) || !isFinite(totalCOGS) ? 0 : totalCOGS;
   const safeTotalRevenue = isNaN(totalRevenue) || !isFinite(totalRevenue) ? 0 : totalRevenue;
 
-  return {
+  const isFunctionMenu = menuType === 'function' || (menuType && menuType.startsWith('function_'));
+
+  const base: MenuDetailStatistics = {
     total_items: menuItems.length,
     total_dishes: dishCount,
     total_recipes: recipeCount,
@@ -112,4 +116,9 @@ export async function calculateMenuStatistics(
     average_profit_margin: safeAverageProfitMargin,
     food_cost_percent: safeFoodCostPercent,
   };
+
+  if (isFunctionMenu) {
+    return { ...base, price_per_person: safeTotalRevenue };
+  }
+  return base;
 }

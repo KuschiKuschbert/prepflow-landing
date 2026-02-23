@@ -1,5 +1,8 @@
 'use client';
+
+import { Icon } from '@/components/ui/Icon';
 import { useTranslation } from '@/lib/useTranslation';
+import { FileText, Link2, Mail, Share2, type LucideIcon } from 'lucide-react';
 
 interface Recipe {
   recipe_name: string;
@@ -34,16 +37,16 @@ function getStatusColor(status: string) {
   }
 }
 
-function getShareTypeIcon(type: string) {
+function getShareTypeIcon(type: string): LucideIcon {
   switch (type) {
     case 'pdf':
-      return '📄';
+      return FileText;
     case 'link':
-      return '🔗';
+      return Link2;
     case 'email':
-      return '📧';
+      return Mail;
     default:
-      return '📤';
+      return Share2;
   }
 }
 
@@ -55,7 +58,12 @@ export function ShareCard({ share }: ShareCardProps) {
         <div className="flex-1">
           <div className="mb-3 flex items-center space-x-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20">
-              <span className="text-lg">{getShareTypeIcon(share.share_type)}</span>
+              <Icon
+                icon={getShareTypeIcon(share.share_type)}
+                size="lg"
+                className="text-[var(--primary)]"
+                aria-hidden={true}
+              />
             </div>
             <div>
               <h3 className="text-lg font-semibold text-[var(--foreground)]">

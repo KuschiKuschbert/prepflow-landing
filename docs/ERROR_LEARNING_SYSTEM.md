@@ -130,13 +130,13 @@ npm run error:generate-rules
 3. **Fix Documented**: Automatically detected or manually documented
 4. **Pattern Learned**: System extracts patterns from fixes
 5. **Rule Generated**: Rules generated when pattern appears 3+ times
-6. **Prevention**: High-risk patterns checked in pre-commit
+6. **Prevention**: High-risk patterns checked in CI and via cleanup checks
 
 ## Integration Points
 
-### Pre-commit Hook
+### Cleanup Checks (Manual or CI)
 
-The learned-patterns check runs as part of cleanup checks, warning about high-risk patterns that have caused errors before.
+The learned-patterns check runs as part of cleanup checks (`npm run cleanup:staged` or `npm run cleanup:check`), warning about high-risk patterns that have caused errors before. Run manually before committing or in CI. The default pre-commit hook runs only fast checks (merge conflicts, curbos protection, file size, lint-staged).
 
 ### CI/CD Pipeline
 
@@ -197,6 +197,6 @@ The `.cursor/rules/error-patterns.mdc` file is automatically updated with learne
 2. Document fixes when resolving errors (interactive tool or auto-detect)
 3. Review learning reports weekly to track progress
 4. Rules will be generated automatically as patterns emerge
-5. High-risk patterns will be checked in pre-commit to prevent errors
+5. High-risk patterns can be checked via `npm run cleanup:staged` or in CI to prevent errors
 
 The system is now fully operational and will continuously learn and improve!

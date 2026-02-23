@@ -8,9 +8,11 @@
 
 'use client';
 
+import { Icon } from '@/components/ui/Icon';
 import { useGamification } from '@/hooks/useGamification';
 import { ArcadeStats, getSessionStats } from '@/lib/arcadeStats';
 import { usePersonality } from '@/lib/personality/store';
+import { Cherry, Flame, Receipt, Trophy } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 interface NavbarStatsProps {
@@ -77,9 +79,12 @@ export const NavbarStats: React.FC<NavbarStatsProps> = ({ onClick }) => {
         className="tablet:gap-1 flex items-center gap-0.5"
         style={{ fontSize: '14px' }}
       >
-        <span className="text-fluid-sm tablet:text-fluid-base desktop:text-fluid-lg leading-none">
-          🍅
-        </span>
+        <Icon
+          icon={Cherry}
+          size="sm"
+          className="text-fluid-sm tablet:text-fluid-base desktop:text-fluid-lg leading-none"
+          aria-hidden={true}
+        />
         <span className="tablet:text-[11px] desktop:text-fluid-xs text-[10px] leading-none">
           {stats.tomatoes}
         </span>
@@ -89,9 +94,12 @@ export const NavbarStats: React.FC<NavbarStatsProps> = ({ onClick }) => {
         className="tablet:gap-1 flex items-center gap-0.5"
         style={{ fontSize: '14px' }}
       >
-        <span className="text-fluid-sm tablet:text-fluid-base desktop:text-fluid-lg leading-none">
-          🧾
-        </span>
+        <Icon
+          icon={Receipt}
+          size="sm"
+          className="text-fluid-sm tablet:text-fluid-base desktop:text-fluid-lg leading-none"
+          aria-hidden={true}
+        />
         <span className="tablet:text-[11px] desktop:text-fluid-xs text-[10px] leading-none">
           {stats.dockets}
         </span>
@@ -101,9 +109,12 @@ export const NavbarStats: React.FC<NavbarStatsProps> = ({ onClick }) => {
         className="tablet:gap-1 flex items-center gap-0.5"
         style={{ fontSize: '14px' }}
       >
-        <span className="text-fluid-sm tablet:text-fluid-base desktop:text-fluid-lg leading-none">
-          🔥
-        </span>
+        <Icon
+          icon={Flame}
+          size="sm"
+          className="text-fluid-sm tablet:text-fluid-base desktop:text-fluid-lg leading-none"
+          aria-hidden={true}
+        />
         <span className="tablet:text-[11px] desktop:text-fluid-xs text-[10px] leading-none">
           {stats.fires}
         </span>
@@ -115,9 +126,12 @@ export const NavbarStats: React.FC<NavbarStatsProps> = ({ onClick }) => {
           title={`${achievementCount} achievements unlocked`}
           className="tablet:gap-1 flex items-center gap-0.5 rounded-full bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20 px-2 py-0.5"
         >
-          <span className="text-fluid-sm tablet:text-fluid-base desktop:text-fluid-lg leading-none">
-            🏆
-          </span>
+          <Icon
+            icon={Trophy}
+            size="sm"
+            className="text-fluid-sm tablet:text-fluid-base desktop:text-fluid-lg leading-none"
+            aria-hidden={true}
+          />
           <span className="tablet:text-[11px] desktop:text-fluid-xs text-[10px] leading-none font-semibold text-[var(--primary)]">
             {achievementCount}
           </span>
@@ -127,9 +141,12 @@ export const NavbarStats: React.FC<NavbarStatsProps> = ({ onClick }) => {
       {/* Streak Indicator - Only render after mount to prevent hydration mismatch */}
       {gamificationEnabled && hasStreak && (
         <div title={`${streakDays} day streak`} className="tablet:gap-1 flex items-center gap-0.5">
-          <span className="text-fluid-sm tablet:text-fluid-base desktop:text-fluid-lg leading-none">
-            🔥
-          </span>
+          <Icon
+            icon={Flame}
+            size="sm"
+            className="text-fluid-sm tablet:text-fluid-base desktop:text-fluid-lg leading-none"
+            aria-hidden={true}
+          />
           <span className="tablet:text-[11px] desktop:text-fluid-xs text-[10px] leading-none font-semibold text-[var(--tertiary)]">
             {streakDays}
           </span>

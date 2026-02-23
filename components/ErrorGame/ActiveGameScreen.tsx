@@ -1,6 +1,8 @@
 'use client';
 
+import { Icon } from '@/components/ui/Icon';
 import { motion } from 'framer-motion';
+import { Flame, SprayCan } from 'lucide-react';
 import React from 'react';
 
 interface ActiveGameScreenProps {
@@ -29,7 +31,10 @@ export const ActiveGameScreen: React.FC<ActiveGameScreenProps> = ({
         animate={{ opacity: 1, y: 0 }}
         className="text-fluid-4xl desktop:text-fluid-4xl mb-4 font-extrabold"
       >
-        Uh oh! The kitchen&apos;s on fire 🔥
+        <span className="flex items-center gap-2">
+          Uh oh! The kitchen&apos;s on fire
+          <Icon icon={Flame} size="lg" className="text-[var(--tertiary)]" aria-hidden={true} />
+        </span>
       </motion.h1>
 
       <motion.p
@@ -71,7 +76,7 @@ export const ActiveGameScreen: React.FC<ActiveGameScreenProps> = ({
                   }
             }
           >
-            🔥
+            <Icon icon={Flame} size="lg" className="text-[var(--tertiary)]" aria-hidden={true} />
           </motion.span>
         ))}
       </motion.div>
@@ -86,10 +91,11 @@ export const ActiveGameScreen: React.FC<ActiveGameScreenProps> = ({
           onClick={handleSprayWater}
           whileHover={reducedMotion ? {} : { scale: 1.05 }}
           whileTap={reducedMotion ? {} : { scale: 0.95, x: [0, -5, 5, -5, 0] }}
-          className="text-fluid-lg desktop:px-8 desktop:py-4 desktop:text-fluid-xl desktop:hover:shadow-xl touch-manipulation rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3.5 font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none active:scale-95"
           aria-label={`Spray water to extinguish flames. ${flames} flames remaining.`}
+          className="text-fluid-lg desktop:px-8 desktop:py-4 desktop:text-fluid-xl desktop:hover:shadow-xl flex touch-manipulation items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3.5 font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none active:scale-95"
         >
-          🧯 Spray Water
+          <Icon icon={SprayCan} size="md" aria-hidden={true} />
+          Spray Water
         </motion.button>
       </motion.div>
 
@@ -102,7 +108,8 @@ export const ActiveGameScreen: React.FC<ActiveGameScreenProps> = ({
         >
           <div className="rounded-xl border border-[var(--accent)] bg-[var(--accent)]/10 px-6 py-4">
             <p className="text-fluid-lg font-semibold text-[var(--accent)]">
-              Hey Chef… back to the real fire 🔪🔥
+              Hey Chef… back to the real fire
+              <Icon icon={Flame} size="sm" className="ml-1 inline" aria-hidden={true} />
             </p>
           </div>
           <motion.button

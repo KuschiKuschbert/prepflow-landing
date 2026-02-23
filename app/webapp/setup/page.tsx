@@ -12,6 +12,8 @@ import {
   ChefHat,
 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import CountrySetup from '../../../components/CountrySetup';
 import { SetupProgress } from './types';
 import SetupProgressComponent from './components/SetupProgress';
@@ -87,6 +89,12 @@ export default function SetupPageRefactored() {
           {/* Progress Steps */}
           <SetupProgressComponent setupProgress={setupProgress} />
         </div>
+
+        {PAGE_TIPS_CONFIG.setup && (
+          <div className="mb-8">
+            <PageTipsCard config={PAGE_TIPS_CONFIG.setup} />
+          </div>
+        )}
 
         {/* Setup Steps */}
         <div className="space-y-12">

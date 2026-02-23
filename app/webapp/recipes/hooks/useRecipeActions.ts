@@ -30,7 +30,7 @@ export function useRecipeActions({
   rollbackRecipes,
 }: UseRecipeActionsProps) {
   const router = useRouter();
-  const { showError: showErrorNotification, showSuccess } = useNotification();
+  const { showError: showErrorNotification, showSuccess, showInfo } = useNotification();
   const onRecipeCreated = useOnRecipeCreated();
   const bulkOps = useRecipeBulkOperations(
     recipes,
@@ -53,10 +53,18 @@ export function useRecipeActions({
         onRecipeCreated,
         showErrorNotification,
         showSuccess,
+        showInfo,
       );
       return handler(newRecipe);
     },
-    [recipes, optimisticallyUpdateRecipes, onRecipeCreated, showErrorNotification, showSuccess],
+    [
+      recipes,
+      optimisticallyUpdateRecipes,
+      onRecipeCreated,
+      showErrorNotification,
+      showSuccess,
+      showInfo,
+    ],
   );
   const handleEditFromPreview = useCallback(
     async (selectedRecipe: Recipe, recipeIngredients: RecipeIngredientWithDetails[]) => {

@@ -1,5 +1,113 @@
-/* Partytown 0.10.3-dev1734732935152 - MIT builder.io */
+/* Partytown 0.11.2 - MIT QwikDev */
 (self => {
+  var WorkerMessageType;
+  !(function (WorkerMessageType) {
+    WorkerMessageType[(WorkerMessageType.MainDataRequestFromWorker = 0)] =
+      'MainDataRequestFromWorker';
+    WorkerMessageType[(WorkerMessageType.MainDataResponseToWorker = 1)] =
+      'MainDataResponseToWorker';
+    WorkerMessageType[(WorkerMessageType.MainInterfacesRequestFromWorker = 2)] =
+      'MainInterfacesRequestFromWorker';
+    WorkerMessageType[(WorkerMessageType.MainInterfacesResponseToWorker = 3)] =
+      'MainInterfacesResponseToWorker';
+    WorkerMessageType[(WorkerMessageType.InitializedWebWorker = 4)] = 'InitializedWebWorker';
+    WorkerMessageType[(WorkerMessageType.InitializeEnvironment = 5)] = 'InitializeEnvironment';
+    WorkerMessageType[(WorkerMessageType.InitializedEnvironmentScript = 6)] =
+      'InitializedEnvironmentScript';
+    WorkerMessageType[(WorkerMessageType.InitializeNextScript = 7)] = 'InitializeNextScript';
+    WorkerMessageType[(WorkerMessageType.InitializedScripts = 8)] = 'InitializedScripts';
+    WorkerMessageType[(WorkerMessageType.RefHandlerCallback = 9)] = 'RefHandlerCallback';
+    WorkerMessageType[(WorkerMessageType.ForwardMainTrigger = 10)] = 'ForwardMainTrigger';
+    WorkerMessageType[(WorkerMessageType.ForwardWorkerAccessRequest = 11)] =
+      'ForwardWorkerAccessRequest';
+    WorkerMessageType[(WorkerMessageType.AsyncAccessRequest = 12)] = 'AsyncAccessRequest';
+    WorkerMessageType[(WorkerMessageType.LocationUpdate = 13)] = 'LocationUpdate';
+    WorkerMessageType[(WorkerMessageType.DocumentVisibilityState = 14)] = 'DocumentVisibilityState';
+    WorkerMessageType[(WorkerMessageType.CustomElementCallback = 15)] = 'CustomElementCallback';
+  })(WorkerMessageType || (WorkerMessageType = {}));
+  var LocationUpdateType;
+  !(function (LocationUpdateType) {
+    LocationUpdateType[(LocationUpdateType.PushState = 0)] = 'PushState';
+    LocationUpdateType[(LocationUpdateType.ReplaceState = 1)] = 'ReplaceState';
+    LocationUpdateType[(LocationUpdateType.PopState = 2)] = 'PopState';
+    LocationUpdateType[(LocationUpdateType.HashChange = 3)] = 'HashChange';
+  })(LocationUpdateType || (LocationUpdateType = {}));
+  var InterfaceType;
+  !(function (InterfaceType) {
+    InterfaceType[(InterfaceType.Window = 0)] = 'Window';
+    InterfaceType[(InterfaceType.Element = 1)] = 'Element';
+    InterfaceType[(InterfaceType.AttributeNode = 2)] = 'AttributeNode';
+    InterfaceType[(InterfaceType.TextNode = 3)] = 'TextNode';
+    InterfaceType[(InterfaceType.CDataSectionNode = 4)] = 'CDataSectionNode';
+    InterfaceType[(InterfaceType.Function = 5)] = 'Function';
+    InterfaceType[(InterfaceType.Property = 6)] = 'Property';
+    InterfaceType[(InterfaceType.ProcessingInstructionNode = 7)] = 'ProcessingInstructionNode';
+    InterfaceType[(InterfaceType.CommentNode = 8)] = 'CommentNode';
+    InterfaceType[(InterfaceType.Document = 9)] = 'Document';
+    InterfaceType[(InterfaceType.DocumentTypeNode = 10)] = 'DocumentTypeNode';
+    InterfaceType[(InterfaceType.DocumentFragmentNode = 11)] = 'DocumentFragmentNode';
+    InterfaceType[(InterfaceType.EnvGlobalConstructor = 12)] = 'EnvGlobalConstructor';
+  })(InterfaceType || (InterfaceType = {}));
+  var WinDocId;
+  !(function (WinDocId) {
+    WinDocId.document = 'd';
+    WinDocId.documentElement = 'e';
+    WinDocId.head = 'h';
+    WinDocId.body = 'b';
+  })(WinDocId || (WinDocId = {}));
+  var ApplyPathType;
+  !(function (ApplyPathType) {
+    ApplyPathType[(ApplyPathType.SetValue = 0)] = 'SetValue';
+    ApplyPathType[(ApplyPathType.GlobalConstructor = 1)] = 'GlobalConstructor';
+  })(ApplyPathType || (ApplyPathType = {}));
+  var SerializedType;
+  !(function (SerializedType) {
+    SerializedType[(SerializedType.Primitive = 0)] = 'Primitive';
+    SerializedType[(SerializedType.Array = 1)] = 'Array';
+    SerializedType[(SerializedType.Object = 2)] = 'Object';
+    SerializedType[(SerializedType.Instance = 3)] = 'Instance';
+    SerializedType[(SerializedType.Ref = 4)] = 'Ref';
+    SerializedType[(SerializedType.Event = 5)] = 'Event';
+    SerializedType[(SerializedType.Function = 6)] = 'Function';
+    SerializedType[(SerializedType.NodeList = 7)] = 'NodeList';
+    SerializedType[(SerializedType.ArrayBuffer = 8)] = 'ArrayBuffer';
+    SerializedType[(SerializedType.ArrayBufferView = 9)] = 'ArrayBufferView';
+    SerializedType[(SerializedType.Attr = 10)] = 'Attr';
+    SerializedType[(SerializedType.CSSRule = 11)] = 'CSSRule';
+    SerializedType[(SerializedType.CSSRuleList = 12)] = 'CSSRuleList';
+    SerializedType[(SerializedType.CSSStyleDeclaration = 13)] = 'CSSStyleDeclaration';
+    SerializedType[(SerializedType.Error = 14)] = 'Error';
+  })(SerializedType || (SerializedType = {}));
+  var NodeName;
+  !(function (NodeName) {
+    NodeName.Body = 'BODY';
+    NodeName.Comment = '#comment';
+    NodeName.Document = '#document';
+    NodeName.DocumentElement = 'HTML';
+    NodeName.DocumentTypeNode = 'html';
+    NodeName.DocumentFragment = '#document-fragment';
+    NodeName.IFrame = 'IFRAME';
+    NodeName.Head = 'HEAD';
+    NodeName.Script = 'SCRIPT';
+    NodeName.Text = '#text';
+  })(NodeName || (NodeName = {}));
+  var StateProp;
+  !(function (StateProp) {
+    StateProp.errorHandlers = 'error';
+    StateProp.loadHandlers = 'load';
+    StateProp[(StateProp.src = 0)] = 'src';
+    StateProp[(StateProp.loadErrorStatus = 1)] = 'loadErrorStatus';
+    StateProp[(StateProp.cssRules = 2)] = 'cssRules';
+    StateProp[(StateProp.innerHTML = 3)] = 'innerHTML';
+    StateProp[(StateProp.url = 4)] = 'url';
+    StateProp[(StateProp.type = 5)] = 'type';
+  })(StateProp || (StateProp = {}));
+  var CallType;
+  !(function (CallType) {
+    CallType[(CallType.Blocking = 1)] = 'Blocking';
+    CallType[(CallType.NonBlocking = 2)] = 'NonBlocking';
+    CallType[(CallType.NonBlockingNoSideEffect = 3)] = 'NonBlockingNoSideEffect';
+  })(CallType || (CallType = {}));
   const WinIdKey = Symbol();
   const InstanceIdKey = Symbol();
   const InstanceDataKey = Symbol();
@@ -222,10 +330,10 @@
   const serializeForMain = ($winId$, $instanceId$, value, added, type) =>
     void 0 !== value && (type = typeof value)
       ? 'string' === type || 'boolean' === type || 'number' === type || null == value
-        ? [0, value]
+        ? [SerializedType.Primitive, value]
         : 'function' === type
           ? [
-              4,
+              SerializedType.Ref,
               {
                 $winId$: $winId$,
                 $instanceId$: $instanceId$,
@@ -234,23 +342,29 @@
             ]
           : (added = added || new Set()) && Array.isArray(value)
             ? added.has(value)
-              ? [1, []]
+              ? [SerializedType.Array, []]
               : added.add(value) && [
-                  1,
+                  SerializedType.Array,
                   value.map(v => serializeForMain($winId$, $instanceId$, v, added)),
                 ]
             : 'object' === type
               ? value[InstanceIdKey]
-                ? [3, [value[WinIdKey], value[InstanceIdKey]]]
+                ? [SerializedType.Instance, [value[WinIdKey], value[InstanceIdKey]]]
                 : value instanceof Event
-                  ? [5, serializeObjectForMain($winId$, $instanceId$, value, false, added)]
+                  ? [
+                      SerializedType.Event,
+                      serializeObjectForMain($winId$, $instanceId$, value, false, added),
+                    ]
                   : supportsTrustedHTML && value instanceof TrustedHTML
-                    ? [0, value.toString()]
+                    ? [SerializedType.Primitive, value.toString()]
                     : value instanceof ArrayBuffer
-                      ? [8, value]
+                      ? [SerializedType.ArrayBuffer, value]
                       : ArrayBuffer.isView(value)
-                        ? [9, value.buffer, getConstructorName(value)]
-                        : [2, serializeObjectForMain($winId$, $instanceId$, value, true, added)]
+                        ? [SerializedType.ArrayBufferView, value.buffer, getConstructorName(value)]
+                        : [
+                            SerializedType.Object,
+                            serializeObjectForMain($winId$, $instanceId$, value, true, added),
+                          ]
               : void 0
       : value;
   const supportsTrustedHTML = 'undefined' != typeof TrustedHTML;
@@ -276,7 +390,9 @@
     return serializedObj;
   };
   const serializeInstanceForMain = (instance, value) =>
-    instance ? serializeForMain(instance[WinIdKey], instance[InstanceIdKey], value) : [0, value];
+    instance
+      ? serializeForMain(instance[WinIdKey], instance[InstanceIdKey], value)
+      : [SerializedType.Primitive, value];
   const deserializeFromMain = (
     winId,
     instanceId,
@@ -290,30 +406,35 @@
     if (serializedValueTransfer) {
       serializedType = serializedValueTransfer[0];
       serializedValue = serializedValueTransfer[1];
-      if (0 === serializedType || 11 === serializedType || 12 === serializedType) {
+      if (
+        serializedType === SerializedType.Primitive ||
+        serializedType === SerializedType.CSSRule ||
+        serializedType === SerializedType.CSSRuleList
+      ) {
         return serializedValue;
       }
-      if (4 === serializedType) {
+      if (serializedType === SerializedType.Ref) {
         return deserializeRefFromMain(applyPath, serializedValue);
       }
-      if (6 === serializedType) {
+      if (serializedType === SerializedType.Function) {
         return winId && applyPath.length > 0
-          ? (...args) => callMethod(environments[winId].$window$, applyPath, args, 1)
+          ? (...args) =>
+              callMethod(environments[winId].$window$, applyPath, args, CallType.Blocking)
           : noop;
       }
-      if (3 === serializedType) {
+      if (serializedType === SerializedType.Instance) {
         return getOrCreateSerializedInstance(serializedValue);
       }
-      if (7 === serializedType) {
+      if (serializedType === SerializedType.NodeList) {
         return new NodeList(serializedValue.map(getOrCreateSerializedInstance));
       }
-      if (10 === serializedType) {
+      if (serializedType === SerializedType.Attr) {
         return new Attr(serializedValue);
       }
-      if (1 === serializedType) {
+      if (serializedType === SerializedType.Array) {
         return serializedValue.map(v => deserializeFromMain(winId, instanceId, applyPath, v));
       }
-      if (14 === serializedType) {
+      if (serializedType === SerializedType.Error) {
         return new CustomError(serializedValue);
       }
       obj = {};
@@ -325,7 +446,7 @@
           serializedValue[key],
         );
       }
-      if (13 === serializedType) {
+      if (serializedType === SerializedType.CSSStyleDeclaration) {
         return new environments[winId].$window$.CSSStyleDeclaration(
           winId,
           instanceId,
@@ -333,7 +454,7 @@
           obj,
         );
       }
-      if (5 === serializedType) {
+      if (serializedType === SerializedType.Event) {
         if ('message' === obj.type && obj.origin) {
           let postMessageKey = JSON.stringify(obj.data);
           let postMessageData = postMessages.find(pm => pm.$data$ === postMessageKey);
@@ -355,7 +476,7 @@
                 : target[String(propName)],
         });
       }
-      if (2 === serializedType) {
+      if (serializedType === SerializedType.Object) {
         return obj;
       }
     }
@@ -472,18 +593,18 @@
       } else if ('string' == typeof target[InstanceDataKey]) {
         let nodeName = target[InstanceDataKey];
         n =
-          '#text' === nodeName
+          nodeName === NodeName.Text
             ? 'textNode.'
-            : '#comment' === nodeName
+            : nodeName === NodeName.Comment
               ? 'commentNode.'
-              : '#document' === nodeName
+              : nodeName === NodeName.Document
                 ? 'document.'
-                : 'html' === nodeName
+                : nodeName === NodeName.DocumentTypeNode
                   ? 'doctype.'
                   : nodeName.toLowerCase() + '.';
       } else {
         n =
-          'nodeType' in target && 2 === target.nodeType
+          'nodeType' in target && target.nodeType === InterfaceType.AttributeNode
             ? 'attributes.'
             : 'CanvasRenderingContext2D' === cstrName
               ? 'context2D.'
@@ -539,10 +660,10 @@
           if (1 === v.nodeType) {
             return `<${v[InstanceDataKey].toLowerCase()}>`;
           }
-          if (10 === v.nodeType) {
+          if (v.nodeType === InterfaceType.DocumentTypeNode) {
             return `<!DOCTYPE ${v[InstanceDataKey]}>`;
           }
-          if (v.nodeType <= 11) {
+          if (v.nodeType <= InterfaceType.DocumentFragmentNode) {
             return v[InstanceDataKey];
           }
         }
@@ -603,18 +724,21 @@
       });
       taskQueue[len(taskQueue) - 1].$debug$ = ((target, applyPath, callType) => {
         let m = getTargetProp(target, applyPath);
-        1 === callType
+        callType === CallType.Blocking
           ? (m += ' (blocking)')
-          : 2 === callType
+          : callType === CallType.NonBlocking
             ? (m += ' (non-blocking)')
-            : 3 === callType && (m += ' (non-blocking, no-side-effect)');
+            : callType === CallType.NonBlockingNoSideEffect &&
+              (m += ' (non-blocking, no-side-effect)');
         return m.trim();
       })(instance, $applyPath$, callType);
-      buffer && 3 !== callType && console.error('buffer must be sent NonBlockingNoSideEffect');
-      if (3 === callType) {
+      buffer &&
+        callType !== CallType.NonBlockingNoSideEffect &&
+        console.error('buffer must be sent NonBlockingNoSideEffect');
+      if (callType === CallType.NonBlockingNoSideEffect) {
         webWorkerCtx.$postMessage$(
           [
-            12,
+            WorkerMessageType.AsyncAccessRequest,
             {
               $msgId$: randomId(),
               $tasks$: [...taskQueue],
@@ -623,7 +747,7 @@
           buffer ? [buffer instanceof ArrayBuffer ? buffer : buffer.buffer] : void 0,
         );
         taskQueue.length = 0;
-      } else if (1 === callType) {
+      } else if (callType === CallType.Blocking) {
         return sendToMain(true);
       }
       webWorkerCtx.$asyncMsgTimer$ = setTimeout(sendToMain, 20);
@@ -645,7 +769,7 @@
           const sharedDataBuffer = webWorkerCtx.$sharedDataBuffer$;
           const sharedData = new Int32Array(sharedDataBuffer);
           Atomics.store(sharedData, 0, 0);
-          webWorkerCtx.$postMessage$([11, accessReq]);
+          webWorkerCtx.$postMessage$([WorkerMessageType.ForwardWorkerAccessRequest, accessReq]);
           Atomics.wait(sharedData, 0, 0);
           let dataLength = Atomics.load(sharedData, 0);
           let accessRespStr = '';
@@ -670,7 +794,7 @@
         }
         return isPromise ? Promise.resolve(rtnValue) : rtnValue;
       }
-      webWorkerCtx.$postMessage$([12, accessReq]);
+      webWorkerCtx.$postMessage$([WorkerMessageType.AsyncAccessRequest, accessReq]);
     }
   };
   const getter = (instance, applyPath, groupedGetters, rtnValue) => {
@@ -680,7 +804,7 @@
         return rtnValue;
       }
     }
-    rtnValue = queue(instance, applyPath, 1, void 0, groupedGetters);
+    rtnValue = queue(instance, applyPath, CallType.Blocking, void 0, groupedGetters);
     ((target, applyPath, rtnValue, restrictedToWorker = false, groupedGetters = false) => {
       if (webWorkerCtx.$config$.logGetters) {
         try {
@@ -710,7 +834,7 @@
           logWorker(`Dimension cache cleared from setter "${propName}"`, target[WinIdKey]);
       })(instance, applyPath[applyPath.length - 1]);
     }
-    applyPath = [...applyPath, serializeInstanceForMain(instance, value), 0];
+    applyPath = [...applyPath, serializeInstanceForMain(instance, value), ApplyPathType.SetValue];
     ((target, applyPath, value, restrictedToWorker = false) => {
       if (webWorkerCtx.$config$.logSetters) {
         try {
@@ -722,7 +846,7 @@
         } catch (e) {}
       }
     })(instance, applyPath, value);
-    queue(instance, applyPath, 2);
+    queue(instance, applyPath, CallType.NonBlocking);
   };
   const callMethod = (
     instance,
@@ -745,7 +869,9 @@
     }
     methodName = applyPath[len(applyPath) - 1];
     applyPath = [...applyPath, serializeInstanceForMain(instance, args)];
-    callType = callType || (nonBlockingMethods.includes(methodName) ? 2 : 1);
+    callType =
+      callType ||
+      (nonBlockingMethods.includes(methodName) ? CallType.NonBlocking : CallType.Blocking);
     if ('setAttribute' === methodName && hasInstanceStateValue(instance, args[0])) {
       setInstanceStateValue(instance, args[0], args[1]);
     } else if (structureChangingMethodNames.includes(methodName)) {
@@ -759,7 +885,7 @@
           );
       })(instance, methodName);
     } else if (dimensionChangingMethodNames.includes(methodName)) {
-      callType = 2;
+      callType = CallType.NonBlocking;
       cachedDimensions.clear();
       logDimensionCacheClearMethod(instance, methodName);
     }
@@ -788,7 +914,11 @@
         } catch (e) {}
       }
     })(instance, cstrName, args);
-    queue(instance, [1, cstrName, serializeInstanceForMain(instance, args)], 1);
+    queue(
+      instance,
+      [ApplyPathType.GlobalConstructor, cstrName, serializeInstanceForMain(instance, args)],
+      CallType.Blocking,
+    );
   };
   const createHookOptions = (instance, applyPath) => ({
     name: applyPath.join('.'),
@@ -798,37 +928,37 @@
     instance: instance,
     window: environments[instance[WinIdKey]].$window$,
   });
-  const addStorageApi = (win, storageName, isSameOrigin, env) => {
+  const addStorageApi = (win, storageName, env) => {
     let storage = {
       getItem(key) {
-        if (isSameOrigin) {
-          return callMethod(win, [storageName, 'getItem'], [key], 1);
+        if (env.$isSameOrigin$) {
+          return callMethod(win, [storageName, 'getItem'], [key], CallType.Blocking);
         }
         warnCrossOrigin('get', storageName, env);
       },
       setItem(key, value) {
-        isSameOrigin
-          ? callMethod(win, [storageName, 'setItem'], [key, value], 1)
+        env.$isSameOrigin$
+          ? callMethod(win, [storageName, 'setItem'], [key, value], CallType.Blocking)
           : warnCrossOrigin('set', storageName, env);
       },
       removeItem(key) {
-        isSameOrigin
-          ? callMethod(win, [storageName, 'removeItem'], [key], 1)
+        env.$isSameOrigin$
+          ? callMethod(win, [storageName, 'removeItem'], [key], CallType.Blocking)
           : warnCrossOrigin('remove', storageName, env);
       },
       key(index) {
-        if (isSameOrigin) {
-          return callMethod(win, [storageName, 'key'], [index], 1);
+        if (env.$isSameOrigin$) {
+          return callMethod(win, [storageName, 'key'], [index], CallType.Blocking);
         }
         warnCrossOrigin('key', storageName, env);
       },
       clear() {
-        isSameOrigin
-          ? callMethod(win, [storageName, 'clear'], EMPTY_ARRAY, 1)
+        env.$isSameOrigin$
+          ? callMethod(win, [storageName, 'clear'], EMPTY_ARRAY, CallType.Blocking)
           : warnCrossOrigin('clear', storageName, env);
       },
       get length() {
-        if (isSameOrigin) {
+        if (env.$isSameOrigin$) {
           return getter(win, [storageName, 'length']);
         }
         warnCrossOrigin('length', storageName, env);
@@ -876,7 +1006,7 @@
         }
         setProperty(...args) {
           this[InstanceDataKey][args[0]] = args[1];
-          callMethod(this, ['setProperty'], args, 2);
+          callMethod(this, ['setProperty'], args, CallType.NonBlocking);
           logDimensionCacheClearStyle(this, args[0]);
           cachedDimensions.clear();
         }
@@ -885,7 +1015,7 @@
         }
         removeProperty(propName) {
           let value = this[InstanceDataKey][propName];
-          callMethod(this, ['removeProperty'], [propName], 2);
+          callMethod(this, ['removeProperty'], [propName], CallType.NonBlocking);
           logDimensionCacheClearStyle(this, propName);
           cachedDimensions.clear();
           this[InstanceDataKey][propName] = void 0;
@@ -923,7 +1053,12 @@
           const cssRules = getCssRules(this.ownerNode);
           index = void 0 === index ? 0 : index;
           if (index >= 0 && index <= cssRules.length) {
-            callMethod(this.ownerNode, ['sheet', 'insertRule'], [ruleText, index], 2);
+            callMethod(
+              this.ownerNode,
+              ['sheet', 'insertRule'],
+              [ruleText, index],
+              CallType.NonBlocking,
+            );
             cssRules.splice(index, 0, 0);
           }
           logDimensionCacheClearMethod(this.ownerNode, 'insertRule');
@@ -931,7 +1066,7 @@
           return index;
         }
         deleteRule(index) {
-          callMethod(this.ownerNode, ['sheet', 'deleteRule'], [index], 2);
+          callMethod(this.ownerNode, ['sheet', 'deleteRule'], [index], CallType.NonBlocking);
           getCssRules(this.ownerNode).splice(index, 1);
           logDimensionCacheClearMethod(this.ownerNode, 'deleteRule');
           cachedDimensions.clear();
@@ -952,10 +1087,10 @@
     definePrototypePropertyDescriptor(win.HTMLStyleElement, HTMLStyleDescriptorMap);
   };
   const getCssRules = (ownerNode, cssRules) => {
-    cssRules = getInstanceStateValue(ownerNode, 2);
+    cssRules = getInstanceStateValue(ownerNode, StateProp.cssRules);
     if (!cssRules) {
       cssRules = getter(ownerNode, ['sheet', 'cssRules']);
-      setInstanceStateValue(ownerNode, 2, cssRules);
+      setInstanceStateValue(ownerNode, StateProp.cssRules, cssRules);
     }
     return cssRules;
   };
@@ -1058,7 +1193,7 @@
     return {};
   };
   const getPartytownScript = () =>
-    `<script src="${partytownLibUrl('partytown.js?v=0.10.3-dev1734732935152')}"><\/script>`;
+    `<script src="${partytownLibUrl('partytown.js?v=0.11.2')}"><\/script>`;
   const createImageConstructor = env =>
     class HTMLImageElement {
       constructor() {
@@ -1066,6 +1201,7 @@
         this.l = [];
         this.e = [];
         this.style = {};
+        this.attributes = new Map();
       }
       get src() {
         return this.s;
@@ -1099,6 +1235,38 @@
               }),
             ),
         );
+      }
+      getAttribute(name) {
+        const value = this.attributes.get(name.toLowerCase());
+        return void 0 !== value ? value : null;
+      }
+      setAttribute(name, value) {
+        this.attributes.set(name.toLowerCase(), String(value));
+        'src' === name.toLowerCase() && (this.src = value);
+      }
+      hasAttribute(name) {
+        return this.attributes.has(name.toLowerCase());
+      }
+      removeAttribute(name) {
+        this.attributes.delete(name.toLowerCase());
+      }
+      toggleAttribute(name, force) {
+        const normalizedName = name.toLowerCase();
+        const hasAttr = this.attributes.has(normalizedName);
+        if (void 0 !== force) {
+          if (force) {
+            hasAttr || this.attributes.set(normalizedName, '');
+            return true;
+          }
+          this.attributes.delete(normalizedName);
+          return false;
+        }
+        if (hasAttr) {
+          this.attributes.delete(normalizedName);
+          return false;
+        }
+        this.attributes.set(normalizedName, '');
+        return true;
       }
       addEventListener(eventName, cb) {
         'load' === eventName && this.l.push(cb);
@@ -1140,20 +1308,20 @@
     },
     onload: {
       get() {
-        let callbacks = getInstanceStateValue(this, 'load');
+        let callbacks = getInstanceStateValue(this, StateProp.loadHandlers);
         return (callbacks && callbacks[0]) || null;
       },
       set(cb) {
-        setInstanceStateValue(this, 'load', cb ? [cb] : null);
+        setInstanceStateValue(this, StateProp.loadHandlers, cb ? [cb] : null);
       },
     },
     onerror: {
       get() {
-        let callbacks = getInstanceStateValue(this, 'error');
+        let callbacks = getInstanceStateValue(this, StateProp.errorHandlers);
         return (callbacks && callbacks[0]) || null;
       },
       set(cb) {
-        setInstanceStateValue(this, 'error', cb ? [cb] : null);
+        setInstanceStateValue(this, StateProp.errorHandlers, cb ? [cb] : null);
       },
     },
     getAttribute: {
@@ -1176,13 +1344,13 @@
       innerText: innerHTMLDescriptor,
       src: {
         get() {
-          return getInstanceStateValue(this, 4) || '';
+          return getInstanceStateValue(this, StateProp.url) || '';
         },
         set(url) {
           const orgUrl = resolveUrl(env, url, null);
           const config = webWorkerCtx.$config$;
           url = resolveUrl(env, url, 'script');
-          setInstanceStateValue(this, 4, url);
+          setInstanceStateValue(this, StateProp.url, url);
           setter(this, ['src'], url);
           orgUrl !== url && setter(this, ['dataset', 'ptsrc'], orgUrl);
           if (this.type) {
@@ -1199,7 +1367,7 @@
         },
         set(type) {
           if (!isScriptJsType(type)) {
-            setInstanceStateValue(this, 5, type);
+            setInstanceStateValue(this, StateProp.type, type);
             setter(this, ['type'], type);
           }
         },
@@ -1212,7 +1380,7 @@
     get() {
       const type = getter(this, ['type']);
       if (isScriptJsType(type)) {
-        const scriptContent = getInstanceStateValue(this, 3);
+        const scriptContent = getInstanceStateValue(this, StateProp.innerHTML);
         if (scriptContent) {
           return scriptContent;
         }
@@ -1220,7 +1388,7 @@
       return getter(this, ['innerHTML']) || '';
     },
     set(scriptContent) {
-      setInstanceStateValue(this, 3, scriptContent);
+      setInstanceStateValue(this, StateProp.innerHTML, scriptContent);
     },
   };
   const isScriptJsType = scriptType => !scriptType || 'text/javascript' === scriptType;
@@ -1237,11 +1405,11 @@
           const winId = (newNode[WinIdKey] = this[WinIdKey]);
           const instanceId = newNode[InstanceIdKey];
           const nodeName = newNode[InstanceDataKey];
-          const isScript = 'SCRIPT' === nodeName;
-          const isIFrame = 'IFRAME' === nodeName;
+          const isScript = nodeName === NodeName.Script;
+          const isIFrame = nodeName === NodeName.IFrame;
           if (isScript) {
-            const scriptContent = getInstanceStateValue(newNode, 3);
-            const scriptType = getInstanceStateValue(newNode, 5);
+            const scriptContent = getInstanceStateValue(newNode, StateProp.innerHTML);
+            const scriptType = getInstanceStateValue(newNode, StateProp.type);
             if (scriptContent) {
               if (isScriptJsType(scriptType)) {
                 const scriptId = newNode.id;
@@ -1260,9 +1428,9 @@
               setter(newNode, ['innerHTML'], scriptContent);
             }
           }
-          callMethod(this, ['insertBefore'], [newNode, referenceNode], 2);
+          callMethod(this, ['insertBefore'], [newNode, referenceNode], CallType.NonBlocking);
           if (isIFrame) {
-            const src = getInstanceStateValue(newNode, 0);
+            const src = getInstanceStateValue(newNode, StateProp.src);
             if (src && src.startsWith('javascript:')) {
               const scriptContent = src.split('javascript:')[1];
               runScriptContent(env, instanceId, scriptContent, winId, '');
@@ -1277,7 +1445,9 @@
                   environments[winId].$isInitialized$ &&
                   !environments[winId].$isLoading$
                 ) {
-                  type = getInstanceStateValue(iframe, 1) ? 'error' : 'load';
+                  type = getInstanceStateValue(iframe, StateProp.loadErrorStatus)
+                    ? StateProp.errorHandlers
+                    : StateProp.loadHandlers;
                   handlers = getInstanceStateValue(iframe, type);
                   handlers &&
                     handlers.map(handler =>
@@ -1286,11 +1456,11 @@
                       }),
                     );
                 } else if (i++ > 2e3) {
-                  handlers = getInstanceStateValue(iframe, 'error');
+                  handlers = getInstanceStateValue(iframe, StateProp.errorHandlers);
                   handlers &&
                     handlers.map(handler =>
                       handler({
-                        type: 'error',
+                        type: StateProp.errorHandlers,
                       }),
                     );
                 } else {
@@ -1302,7 +1472,7 @@
           }
           if (isScript) {
             sendToMain(true);
-            webWorkerCtx.$postMessage$([7, winId]);
+            webWorkerCtx.$postMessage$([WorkerMessageType.InitializeNextScript, winId]);
           }
           return newNode;
         }
@@ -1355,10 +1525,10 @@
           if (!IS_TAG_REG.test(tagName)) {
             throw tagName + ' not valid';
           }
-          const isIframe = 'IFRAME' === tagName;
+          const isIframe = tagName === NodeName.IFrame;
           const winId = this[WinIdKey];
           const instanceId = (isIframe ? 'f_' : '') + randomId();
-          callMethod(this, ['createElement'], [tagName], 2, instanceId);
+          callMethod(this, ['createElement'], [tagName], CallType.NonBlocking, instanceId);
           const elm = getOrCreateNodeInstance(winId, instanceId, tagName);
           if (isIframe) {
             const env = createEnvironment(
@@ -1371,8 +1541,8 @@
             );
             env.$window$.fetch = fetch;
             setter(elm, ['srcdoc'], getPartytownScript());
-          } else if ('SCRIPT' === tagName) {
-            const scriptType = getInstanceStateValue(elm, 5);
+          } else if (tagName === NodeName.Script) {
+            const scriptType = getInstanceStateValue(elm, StateProp.type);
             isScriptJsType(scriptType) && setter(elm, ['type'], 'text/partytown');
           }
           return elm;
@@ -1382,7 +1552,13 @@
         value(namespace, tagName) {
           const instanceId = randomId();
           const nsElm = getOrCreateNodeInstance(this[WinIdKey], instanceId, tagName, namespace);
-          callMethod(this, ['createElementNS'], [namespace, tagName], 2, instanceId);
+          callMethod(
+            this,
+            ['createElementNS'],
+            [namespace, tagName],
+            CallType.NonBlocking,
+            instanceId,
+          );
           return nsElm;
         },
       },
@@ -1390,8 +1566,8 @@
         value(text) {
           const winId = this[WinIdKey];
           const instanceId = randomId();
-          const textNode = getOrCreateNodeInstance(winId, instanceId, '#text');
-          callMethod(this, ['createTextNode'], [text], 2, instanceId);
+          const textNode = getOrCreateNodeInstance(winId, instanceId, NodeName.Text);
+          callMethod(this, ['createTextNode'], [text], CallType.NonBlocking, instanceId);
           return textNode;
         },
       },
@@ -1401,7 +1577,7 @@
       currentScript: {
         get() {
           return env.$currentScriptId$
-            ? getOrCreateNodeInstance(this[WinIdKey], env.$currentScriptId$, 'SCRIPT')
+            ? getOrCreateNodeInstance(this[WinIdKey], env.$currentScriptId$, NodeName.Script)
             : null;
         },
       },
@@ -1414,9 +1590,9 @@
       getElementsByTagName: {
         value(tagName) {
           tagName = tagName.toUpperCase();
-          return 'BODY' === tagName
+          return tagName === NodeName.Body
             ? [env.$body$]
-            : 'HEAD' === tagName
+            : tagName === NodeName.Head
               ? [env.$head$]
               : callMethod(this, ['getElementsByTagName'], [tagName]);
         },
@@ -1434,15 +1610,26 @@
           return getter(this, ['scripts']);
         },
       },
+      adoptedStyleSheets: {
+        get() {
+          return getter(this, ['adoptedStyleSheets']);
+        },
+      },
       implementation: {
         get() {
           return {
             hasFeature: () => true,
             createHTMLDocument: title => {
               const $winId$ = randomId();
-              callMethod(this, ['implementation', 'createHTMLDocument'], [title], 1, {
-                $winId$: $winId$,
-              });
+              callMethod(
+                this,
+                ['implementation', 'createHTMLDocument'],
+                [title],
+                CallType.Blocking,
+                {
+                  $winId$: $winId$,
+                },
+              );
               const docEnv = createEnvironment(
                 {
                   $winId$: $winId$,
@@ -1528,14 +1715,14 @@
     commaSplit('hash,host,hostname,href,origin,pathname,port,protocol,search').map(anchorProp => {
       HTMLAnchorDescriptorMap[anchorProp] = {
         get() {
-          let value = getInstanceStateValue(this, 4);
+          let value = getInstanceStateValue(this, StateProp.url);
           let href;
           if ('string' != typeof value) {
             href = getter(this, ['href']);
             if ('' === href) {
               return 'protocol' === anchorProp ? ':' : '';
             }
-            setInstanceStateValue(this, 4, href);
+            setInstanceStateValue(this, StateProp.url, href);
             value = new URL(href)[anchorProp];
           }
           return resolveToUrl(env, value, null)[anchorProp];
@@ -1563,7 +1750,7 @@
             url = resolveToUrl(env, this.href, null);
             url[anchorProp] = value;
           }
-          setInstanceStateValue(this, 4, url.href);
+          setInstanceStateValue(this, StateProp.url, url.href);
           setter(this, ['href'], url.href);
         },
       };
@@ -1584,7 +1771,7 @@
       },
       src: {
         get() {
-          let src = getInstanceStateValue(this, 0);
+          let src = getInstanceStateValue(this, StateProp.src);
           if (src && src.startsWith('javascript:')) {
             return src;
           }
@@ -1594,14 +1781,15 @@
         set(src) {
           if (src) {
             if (src.startsWith('javascript:')) {
-              setInstanceStateValue(this, 0, src);
+              setInstanceStateValue(this, StateProp.src, src);
             } else if (!src.startsWith('about:')) {
               let xhr = new XMLHttpRequest();
               let xhrStatus;
               let env = getIframeEnv(this);
               env.$location$.href = src = resolveUrl(env, src, 'iframe');
               env.$isLoading$ = 1;
-              setInstanceStateValue(this, 1, void 0);
+              env.$isSameOrigin$ = webWorkerCtx.$origin$ === env.$location$.origin;
+              setInstanceStateValue(this, StateProp.loadErrorStatus, void 0);
               xhr.open('GET', src, false);
               xhr.send();
               xhrStatus = xhr.status;
@@ -1633,9 +1821,9 @@
                     getPartytownScript(),
                 );
                 sendToMain(true);
-                webWorkerCtx.$postMessage$([7, env.$winId$]);
+                webWorkerCtx.$postMessage$([WorkerMessageType.InitializeNextScript, env.$winId$]);
               } else {
-                setInstanceStateValue(this, 1, xhrStatus);
+                setInstanceStateValue(this, StateProp.loadErrorStatus, xhrStatus);
                 env.$isLoading$ = 0;
               }
             }
@@ -1707,7 +1895,7 @@
     );
   };
   function method(applyPath, ...args) {
-    return callMethod(this, applyPath, args, 1);
+    return callMethod(this, applyPath, args, CallType.Blocking);
   }
   const NAMED_NODE_MAP_HANDLERS = {
     getNamedItem: method,
@@ -1782,7 +1970,7 @@
                     type: 'load',
                   }),
                 )
-              : callMethod(this, ['addEventListener'], args, 2);
+              : callMethod(this, ['addEventListener'], args, CallType.NonBlocking);
           };
           let win = this;
           let value;
@@ -1803,9 +1991,7 @@
                     InstanceIdKey,
                     ApplyPathKey,
                   ];
-                  webWorkerCtx.$importScripts$(
-                    partytownLibUrl('partytown-media.js?v=0.10.3-dev1734732935152'),
-                  );
+                  webWorkerCtx.$importScripts$(partytownLibUrl('partytown-media.js?v=0.11.2'));
                   webWorkerCtx.$initWindowMedia$ = self.$bridgeFromMedia$;
                   delete self.$bridgeFromMedia$;
                 }
@@ -1874,7 +2060,7 @@
                     ? WorkerBase
                     : win[superCstrName];
               const Cstr = (win[cstrName] = defineConstructorName(
-                12 === interfaceType
+                interfaceType === InterfaceType.EnvGlobalConstructor
                   ? class extends WorkerBase {
                       constructor(...args) {
                         super();
@@ -1908,7 +2094,7 @@
                           setInstanceStateValue(this, memberName, value);
                         },
                       })
-                    : 5 === memberType
+                    : memberType === InterfaceType.Function
                       ? definePrototypeValue(Cstr, memberName, function (...args) {
                           return callMethod(this, [memberName], args);
                         })
@@ -1979,6 +2165,7 @@
             definePrototypePropertyDescriptor(WorkerHTMLHtmlElement, DocumentElementDescriptorMap);
           })(win.HTMLHtmlElement, env);
           createCSSStyleSheetConstructor(win, 'CSSStyleSheet');
+          createCSSStyleSheetConstructor(win, 'CSSMediaRule');
           definePrototypeNodeType(win.Comment, 8);
           definePrototypeNodeType(win.DocumentType, 10);
           Object.assign(env, {
@@ -2003,10 +2190,13 @@
               },
               has: () => true,
             }),
-            $document$: $createNode$('#document', $winId$ + '.d'),
-            $documentElement$: $createNode$('HTML', $winId$ + '.e'),
-            $head$: $createNode$('HEAD', $winId$ + '.h'),
-            $body$: $createNode$('BODY', $winId$ + '.b'),
+            $document$: $createNode$(NodeName.Document, $winId$ + '.' + WinDocId.document),
+            $documentElement$: $createNode$(
+              NodeName.DocumentElement,
+              $winId$ + '.' + WinDocId.documentElement,
+            ),
+            $head$: $createNode$(NodeName.Head, $winId$ + '.' + WinDocId.head),
+            $body$: $createNode$(NodeName.Body, $winId$ + '.' + WinDocId.body),
             $location$: $location$,
             $visibilityState$: $visibilityState$,
             $isSameOrigin$: $isSameOrigin$,
@@ -2027,8 +2217,8 @@
             );
           };
           win.cancelIdleCallback = id => clearTimeout(id);
-          addStorageApi(win, 'localStorage', $isSameOrigin$, env);
-          addStorageApi(win, 'sessionStorage', $isSameOrigin$, env);
+          addStorageApi(win, 'localStorage', env);
+          addStorageApi(win, 'sessionStorage', env);
           $isSameOrigin$ || (win.indexeddb = void 0);
           if (isIframeWindow) {
             historyState = {};
@@ -2074,7 +2264,9 @@
           return env.$window$;
         }
         get frameElement() {
-          return $isTopWindow$ ? null : getOrCreateNodeInstance($parentWinId$, $winId$, 'IFRAME');
+          return $isTopWindow$
+            ? null
+            : getOrCreateNodeInstance($parentWinId$, $winId$, NodeName.IFrame);
         }
         get globalThis() {
           return env.$window$;
@@ -2161,7 +2353,7 @@
             });
             args = args.slice(1);
           }
-          callMethod(this, ['postMessage'], args, 3);
+          callMethod(this, ['postMessage'], args, CallType.NonBlockingNoSideEffect);
         }
         get self() {
           return env.$window$;
@@ -2217,7 +2409,7 @@
     eventTargetMethods.map(
       methodName =>
         (WorkerEventTargetProxy.prototype[methodName] = function (...args) {
-          return callMethod(this, [methodName], args, 2);
+          return callMethod(this, [methodName], args, CallType.NonBlocking);
         }),
     );
     cachedProps(WorkerWindow, 'devicePixelRatio');
@@ -2254,7 +2446,7 @@
         logWorker(`Created ${winType} window ${normalizedWinId($winId$)} environment`, $winId$);
       }
     }
-    webWorkerCtx.$postMessage$([7, $winId$]);
+    webWorkerCtx.$postMessage$([WorkerMessageType.InitializeNextScript, $winId$]);
     return environments[$winId$];
   };
   const queuedEvents = [];
@@ -2263,11 +2455,11 @@
     const msgType = msg[0];
     const msgValue = msg[1];
     if (webWorkerCtx.$isInitialized$) {
-      if (7 === msgType) {
+      if (msgType === WorkerMessageType.InitializeNextScript) {
         (async initScript => {
           let winId = initScript.$winId$;
           let instanceId = initScript.$instanceId$;
-          let instance = getOrCreateNodeInstance(winId, instanceId, 'SCRIPT');
+          let instance = getOrCreateNodeInstance(winId, instanceId, NodeName.Script);
           let scriptContent = initScript.$content$;
           let scriptSrc = initScript.$url$;
           let scriptOrgSrc = initScript.$orgUrl$;
@@ -2287,7 +2479,7 @@
           if (scriptSrc) {
             try {
               scriptSrc = resolveToUrl(env, scriptSrc, 'script') + '';
-              setInstanceStateValue(instance, 4, scriptSrc);
+              setInstanceStateValue(instance, StateProp.url, scriptSrc);
               webWorkerCtx.$config$.logScriptExecution &&
                 logWorker(`Execute script src: ${scriptOrgSrc}`, winId);
               rsp = await fetch(scriptSrc);
@@ -2311,24 +2503,29 @@
                   env.$currentScriptId$ = instanceId;
                   run(env, scriptContent, scriptOrgSrc || scriptSrc);
                 }
-                runStateLoadHandlers(instance, 'load');
+                runStateLoadHandlers(instance, StateProp.loadHandlers);
               } else {
                 errorMsg = rsp.statusText;
-                runStateLoadHandlers(instance, 'error');
+                runStateLoadHandlers(instance, StateProp.errorHandlers);
               }
             } catch (urlError) {
               console.error(urlError);
               errorMsg = String(urlError.stack || urlError);
-              runStateLoadHandlers(instance, 'error');
+              runStateLoadHandlers(instance, StateProp.errorHandlers);
             }
           } else {
             scriptContent &&
               (errorMsg = runScriptContent(env, instanceId, scriptContent, winId, errorMsg));
           }
           env.$currentScriptId$ = '';
-          webWorkerCtx.$postMessage$([6, winId, instanceId, errorMsg]);
+          webWorkerCtx.$postMessage$([
+            WorkerMessageType.InitializedEnvironmentScript,
+            winId,
+            instanceId,
+            errorMsg,
+          ]);
         })(msgValue);
-      } else if (9 === msgType) {
+      } else if (msgType === WorkerMessageType.RefHandlerCallback) {
         (({
           $winId$: $winId$,
           $instanceId$: $instanceId$,
@@ -2347,7 +2544,7 @@
             }
           }
         })(msgValue);
-      } else if (10 === msgType) {
+      } else if (msgType === WorkerMessageType.ForwardMainTrigger) {
         (({ $winId$: $winId$, $forward$: $forward$, $args$: $args$ }) => {
           try {
             let target = environments[$winId$].$window$;
@@ -2365,9 +2562,9 @@
             console.error(e);
           }
         })(msgValue);
-      } else if (5 === msgType) {
+      } else if (msgType === WorkerMessageType.InitializeEnvironment) {
         createEnvironment(msgValue);
-      } else if (8 === msgType) {
+      } else if (msgType === WorkerMessageType.InitializedScripts) {
         if (1 !== environments[msgValue].$isInitialized$) {
           const winId = msgValue;
           const env = environments[winId];
@@ -2379,16 +2576,16 @@
         }
         environments[msgValue].$isInitialized$ = 1;
         environments[msgValue].$isLoading$ = 0;
-      } else if (14 === msgType) {
+      } else if (msgType === WorkerMessageType.DocumentVisibilityState) {
         environments[msgValue].$visibilityState$ = msg[2];
-      } else if (13 === msgType) {
+      } else if (msgType === WorkerMessageType.LocationUpdate) {
         const $winId$ = msgValue.$winId$;
         const env = environments[$winId$];
         env.$location$.href = msgValue.url;
         !(function ($winId$, env, data) {
           const history = env.$window$.history;
           switch (data.type) {
-            case 0:
+            case LocationUpdateType.PushState:
               env.$propagateHistoryChange$ = false;
               try {
                 history.pushState(data.state, '', data.newUrl);
@@ -2396,7 +2593,7 @@
               env.$propagateHistoryChange$ = true;
               break;
 
-            case 1:
+            case LocationUpdateType.ReplaceState:
               env.$propagateHistoryChange$ = false;
               try {
                 history.replaceState(data.state, '', data.newUrl);
@@ -2405,13 +2602,13 @@
           }
         })(msgValue.$winId$, env, msgValue);
       } else {
-        15 === msgType &&
+        msgType === WorkerMessageType.CustomElementCallback &&
           ((_type, winId, instanceId, callbackName, args) => {
             const elm = getOrCreateNodeInstance(winId, instanceId);
             elm && 'function' == typeof elm[callbackName] && elm[callbackName].apply(elm, args);
           })(...msg);
       }
-    } else if (1 === msgType) {
+    } else if (msgType === WorkerMessageType.MainDataResponseToWorker) {
       (initWebWorkerData => {
         const config = (webWorkerCtx.$config$ = JSON.parse(initWebWorkerData.$config$));
         const locOrigin = initWebWorkerData.$origin$;
@@ -2432,12 +2629,12 @@
           },
         );
       })(msgValue);
-      webWorkerCtx.$postMessage$([2]);
-    } else if (3 === msgType) {
+      webWorkerCtx.$postMessage$([WorkerMessageType.MainInterfacesRequestFromWorker]);
+    } else if (msgType === WorkerMessageType.MainInterfacesResponseToWorker) {
       webWorkerCtx.$interfaces$ = [...webWorkerCtx.$interfaces$, ...msgValue];
       webWorkerCtx.$isInitialized$ = 1;
       logWorker('Initialized web worker');
-      webWorkerCtx.$postMessage$([4]);
+      webWorkerCtx.$postMessage$([WorkerMessageType.InitializedWebWorker]);
       queuedEvents.length && logWorker(`Queued ready messages: ${queuedEvents.length}`);
       [...queuedEvents].map(receiveMessageFromSandboxToWorker);
       queuedEvents.length = 0;
@@ -2446,5 +2643,5 @@
     }
   };
   self.onmessage = receiveMessageFromSandboxToWorker;
-  postMessage([0]);
+  postMessage([WorkerMessageType.MainDataRequestFromWorker]);
 })(self);

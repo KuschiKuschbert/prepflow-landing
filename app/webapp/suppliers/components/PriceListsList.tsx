@@ -40,7 +40,12 @@ export function PriceListsList({ priceLists }: PriceListsListProps) {
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
-                <span className="text-2xl">{getSupplierIcon(priceList.suppliers?.name)}</span>
+                <Icon
+                  icon={getSupplierIcon(priceList.suppliers?.name)}
+                  size="lg"
+                  className="text-[var(--primary)]"
+                  aria-hidden={true}
+                />
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-[var(--foreground)]">

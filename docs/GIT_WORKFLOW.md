@@ -43,11 +43,14 @@ As you code, leverage the **Recursive Self-Improvement (RSI)** system to maintai
 
 ### Step 3: Committing (Automation)
 
-When you commit, `husky` and `lint-staged` will automatically run:
+When you commit, `husky` and `lint-staged` will automatically run fast checks:
 
-1.  **Prettier**: Formats all modified files.
-2.  **File Size Check**: Blocks commits if files exceed complexity limits (see `docs/SCRIPTS.md`).
-3.  **Sentinel**: Simple static analysis.
+1.  **Merge Conflict Check**: Blocks if unresolved conflict markers are staged.
+2.  **Curbos Protection**: Blocks commits that modify `app/curbos/` (use `ALLOW_CURBOS_MODIFY=1` for emergency bypass).
+3.  **File Size Check**: Blocks commits if files exceed complexity limits (see `docs/SCRIPTS.md`).
+4.  **Prettier** (via lint-staged): Formats all modified files.
+
+Heavy checks (Security, Health, Architecture, ADR) run in CI. Use `--no-verify` only in emergencies.
 
 ```bash
 git add .

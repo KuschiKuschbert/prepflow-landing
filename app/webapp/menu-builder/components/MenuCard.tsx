@@ -3,27 +3,14 @@
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
 import { Menu } from '@/lib/types/menu-builder';
-import {
-  Cake,
-  Check,
-  Edit2,
-  Heart,
-  Lock,
-  PartyPopper,
-  Printer,
-  Trash2,
-  Users,
-  X,
-} from 'lucide-react';
+import { Check, Edit2, Lock, PartyPopper, Printer, Trash2, X } from 'lucide-react';
 import { memo } from 'react';
 
-const FUNCTION_TYPE_CONFIG: Record<string, { icon: typeof Heart; label: string; accent: string }> =
-  {
-    function_wedding: { icon: Heart, label: 'Wedding Menu', accent: 'text-pink-400' },
-    function_birthday: { icon: Cake, label: 'Birthday Menu', accent: 'text-amber-400' },
-    function_corporate: { icon: Users, label: 'Corporate Menu', accent: 'text-blue-400' },
-    function_other: { icon: PartyPopper, label: 'Function Menu', accent: 'text-[var(--primary)]' },
-  };
+const FUNCTION_MENU_CONFIG = {
+  icon: PartyPopper,
+  label: 'Function Menu',
+  accent: 'text-[var(--primary)]',
+};
 
 interface MenuCardProps {
   menu: Menu;
@@ -80,10 +67,9 @@ export const MenuCard = memo(function MenuCard({
   onPrintClick,
 }: MenuCardProps) {
   const isLocked = menu.is_locked || false;
-  const isFunctionMenu = menu.menu_type && menu.menu_type.startsWith('function_');
-  const functionConfig = isFunctionMenu
-    ? FUNCTION_TYPE_CONFIG[menu.menu_type || ''] || FUNCTION_TYPE_CONFIG.function_other
-    : null;
+  const isFunctionMenu =
+    menu.menu_type === 'function' || (menu.menu_type && menu.menu_type.startsWith('function_'));
+  const functionConfig = isFunctionMenu ? FUNCTION_MENU_CONFIG : null;
 
   if (isLocked) {
     logger.dev('[MenuCard] Menu is locked, print button should be visible', {
@@ -112,11 +98,15 @@ export const MenuCard = memo(function MenuCard({
       {/* Function Menu Badge */}
       {functionConfig && (
         <div className="mb-3 flex items-center gap-2">
-          <Icon icon={functionConfig.icon} size="sm" className={functionConfig.accent} />
+          <Icon
+            icon={FUNCTION_MENU_CONFIG.icon}
+            size="sm"
+            className={FUNCTION_MENU_CONFIG.accent}
+          />
           <span
-            className={`text-xs font-semibold tracking-wider uppercase ${functionConfig.accent}`}
+            className={`text-xs font-semibold tracking-wider uppercase ${FUNCTION_MENU_CONFIG.accent}`}
           >
-            {functionConfig.label}
+            {FUNCTION_MENU_CONFIG.label}
           </span>
         </div>
       )}

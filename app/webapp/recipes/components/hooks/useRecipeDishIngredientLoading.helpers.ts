@@ -35,6 +35,7 @@ export async function loadRecipeIngredients({
         convertedUnit,
         conversionNote || '',
         recipeId,
+        ri.id,
       );
     })
     .filter(Boolean) as COGSCalculation[];
@@ -67,7 +68,7 @@ export async function loadDishIngredients({
   });
 
   const allCalculations: COGSCalculation[] = [];
-  const processIngredient = (ingId: string, qty: number, unit: string) => {
+  const processIngredient = (ingId: string, qty: number, unit: string, rowId?: string) => {
     const ingredientData = ingredients.find(ing => ing.id === ingId);
     if (!ingredientData) return;
     const { convertedQuantity, convertedUnit, conversionNote } = convertIngredientQuantity(
@@ -83,11 +84,13 @@ export async function loadDishIngredients({
         convertedUnit,
         conversionNote || '',
         dishId,
+        rowId,
       ),
     );
   };
-  dishIngredients.forEach((di: { ingredient_id: string; quantity: number; unit: string }) =>
-    processIngredient(di.ingredient_id, di.quantity, di.unit),
+  dishIngredients.forEach(
+    (di: { id?: string; ingredient_id: string; quantity: number; unit: string }) =>
+      processIngredient(di.ingredient_id, di.quantity, di.unit, di.id),
   );
   for (const dr of dishRecipes) {
     const recipe = recipes.find(r => r.id === dr.recipe_id);
@@ -99,8 +102,8 @@ export async function loadDishIngredients({
     const recipeYield = recipe.yield || 1;
     const quantity = dr.quantity || 1;
     (recipeData.items || []).forEach(
-      (ri: { ingredient_id: string; quantity: number; unit: string }) =>
-        processIngredient(ri.ingredient_id, (ri.quantity / recipeYield) * quantity, ri.unit),
+      (ri: { id?: string; ingredient_id: string; quantity: number; unit: string }) =>
+        processIngredient(ri.ingredient_id, (ri.quantity / recipeYield) * quantity, ri.unit, ri.id),
     );
   }
   return allCalculations;

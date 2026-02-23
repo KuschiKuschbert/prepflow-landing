@@ -1,7 +1,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { Check } from 'lucide-react';
+import { BookOpen, Check } from 'lucide-react';
 import { formatRecipeDate } from '../../../utils/formatDate';
 
 interface RecipeCardHeaderProps {
@@ -24,7 +24,11 @@ export function RecipeCardHeader({
 }: RecipeCardHeaderProps) {
   return (
     <div className="mb-2 flex items-start justify-between">
-      <div className="flex items-center">
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="inline-flex items-center gap-1 rounded-full border border-[var(--color-info)]/20 bg-[var(--color-info)]/10 px-2 py-0.5 text-xs font-medium text-[var(--color-info)]">
+          <Icon icon={BookOpen} size="xs" aria-hidden={true} />
+          Recipe
+        </span>
         <button
           onClick={e => {
             e.stopPropagation();

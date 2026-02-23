@@ -8,6 +8,7 @@ export function createHandleAddRecipe(
   onRecipeCreated: () => void,
   showErrorNotification: (message: string) => void,
   showSuccess: (message: string) => void,
+  showInfo?: (message: string) => void,
 ) {
   return async (newRecipe: Partial<Recipe>) => {
     try {
@@ -18,6 +19,7 @@ export function createHandleAddRecipe(
         onRecipeCreated,
         showErrorNotification,
         showSuccess,
+        showInfo,
       });
     } catch (err) {
       logger.error('[createHandleAddRecipe] Error in catch block:', {

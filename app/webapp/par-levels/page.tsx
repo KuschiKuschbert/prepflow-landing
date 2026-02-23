@@ -1,11 +1,13 @@
 'use client';
 
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { TablePagination } from '@/components/ui/TablePagination';
 import { useNotification } from '@/contexts/NotificationContext';
-import { useState } from 'react';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
+import { useEffect, useState } from 'react';
 
 import { ParLevelCard } from './components/ParLevelCard';
 import { ParLevelEditDrawer } from './components/ParLevelEditDrawer';
@@ -19,6 +21,7 @@ import { useParLevelsData } from './hooks/useParLevelsData';
 import { useParLevelsExport } from './hooks/useParLevelsExport';
 import { useParLevelsForm } from './hooks/useParLevelsForm';
 import { useParLevelsPagination } from './hooks/useParLevelsPagination';
+import { markFirstDone } from '@/lib/page-help/first-done-storage';
 import { useParLevelsSelection } from './hooks/useParLevelsSelection';
 import { useSelectionMode } from './hooks/useSelectionMode';
 
@@ -73,6 +76,11 @@ export default function ParLevelsPage() {
   });
 
   // Selection
+  // Mark first done for InlineHint/RescueNudge when user sets first par level
+  useEffect(() => {
+    if (parLevels.length > 0) markFirstDone('par-levels');
+  }, [parLevels.length]);
+
   const { selectedParLevels, handleSelectParLevel, handleSelectAll } = useParLevelsSelection({
     parLevels,
     isSelectionMode,
@@ -117,6 +125,12 @@ export default function ParLevelsPage() {
           exportLoading={exportLoading}
           hasItems={parLevels.length > 0}
         />
+
+        {PAGE_TIPS_CONFIG['par-levels'] && (
+          <div className="mb-6">
+            <PageTipsCard config={PAGE_TIPS_CONFIG['par-levels']} />
+          </div>
+        )}
 
         {/* Inline Add Form */}
         {showForm && !editingParLevel && (

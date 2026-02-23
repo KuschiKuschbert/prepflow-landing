@@ -1,5 +1,8 @@
 'use client';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
+import { markFirstDone } from '@/lib/page-help/first-done-storage';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { logger } from '@/lib/logger';
 import { Menu } from '@/lib/types/menu-builder';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -18,7 +21,7 @@ interface MenuBuilderClientProps {
   onBack: () => void;
 }
 
-type MenuTab = 'a_la_carte' | 'function';
+type MenuTab = 'a_la_carte' | 'function' | 'all';
 
 export default function MenuBuilderClient({
   selectedMenu,
@@ -39,7 +42,7 @@ export default function MenuBuilderClient({
     fetchMenus,
     cachedMenus,
   } = useMenuData();
-  const [activeTab, setActiveTab] = useState<MenuTab>('a_la_carte');
+  const [activeTab, setActiveTab] = useState<MenuTab>('all');
   const { checkingDb, dbError, setDbError, checkDatabaseTables, cachedDbCheck } =
     useDatabaseCheck();
   const [showMenuForm, setShowMenuForm] = useState(false);
@@ -165,6 +168,12 @@ export default function MenuBuilderClient({
     [handleMenuSaved],
   );
 
+  useEffect(() => {
+    if (menus.length > 0) {
+      markFirstDone('menu-builder');
+    }
+  }, [menus.length]);
+
   // Log when selectedMenu prop changes
   useEffect(() => {
     if (selectedMenu) {
@@ -193,9 +202,24 @@ export default function MenuBuilderClient({
       {error && !dbError && <ErrorBanner error={error} onRetry={handleRetryFetch} />}
       {!dbError && (
         <>
+          {menus.length === 0 && PAGE_TIPS_CONFIG['menu-builder'] && (
+            <div className="mb-6">
+              <PageTipsCard config={PAGE_TIPS_CONFIG['menu-builder']} />
+            </div>
+          )}
           {/* Tab Bar */}
           <div className="mb-6 flex items-center justify-between">
             <div className="flex gap-1 rounded-xl bg-[var(--background)] p-1">
+              <button
+                onClick={() => setActiveTab('all')}
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
+                  activeTab === 'all'
+                    ? 'bg-[var(--muted)] text-[var(--foreground)] shadow-sm'
+                    : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
+                }`}
+              >
+                All Menus
+              </button>
               <button
                 onClick={() => setActiveTab('a_la_carte')}
                 className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
@@ -226,17 +250,19 @@ export default function MenuBuilderClient({
           </div>
 
           <MenuList
-            menus={menus.filter(m =>
-              activeTab === 'a_la_carte'
-                ? !m.menu_type || m.menu_type === 'a_la_carte'
-                : m.menu_type === 'function' ||
-                  (m.menu_type && m.menu_type.startsWith('function_')),
-            )}
+            menus={menus.filter(m => {
+              if (activeTab === 'all') return true;
+              if (activeTab === 'a_la_carte') return !m.menu_type || m.menu_type === 'a_la_carte';
+              return (
+                m.menu_type === 'function' || (m.menu_type && m.menu_type.startsWith('function_'))
+              );
+            })}
             onSelectMenu={handleSelectMenu}
             onEditMenu={handleEditMenuClick}
             onDeleteMenu={handleDeleteMenu}
             onMenuUpdated={handleMenuUpdated}
             setMenus={setMenus}
+            onCreateMenu={handleCreateMenuClick}
           />
         </>
       )}

@@ -1,15 +1,14 @@
 #!/bin/bash
 
-# Pre-Commit Checks (Fast)
-# - Security (Auditor)
-# - Health (Sentinel)
-# - Architecture (Architect)
+# Pre-Commit Checks (Fast Only - target <10 seconds)
+# Heavy checks (Security, Health, Architecture, ADR) run in CI.
+# See: .github/workflows/ci-cd.yml
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
 
-echo "🦁 The Brain (Pre-Commit Guard)..."
+echo "🦁 Pre-Commit Guard (fast checks)..."
 
 # 0. Merge Conflict Check
 echo -n "   - Merge Conflicts... "
@@ -22,39 +21,21 @@ else
     echo -e "${GREEN}Pass${NC}"
 fi
 
-# 1. Security Check (Auditor)
-echo -n "   - Security (Auditor)... "
-if npm run check:security; then
-    echo -e "${GREEN}Pass${NC}"
-else
-    echo -e "${RED}FAIL (Secrets or Assets Detected)${NC}"
-    echo "     Run 'npm run check:security' to see details."
-    exit 1
+# 1. Curbos Protection (block commits that modify app/curbos/)
+if [ -z "$ALLOW_CURBOS_MODIFY" ]; then
+    echo -n "   - Curbos Protection... "
+    if git diff --cached --name-only | grep -q '^app/curbos/'; then
+        echo -e "${RED}FAIL (Curbos Area Modified)${NC}"
+        echo "     app/curbos/ is protected. Use ALLOW_CURBOS_MODIFY=1 for emergency bypass."
+        git diff --cached --name-only | grep '^app/curbos/'
+        exit 1
+    else
+        echo -e "${GREEN}Pass${NC}"
+    fi
 fi
 
-# 2. Health Check (Sentinel)
-echo -n "   - Health (Sentinel)... "
-if npm run check:health; then
-    echo -e "${GREEN}Pass${NC}"
-else
-    echo -e "${RED}FAIL (Code Debt Ceiling Breached)${NC}"
-    echo "     Run 'npm run check:health' to see details."
-    exit 1
-fi
-
-
-# 3. Architecture Check (Architect)
-echo -n "   - Architecture (Architect)... "
-if npm run check:architecture; then
-    echo -e "${GREEN}Pass${NC}"
-else
-    echo -e "${RED}FAIL (Architectural Violation)${NC}"
-    echo "     Run 'npm run check:architecture' to see details."
-    exit 1
-fi
-
-# 4. File Size Check (Complexity)
-echo -n "   - File Size (Complexity)... "
+# 2. File Size Check (Complexity)
+echo -n "   - File Size... "
 if npm run lint:filesize; then
     echo -e "${GREEN}Pass${NC}"
 else
@@ -63,15 +44,5 @@ else
     exit 1
 fi
 
-# 5. Documentation (ADR)
-echo -n "   - Documentation (ADR)... "
-if npm run check:adr; then
-    echo -e "${GREEN}Pass${NC}"
-else
-    echo -e "${YELLOW}Warning (ADR Missing)${NC}"
-    echo "     Architectural changes detected without a record."
-    # We don't exit 1 for ADRs yet, just warn.
-fi
-
-echo -e "${GREEN}✅ All Guards Passed. Commit Approved.${NC}"
+echo -e "${GREEN}✅ Pre-commit passed. (Heavy checks run in CI.)${NC}"
 exit 0

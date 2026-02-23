@@ -3,9 +3,12 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
+import { markFirstDone } from '@/lib/page-help/first-done-storage';
 import { logger } from '@/lib/logger';
 import { useOnRecipeShared } from '@/lib/personality/hooks';
 import { useNotification } from '@/contexts/NotificationContext';
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { EmptyState } from './components/EmptyState';
 import { ShareCard } from './components/ShareCard';
 import { ShareFormModal } from './components/ShareFormModal';
@@ -50,6 +53,11 @@ export default function RecipeSharingPage() {
     fetchRecipes();
     fetchRecipeShares();
   }, []);
+
+  // Mark first done for InlineHint/RescueNudge when user shares first recipe
+  useEffect(() => {
+    if (recipeShares.length > 0) markFirstDone('recipe-sharing');
+  }, [recipeShares.length]);
 
   const fetchRecipes = async () => {
     try {
@@ -193,6 +201,11 @@ export default function RecipeSharingPage() {
         {error && (
           <div className="mb-6 rounded-2xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-4">
             <p className="text-[var(--color-error)]">{error}</p>
+          </div>
+        )}
+        {PAGE_TIPS_CONFIG['recipe-sharing'] && (
+          <div className="mb-6">
+            <PageTipsCard config={PAGE_TIPS_CONFIG['recipe-sharing']} />
           </div>
         )}
         <div className="space-y-4">

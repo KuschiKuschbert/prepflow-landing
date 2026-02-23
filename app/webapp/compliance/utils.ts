@@ -27,20 +27,6 @@ export function getTypeIcon(typeName: string): LucideIcon {
   return ClipboardCheck;
 }
 
-export function getTypeIconEmoji(typeName: string): string {
-  // Keep for select options where React components can't be used
-  const name = typeName.toLowerCase();
-  if (name.includes('pest') || name.includes('exterminat')) return '🐛';
-  if (name.includes('fire') || name.includes('safety')) return '🔥';
-  if (name.includes('health') || name.includes('hygiene')) return '🏥';
-  if (name.includes('council') || name.includes('license')) return '🏛️';
-  if (name.includes('insurance')) return '🛡️';
-  if (name.includes('tax') || name.includes('gst')) return '💼';
-  if (name.includes('liquor') || name.includes('alcohol')) return '🍷';
-  if (name.includes('food') || name.includes('safety')) return '🍽️';
-  return '📋';
-}
-
 export function getStatusColor(status: 'active' | 'expired' | 'pending_renewal'): string {
   switch (status) {
     case 'active':

@@ -37,7 +37,7 @@ export async function populateRecipes(
 
   for (const recipe of recipes) {
     try {
-      const recipeName = recipe.name || 'Unknown';
+      const recipeName = recipe.recipe_name ?? recipe.name ?? 'Unknown';
       const hasIngredients = await recipeHasIngredients(recipe.id);
       if (hasIngredients) {
         skipped.push({
@@ -60,13 +60,21 @@ export async function populateRecipes(
         continue;
       }
 
-      // Insert recipe_ingredients
-      const recipeIngredientsToInsert = ingredientsToAdd.map(ing => ({
-        recipe_id: recipe.id,
-        ingredient_id: ing.ingredient_id,
-        quantity: ing.quantity,
-        unit: ing.unit,
-      }));
+      // Deduplicate by (recipe_id, ingredient_id) to prevent duplicate rows
+      const seen = new Set<string>();
+      const recipeIngredientsToInsert = ingredientsToAdd
+        .filter(ing => {
+          const key = `${recipe.id}-${ing.ingredient_id}`;
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        })
+        .map(ing => ({
+          recipe_id: recipe.id,
+          ingredient_id: ing.ingredient_id,
+          quantity: ing.quantity,
+          unit: ing.unit,
+        }));
 
       if (!supabaseAdmin) {
         throw ApiErrorHandler.createError(
@@ -94,21 +102,21 @@ export async function populateRecipes(
         continue;
       }
 
-      const ingredientNames = ingredientsToAdd.map(ing =>
-        getIngredientName(ing.ingredient_id, ingredients),
+      const ingredientNames = recipeIngredientsToInsert.map(ri =>
+        getIngredientName(ri.ingredient_id, ingredients),
       );
 
       populated.push({
         recipe_id: recipe.id,
         recipe_name: recipeName,
-        ingredients_added: ingredientsToAdd.length,
+        ingredients_added: recipeIngredientsToInsert.length,
         ingredient_names: ingredientNames,
       });
 
       logger.dev('[Populate Empty Dishes] Populated recipe:', {
         recipeId: recipe.id,
         recipeName,
-        ingredientsAdded: ingredientsToAdd.length,
+        ingredientsAdded: recipeIngredientsToInsert.length,
         ingredientNames,
       });
     } catch (err) {

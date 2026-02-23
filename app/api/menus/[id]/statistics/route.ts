@@ -25,6 +25,16 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       );
     }
 
+    // Fetch menu_type from menus table
+    const { data: menuRow, error: menuError } = await supabaseAdmin
+      .from('menus')
+      .select('menu_type')
+      .eq('id', menuId)
+      .single();
+
+    const menuType =
+      menuError || !menuRow ? 'a_la_carte' : (menuRow.menu_type as string) || 'a_la_carte';
+
     // Fetch menu items with dishes and recipes
     // Note: recipes table uses 'name' column, not 'recipe_name'
     const { data: menuItems, error: queryError } = await supabaseAdmin
@@ -79,23 +89,29 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
 
     if (!menuItems || menuItems.length === 0) {
       logger.dev('[Menu Statistics API] No menu items found, returning zeros');
+      const emptyStats = {
+        total_items: 0,
+        total_dishes: 0,
+        total_recipes: 0,
+        total_cogs: 0,
+        total_revenue: 0,
+        gross_profit: 0,
+        average_profit_margin: 0,
+        food_cost_percent: 0,
+      };
+      const isFunctionMenu =
+        menuType === 'function' || (menuType && menuType.startsWith('function_'));
       return NextResponse.json({
         success: true,
-        statistics: {
-          total_items: 0,
-          total_dishes: 0,
-          total_recipes: 0,
-          total_cogs: 0,
-          total_revenue: 0,
-          gross_profit: 0,
-          average_profit_margin: 0,
-          food_cost_percent: 0,
-        },
+        statistics: isFunctionMenu ? { ...emptyStats, price_per_person: 0 } : emptyStats,
       });
     }
 
-    logger.dev('[Menu Statistics API] Calculating statistics', { itemCount: menuItems.length });
-    const statistics = await calculateMenuStatistics(menuItems);
+    logger.dev('[Menu Statistics API] Calculating statistics', {
+      itemCount: menuItems.length,
+      menuType,
+    });
+    const statistics = await calculateMenuStatistics(menuItems, menuType);
     logger.dev('[Menu Statistics API] Statistics calculated:', statistics);
 
     return NextResponse.json({

@@ -1,4 +1,4 @@
-/* Partytown 0.10.3-dev1734732935152 - MIT builder.io */
+/* Partytown 0.11.2 - MIT QwikDev */
 const t = { preserveBehavior: !1 },
   e = e => {
     if ('string' == typeof e) return [e, t];
@@ -17,15 +17,15 @@ const t = { preserveBehavior: !1 },
       return Array.from(e);
     })(),
   );
-!(function (t, r, o, i, a, s, c, d, l, p, u = t, f) {
+!(function (t, r, o, i, a, s, c, l, d, p, u = t, f) {
   function h() {
     f ||
       ((f = 1),
       '/' == (c = (s.lib || '/~partytown/') + (s.debug ? 'debug/' : ''))[0] &&
-        ((l = r.querySelectorAll('script[type="text/partytown"]')),
+        ((d = r.querySelectorAll('script[type="text/partytown"]')),
         i != t
           ? i.dispatchEvent(new CustomEvent('pt1', { detail: t }))
-          : ((d = setTimeout(v, 999999999)),
+          : ((l = setTimeout(v, (null == s ? void 0 : s.fallbackTimeout) || 1e4)),
             r.addEventListener('pt0', w),
             a
               ? y(1)
@@ -52,10 +52,7 @@ const t = { preserveBehavior: !1 },
         (p.style.border = '0'),
         (p.style.visibility = 'hidden'),
         p.setAttribute('aria-hidden', !0)),
-      (p.src =
-        c +
-        'partytown-' +
-        (e ? 'atomics.js?v=0.10.3-dev1734732935152' : 'sandbox-sw.html?' + t._pttab)),
+      (p.src = c + 'partytown-' + (e ? 'atomics.js?v=0.11.2' : 'sandbox-sw.html?' + t._pttab)),
       r.querySelector(s.sandboxParent || 'body').appendChild(p));
   }
   function v(n, o) {
@@ -67,16 +64,16 @@ const t = { preserveBehavior: !1 },
             delete t[r.split('.')[0]];
           }),
         n = 0;
-      n < l.length;
+      n < d.length;
       n++
     )
-      (((o = r.createElement('script')).innerHTML = l[n].innerHTML),
+      (((o = r.createElement('script')).innerHTML = d[n].innerHTML),
         (o.nonce = s.nonce),
         r.head.appendChild(o));
     p && p.parentNode.removeChild(p);
   }
   function w() {
-    clearTimeout(d);
+    clearTimeout(l);
   }
   ((s = t.partytown || {}),
     i == t &&

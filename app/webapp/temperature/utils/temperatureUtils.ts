@@ -19,16 +19,15 @@ export const temperatureTypes = [
 ];
 
 /**
- * Temperature types with icon strings for use in select options.
- * Select options cannot use React components, so this provides emoji strings.
+ * Temperature types for select options (label only; native <option> cannot render icons).
  */
 export const temperatureTypesForSelect: Array<{ value: string; label: string; icon: string }> = [
-  { value: 'fridge', label: 'Fridge', icon: '🧊' },
-  { value: 'freezer', label: 'Freezer', icon: '❄️' },
-  { value: 'food_cooking', label: 'Food Cooking', icon: '🔥' },
-  { value: 'food_hot_holding', label: 'Food Hot Holding', icon: '🍲' },
-  { value: 'food_cold_holding', label: 'Food Cold Holding', icon: '🥗' },
-  { value: 'storage', label: 'Storage', icon: '📦' },
+  { value: 'fridge', label: 'Fridge', icon: '' },
+  { value: 'freezer', label: 'Freezer', icon: '' },
+  { value: 'food_cooking', label: 'Food Cooking', icon: '' },
+  { value: 'food_hot_holding', label: 'Food Hot Holding', icon: '' },
+  { value: 'food_cold_holding', label: 'Food Cold Holding', icon: '' },
+  { value: 'storage', label: 'Storage', icon: '' },
 ];
 
 /**

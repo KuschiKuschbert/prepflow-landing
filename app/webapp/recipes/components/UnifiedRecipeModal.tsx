@@ -145,6 +145,7 @@ export function UnifiedRecipeModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="recipe-modal-title"
+      data-guide-capture="recipe-modal"
     >
       <div className="animate-in zoom-in-95 max-h-[90vh] w-full max-w-6xl rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl duration-200">
         <div

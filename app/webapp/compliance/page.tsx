@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { useTranslation } from '@/lib/useTranslation';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { ClipboardCheck } from 'lucide-react';
@@ -76,6 +78,13 @@ export default function ComplianceTrackingPage() {
             )}
           </p>
         </div>
+
+        {/* Page tips for compliance (form-heavy, no natural empty state) */}
+        {PAGE_TIPS_CONFIG.compliance && (
+          <div className="mb-6">
+            <PageTipsCard config={PAGE_TIPS_CONFIG.compliance} />
+          </div>
+        )}
 
         <ComplianceTabs activeTab={activeTab} onTabChange={setActiveTab} />
 

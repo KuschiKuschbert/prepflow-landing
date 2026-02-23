@@ -6,6 +6,8 @@ import { PhotoUploadModal } from './components/PhotoUploadModal';
 import { usePhotoUpload } from './hooks/usePhotoUpload';
 
 // New Imports
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { RecipeIngredientWithDetails, Recipe as UnifiedRecipe } from '@/lib/types/recipes';
 import { SpecialsFilters } from './components/SpecialsFilters';
 import { SpecialsGrid } from './components/SpecialsGrid';
@@ -158,6 +160,12 @@ export default function AISpecialsPage() {
         onCameraClick={() => setIsUploadModalOpen(true)}
         isAuthenticated={isAuthenticated}
       />
+
+      {PAGE_TIPS_CONFIG.specials && (
+        <div className="mx-auto mb-6 max-w-[2560px]">
+          <PageTipsCard config={PAGE_TIPS_CONFIG.specials} />
+        </div>
+      )}
 
       <div className="mx-auto max-w-[2560px]">
         <SpecialsFilters

@@ -8,6 +8,8 @@ import { logger } from '@/lib/logger';
 import { ClipboardCheck } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { PageHeader } from '../components/static/PageHeader';
 
 // Lazy load order list components to reduce initial bundle size
@@ -183,6 +185,12 @@ export default function OrderListsPage() {
           icon={ClipboardCheck}
           showLogo={true}
         />
+
+        {PAGE_TIPS_CONFIG['order-lists'] && (
+          <div className="mb-6">
+            <PageTipsCard config={PAGE_TIPS_CONFIG['order-lists']} />
+          </div>
+        )}
 
         {/* Error Message */}
         {error && (

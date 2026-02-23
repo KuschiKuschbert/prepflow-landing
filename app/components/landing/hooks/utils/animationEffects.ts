@@ -8,7 +8,7 @@ interface Feature {
   screenshotAlt: string;
 }
 
-const STAGGER_DELAY = 30;
+const STAGGER_DELAY = 20;
 
 export function useImageEntranceAnimation(
   imageMounted: boolean,
@@ -23,14 +23,12 @@ export function useImageEntranceAnimation(
       const timeoutId = setTimeout(() => {
         setImageMounted(true);
         requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            if (imageContainerRef.current) {
-              imageContainerRef.current.style.opacity = expandedFeature ? '1' : '0.8';
-              imageContainerRef.current.style.transform = 'translateX(0)';
-            }
-          });
+          if (imageContainerRef.current) {
+            imageContainerRef.current.style.opacity = expandedFeature ? '1' : '0.8';
+            imageContainerRef.current.style.transform = 'translateX(0)';
+          }
         });
-      }, 200);
+      }, 100);
       return () => clearTimeout(timeoutId);
     }
   }, [imageMounted, imageContainerRef, expandedFeature, setImageMounted]);

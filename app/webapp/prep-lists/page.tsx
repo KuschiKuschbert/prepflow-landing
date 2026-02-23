@@ -1,10 +1,13 @@
 'use client';
 
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { useNotification } from '@/contexts/NotificationContext';
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
+import { markFirstDone } from '@/lib/page-help/first-done-storage';
 import { logger } from '@/lib/logger';
 import { useTranslation } from '@/lib/useTranslation';
 import dynamic from 'next/dynamic';
@@ -155,6 +158,11 @@ export default function PrepListsPage() {
     }
   }, [prepListsData]);
 
+  // Mark first done for InlineHint/RescueNudge when user creates first prep list
+  useEffect(() => {
+    if (prepLists.length > 0) markFirstDone('prep-lists');
+  }, [prepLists.length]);
+
   // Update pagination when data changes
   const actualTotal = prepListsData?.total || 0;
   const actualTotalPages = Math.max(1, Math.ceil(actualTotal / pageSize));
@@ -194,6 +202,12 @@ export default function PrepListsPage() {
     <ResponsivePageContainer>
       <div className="min-h-screen bg-transparent py-8 text-[var(--foreground)]">
         <PrepListsHeader onGenerateClick={openGenerateModal} onCreateClick={openForm} />
+
+        {PAGE_TIPS_CONFIG['prep-lists'] && (
+          <div className="mb-6">
+            <PageTipsCard config={PAGE_TIPS_CONFIG['prep-lists']} />
+          </div>
+        )}
 
         {formError && (
           <div className="mb-6 rounded-2xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-4">

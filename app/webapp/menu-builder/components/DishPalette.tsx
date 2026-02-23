@@ -114,11 +114,8 @@ export default function DishPalette({
 }: DishPaletteProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const isFunctionMenu = menuType !== 'a_la_carte';
-
   // Filter dishes and recipes based on search query
   const filteredDishes = useMemo(() => {
-    if (isFunctionMenu) return []; // Function Menus only use Recipes
     if (!searchQuery.trim()) return dishes;
     const query = searchQuery.toLowerCase();
     return dishes.filter(
@@ -139,7 +136,7 @@ export default function DishPalette({
     );
   }, [recipes, searchQuery]);
 
-  const hasItems = (isFunctionMenu ? false : dishes.length > 0) || recipes.length > 0;
+  const hasItems = dishes.length > 0 || recipes.length > 0;
   const hasFilteredItems = filteredDishes.length > 0 || filteredRecipes.length > 0;
 
   return (
@@ -181,7 +178,8 @@ export default function DishPalette({
               No dishes or recipes available yet.
             </div>
             <p className="mb-4 text-xs text-[var(--foreground-subtle)]">
-              Create dishes in the Dish Builder or recipes to add them to your menu.
+              Create dishes in the Dish Builder or recipes to add them to your menu. Dishes = menu
+              items with prices; recipes = prep batches you can reuse.
             </p>
             <Link
               href="/webapp/recipes?builder=true#dishes"

@@ -2,7 +2,7 @@
 
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { LucideIcon } from 'lucide-react';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FeatureButton } from './components/FeatureButton';
 import { FeatureImageContainer } from './components/FeatureImageContainer';
 import { useAppleStyleAnimations } from './hooks/useAppleStyleAnimations';
@@ -60,8 +60,25 @@ function AppleStyleFeatures({
     ANIMATION_DURATION,
     ANIMATION_EASING,
     BORDER_RADIUS_EASING: _BORDER_RADIUS_EASING,
+    IMAGE_CROSSFADE_DURATION,
+    IMAGE_OPACITY_DURATION,
   } = useAppleStyleAnimations(features);
 
+  const containerAndButtonRefCallbacks = useMemo(
+    () =>
+      features.map((_, i) => (el: HTMLButtonElement | null) => {
+        containerRefs.current[i] = el;
+        buttonRefs.current[i] = el;
+      }),
+    [features.length],
+  );
+  const contentRefCallbacks = useMemo(
+    () =>
+      features.map((_, i) => (el: HTMLSpanElement | null) => {
+        contentRefs.current[i] = el;
+      }),
+    [features.length],
+  );
   const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     const img = e.currentTarget;
     if (img.naturalWidth && img.naturalHeight) {
@@ -88,14 +105,14 @@ function AppleStyleFeatures({
         <div
           className="desktop:flex-row desktop:gap-8 desktop:items-stretch large-desktop:gap-10 flex flex-col gap-12 xl:gap-12 2xl:gap-14"
           style={{
-            contain: 'layout',
+            contain: 'layout style',
           }}
         >
           <div
             ref={parentContainerRef}
             className="desktop:max-w-[45%] desktop:w-auto desktop:self-center flex w-full min-w-0 flex-shrink-0 flex-col xl:max-w-[42%]"
             style={{
-              contain: 'layout',
+              contain: 'layout style',
               gap: '0.375rem',
             }}
           >
@@ -115,15 +132,9 @@ function AppleStyleFeatures({
                   initialWidth={initialWidths[index]}
                   buttonHeight={buttonHeights[index]}
                   onToggle={() => handleToggle(index)}
-                  containerRef={el => {
-                    containerRefs.current[index] = el;
-                  }}
-                  buttonRef={el => {
-                    buttonRefs.current[index] = el;
-                  }}
-                  contentRef={el => {
-                    contentRefs.current[index] = el;
-                  }}
+                  containerRef={containerAndButtonRefCallbacks[index]}
+                  buttonRef={containerAndButtonRefCallbacks[index]}
+                  contentRef={contentRefCallbacks[index]}
                 />
               );
             })}
@@ -142,6 +153,8 @@ function AppleStyleFeatures({
             onImageLoad={handleImageLoad}
             ANIMATION_DURATION={ANIMATION_DURATION}
             ANIMATION_EASING={ANIMATION_EASING}
+            IMAGE_CROSSFADE_DURATION={IMAGE_CROSSFADE_DURATION}
+            IMAGE_OPACITY_DURATION={IMAGE_OPACITY_DURATION}
           />
         </div>
       </div>

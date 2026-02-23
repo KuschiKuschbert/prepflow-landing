@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 import { useTranslation } from '@/lib/useTranslation';
-import { Plus, Sparkles } from 'lucide-react';
+import { BarChart2, Plus, Sparkles } from 'lucide-react';
 import { useEquipmentLogInfo } from '../hooks/useEquipmentLogInfo';
 import { useTemperatureEquipmentTabHandlers } from '../hooks/useTemperatureEquipmentTabHandlers';
 import { TemperatureEquipment, TemperatureLog } from '../types';
@@ -120,7 +120,9 @@ export default function TemperatureEquipmentTab({
               <span className="tablet:inline hidden">
                 {isGenerating ? 'Generating...' : 'Generate Sample Logs'}
               </span>
-              <span className="tablet:hidden">{isGenerating ? '...' : '📊'}</span>
+              <span className="tablet:hidden">
+                {isGenerating ? '...' : <Icon icon={BarChart2} size="sm" aria-hidden={true} />}
+              </span>
             </button>
           )}
           <Button

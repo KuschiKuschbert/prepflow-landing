@@ -9,24 +9,34 @@ export type UnifiedItem = (Dish & { itemType: 'dish' }) | (Recipe & { itemType: 
 
 /**
  * Combine dishes and recipes into unified items.
+ * Filters by itemType when not 'all'.
  */
 export function combineItems(
   filteredAndSortedDishes: Dish[],
   filteredAndSortedRecipes: Recipe[],
   filters: UnifiedFilters,
 ): UnifiedItem[] {
-  const dishItems: UnifiedItem[] = filteredAndSortedDishes.map(d => ({
-    ...d,
-    itemType: 'dish' as const,
-  }));
-  const recipeItems: UnifiedItem[] = filteredAndSortedRecipes.map(r => ({
-    ...r,
-    itemType: 'recipe' as const,
-  }));
+  const dishItems: UnifiedItem[] =
+    filters.itemType === 'recipe'
+      ? []
+      : filteredAndSortedDishes.map(d => ({
+          ...d,
+          itemType: 'dish' as const,
+        }));
+  const recipeItems: UnifiedItem[] =
+    filters.itemType === 'dish'
+      ? []
+      : filteredAndSortedRecipes.map(r => ({
+          ...r,
+          itemType: 'recipe' as const,
+        }));
 
-  // Combine and sort by name if sortField is 'name', otherwise keep separate groups
-  if (filters.sortField === 'name') {
-    return [...dishItems, ...recipeItems].sort((a, b) => {
+  const combined =
+    filters.itemType === 'all' ? [...dishItems, ...recipeItems] : [...dishItems, ...recipeItems];
+
+  // Sort by name if sortField is 'name', otherwise keep separate groups (dishes first, then recipes)
+  if (filters.sortField === 'name' && combined.length > 0) {
+    return [...combined].sort((a, b) => {
       const aName = (a.itemType === 'dish' ? a.dish_name || '' : a.recipe_name || '').toLowerCase();
       const bName = (b.itemType === 'dish' ? b.dish_name || '' : b.recipe_name || '').toLowerCase();
       return filters.sortDirection === 'asc'
@@ -35,7 +45,5 @@ export function combineItems(
     });
   }
 
-  // For other sort fields, keep dishes and recipes separate (they have different sort fields)
-  // Dishes first, then recipes
-  return [...dishItems, ...recipeItems];
+  return combined;
 }

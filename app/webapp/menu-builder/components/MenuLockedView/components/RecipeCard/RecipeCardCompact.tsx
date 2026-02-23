@@ -90,13 +90,7 @@ export function RecipeCardCompact({
             onClick={e => e.stopPropagation()}
             data-prep-input
           >
-            <QRCodeSVG
-              value={recipeUrl}
-              size={80}
-              level="M"
-              bgColor="var(--qr-background)"
-              fgColor="var(--qr-foreground)"
-            />
+            <QRCodeSVG value={recipeUrl} size={80} level="M" bgColor="#FFFFFF" fgColor="#000000" />
             <p className="mt-1 text-[8px] text-[var(--foreground-subtle)]">Scan to view recipe</p>
           </div>
         )}

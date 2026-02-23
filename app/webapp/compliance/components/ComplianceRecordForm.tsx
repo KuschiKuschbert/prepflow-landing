@@ -5,7 +5,6 @@ import { useAutosave } from '@/hooks/useAutosave';
 import { useTranslation } from '@/lib/useTranslation';
 import React from 'react';
 import { ComplianceRecordFormData, ComplianceType } from '../types';
-import { getTypeIconEmoji } from '../utils';
 
 interface ComplianceRecordFormProps {
   formData: ComplianceRecordFormData;
@@ -62,7 +61,7 @@ export function ComplianceRecordForm({
             <option value="">{t('compliance.selectType', 'Choose a compliance type')}</option>
             {types.map(type => (
               <option key={type.id} value={type.id}>
-                {getTypeIconEmoji(type.name)} {type.name}
+                {type.name}
               </option>
             ))}
           </select>

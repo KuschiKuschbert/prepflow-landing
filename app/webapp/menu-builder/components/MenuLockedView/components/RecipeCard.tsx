@@ -56,9 +56,9 @@ export function RecipeCard({
 
   const scaledIngredients = scaleIngredients(ingredients, prepQuantity, baseYield);
 
-  // Generate QR code URL for the recipe
+  // Generate QR code URL for the recipe (deep link opens recipe in modal)
   const recipeUrl = recipeId
-    ? `${typeof window !== 'undefined' ? window.location.origin : ''}/webapp/recipes/${recipeId}`
+    ? `${typeof window !== 'undefined' ? window.location.origin : ''}/webapp/recipes?recipe=${recipeId}`
     : null;
 
   // Prevent body scroll when modal is open

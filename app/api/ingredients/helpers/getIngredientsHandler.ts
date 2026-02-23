@@ -37,7 +37,7 @@ export async function handleGetIngredients(request: NextRequest) {
       query = query.eq('supplier_id', supplierFilter);
     }
     if (storageFilter) {
-      query = query.eq('storage_area', storageFilter);
+      query = query.eq('storage_location', storageFilter);
     }
 
     // Apply sorting

@@ -1,6 +1,8 @@
 'use client';
 
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
 import { TablePagination } from '@/components/ui/TablePagination';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { useState } from 'react';
 import PerformanceCharts from '../components/PerformanceCharts';
 import PerformanceDateRange from '../components/PerformanceDateRange';
@@ -72,6 +74,12 @@ export default function PerformanceClient() {
         performanceItems={state.performanceItems}
         metadata={state.metadata}
       />
+
+      {PAGE_TIPS_CONFIG.performance && (
+        <div className="mb-6">
+          <PageTipsCard config={PAGE_TIPS_CONFIG.performance} />
+        </div>
+      )}
 
       {hasData ? (
         <>

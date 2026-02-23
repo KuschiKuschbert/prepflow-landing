@@ -1,6 +1,8 @@
 'use client';
 
+import { Icon } from '@/components/ui/Icon';
 import { motion } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
 import Image from 'next/image';
 
 interface AIIngredient {
@@ -76,7 +78,8 @@ export function RecipeCard({
         <div className="absolute top-3 right-3 flex gap-2">
           {percentage > 99 ? (
             <div className="flex items-center gap-1.5 rounded-full border border-emerald-400 bg-emerald-600 px-3 py-1.5 text-sm font-bold text-white shadow-md shadow-black/30">
-              <span className="text-yellow-300">✨</span> Ready to Cook
+              <Icon icon={Sparkles} size="sm" className="text-yellow-300" aria-hidden={true} />
+              Ready to Cook
             </div>
           ) : percentage > 0 ? (
             <div

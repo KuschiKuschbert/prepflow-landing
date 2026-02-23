@@ -10,6 +10,8 @@ import { logger } from '@/lib/logger';
 import { Building, Mail, Phone, Plus, Search, Users } from 'lucide-react';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { PageTipsCard } from '@/components/ui/PageTipsCard';
+import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { PageHeader } from '../components/static/PageHeader';
 import type { CreateCustomerData } from './components/CreateCustomerForm';
 import { CreateCustomerForm } from './components/CreateCustomerForm';
@@ -75,6 +77,8 @@ export default function CustomersPage() {
             </Button>
           }
         />
+
+        <PageTipsCard config={PAGE_TIPS_CONFIG.customers} className="mb-6" />
 
         {/* Search bar */}
         <div className="flex items-center space-x-2">

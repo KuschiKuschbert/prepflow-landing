@@ -16,6 +16,7 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
   const [menuName, setMenuName] = useState('');
   const [description, setDescription] = useState('');
   const [menuType, setMenuType] = useState('a_la_carte');
+  const [expectedGuests, setExpectedGuests] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -24,6 +25,7 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
       setDescription(menu.description || '');
       const type = menu.menu_type || 'a_la_carte';
       setMenuType(type === 'a_la_carte' ? 'a_la_carte' : 'function');
+      setExpectedGuests(menu.expected_guests != null ? String(menu.expected_guests) : '');
     }
   }, [menu]);
 
@@ -40,14 +42,20 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
       const url = menu ? `/api/menus/${menu.id}` : '/api/menus';
       const method = menu ? 'PUT' : 'POST';
 
+      const payload: Record<string, unknown> = {
+        menu_name: menuName.trim(),
+        description: description.trim() || null,
+        menu_type: menuType,
+      };
+      if (menuType === 'function') {
+        const guests = expectedGuests.trim();
+        payload.expected_guests = guests === '' ? null : Math.max(0, parseInt(guests, 10) || 0);
+      }
+
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          menu_name: menuName.trim(),
-          description: description.trim() || null,
-          menu_type: menuType,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
@@ -138,6 +146,25 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
                 <option value="function">Function Menu</option>
               </select>
             </div>
+
+            {menuType === 'function' && (
+              <div className="mb-6">
+                <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+                  Expected guests
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  value={expectedGuests}
+                  onChange={e => setExpectedGuests(e.target.value)}
+                  placeholder="e.g. 80"
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
+                />
+                <p className="mt-1 text-xs text-[var(--foreground-muted)]">
+                  Optional. Used for total estimation (price per person × guests).
+                </p>
+              </div>
+            )}
 
             <div className="flex gap-3">
               <button

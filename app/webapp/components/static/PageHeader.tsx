@@ -1,7 +1,9 @@
 'use client';
 
+import { PageHeaderHelp } from '@/components/ui/PageHeaderHelp';
 import { Icon } from '@/components/ui/Icon';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { usePageHelp } from '@/lib/page-help/usePageHelp';
 import { WEBAPP_LANDING_PRESETS } from '@/lib/landing-styles';
 import { ArrowLeft, LucideIcon } from 'lucide-react';
 import Image from 'next/image';
@@ -17,6 +19,8 @@ interface PageHeaderProps {
   actions?: ReactNode;
   children?: ReactNode;
   useLandingStyles?: boolean; // Enable landing page style enhancements
+  /** When true, hides the help icon even if config exists for this route */
+  hideHelp?: boolean;
 }
 
 export function PageHeader({
@@ -29,7 +33,9 @@ export function PageHeader({
   actions,
   children,
   useLandingStyles = false,
+  hideHelp = false,
 }: PageHeaderProps) {
+  const pageHelp = usePageHelp();
   // Determine title classes based on useLandingStyles prop
   const titleClasses = useLandingStyles
     ? `${WEBAPP_LANDING_PRESETS.header.title} flex items-center gap-2`
@@ -99,6 +105,7 @@ export function PageHeader({
             <h1 className={titleClasses}>
               {renderIcon()}
               {title}
+              {!hideHelp && pageHelp && <PageHeaderHelp config={pageHelp} className="ml-1" />}
             </h1>
           </div>
           {actions && (

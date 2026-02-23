@@ -1,5 +1,5 @@
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useIngredientFormState } from '../../hooks/useIngredientFormState';
 import { useSelectionMode } from '../../hooks/useSelectionMode';
 import { useIngredientDataSync } from './useIngredientDataSync';
@@ -90,6 +90,17 @@ export function useIngredientsClientController() {
       router.replace(newUrl);
     }
   }, [searchParams, showAddForm, setShowAddForm, resetWizard, router]);
+
+  // QR code deep link: set storage filter when ?storage=value is in URL
+  const processedStorageRef = useRef(false);
+  useEffect(() => {
+    const storageParam = searchParams.get('storage');
+    if (storageParam && !processedStorageRef.current) {
+      processedStorageRef.current = true;
+      view.setStorageFilter(storageParam);
+      router.replace('/webapp/ingredients', { scroll: false });
+    }
+  }, [searchParams, view.setStorageFilter, router]);
 
   return {
     // State

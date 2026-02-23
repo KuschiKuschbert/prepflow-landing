@@ -3,6 +3,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
+import React from 'react';
 
 interface Feature {
   title: string;
@@ -29,20 +30,21 @@ interface FeatureButtonProps {
   contentRef: (el: HTMLSpanElement | null) => void;
 }
 
-const getShadowStyle = (colorClass?: string) => {
+/** filter drop-shadow is compositor-accelerated vs boxShadow which triggers paint */
+const getGlowFilter = (colorClass?: string) => {
   if (colorClass?.includes('text-landing-primary')) {
-    return '0 0 20px rgba(41, 231, 205, 0.25), 0 0 40px rgba(41, 231, 205, 0.1)';
+    return 'drop-shadow(0 0 20px rgba(41, 231, 205, 0.25)) drop-shadow(0 0 40px rgba(41, 231, 205, 0.1))';
   }
   if (colorClass?.includes('text-landing-secondary')) {
-    return '0 0 20px rgba(59, 130, 246, 0.25), 0 0 40px rgba(59, 130, 246, 0.1)';
+    return 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.25)) drop-shadow(0 0 40px rgba(59, 130, 246, 0.1))';
   }
   if (colorClass?.includes('text-landing-accent')) {
-    return '0 0 20px rgba(217, 37, 199, 0.25), 0 0 40px rgba(217, 37, 199, 0.1)';
+    return 'drop-shadow(0 0 20px rgba(217, 37, 199, 0.25)) drop-shadow(0 0 40px rgba(217, 37, 199, 0.1))';
   }
-  return '0 0 20px rgba(41, 231, 205, 0.25), 0 0 40px rgba(41, 231, 205, 0.1)';
+  return 'drop-shadow(0 0 20px rgba(41, 231, 205, 0.25)) drop-shadow(0 0 40px rgba(41, 231, 205, 0.1))';
 };
 
-export function FeatureButton({
+const FeatureButtonComponent = ({
   feature,
   index,
   isExpanded,
@@ -54,7 +56,7 @@ export function FeatureButton({
   containerRef,
   buttonRef,
   contentRef,
-}: FeatureButtonProps) {
+}: FeatureButtonProps) => {
   const borderRadius = isExpanded
     ? '24px'
     : buttonHeight
@@ -79,13 +81,13 @@ export function FeatureButton({
       }}
       transition={{
         type: 'spring',
-        bounce: 0,
-        duration: 0.6,
-        opacity: { duration: 0.2 },
+        stiffness: 400,
+        damping: 35,
+        opacity: { duration: 0.15 },
         layout: {
           type: 'spring',
-          bounce: 0,
-          duration: 0.6,
+          stiffness: 400,
+          damping: 35,
         },
       }}
       className={`relative flex cursor-pointer overflow-hidden border border-solid text-left focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
@@ -99,6 +101,8 @@ export function FeatureButton({
           : {}
       }
       style={{
+        contain: 'layout',
+        willChange: isExpanded ? 'transform, filter' : 'auto',
         width:
           isExpanded && containerWidth
             ? `${containerWidth}px`
@@ -118,7 +122,7 @@ export function FeatureButton({
         padding: isExpanded ? '0.75rem 1rem' : '0.625rem 0.875rem',
         maxHeight: isExpanded ? '1000px' : buttonHeight ? `${buttonHeight}px` : '200px',
         minHeight: buttonHeight ? `${buttonHeight}px` : undefined,
-        boxShadow: isExpanded ? getShadowStyle(feature.colorClass) : 'none',
+        filter: isExpanded ? getGlowFilter(feature.colorClass) : 'none',
       }}
       suppressHydrationWarning
       aria-expanded={isExpanded}
@@ -160,21 +164,21 @@ export function FeatureButton({
             }}
             transition={{
               type: 'spring',
-              bounce: 0,
-              duration: 0.4,
+              stiffness: 400,
+              damping: 30,
             }}
           >
             <Icon icon={Plus} size="sm" className="text-white" aria-hidden={true} />
           </motion.div>
         </div>
 
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence mode="sync">
           {isExpanded && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
+              transition={{ duration: 0.25, delay: 0.05 }}
               className="text-fluid-base tablet:text-fluid-lg w-full leading-relaxed text-gray-400"
             >
               {feature.description}
@@ -184,4 +188,5 @@ export function FeatureButton({
       </motion.div>
     </motion.button>
   );
-}
+};
+export const FeatureButton = React.memo(FeatureButtonComponent);

@@ -1,5 +1,8 @@
 import { useSelectionMode } from '@/app/webapp/ingredients/hooks/useSelectionMode';
+import { markFirstDone } from '@/lib/page-help/first-done-storage';
 import { Dish, Recipe } from '@/lib/types/recipes';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { useAIInstructions } from '../../hooks/useAIInstructions';
 import { useRecipeIngredients } from '../../hooks/useRecipeIngredients';
 import { useRecipePricing } from '../../hooks/useRecipePricing';
@@ -23,11 +26,13 @@ import { useDishesSidePanelsHandlers } from './useDishesSidePanelsHandlers';
 interface UseDishesClientControllerProps {
   initialDishes?: Dish[];
   initialRecipes?: Recipe[];
+  preselectedRecipeId?: string;
 }
 
 export function useDishesClientController({
   initialDishes,
   initialRecipes,
+  preselectedRecipeId,
 }: UseDishesClientControllerProps = {}): UseDishesClientControllerResult {
   const { viewMode, setViewMode } = useDishesClientViewMode();
   const { recipePrices, updateVisibleRecipePrices } = useRecipePricing();
@@ -97,8 +102,28 @@ export function useDishesClientController({
     confirmDeleteItem,
     cancelDeleteItem,
   } = handlers;
+  const { handlePreviewRecipe } = previewState;
 
   const selectionModeHelpers = useSelectionMode();
+  const router = useRouter();
+
+  useEffect(() => {
+    const totalItems = dishes.length + recipes.length;
+    if (totalItems > 0) {
+      markFirstDone('dishes');
+    }
+  }, [dishes.length, recipes.length]);
+
+  // QR code deep link: open recipe preview when ?recipe=id is in URL
+  useEffect(() => {
+    if (!preselectedRecipeId || loading || recipes.length === 0) return;
+    const recipe = recipes.find(r => r.id === preselectedRecipeId);
+    if (recipe) {
+      handlePreviewRecipe(recipe);
+      // Clear URL param so back button works correctly
+      router.replace('/webapp/recipes', { scroll: false });
+    }
+  }, [preselectedRecipeId, loading, recipes, handlePreviewRecipe, router]);
 
   useResetStateOnViewModeChange(
     viewMode,

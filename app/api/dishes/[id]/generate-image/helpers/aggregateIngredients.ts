@@ -1,9 +1,11 @@
 /**
  * Aggregate ingredients from dish and recipes
- * Combines direct dish ingredients with recipe ingredients
+ * Combines direct dish ingredients with recipe ingredients.
+ * Includes fallback when join returns empty but dish_ingredients rows exist.
  */
 
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { DishIngredient, DishRecipe } from '@/types/dish';
 
 import { fetchDishIngredients } from '../../helpers/fetchDishIngredients';
@@ -56,15 +58,46 @@ export async function aggregateDishIngredients(dishId: string): Promise<{
   const ingredientNamesSet = new Set<string>();
 
   // Add direct dish ingredients
+  // fetchDishIngredients returns DishRelationIngredient with `ingredients` (plural);
+  // types/dish DishIngredient uses `ingredient` (singular) - support both shapes
   dishIngredients.forEach(di => {
-    const ingredient = di.ingredient as Record<string, any> | undefined;
-    if (ingredient) {
-      const name = ingredient.ingredient_name || ingredient.name;
+    const ingredient =
+      (di as unknown as Record<string, unknown>).ingredients ??
+      (di as unknown as Record<string, unknown>).ingredient;
+    if (ingredient && typeof ingredient === 'object') {
+      const ing = ingredient as Record<string, unknown>;
+      const name = ing.ingredient_name ?? ing.name;
       if (name && typeof name === 'string') {
         ingredientNamesSet.add(name);
       }
     }
   });
+
+  // Fallback: when join returns empty but dish_ingredients rows exist (e.g. orphaned refs)
+  if (dishIngredients.length === 0 && supabaseAdmin) {
+    const { data: rawRows } = await supabaseAdmin
+      .from('dish_ingredients')
+      .select('ingredient_id')
+      .eq('dish_id', dishId);
+    const ingredientIds = (rawRows || [])
+      .map((r: { ingredient_id: string | null }) => r.ingredient_id)
+      .filter((id): id is string => !!id);
+    if (ingredientIds.length > 0) {
+      const { data: ingredients } = await supabaseAdmin
+        .from('ingredients')
+        .select('id, ingredient_name, name')
+        .in('id', ingredientIds);
+      (ingredients || []).forEach((ing: { ingredient_name?: string; name?: string }) => {
+        const name = ing.ingredient_name ?? ing.name;
+        if (name && typeof name === 'string') ingredientNamesSet.add(name);
+      });
+      logger.dev('[Dish Image Generation] Fallback fetched ingredients by id:', {
+        dishId,
+        ingredientIdsCount: ingredientIds.length,
+        namesFound: ingredients?.length ?? 0,
+      });
+    }
+  }
 
   // Add ingredients from recipes
   recipeIngredientNamesSet.forEach(name => {

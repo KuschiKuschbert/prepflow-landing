@@ -22,6 +22,8 @@ interface FeatureImageContainerProps {
   onImageLoad: (e: React.SyntheticEvent<HTMLImageElement, Event>) => void;
   ANIMATION_DURATION: number;
   ANIMATION_EASING: string;
+  IMAGE_CROSSFADE_DURATION: number;
+  IMAGE_OPACITY_DURATION: number;
 }
 
 export function FeatureImageContainer({
@@ -33,9 +35,12 @@ export function FeatureImageContainer({
   expandedFeature,
   imageContainerRef,
   onImageLoad,
+  IMAGE_CROSSFADE_DURATION,
+  IMAGE_OPACITY_DURATION,
 }: FeatureImageContainerProps) {
   const [imageReady, setImageReady] = useState(false);
   const shouldShow = expandedFeature !== null && imageMounted;
+  const opacityDurationSec = IMAGE_OPACITY_DURATION / 1000;
   const minHeight =
     containerHeight && typeof window !== 'undefined' && window.innerWidth >= 1024
       ? `${Math.min(containerHeight, 500)}px`
@@ -76,14 +81,14 @@ export function FeatureImageContainer({
         transition={{
           type: 'spring',
           bounce: 0,
-          duration: 0.6,
-          opacity: { duration: 0.4 },
+          duration: 0.4,
+          opacity: { duration: 0.3 },
         }}
         style={{
           height: containerHeight ? `${containerHeight}px` : undefined,
           minHeight,
           maxHeight,
-          willChange: 'transform, opacity',
+          willChange: shouldShow || isImageTransitioning ? 'transform, opacity' : 'auto',
         }}
       >
         <div className="relative h-full w-full overflow-hidden bg-[#0a0a0a]">
@@ -97,7 +102,7 @@ export function FeatureImageContainer({
             animate={{
               opacity: shouldShow ? 1 : 0.8,
             }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.3 }}
           />
 
           {/* Professional crossfade - both images visible simultaneously */}
@@ -106,18 +111,13 @@ export function FeatureImageContainer({
             <motion.div
               key={`prev-${previousImage.screenshot}`}
               className="absolute inset-0 z-10"
-              initial={{ opacity: 1, scale: 1 }}
-              animate={{
-                opacity: imageReady ? 0 : 1,
-                scale: imageReady ? 1.01 : 1,
-              }}
+              initial={{ opacity: 1 }}
+              animate={{ opacity: imageReady ? 0 : 1 }}
               transition={{
-                duration: 0.8,
-                ease: [0.25, 0.1, 0.25, 1], // Apple's standard easing
-                opacity: { duration: 0.7 },
-                scale: { duration: 0.8 },
+                duration: opacityDurationSec,
+                ease: [0.25, 0.1, 0.25, 1],
               }}
-              style={{ willChange: 'transform, opacity' }}
+              style={{ willChange: 'opacity' }}
             >
               <Image
                 src={previousImage.screenshot}
@@ -143,18 +143,13 @@ export function FeatureImageContainer({
             <motion.div
               key={`current-${currentImage.screenshot}`}
               className="absolute inset-0 z-10"
-              initial={{ opacity: 0, scale: 0.99 }}
-              animate={{
-                opacity: imageReady || !isImageTransitioning ? 1 : 0,
-                scale: imageReady || !isImageTransitioning ? 1 : 0.99,
-              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: imageReady || !isImageTransitioning ? 1 : 0 }}
               transition={{
-                duration: 0.8,
-                ease: [0.25, 0.1, 0.25, 1], // Apple's standard easing
-                opacity: { duration: 0.7 },
-                scale: { duration: 0.8 },
+                duration: opacityDurationSec,
+                ease: [0.25, 0.1, 0.25, 1],
               }}
-              style={{ willChange: 'transform, opacity' }}
+              style={{ willChange: 'opacity' }}
             >
               <Image
                 src={currentImage.screenshot}

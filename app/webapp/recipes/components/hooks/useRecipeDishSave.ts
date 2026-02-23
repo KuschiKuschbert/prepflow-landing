@@ -15,6 +15,8 @@ interface UseRecipeDishSaveProps {
   onSave: () => void;
   showError: (message: string) => void;
   showSuccess: (message: string) => void;
+  /** When provided, called before saving with 0 ingredients. Return false to abort. */
+  confirmZeroIngredients?: () => Promise<boolean>;
 }
 
 export function useRecipeDishSave({
@@ -25,6 +27,7 @@ export function useRecipeDishSave({
   onSave,
   showError,
   showSuccess,
+  confirmZeroIngredients,
 }: UseRecipeDishSaveProps) {
   const [saving, setSaving] = useState(false);
   const handleSave = useCallback(async () => {
@@ -33,10 +36,15 @@ export function useRecipeDishSave({
       return;
     }
     if (calculations.length === 0) {
-      showError(
-        `${selectedItem.type === 'recipe' ? 'Recipe' : 'Dish'} must contain at least one ingredient`,
-      );
-      return;
+      if (confirmZeroIngredients) {
+        const proceed = await confirmZeroIngredients();
+        if (!proceed) return;
+      } else {
+        showError(
+          `${selectedItem.type === 'recipe' ? 'Recipe' : 'Dish'} must contain at least one ingredient`,
+        );
+        return;
+      }
     }
     setSaving(true);
     try {
@@ -64,6 +72,15 @@ export function useRecipeDishSave({
     } finally {
       setSaving(false);
     }
-  }, [calculations, selectedItem, allRecipes, allDishes, onSave, showError, showSuccess]);
+  }, [
+    calculations,
+    selectedItem,
+    allRecipes,
+    allDishes,
+    onSave,
+    showError,
+    showSuccess,
+    confirmZeroIngredients,
+  ]);
   return { saving, handleSave };
 }

@@ -27,7 +27,7 @@ npm run dev:code-review <file>
 - Suggests best practices based on learned error patterns
 - Generates comprehensive code review reports
 
-**Integration:** Automatically runs in pre-commit hooks via learned-patterns check.
+**Integration:** Learned-patterns runs via `npm run cleanup:staged` or `npm run cleanup:check`; not in the default pre-commit flow.
 
 ### 2. Refactoring Intelligence
 

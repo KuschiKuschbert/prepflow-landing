@@ -536,6 +536,56 @@ Uses the saved session in `.screenshot-session/`—no login required.
 
 ---
 
+### Capture Guide Screenshots
+
+**Script:** `scripts/capture-guide-screenshots.js`
+**Command:** `npm run capture:guide-screenshots`
+**Referenced in:** `docs/GUIDE_SCREENSHOTS.md`
+
+Captures webapp screens for the Guides page (`/webapp/guide`). Saves to `public/images/guides/` for use in guide steps.
+
+**Prerequisites:**
+
+- Dev server running (`npm run dev`)
+- Authenticated session (same as landing screenshots)
+
+**First run (manual login):**
+
+```bash
+npm run capture:guide-screenshots -- --headed
+```
+
+**Subsequent runs (headless):**
+
+```bash
+npm run capture:guide-screenshots
+```
+
+**Options:**
+
+- `--base-url=<url>` — Base URL (default: `http://localhost:3000`)
+- `--headed` — Show browser for manual login
+
+**Output:** PNG files in `public/images/guides/`:
+
+- `dashboard-overview.png`
+- `ingredients-page.png`
+- `cogs-calculator.png`
+- `recipe-builder.png`
+- `performance-analysis.png`
+- `temperature-equipment.png`
+- `compliance-records.png`
+- `suppliers.png`
+- `menu-builder.png`
+- `prep-lists.png`
+- `order-lists.png`
+- `par-levels.png`
+- `dish-builder.png`
+
+**See:** `docs/GUIDE_SCREENSHOTS.md` for the full checklist and manual capture notes for guides that need multiple views per page (e.g. recipe form vs add-ingredients).
+
+---
+
 ### Add Screenshots
 
 **Script:** `scripts/add-screenshots.sh`

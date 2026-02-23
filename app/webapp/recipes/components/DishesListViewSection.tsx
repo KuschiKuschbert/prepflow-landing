@@ -138,6 +138,13 @@ export function DishesListViewSection({
     [updateFilters],
   );
 
+  const handleItemTypeChange = useCallback(
+    (itemType: 'all' | 'dish' | 'recipe') => {
+      updateFilters({ itemType });
+    },
+    [updateFilters],
+  );
+
   return (
     <>
       <DishesListView
@@ -156,6 +163,7 @@ export function DishesListViewSection({
         onPageChange={handlePageChange}
         onItemsPerPageChange={handleItemsPerPageChange}
         onSearchChange={handleSearchChange}
+        onItemTypeChange={handleItemTypeChange}
         onSelectAll={handleSelectAll}
         onSelectItem={handleSelectItem}
         onPreviewDish={handlePreviewDish}

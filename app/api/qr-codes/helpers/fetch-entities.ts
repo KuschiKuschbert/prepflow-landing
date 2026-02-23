@@ -36,7 +36,7 @@ export async function fetchRecipes(
     id: r.id,
     name: r.recipe_name,
     type: 'recipe',
-    destinationUrl: `${baseUrl}/webapp/recipes/${r.id}`,
+    destinationUrl: `${baseUrl}/webapp/recipes?recipe=${r.id}`,
     createdAt: r.created_at,
   }));
 }
@@ -85,7 +85,7 @@ export async function fetchStorageAreas(
     name: s.name,
     type: 'storage-area',
     subtitle: s.equipment_type || s.location || undefined,
-    destinationUrl: `${baseUrl}/webapp/ingredients?storage=${s.id}`,
+    destinationUrl: `${baseUrl}/webapp/ingredients?storage=${encodeURIComponent(s.name)}`,
     createdAt: s.created_at,
   }));
 }

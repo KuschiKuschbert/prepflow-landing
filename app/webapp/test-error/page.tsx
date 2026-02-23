@@ -11,8 +11,10 @@
  * 3. Use browser console to trigger errors in production build
  */
 
-import { useState } from 'react';
+import { Icon } from '@/components/ui/Icon';
+import { Flame, Train } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import { useState } from 'react';
 
 // Dynamically import error components
 const KitchenOnFire = dynamic(() => import('@/components/ErrorGame/KitchenOnFire'), {
@@ -40,15 +42,17 @@ export default function TestErrorPage() {
         <div className="mb-6 flex flex-wrap justify-center gap-4">
           <button
             onClick={() => setPreviewMode('kitchen-fire')}
-            className="rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-[var(--primary)]/20 hover:shadow-lg"
+            className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-[var(--primary)]/20 hover:shadow-lg"
           >
-            🔥 Preview Kitchen Fire
+            <Icon icon={Flame} size="md" aria-hidden={true} />
+            Preview Kitchen Fire
           </button>
           <button
             onClick={() => setPreviewMode('train-off-track')}
-            className="rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-[var(--primary)]/20 hover:shadow-lg"
+            className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-[var(--primary)]/20 hover:shadow-lg"
           >
-            🚂 Preview Train Off Track
+            <Icon icon={Train} size="md" aria-hidden={true} />
+            Preview Train Off Track
           </button>
           <button
             onClick={() => setPreviewMode('none')}
