@@ -1,6 +1,6 @@
 'use client';
 
-import { Icon } from '@/components/ui/Icon';
+import { Icon } from '@/lib/ui/Icon';
 import { logger } from '@/lib/logger';
 import { LucideIcon, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';

@@ -3,7 +3,7 @@
  * Provides parsing, validation, and template generation for par level imports
  */
 
-import { CSVImportConfig } from '@/components/ui/CSVImportModal';
+import type { CSVImportConfig } from '@/lib/imports/types';
 import { parseCSV, type ParseCSVResult } from '@/lib/csv/csv-utils';
 import { mapCSVRowToEntity, normalizeColumnName, parseNumber } from './import-utils';
 

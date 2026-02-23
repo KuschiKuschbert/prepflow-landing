@@ -6,8 +6,8 @@
  * Uses Cyber Carrot styling and PrepFlow voice
  */
 
-import { type ParseCSVResult } from '@/lib/csv/csv-utils';
 import { logger } from '@/lib/logger';
+import { type CSVImportConfig } from '@/lib/imports/types';
 import { X } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import { CSVImportActions } from './CSVImportModal/CSVImportActions';
@@ -19,28 +19,7 @@ import { CSVImportTemplateDownload } from './CSVImportModal/CSVImportTemplateDow
 import { Icon } from './Icon';
 import { ImportProgress, type ImportProgressState } from './ImportProgress';
 
-export interface CSVImportConfig<T = any> {
-  /** Entity type name (e.g., "Ingredients", "Recipes") */
-  entityName: string;
-  /** Entity name plural (e.g., "ingredients", "recipes") */
-  entityNamePlural: string;
-  /** CSV column headers expected */
-  expectedColumns: string[];
-  /** Optional columns that may be present */
-  optionalColumns?: string[];
-  /** Parse CSV text into entity objects */
-  parseCSV: (csvText: string) => ParseCSVResult<T>;
-  /** Validate parsed entity */
-  validateEntity?: (entity: T, index: number) => { valid: boolean; error?: string };
-  /** Format entity for preview display */
-  formatEntityForPreview: (entity: T, index: number) => React.ReactNode;
-  /** Generate template CSV content */
-  generateTemplate: () => string;
-  /** Template filename */
-  templateFilename: string;
-  /** Instructions for CSV format */
-  instructions: string[];
-}
+export type { CSVImportConfig } from '@/lib/imports/types';
 
 export interface CSVImportModalProps<T = any> {
   /** Whether modal is open */

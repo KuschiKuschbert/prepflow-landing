@@ -1,6 +1,6 @@
 // PrepFlow Adaptive Navigation Optimization - Optimization Engine
 
-import { type NavigationItemConfig } from '@/app/webapp/components/navigation/nav-items';
+import type { NavigationItemConfig } from './types';
 import { type NavigationPattern } from './schema';
 import { getCachedOptimization, cacheOptimization } from './localStorage';
 import { getUsagePatterns, detectPatternChange } from './patternAnalyzer';

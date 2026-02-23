@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Icon } from '@/components/ui/Icon';
+import { Icon } from '@/lib/ui/Icon';
 import { X } from 'lucide-react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { copyToClipboard, shareViaWebAPI, shareViaEmail } from './share-utils';

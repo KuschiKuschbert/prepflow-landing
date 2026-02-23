@@ -1,6 +1,6 @@
 'use client';
 
-import { Icon } from '@/components/ui/Icon';
+import { Icon } from '@/lib/ui/Icon';
 import { Copy, LucideIcon, QrCode } from 'lucide-react';
 
 export interface QRCodeHeaderProps {

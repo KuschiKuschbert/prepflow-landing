@@ -1,7 +1,7 @@
 /**
  * Temperature log import configuration
  */
-import { CSVImportConfig } from '@/components/ui/CSVImportModal';
+import type { CSVImportConfig } from '@/lib/imports/types';
 import { parseTemperatureLogsCSV } from './parseTemperatureLogsCSV';
 import { validateTemperatureLog } from './validateTemperatureLog';
 import { formatTemperatureLogPreview } from './formatTemperatureLogPreview';

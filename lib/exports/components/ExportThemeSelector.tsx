@@ -1,6 +1,6 @@
 'use client';
 
-import { Icon } from '@/components/ui/Icon';
+import { Icon } from '@/lib/ui/Icon';
 import { LayoutTemplate, Monitor } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { type TemplateVariant } from '../print-template';

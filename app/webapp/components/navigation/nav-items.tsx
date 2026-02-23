@@ -30,16 +30,11 @@ import {
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
-type WorkflowType = 'daily-operations' | 'setup-planning-operations' | 'menu-first';
+import type { NavigationItemConfig } from '@/lib/navigation-optimization/types';
 
-export interface NavigationItemConfig {
-  href: string;
-  label: string;
-  icon: React.ReactNode;
-  color: string;
-  category?: string;
-  children?: NavigationItemConfig[];
-}
+export type { NavigationItemConfig } from '@/lib/navigation-optimization/types';
+
+type WorkflowType = 'daily-operations' | 'setup-planning-operations' | 'menu-first';
 
 /**
  * Get category for a navigation item based on workflow type.

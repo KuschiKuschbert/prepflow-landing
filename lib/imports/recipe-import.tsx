@@ -3,7 +3,7 @@
  * Provides parsing, validation, and template generation for recipe imports
  */
 
-import { CSVImportConfig } from '@/components/ui/CSVImportModal';
+import type { CSVImportConfig } from '@/lib/imports/types';
 import { parseRecipesCSV } from './recipe-import/helpers/parseRecipesCSV';
 import { validateRecipe } from './recipe-import/helpers/validateRecipe';
 import { formatRecipePreview } from './recipe-import/helpers/formatRecipePreview';

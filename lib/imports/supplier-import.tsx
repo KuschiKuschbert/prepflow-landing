@@ -3,7 +3,7 @@
  * Provides parsing, validation, and template generation for supplier imports
  */
 
-import { CSVImportConfig } from '@/components/ui/CSVImportModal';
+import type { CSVImportConfig } from '@/lib/imports/types';
 import { parseSuppliersCSV } from './supplier-import/helpers/parseSuppliersCSV';
 import { validateSupplier } from './supplier-import/helpers/validateSupplier';
 import { formatSupplierPreview } from './supplier-import/helpers/formatSupplierPreview';

@@ -1,6 +1,6 @@
 'use client';
 
-import { Icon } from '@/components/ui/Icon';
+import { Icon } from '@/lib/ui/Icon';
 import { Share2, Link2, Mail, FileText, Check } from 'lucide-react';
 import { isWebShareAPIAvailable } from '../share-utils';
 

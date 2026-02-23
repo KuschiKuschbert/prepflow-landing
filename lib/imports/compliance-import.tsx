@@ -3,7 +3,7 @@
  * Provides parsing, validation, and template generation for compliance record imports
  */
 
-import { CSVImportConfig } from '@/components/ui/CSVImportModal';
+import type { CSVImportConfig } from '@/lib/imports/types';
 import { parseComplianceRecordsCSV } from './compliance-import/helpers/parseComplianceRecordsCSV';
 import { validateComplianceRecord } from './compliance-import/helpers/validateComplianceRecord';
 import { formatComplianceRecordPreview } from './compliance-import/helpers/formatComplianceRecordPreview';

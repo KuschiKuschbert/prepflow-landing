@@ -1,4 +1,4 @@
-import { type NavigationItemConfig } from '@/app/webapp/components/navigation/nav-items';
+import type { NavigationItemConfig } from '../../types';
 import { type NavigationPattern, type OptimizationResult } from '../../schema';
 
 /**

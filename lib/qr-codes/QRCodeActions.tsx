@@ -1,6 +1,6 @@
 'use client';
 
-import { Icon } from '@/components/ui/Icon';
+import { Icon } from '@/lib/ui/Icon';
 import { Printer } from 'lucide-react';
 import { RefObject } from 'react';
 import { printQRCode } from './qr-print-template';
