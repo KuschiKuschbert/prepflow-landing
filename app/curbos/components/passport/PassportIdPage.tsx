@@ -82,7 +82,7 @@ export default function PassportIdPage({ customer }: PassportIdPageProps) {
       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#ccff00]/30 to-transparent rounded-bl-full z-10"></div>
 
       {/* Content */}
-      <div className="relative z-10 p-5 lg:p-7 flex flex-col h-full justify-between">
+      <div className="relative z-10 p-5 desktop:p-7 flex flex-col h-full justify-between">
         {/* Header */}
         <div className="flex justify-between items-start border-b border-dashed border-[#ccff00] pb-2 shrink-0">
             <div className="flex items-center gap-2">

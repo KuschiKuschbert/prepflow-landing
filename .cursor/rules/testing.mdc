@@ -251,7 +251,9 @@ test('user can create recipe', async ({ page }) => {
 - **Watch Mode:** `npm run test:watch` - Runs tests in watch mode for development
 - **Coverage Report:** `npm run test:coverage` - Runs tests with coverage report (target: ≥ 60%, goal: 80%)
 - **Integration Tests:** `npm run test:integration` (future) - Will run integration tests for API endpoints and database operations
-- **E2E Tests:** `npm run test:e2e` (future) - Will run end-to-end tests using Playwright or Cypress
+- **E2E Tests:** `npm run test:e2e` - Full Playwright suite
+- **E2E Smoke:** `npm run test:smoke` - Quick key-page check (auth bypassed); outputs to console
+- **E2E Crawl:** `npm run test:crawl` - Full webapp crawl for console errors; generates `CRAWL_REPORT.md` and `CRAWL_REPORT.json` (cross-reference: see `docs/E2E_TESTING_GUIDE.md`)
 - **All Tests:** `npm run test:all` (future) - Will run all test suites (unit, integration, E2E)
 
 **Test Scripts:**

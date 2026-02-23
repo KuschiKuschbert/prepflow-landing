@@ -58,8 +58,7 @@ const features: Feature[] = [
     details: [
       'Live cost calculations as you build recipes',
       'Automatic COGS calculation per portion',
-      'Labor and overhead cost allocation',
-      'Optimal pricing recommendations',
+      'Recommended pricing with food cost percentages',
       'Gross profit margin analysis',
     ],
     colorClass: 'text-landing-accent',
@@ -69,12 +68,12 @@ const features: Feature[] = [
     },
   },
   {
-    title: 'Recipe Book',
+    title: 'Recipe Builder',
     description: 'Your complete recipe library. Pricing, margins, profitability—all in one place.',
     icon: BookOpen, // Lucide icon instead of emoji
     screenshot: '/images/recipe-book-screenshot.png',
     screenshotAlt:
-      'PrepFlow Recipe Book Ingredients tab showing standardized buttons, sidebar navigation, and ingredients management interface',
+      'PrepFlow Recipe Builder Ingredients tab showing standardized buttons, sidebar navigation, and ingredients management interface',
     details: [
       'Complete recipe library with all your dishes',
       'Recommended pricing with food cost percentages',
@@ -132,7 +131,8 @@ const features: Feature[] = [
   },
   {
     title: 'Cleaning & Compliance',
-    description: 'Track tasks, keep records, maintain audit trails. Health inspections covered.',
+    description:
+      'Track tasks, keep records, maintain audit trails. Compliance records for health inspections.',
     icon: Sparkles, // Lucide icon instead of emoji
     screenshot: '/images/cleaning-roster-screenshot.png',
     screenshotAlt: 'PrepFlow Cleaning Roster showing cleaning areas and task management',
@@ -140,7 +140,7 @@ const features: Feature[] = [
       'Cleaning area management with customizable schedules',
       'Task tracking with photo verification',
       'Compliance record keeping with types and categories',
-      'Complete audit trail for health inspections',
+      'Audit trail for compliance records',
       'Standard task templates for quick setup',
     ],
     colorClass: 'text-landing-primary',
@@ -151,7 +151,7 @@ const features: Feature[] = [
   },
   {
     title: 'Temperature Monitoring',
-    description: 'QLD-compliant monitoring with smart thresholds and alerts.',
+    description: 'QLD-compliant monitoring with configurable thresholds and alerts.',
     icon: Thermometer, // Lucide icon instead of emoji
     screenshot: '/images/temperature-monitoring-screenshot.png',
     screenshotAlt:
@@ -168,6 +168,24 @@ const features: Feature[] = [
     cta: {
       text: 'Monitor Temperature',
       href: '/webapp/temperature',
+    },
+  },
+  {
+    title: 'AI Specials',
+    description: 'AI-powered specials suggestions. Scrape recipes, get ideas, build your menu.',
+    icon: Sparkles,
+    screenshot: '/images/performance-analysis-screenshot.png',
+    screenshotAlt: 'PrepFlow AI Specials showing recipe scraping and specials suggestions',
+    details: [
+      'AI-powered specials ideas and suggestions',
+      'Recipe scraper to import from URLs',
+      'Build seasonal and daily specials with ease',
+      'Integrates with your recipe and menu data',
+    ],
+    colorClass: 'text-landing-accent',
+    cta: {
+      text: 'Try AI Specials',
+      href: '/webapp/specials',
     },
   },
   {

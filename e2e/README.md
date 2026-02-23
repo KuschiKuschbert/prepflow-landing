@@ -11,6 +11,12 @@ npx playwright install
 # Run all tests
 npm run test:e2e
 
+# Quick smoke test (key pages only, auth bypassed)
+npm run test:smoke
+
+# Full crawl (all webapp pages, console error report)
+npm run test:crawl
+
 # Run tests with UI
 npm run test:e2e:ui
 
@@ -29,7 +35,8 @@ npm run test:e2e:headed
 
 After running tests, check:
 
-- `QA_AUDIT_REPORT.md` - Comprehensive error report
+- `QA_AUDIT_REPORT.md` - Comprehensive error report (full E2E suite)
+- `CRAWL_REPORT.md` - Per-page console errors (from `test:crawl`); see `CRAWL_REPORT.json` for machine-readable data
 - `test-failures/` - Screenshots of failures
 - `playwright-report/` - HTML test report
 

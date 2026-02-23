@@ -689,6 +689,49 @@ npm run pre-deploy
 
 ---
 
+### Full Check Suite
+
+**Script:** `scripts/check-full.sh`
+**Command:** `npm run check:full`
+**Referenced in:** `operations.mdc`, `cleanup.mdc`
+
+Comprehensive check that combines checks not fully covered by CI and pre-deploy:
+
+1. **Phase 1 - Cleanup (blocking):** `npm run cleanup:check` - All cleanup standards
+2. **Phase 2 - Design & Consistency (advisory):** `npm run detect-breakpoints`, `npm run check:voice`, `npm run audit:hierarchy`, `npm run audit:icons`
+3. **Phase 3 - Test Coverage (blocking):** `npm run test:coverage` - Ensures ≥60% coverage
+4. **Phase 4 - Dependency Audit (advisory):** `npm run audit:deps` - Unused deps, heavy packages
+5. **Phase 5 - E2E Crawl (advisory):** `npm run test:crawl` - Crawls webapp routes
+
+**Usage:**
+
+```bash
+# Run all checks (blocking + advisory) - summary mode
+npm run check:full
+
+# Full output + log file (for debugging)
+npm run check:full:verbose
+
+# Or with args: --verbose, --log
+npm run check:full -- --verbose --log
+
+# Capture to file manually (tee)
+npm run check:full 2>&1 | tee logs/check-full.log
+```
+
+**Options:**
+
+- `--verbose`, `-v` - Show full output from each check (no /dev/null suppression)
+- `--log` - Create `logs/check-full-TIMESTAMP.log` automatically
+- `CHECK_FULL_VERBOSE=1` - Env equivalent of `--verbose`
+- `CHECK_FULL_LOG=1` - Env equivalent of `--log`
+
+**Behavior:** Blocking checks cause exit code 1; advisory checks report but do not fail. Script runs all phases and prints a summary with suggested fix commands. Default mode suppresses sub-command output; use `--verbose` or `check:full:verbose` to see full output for debugging.
+
+**See Also:** `scripts/pre-deploy-check.sh` for deploy-specific checks; `cleanup.mdc` for cleanup standards.
+
+---
+
 ### Vercel Setup Verification
 
 **Script:** `scripts/verify-vercel-setup.sh`
@@ -895,12 +938,28 @@ Will run integration tests for API endpoints and database operations.
 
 ### E2E Tests
 
-**Command:** `npm run test:e2e` (Future)
-**Referenced in:** `testing.mdc` (Test Execution)
+**Commands:** `npm run test:e2e` | `npm run test:smoke` | `npm run test:crawl`
+**Referenced in:** `testing.mdc`, `e2e/README.md`, `docs/E2E_TESTING_GUIDE.md`
 
-Will run end-to-end tests using Playwright or Cypress.
+Playwright E2E suite. See `e2e/README.md` and `docs/E2E_TESTING_GUIDE.md` for full documentation.
 
-**Status:** Planned
+**Usage:**
+
+```bash
+npm run test:e2e       # Full suite
+npm run test:smoke     # Quick smoke (key pages, auth bypassed)
+npm run test:crawl     # Full webapp crawl, generates CRAWL_REPORT
+```
+
+**Outputs:**
+
+- `QA_AUDIT_REPORT.md` - Full E2E error report
+- `CRAWL_REPORT.md` - Per-page console errors (from `test:crawl`); human-readable
+- `CRAWL_REPORT.json` - Same data as `CRAWL_REPORT.md` for CI/scripts; see `CRAWL_REPORT.md` for interpretation
+- `test-failures/` - Screenshots
+- `playwright-report/` - HTML report
+
+**Status:** ✅ Active
 
 ---
 
@@ -960,7 +1019,9 @@ Will run all test suites (unit, integration, E2E).
 | Unit Tests           | `npm test`                    | Testing     | ✅ Active  |
 | Test Coverage        | `npm run test:coverage`       | Testing     | ✅ Active  |
 | Integration Tests    | `npm run test:integration`    | Testing     | 📋 Planned |
-| E2E Tests            | `npm run test:e2e`            | Testing     | 📋 Planned |
+| E2E Tests            | `npm run test:e2e`            | Testing     | ✅ Active  |
+| E2E Smoke            | `npm run test:smoke`          | Testing     | ✅ Active  |
+| E2E Crawl            | `npm run test:crawl`          | Testing     | ✅ Active  |
 
 ---
 

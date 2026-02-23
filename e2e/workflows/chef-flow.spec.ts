@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import {
   setupGlobalErrorListener,
   collectPageErrors,
-  getCollectedErrors,
+  getNonAllowlistedErrors,
   clearCollectedErrors,
 } from '../fixtures/global-error-listener';
 import { ensureAuthenticated } from '../fixtures/auth-helper';
@@ -69,7 +69,7 @@ test.describe('Chef Flow - Critical Path', () => {
 
     // Final error collection
     await collectPageErrors(page);
-    const finalErrors = getCollectedErrors();
+    const nonAllowlistedErrors = getNonAllowlistedErrors();
 
     // Assertions
     testSteps.push('Step 32: Verifying test completion');
@@ -77,17 +77,11 @@ test.describe('Chef Flow - Critical Path', () => {
     // Log test steps for report
     console.log('Test Steps:', testSteps.join('\n'));
 
-    // Check for critical errors (uncaught exceptions and network 5xx)
-    const criticalErrors = finalErrors.filter(
-      e => e.type === 'uncaught' || (e.type === 'network' && e.statusCode && e.statusCode >= 500),
-    );
-
-    if (criticalErrors.length > 0) {
-      console.error('Critical errors found:', criticalErrors);
+    if (nonAllowlistedErrors.length > 0) {
+      console.error('Non-allowlisted console/network errors found:', nonAllowlistedErrors);
     }
 
-    // Test passes even if there are warnings/4xx errors (they'll be in the report)
-    // But fail if there are critical errors
-    expect(criticalErrors.length).toBe(0);
+    // Fail on any console.error, console.warn (non-allowlisted), uncaught, or network 5xx
+    expect(nonAllowlistedErrors.length).toBe(0);
   });
 });

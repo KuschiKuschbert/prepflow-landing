@@ -58,15 +58,18 @@ export function useTranslation() {
   }, []);
 
   // Get translation function
+  // Use fallback during isLoading to prevent hydration mismatch: server has no translations
+  // loaded, client's first paint matches server when we use fallback until async load completes.
   const t = useCallback(
     (key: string, fallback?: string): string => {
+      if (isLoading) return fallback ?? key;
       const translations = getCachedTranslations();
       const currentTranslations = translations[currentLanguage] || translations['en-AU'];
       const translation = getNestedValue(currentTranslations, key);
-      if (typeof translation === 'string') return translation;
-      return fallback || key;
+      const result = typeof translation === 'string' ? translation : (fallback ?? key);
+      return result;
     },
-    [currentLanguage],
+    [currentLanguage, isLoading],
   );
 
   // Change language

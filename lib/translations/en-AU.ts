@@ -450,7 +450,7 @@ export const translations = {
     },
     step2: {
       title: 'Import sales',
-      description: 'Paste your POS export into the Sales tab.',
+      description: 'Import your POS export on the Performance page to see profit rankings.',
     },
     step3: {
       title: 'Decide & act',

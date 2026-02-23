@@ -55,7 +55,7 @@ export function parseAIError(error: Error): AIError {
     return {
       type: 'QUOTA_EXCEEDED',
       message:
-        'Gemini API quota exceeded. Please check your plan and billing at https://ai.google.dev/gemini-api/docs/rate-limits. To monitor usage, visit https://ai.dev/usage?tab=rate-limit',
+        "You've hit your AI usage limit. Check your plan and billing at https://ai.google.dev/gemini-api/docs/rate-limits. To monitor usage, visit https://ai.dev/usage?tab=rate-limit",
       details: error,
       retryable: false,
     };

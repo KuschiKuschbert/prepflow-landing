@@ -16,7 +16,7 @@ interface PrepListPreviewSectionProps {
   section: GeneratedPrepListData['sections'][0];
   sectionIndex: number;
   viewMode: 'aggregated' | 'recipe-grouped';
-  kitchenSections: Array<{ id: string; name: string }>;
+  kitchenSections: Array<{ id: string; name?: string; section_name?: string }>;
   safeIngredients: Array<{ id: string; name?: string; ingredient_name?: string; unit: string }>;
   loadingPrepDetails: boolean;
   handleSectionChange: (index: number, sectionId: string | null) => void;
@@ -94,7 +94,7 @@ export function PrepListPreviewSection({
               <option value="">Assign to section...</option>
               {kitchenSections.map(ks => (
                 <option key={ks.id} value={ks.id}>
-                  {ks.name}
+                  {ks.section_name ?? ks.name ?? 'Unassigned'}
                 </option>
               ))}
             </select>

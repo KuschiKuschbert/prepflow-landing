@@ -44,6 +44,8 @@
     "cleanup:all": "node scripts/cleanup.js --check --fix --report",
     "cleanup:staged": "node scripts/cleanup.js --staged",
     "check:voice": "node scripts/check-voice-consistency.js",
+    "check:full": "bash scripts/check-full.sh",
+    "check:full:verbose": "bash scripts/check-full.sh --verbose --log",
     "check:architecture": "tsx scripts/check-architecture.ts",
     "check:health": "tsx scripts/sentinel.ts",
     "check:skills": "tsx scripts/check-skills.ts",
@@ -92,6 +94,8 @@
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:report": "playwright show-report",
+    "test:smoke": "AUTH0_BYPASS_DEV=true playwright test smoke.spec.ts",
+    "test:crawl": "AUTH0_BYPASS_DEV=true playwright test crawl-console-errors.spec.ts",
     "scrape:recipes": "tsx lib/recipes/cli.ts",
     "scrape:recipes:allrecipes": "tsx lib/recipes/cli.ts --source allrecipes",
     "scrape:recipes:bbc": "tsx lib/recipes/cli.ts --source bbc-good-food",
@@ -213,6 +217,9 @@
   },
   "overrides": {
     "js-yaml": ">=4.1.1",
-    "tar": "^7.5.6"
+    "tar": "^7.5.6",
+    "test-exclude": {
+      "minimatch": "5.1.6"
+    }
   }
 }

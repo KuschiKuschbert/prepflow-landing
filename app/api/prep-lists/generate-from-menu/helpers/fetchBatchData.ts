@@ -77,7 +77,7 @@ export async function fetchDishData(
   // Batch fetch dish sections
   const { data: allDishSections, error: dishSectionsError } = await supabaseAdmin
     .from('dish_sections')
-    .select('dish_id, section_id, kitchen_sections(id, name)')
+    .select('dish_id, section_id, kitchen_sections(id, section_name)')
     .in('dish_id', dishIdsArray);
 
   if (dishSectionsError) {
@@ -96,7 +96,7 @@ export async function fetchDishData(
       const section = dishSection.kitchen_sections;
       dishSectionsMap.set(dishId, {
         sectionId,
-        sectionName: section?.name || 'Uncategorized',
+        sectionName: section?.section_name ?? section?.name ?? 'Uncategorized',
       });
     }
   }

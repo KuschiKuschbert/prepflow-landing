@@ -1,7 +1,10 @@
 import { auth0 } from '@/lib/auth0';
 import { NextRequest } from 'next/server';
 
-export const GET = (req: NextRequest) =>
-  (auth0 as unknown as { handler: (req: NextRequest) => Promise<Response> }).handler(req);
-export const POST = (req: NextRequest) =>
-  (auth0 as unknown as { handler: (req: NextRequest) => Promise<Response> }).handler(req);
+/**
+ * Auth0 SDK v4 uses middleware() to handle auth routes (login, callback, logout).
+ * The middleware delegates to authClient.handler internally.
+ * Route handlers must use middleware(), not handler (which is not on Auth0Client).
+ */
+export const GET = (req: NextRequest) => auth0.middleware(req);
+export const POST = (req: NextRequest) => auth0.middleware(req);

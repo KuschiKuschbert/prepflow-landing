@@ -10,7 +10,9 @@ import {
   CalendarDays,
   DollarSign,
   Leaf,
+  ListChecks,
   LucideIcon,
+  Sparkles,
   Thermometer,
 } from 'lucide-react';
 import Image from 'next/image';
@@ -34,7 +36,7 @@ const highlights: Highlight[] = [
   },
   {
     name: 'COGS Calculator',
-    description: 'Exact food costs. Waste factors. Yield adjustments. All automatic.',
+    description: 'Accurate food costs. Waste factors. Yield adjustments. All automatic.',
     icon: DollarSign,
     screenshot: '/images/dashboard-screenshot.png',
     color: '#D925C7',
@@ -67,6 +69,20 @@ const highlights: Highlight[] = [
     icon: BarChart3,
     screenshot: '/images/performance-analysis-screenshot.png',
     color: '#D925C7',
+  },
+  {
+    name: 'AI Specials',
+    description: 'AI-powered specials suggestions. Scrape recipes, get ideas, build your menu.',
+    icon: Sparkles,
+    screenshot: '/images/performance-analysis-screenshot.png',
+    color: '#FF6B00',
+  },
+  {
+    name: 'Prep Lists',
+    description: 'Generate kitchen prep lists from your menu. Order lists and par levels included.',
+    icon: ListChecks,
+    screenshot: '/images/dashboard-screenshot.png',
+    color: '#3B82F6',
   },
 ];
 
@@ -135,9 +151,11 @@ function HighlightAccent({ highlight }: { highlight: Highlight }) {
       ? 'bg-[#29E7CD]'
       : highlight.name.includes('COGS') || highlight.name.includes('Menu')
         ? 'bg-[#D925C7]'
-        : highlight.name.includes('Functions')
+        : highlight.name.includes('Functions') || highlight.name.includes('AI Specials')
           ? 'bg-[#FF6B00]'
-          : 'bg-[#3B82F6]';
+          : highlight.name.includes('Prep') || highlight.name.includes('Temperature')
+            ? 'bg-[#3B82F6]'
+            : 'bg-[#3B82F6]';
   return (
     <motion.div
       className={`absolute bottom-0 left-0 h-1 w-full ${accentClass}`}
@@ -149,7 +167,7 @@ function HighlightAccent({ highlight }: { highlight: Highlight }) {
 
 function Highlights() {
   return (
-    <section className="tablet:py-32 relative bg-transparent py-24">
+    <section id="features" className="tablet:pb-32 tablet:pt-40 relative bg-transparent py-24">
       <div className="mx-auto max-w-7xl px-6">
         {/* Section Header - MacBook Pro Style */}
         <ScrollReveal variant="fade-up" className="mb-20 text-center">

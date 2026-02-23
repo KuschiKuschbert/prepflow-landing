@@ -2,8 +2,9 @@ import { Recipe, RecipeIngredientWithDetails } from './recipes';
 
 export interface KitchenSection {
   id: string;
-  name: string;
-  color: string;
+  name?: string;
+  section_name?: string;
+  color?: string;
 }
 
 export interface RecipeAnalysisData {

@@ -17,7 +17,7 @@ export function DataManagementSection() {
     const confirmed = await showConfirm({
       title: 'Restore Default Data?',
       message:
-        "This will add default menu items and modifiers to your database. Only missing items will be added - existing data won't be deleted or modified. Continue?",
+        "This will add default menu items and modifiers. Only missing items will be added - existing data won't be deleted or modified. Continue?",
       variant: 'info',
       confirmLabel: 'Restore Defaults',
       cancelLabel: 'Cancel',

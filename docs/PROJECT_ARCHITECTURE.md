@@ -40,24 +40,17 @@ app/
 ├── components/landing/  # Landing page components
 │   ├── Hero.tsx        # Hero section
 │   ├── TourModal.tsx   # Tour modal component
-│   ├── HowItWorks.tsx  # Process explanation
 │   ├── LandingHeader.tsx # Landing page header
 │   ├── LandingFooter.tsx # Landing page footer
-│   ├── LandingSections.tsx # Section orchestrator
+│   ├── LandingPageClient.tsx # Main landing page orchestrator
+│   ├── Highlights.tsx # Key features
+│   ├── CloserLook.tsx # Feature details
+│   ├── Performance.tsx # Performance metrics
+│   ├── TechnicalSpecs.tsx # Capabilities overview
 │   ├── FinalCTA.tsx   # Final call-to-action
 │   ├── ExitIntentPopup.tsx # Exit intent lead capture
 │   └── sections/       # Landing page sections
-│       ├── BenefitsSection.tsx
-│       ├── FeaturesSection.tsx
-│       ├── FAQSection.tsx
-│       ├── LeadMagnetSection.tsx
-│       ├── TrustSection.tsx
-│       ├── HowItWorksSection.tsx
-│       ├── MyStorySection.tsx
-│       ├── ProblemOutcomeSection.tsx
-│       ├── PracticeSection.tsx
-│       ├── ContributingMarginSection.tsx
-│       └── GlobalFeaturesSection.tsx
+│       └── HowItWorksSection.tsx # Add → Analyze → Act
 ├── webapp/             # Protected webapp area
 │   ├── page.tsx        # Main dashboard
 │   ├── layout.tsx      # WebApp layout with navigation

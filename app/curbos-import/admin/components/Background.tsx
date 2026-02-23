@@ -42,11 +42,11 @@ export default function Background() {
       <Triangle className="-right-32 -bottom-32 h-[500px] w-[500px] rotate-45 text-neutral-700 opacity-5" />
 
       {/* Rotating Logo - top-right */}
-      <div className="absolute top-20 right-20 hidden md:block">
+      <div className="tablet:block absolute top-20 right-20 hidden">
         <RotatingLogo />
       </div>
       {/* Small floating logo for mobile */}
-      <div className="absolute right-10 bottom-10 scale-50 md:hidden">
+      <div className="tablet:hidden absolute right-10 bottom-10 scale-50">
         <RotatingLogo />
       </div>
 

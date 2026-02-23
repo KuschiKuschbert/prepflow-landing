@@ -88,7 +88,7 @@ export function MenuDisplayView({ menu, menuItems }: MenuDisplayViewProps) {
             </div>
 
             {/* Items Grid - modernized list layout instead of cards for cleaner "menu" feel */}
-            <div className="grid grid-cols-1 gap-x-12 gap-y-8 md:grid-cols-2">
+            <div className="tablet:grid-cols-2 grid grid-cols-1 gap-x-12 gap-y-8">
               {items.map(item => {
                 const isDish = !!item.dish_id;
                 const itemName = isDish

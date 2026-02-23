@@ -3,13 +3,13 @@
 import { GlowCard } from '@/components/ui/GlowCard';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 
 interface Metric {
   label: string;
-  value: number;
-  suffix: string;
+  value?: number;
+  suffix?: string;
+  displayText?: string;
   description: string;
   colorClass: string;
 }
@@ -17,22 +17,19 @@ interface Metric {
 const metrics: Metric[] = [
   {
     label: 'Lightning Fast',
-    value: 80,
-    suffix: '%',
+    displayText: 'Seconds',
     description: 'From hours of Excel to seconds of accurate calculations',
     colorClass: 'text-landing-primary',
   },
   {
     label: 'More Accurate',
-    value: 3,
-    suffix: 'x',
-    description: 'No more formula errors. No more guesswork. Just accurate costs.',
+    displayText: 'Always',
+    description: 'No formula errors. No guesswork. Just accurate costs.',
     colorClass: 'text-landing-accent',
   },
   {
     label: 'Manual Logging',
-    value: 24,
-    suffix: '/7',
+    displayText: 'Anytime',
     description: 'Log temperatures anytime with dashboard alerts for violations',
     colorClass: 'text-landing-secondary',
   },
@@ -125,12 +122,23 @@ function Performance() {
           {metrics.map((metric, index) => (
             <ScrollReveal key={metric.label} variant="fade-up" delay={index * 0.1}>
               <GlowCard glowColor={getGlowColor(metric.colorClass)} className="p-10 text-center">
-                {/* Animated Counter */}
-                <AnimatedCounter
-                  value={metric.value}
-                  suffix={metric.suffix}
-                  colorClass={metric.colorClass}
-                />
+                {/* Value display – text or animated counter */}
+                {metric.displayText ? (
+                  <div
+                    className={`text-fluid-4xl tablet:text-fluid-4xl desktop:text-fluid-4xl font-bold ${metric.colorClass}`}
+                  >
+                    {metric.displayText}
+                  </div>
+                ) : (
+                  metric.value != null &&
+                  metric.suffix != null && (
+                    <AnimatedCounter
+                      value={metric.value}
+                      suffix={metric.suffix}
+                      colorClass={metric.colorClass}
+                    />
+                  )
+                )}
 
                 {/* Label */}
                 <h3 className="text-fluid-2xl mt-6 font-light text-white">{metric.label}</h3>
@@ -143,54 +151,6 @@ function Performance() {
             </ScrollReveal>
           ))}
         </div>
-
-        {/* Performance Comparison - MacBook Pro Style */}
-        <ScrollReveal variant="fade-up" delay={0.4} className="tablet:p-12 mt-24">
-          <GlowCard glowColor="cyan" className="tablet:p-16 p-12">
-            <div className="text-center">
-              <h3 className="text-fluid-3xl tablet:text-fluid-4xl font-light text-white">
-                Stop fighting with Excel at 2 AM
-              </h3>
-              <p className="text-fluid-lg tablet:text-fluid-xl mt-6 text-gray-400">
-                One platform. Real costs. Live calculations. No spreadsheets. No guesswork. No
-                broken formulas.
-              </p>
-            </div>
-
-            {/* Before/After Comparison */}
-            <div className="desktop:grid-cols-2 mt-16 grid gap-12">
-              <motion.div
-                className="rounded-xl border border-red-500/20 bg-red-500/10 p-8"
-                whileHover={{ scale: 1.01 }}
-                transition={{ duration: 0.3 }}
-              >
-                <h4 className="text-fluid-xl mb-6 font-light text-red-400">Before PrepFlow</h4>
-                <ul className="space-y-3 text-gray-400">
-                  <li>• Excel formulas break</li>
-                  <li>• Hours wasted on calculations</li>
-                  <li>• Guessing at costs</li>
-                  <li>• No real-time updates</li>
-                  <li>• Multiple systems to juggle</li>
-                </ul>
-              </motion.div>
-
-              <motion.div
-                className="border-primary/20 bg-primary/10 rounded-xl border p-8"
-                whileHover={{ scale: 1.01 }}
-                transition={{ duration: 0.3 }}
-              >
-                <h4 className="text-fluid-xl text-primary mb-6 font-light">With PrepFlow</h4>
-                <ul className="space-y-3 text-gray-400">
-                  <li>• Calculations happen automatically</li>
-                  <li>• See costs and margins instantly</li>
-                  <li>• Know which dishes make money</li>
-                  <li>• Track compliance in one place</li>
-                  <li>• No more juggling systems</li>
-                </ul>
-              </motion.div>
-            </div>
-          </GlowCard>
-        </ScrollReveal>
       </div>
     </section>
   );

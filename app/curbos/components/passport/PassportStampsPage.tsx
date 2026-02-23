@@ -43,10 +43,10 @@ export default function PassportStampsPage({ unlockedRegions, stampCards }: Pass
                     style={{ rotate: `${getRotation(region)}deg` }}
                  >
                     <MapPin className="text-purple-900/70 mb-1 w-[25%] h-[25%]" />
-                    <span className="text-[6px] sm:text-[8px] font-black text-purple-900 uppercase text-center leading-none tracking-tighter">
+                    <span className="text-[6px] tablet:text-[8px] font-black text-purple-900 uppercase text-center leading-none tracking-tighter">
                         PERMIT
                         <br/>
-                        <span className="text-[7px] sm:text-[9px] text-purple-700">{region}</span>
+                        <span className="text-[7px] tablet:text-[9px] text-purple-700">{region}</span>
                     </span>
                  </motion.div>
              ))}
@@ -59,10 +59,10 @@ export default function PassportStampsPage({ unlockedRegions, stampCards }: Pass
                     style={{ rotate: `${getRotation(category)}deg` }}
                  >
                     <Coffee className="text-orange-900/70 mb-1 w-[25%] h-[25%]" />
-                    <span className="text-[6px] sm:text-[8px] font-bold text-orange-900 uppercase text-center leading-none">
+                    <span className="text-[6px] tablet:text-[8px] font-bold text-orange-900 uppercase text-center leading-none">
                         {category}
                         <br/>
-                        <span className="text-[8px] sm:text-[10px] font-black">{count}/10</span>
+                        <span className="text-[8px] tablet:text-[10px] font-black">{count}/10</span>
                     </span>
                  </div>
              ))}
@@ -70,7 +70,7 @@ export default function PassportStampsPage({ unlockedRegions, stampCards }: Pass
              {/* Empty Placeholder Stamps */}
              {[...Array(Math.max(0, 12 - unlockedRegions.length - Object.keys(stampCards).length))].map((_, i) => (
                  <div key={`empty-${i}`} className="w-full h-full max-w-[100px] max-h-[100px] aspect-square border border-neutral-200 rounded-full opacity-30 flex items-center justify-center">
-                    <span className="text-[6px] sm:text-[8px] font-mono text-neutral-300">VOID</span>
+                    <span className="text-[6px] tablet:text-[8px] font-mono text-neutral-300">VOID</span>
                  </div>
              ))}
           </div>

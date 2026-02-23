@@ -47,11 +47,11 @@ export async function fetchDishRecipes(dishId: string): Promise<DishRecipe[]> {
     return [];
   }
 
-  // Fetch recipe details - use both 'name' and 'recipe_name' column (database uses 'name', not 'recipe_name')
+  // Fetch recipe details (recipes table uses recipe_name after migration)
 
   const { data: recipesData, error: recipesError } = await supabaseAdmin
     .from('recipes')
-    .select('id, name, recipe_name, description, yield, yield_unit, instructions')
+    .select('id, recipe_name, description, yield, yield_unit, instructions')
     .in('id', recipeIds);
 
   if (recipesError) {
@@ -70,7 +70,7 @@ export async function fetchDishRecipes(dishId: string): Promise<DishRecipe[]> {
         r.id,
         {
           id: r.id,
-          name: recipeRecord.name || '',
+          name: recipeRecord.recipe_name || '',
           recipe_name: recipeRecord.recipe_name || '',
           description: r.description,
           yield: r.yield,

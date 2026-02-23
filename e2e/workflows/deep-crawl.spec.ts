@@ -3,6 +3,7 @@ import {
   setupGlobalErrorListener,
   collectPageErrors,
   getCollectedErrors,
+  getNonAllowlistedErrors,
   clearCollectedErrors,
   captureErrorScreenshot,
 } from '../fixtures/global-error-listener';
@@ -123,18 +124,17 @@ test.describe('Deep Crawl - Page Discovery and Monkey Testing', () => {
     // Assert that we visited at least some pages
     expect(crawlResults.length).toBeGreaterThan(0);
 
-    // Check for critical errors across all pages
-    const allErrors = getCollectedErrors();
-    const criticalErrors = allErrors.filter(
-      e => e.type === 'uncaught' || (e.type === 'network' && e.statusCode && e.statusCode >= 500),
-    );
+    // Check for non-allowlisted errors across all pages
+    const nonAllowlistedErrors = getNonAllowlistedErrors();
 
-    if (criticalErrors.length > 0) {
-      console.error('Critical errors found during crawl:', criticalErrors);
+    if (nonAllowlistedErrors.length > 0) {
+      console.error(
+        'Non-allowlisted console/network errors found during crawl:',
+        nonAllowlistedErrors,
+      );
     }
 
-    // Test passes even with warnings/4xx (they'll be in report)
-    // But fail if critical errors found
-    expect(criticalErrors.length).toBe(0);
+    // Fail on any console.error, console.warn (non-allowlisted), uncaught, or network 5xx
+    expect(nonAllowlistedErrors.length).toBe(0);
   });
 });

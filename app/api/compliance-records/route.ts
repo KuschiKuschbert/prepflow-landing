@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { handleCreateComplianceRecord } from './helpers/createComplianceRecordHandler';
 import { handleDeleteComplianceRecord } from './helpers/deleteComplianceRecordHandler';
 import { handleComplianceError } from './helpers/handleComplianceError';
-import { COMPLIANCE_TYPES_SELECT, updateComplianceRecordSchema } from './helpers/schemas';
+import { updateComplianceRecordSchema } from './helpers/schemas';
 import { updateComplianceRecord } from './helpers/updateComplianceRecord';
 
 export async function GET(request: NextRequest) {
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
 
     let query = supabaseAdmin
       .from('compliance_records')
-      .select(COMPLIANCE_TYPES_SELECT)
+      .select('*')
       .order('expiry_date', { ascending: true });
 
     if (typeId) {
@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
       query = query.eq('status', status);
     }
 
-    const { data, error } = await query;
+    const { data: records, error } = await query;
 
     if (error) {
       const errorCode = error.code;
@@ -61,10 +61,26 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
-    return NextResponse.json({
-      success: true,
-      data: data || [],
-    });
+    const items = records || [];
+
+    // Enrich with compliance_types if we have records (avoids PGRST200 join when FK not exposed)
+    if (items.length > 0) {
+      const typeIds = [...new Set(items.map(r => r.compliance_type_id).filter(Boolean))];
+      const { data: types } = await supabaseAdmin
+        .from('compliance_types')
+        .select('id, type_name, description')
+        .in('id', typeIds);
+
+      const typeMap = new Map((types || []).map(t => [t.id, t]));
+      const enriched = items.map(r => ({
+        ...r,
+        compliance_types: r.compliance_type_id ? (typeMap.get(r.compliance_type_id) ?? null) : null,
+      }));
+
+      return NextResponse.json({ success: true, data: enriched });
+    }
+
+    return NextResponse.json({ success: true, data: [] });
   } catch (err: unknown) {
     return handleComplianceError(err, 'GET');
   }

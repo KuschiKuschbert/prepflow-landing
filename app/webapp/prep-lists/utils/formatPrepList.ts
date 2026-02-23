@@ -11,7 +11,8 @@ export function formatPrepListForPrint(
   variant: 'default' | 'kitchen' = 'default',
 ): string {
   const items = prepList.prep_list_items || [];
-  const sectionName = prepList.kitchen_sections?.name || 'Unassigned';
+  const sectionName =
+    prepList.kitchen_sections?.section_name || prepList.kitchen_sections?.name || 'Unassigned';
   const date = new Date(prepList.created_at).toLocaleDateString('en-AU', {
     year: 'numeric',
     month: 'long',

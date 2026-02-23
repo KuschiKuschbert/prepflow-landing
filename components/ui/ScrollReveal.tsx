@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useInView, useReducedMotion } from 'framer-motion';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface ScrollRevealProps {
   children: React.ReactNode;
@@ -23,12 +23,17 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   once = true,
 }) => {
   const ref = useRef(null);
+  const [hasMounted, setHasMounted] = useState(false);
   const reducedMotion = useReducedMotion();
   const isInView = useInView(ref, {
     once,
     amount: offset,
     margin: '0px 0px -100px 0px',
   });
+
+  // Prevent hydration mismatch: useInView can differ between server (false) and client (true for above-fold).
+  // Gate animation until after mount so server and initial client render both use "hidden".
+  useEffect(() => setHasMounted(true), []);
 
   const variants: Record<string, any> = {
     'fade-up': {
@@ -79,11 +84,13 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
 
   const activeVariants = reducedMotion ? reducedVariants : variants;
 
+  const animateTo = hasMounted && isInView ? 'visible' : 'hidden';
+
   return (
     <motion.div
       ref={ref}
       initial="hidden"
-      animate={isInView ? 'visible' : 'hidden'}
+      animate={animateTo}
       variants={activeVariants[variant]}
       transition={{
         duration: reducedMotion ? 0.2 : duration,

@@ -70,10 +70,11 @@ export function usePrepListHandlers({
   const handleSectionChange = (sectionIndex: number, newSectionId: string | null) => {
     const updatedSections = [...sections];
     const section = updatedSections[sectionIndex];
+    const foundSection = kitchenSections.find(s => s.id === newSectionId);
     const newSectionName =
       newSectionId === null
         ? 'Uncategorized'
-        : kitchenSections.find(s => s.id === newSectionId)?.name || 'Unknown';
+        : (foundSection?.section_name ?? foundSection?.name ?? 'Unknown');
 
     section.sectionId = newSectionId;
     section.sectionName = newSectionName;

@@ -45,8 +45,8 @@ export default defineConfig({
     video: 'retain-on-failure',
     /* Viewport: 1920x1080 */
     viewport: { width: 1920, height: 1080 },
-    /* Headless: false (visible browser) */
-    headless: false,
+    /* Headless in CI, visible locally */
+    headless: !!process.env.CI,
     /* Load Auth State if available */
     storageState: hasAuth ? authFile : undefined,
     /* Maximum speed - no slowMo */
@@ -60,7 +60,7 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 1920, height: 1080 },
-        headless: false,
+        headless: !!process.env.CI,
       },
     },
     // Commented out for system audit - run only chromium for speed

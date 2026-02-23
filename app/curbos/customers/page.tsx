@@ -46,7 +46,7 @@ export default async function CustomerDirectory() {
     <div className="min-h-screen bg-black text-white p-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-[#ccff00]">Customer Database</h1>
+          <h1 className="text-4xl font-bold text-[#ccff00]">Your customers</h1>
           <div className="bg-[#1E1E1E] px-4 py-2 rounded-lg border border-[#ccff00]/20">
             <span className="text-[#ccff00] font-bold">{customers.length}</span> Members
           </div>
@@ -61,7 +61,7 @@ export default async function CustomerDirectory() {
         {customers.length === 0 && (
           <div className="text-center py-20 bg-[#1E1E1E]/50 rounded-2xl border border-dashed border-zinc-800">
             <h2 className="text-2xl font-bold text-zinc-500 mb-2">No Customers Found</h2>
-            <p className="text-zinc-600">Run "Push to Cloud" from your POS to sync/clone the database.</p>
+            <p className="text-zinc-600">Run "Push to Cloud" from your POS to sync your data.</p>
           </div>
         )}
       </div>

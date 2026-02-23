@@ -46,6 +46,7 @@ alwaysApply: true
 
 **Pre-deployment Scripts:**
 - **Pre-Deploy Check:** `scripts/pre-deploy-check.sh` - **MANDATORY** - Runs the same deploy-critical checks as CI: lint, type-check, format:check, audit:scripts, npm audit, build, check:bundle. Cleanup check runs as advisory only. Use `npm run pre-deploy` to run all checks at once. **See:** `docs/SCRIPTS.md` (Pre-Deployment Check) for details.
+- **Full Check Suite:** `npm run check:full` - Periodic health check combining cleanup, design audits (breakpoints, voice, hierarchy, icons), test coverage, dependency audit, and E2E crawl. Use before releases or quarterly. **See:** `docs/SCRIPTS.md` (Full Check Suite).
 - **Legal & Node Check:** `scripts/check-legal-and-node.js` - Verifies Node.js version (>=22.0.0) and legal compliance
 - **Vercel Setup Verification:** `scripts/verify-vercel-setup.sh` - Verifies git repository, GitHub Actions workflows, environment variables, and Next.js configuration
 

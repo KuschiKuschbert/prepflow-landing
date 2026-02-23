@@ -2,6 +2,25 @@
 
 ## 2026-02-23 (continued)
 
+- **File size refactoring – crawl spec and report-generator**: Resolved 2 file size violations.
+  - **crawl-console-errors.spec.ts** (318→200 lines): Extracted `e2e/helpers/crawl-constants.ts` (65 lines) and `e2e/helpers/crawl-helpers.ts` (62 lines) for HASH_SEED_URLS, selectors, shouldSkip, normalizeUrlToPath, interactWithSectionNav, interactWithHashSections.
+  - **report-generator.ts** (408→46 lines): Extracted `e2e/helpers/report-generator/qa-report.ts` (197 lines), `e2e/helpers/report-generator/crawl-report.ts` (137 lines), `e2e/helpers/report-generator/types.ts` (18 lines). Main file re-exports and retains parseTestResults.
+  - `npm run lint:filesize` passes; type-check passes.
+
+## 2026-02-23 (continued)
+
+- **Crawl-reported console/network errors – systematic fix**: Addressed 41 non-allowlisted errors from CRAWL_REPORT.
+  - **Auth0**: Route used `auth0.handler` (not on Auth0Client); switched to `auth0.middleware(req)` per SDK v4 API.
+  - **recipe-share GET**: Recipes select used `name`; changed to `recipe_name` (post-migration).
+  - **recipes/exists**: Filter used `ilike('name', name)`; changed to `recipe_name`.
+  - **dishes fetchDishRecipes**: Select included `name`; removed, use `recipe_name` for mapped `name`.
+  - **compliance-records**: PGRST200 join failure – fetch records and types separately, merge in code.
+  - **prep-lists fetchBatchData**: kitchen_sections used `name`; changed to `section_name` with fallback for `name`; updated DBKitchenSection type.
+  - **E2E allowlist**: Added Square and Feature Flags "Unauthorized" patterns (expected when not admin).
+  - **Docs**: TROUBLESHOOTING_LOG entries for auth0.handler, recipes.name, PGRST200, kitchen_sections.
+
+## 2026-02-23 (continued)
+
 - **Guide Screenshots Capture and Crop**: Implemented DOM-driven capture and crop script.
   - **Capture script**: Replaced fullPage screenshots with main-element clip. Scrolls to top, gets `main` bounding box, clips to top 720px of content. Fallback to viewport if main missing.
   - **Crop script**: `scripts/crop-guide-screenshots.js` — processes images in `public/images/guides/` taller than 900px; extracts top 720px (skip 64px header). Idempotent. `npm run crop:guide-screenshots`.

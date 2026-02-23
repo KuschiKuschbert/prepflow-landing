@@ -1,38 +1,47 @@
 'use client';
 
 import { GlowCard } from '@/components/ui/GlowCard';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { LANDING_LAYOUT, LANDING_TYPOGRAPHY, getSectionClasses } from '@/lib/landing-styles';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../../../../lib/useTranslation';
 
 export function HowItWorksSection() {
   const { t } = useTranslation();
+  const titleValue = t('howItWorks.title', 'Get Results in 3 Simple Steps');
 
+  const GLOW_COLORS = {
+    cyan: 'rgba(41, 231, 205, 0.15)',
+    blue: 'rgba(59, 130, 246, 0.15)',
+    magenta: 'rgba(217, 37, 199, 0.15)',
+  } as const;
+
+  // Fallbacks must match en-AU.ts to prevent hydration mismatch (server uses fallback until translations load).
   const steps = [
     {
       number: 1,
-      title: t('howItWorks.step1.title', 'Add Your Ingredients'),
+      title: t('howItWorks.step1.title', 'Set up (5–10 min)'),
       description: t(
         'howItWorks.step1.description',
-        'Import from CSV or add manually. Track costs, suppliers, and stock. We handle unit conversions automatically.',
+        'Turn on GST, add ingredients, yields, and supplier costs.',
       ),
       color: 'cyan' as const,
     },
     {
       number: 2,
-      title: t('howItWorks.step2.title', 'Build Recipes'),
+      title: t('howItWorks.step2.title', 'Import sales'),
       description: t(
         'howItWorks.step2.description',
-        'Add ingredients to recipes. Watch costs calculate live. See food cost percentages as you build—no surprises.',
+        'Import your POS export on the Performance page to see profit rankings.',
       ),
       color: 'blue' as const,
     },
     {
       number: 3,
-      title: t('howItWorks.step3.title', 'Price & Profit'),
+      title: t('howItWorks.step3.title', 'Decide & act'),
       description: t(
         'howItWorks.step3.description',
-        'Get pricing recommendations. See which dishes make money. Track compliance. All in one place, no juggling systems.',
+        'Dashboard ranks items by profit and popularity; fix pricing, portioning, or menu mix.',
       ),
       color: 'magenta' as const,
     },
@@ -53,25 +62,15 @@ export function HowItWorksSection() {
   return (
     <section id="how-it-works" className={getSectionClasses({ padding: 'large' })}>
       <div className={LANDING_LAYOUT.container}>
-        <motion.h2
-          className={`${LANDING_TYPOGRAPHY['5xl']} mb-16 text-center font-light tracking-tight text-white`}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          {t('howItWorks.title', 'How PrepFlow Works')}
-        </motion.h2>
+        <ScrollReveal variant="fade-up" duration={0.6} className="mb-16 text-center">
+          <h2 className={`${LANDING_TYPOGRAPHY['5xl']} font-light tracking-tight text-white`}>
+            {titleValue}
+          </h2>
+        </ScrollReveal>
         <div className="tablet:gap-10 desktop:gap-12 large-desktop:gap-14 tablet:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] desktop:[grid-template-columns:repeat(auto-fit,minmax(320px,1fr))] grid [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))] gap-12 xl:gap-16">
           {steps.map((step, index) => (
-            <motion.div
-              key={step.number}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.5, delay: index * 0.15 }}
-            >
-              <GlowCard glowColor={step.color} className="p-8 text-center">
+            <ScrollReveal key={step.number} variant="fade-up" delay={index * 0.15} duration={0.5}>
+              <GlowCard glowColor={GLOW_COLORS[step.color]} className="p-8 text-center">
                 <motion.div
                   className={`${LANDING_TYPOGRAPHY.xl} mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full font-light ${getColorClasses(step.color)}`}
                   whileHover={{ scale: 1.05 }}
@@ -86,7 +85,7 @@ export function HowItWorksSection() {
                   {step.description}
                 </p>
               </GlowCard>
-            </motion.div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

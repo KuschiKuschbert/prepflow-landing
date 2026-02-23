@@ -171,7 +171,8 @@ PrepFlow automatically applies Queensland food safety regulations to all tempera
 
 ## 🔗 Additional Resources
 
-- **Scripts Reference:** `docs/SCRIPTS.md` - Complete script documentation
+- **Scripts Reference:** `docs/SCRIPTS.md` - Complete script documentation (includes `test:smoke`, `test:crawl`)
+- **E2E Testing:** `docs/E2E_TESTING_GUIDE.md` - Crawl report (`CRAWL_REPORT.md` / `CRAWL_REPORT.json`), smoke test, QA audit
 - **Print/Export/Import:** `docs/PRINT_EXPORT_IMPORT_PATTERNS.md` - Standardized patterns
 - **CSV Import:** `docs/CSV_IMPORT_INTEGRATION.md` - CSV import guide
 - **Voice Guide:** `docs/VOICE_ENHANCEMENT_GUIDE.md` - PrepFlow voice guidelines

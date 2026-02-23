@@ -98,10 +98,10 @@ export const MobileBottomNav = memo(function MobileBottomNav({
       ariaLabel: 'View features',
     },
     {
-      href: '#pricing',
-      label: 'Pricing',
+      href: '#cta',
+      label: 'Get Started',
       icon: DollarSign,
-      ariaLabel: 'View pricing',
+      ariaLabel: 'Get started',
     },
   ];
 

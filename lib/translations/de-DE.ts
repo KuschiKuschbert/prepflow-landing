@@ -479,7 +479,8 @@ export const translations = {
     },
     step2: {
       title: 'Verkäufe importieren',
-      description: 'Fügen Sie Ihren POS-Export in den Verkaufs-Tab ein.',
+      description:
+        'Importieren Sie Ihren POS-Export auf der Performance-Seite, um Gewinnrankings zu sehen.',
     },
     step3: {
       title: 'Entscheiden & handeln',

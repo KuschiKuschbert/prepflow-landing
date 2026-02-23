@@ -17,7 +17,10 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const { data, error } = await supabaseAdmin.from('recipes').select('id').ilike('name', name);
+    const { data, error } = await supabaseAdmin
+      .from('recipes')
+      .select('id')
+      .ilike('recipe_name', name);
     if (error) {
       logger.error('[Recipes API] Database error checking recipe existence:', {
         error: error.message,

@@ -56,7 +56,10 @@ export default function FinalCTA({ trackEngagement }: FinalCTAProps) {
   };
 
   return (
-    <section className={`${getSectionClasses({ padding: 'large' })} relative overflow-hidden`}>
+    <section
+      id="cta"
+      className={`${getSectionClasses({ padding: 'large' })} relative overflow-hidden`}
+    >
       {/* Background Glow */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
         <div className="bg-landing-primary/10 h-[500px] w-[500px] rounded-full blur-[120px]" />

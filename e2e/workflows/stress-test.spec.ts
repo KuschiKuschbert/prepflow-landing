@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import {
   setupGlobalErrorListener,
   collectPageErrors,
-  getCollectedErrors,
+  getNonAllowlistedErrors,
   clearCollectedErrors,
 } from '../fixtures/global-error-listener';
 import { ensureAuthenticated } from '../fixtures/auth-helper';
@@ -70,12 +70,8 @@ test.describe('Stress Tests - Rapid Operations and Concurrent Actions', () => {
       await expect(page.locator(`text=${name}`).first()).toBeVisible({ timeout: 5000 });
     }
 
-    const errors = getCollectedErrors();
-    const criticalErrors = errors.filter(
-      e => e.type === 'uncaught' || (e.type === 'network' && e.statusCode && e.statusCode >= 500),
-    );
-
-    expect(criticalErrors.length).toBe(0);
+    const nonAllowlistedErrors = getNonAllowlistedErrors();
+    expect(nonAllowlistedErrors.length).toBe(0);
   });
 
   test('Rapid recipe creation (5 recipes)', async ({ page }) => {
@@ -116,12 +112,8 @@ test.describe('Stress Tests - Rapid Operations and Concurrent Actions', () => {
       await expect(page.locator(`text=${name}`).first()).toBeVisible({ timeout: 5000 });
     }
 
-    const errors = getCollectedErrors();
-    const criticalErrors = errors.filter(
-      e => e.type === 'uncaught' || (e.type === 'network' && e.statusCode && e.statusCode >= 500),
-    );
-
-    expect(criticalErrors.length).toBe(0);
+    const nonAllowlistedErrors = getNonAllowlistedErrors();
+    expect(nonAllowlistedErrors.length).toBe(0);
   });
 
   test('Rapid temperature log creation (10 logs)', async ({ page }) => {
@@ -162,12 +154,8 @@ test.describe('Stress Tests - Rapid Operations and Concurrent Actions', () => {
       await page.waitForTimeout(200);
     }
 
-    const errors = getCollectedErrors();
-    const criticalErrors = errors.filter(
-      e => e.type === 'uncaught' || (e.type === 'network' && e.statusCode && e.statusCode >= 500),
-    );
-
-    expect(criticalErrors.length).toBe(0);
+    const nonAllowlistedErrors = getNonAllowlistedErrors();
+    expect(nonAllowlistedErrors.length).toBe(0);
   });
 
   test('Large recipe with 20+ ingredients', async ({ page }) => {
@@ -226,12 +214,8 @@ test.describe('Stress Tests - Rapid Operations and Concurrent Actions', () => {
     }
 
     await collectPageErrors(page);
-    const errors = getCollectedErrors();
-    const criticalErrors = errors.filter(
-      e => e.type === 'uncaught' || (e.type === 'network' && e.statusCode && e.statusCode >= 500),
-    );
-
-    expect(criticalErrors.length).toBe(0);
+    const nonAllowlistedErrors = getNonAllowlistedErrors();
+    expect(nonAllowlistedErrors.length).toBe(0);
   });
 
   test('Concurrent page navigation', async ({ browser }) => {
@@ -263,11 +247,7 @@ test.describe('Stress Tests - Rapid Operations and Concurrent Actions', () => {
     // Close all contexts
     await Promise.all(contexts.map(ctx => ctx.close()));
 
-    const errors = getCollectedErrors();
-    const criticalErrors = errors.filter(
-      e => e.type === 'uncaught' || (e.type === 'network' && e.statusCode && e.statusCode >= 500),
-    );
-
-    expect(criticalErrors.length).toBe(0);
+    const nonAllowlistedErrors = getNonAllowlistedErrors();
+    expect(nonAllowlistedErrors.length).toBe(0);
   });
 });

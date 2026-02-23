@@ -20,13 +20,12 @@ async function main() {
   if (statsFlag) {
     const storage = new JSONStorage();
     const recipes = storage.getAllRecipes();
-    // eslint-disable-next-line no-console
+
     console.log(`Total Recipes: ${recipes.length}`);
     return;
   }
 
   if (searchFlag && searchQuery) {
-    // eslint-disable-next-line no-console
     console.log(`Searching for recipes matching: "${searchQuery}"...`);
     const storage = new JSONStorage();
     const recipes = storage.getAllRecipes();
@@ -34,21 +33,17 @@ async function main() {
       r.recipe_name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
-    // eslint-disable-next-line no-console
     console.log(`Found ${results.length} matches:`);
     results.slice(0, 10).forEach(r => console.log(`- ${r.recipe_name} (${r.source_url})`));
     return;
   }
 
   if (sourceArg) {
-    // eslint-disable-next-line no-console
     console.log(`Scraping has been decommissioned.`);
     return;
   }
 
-  // eslint-disable-next-line no-console
   console.log('Use --stats or --search to query the local database.');
 }
 
-// eslint-disable-next-line no-console
 main().catch(console.error);

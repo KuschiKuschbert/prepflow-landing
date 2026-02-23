@@ -63,7 +63,7 @@ export default function KitchenChartsLazy({
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <div className="desktop:grid-cols-2 grid grid-cols-1 gap-6">
       {/* Top Sellers Chart */}
       {topDishesData.length > 0 && (
         <div className="glass-surface rounded-2xl border border-[var(--border)]/30 p-6 shadow-sm transition-all duration-300 hover:border-[var(--primary)]/30 hover:shadow-md">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Zap, Rocket, Plug, Laptop, Mail, ChevronDown, LucideIcon } from 'lucide-react';
+import { Zap, Rocket, Laptop, Mail, ChevronDown, LucideIcon } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
@@ -24,6 +24,7 @@ const specCategories: SpecCategory[] = [
       'Cleaning Task Management',
       'Compliance Records',
       'Supplier Management',
+      'CRM (Clients)',
       'Menu Builder',
       'Dish Builder',
       'Par Level Management',
@@ -37,7 +38,7 @@ const specCategories: SpecCategory[] = [
       'Real-time cost calculations',
       'Dynamic menu performance analysis',
       'AI-powered specials suggestions',
-      'AI allergen detection',
+      'Allergen tracking & auto-populate',
       'Compliance tracking (QLD standards)',
       'GST calculation (Australian)',
       'Automated unit conversion',
@@ -45,12 +46,9 @@ const specCategories: SpecCategory[] = [
       'Photo verification for tasks',
       'Menu builder with change tracking',
       'Prep lists and order lists',
+      'CRM (clients) for catering & events',
+      'Recipe sharing with team members',
     ],
-  },
-  {
-    title: 'Integrations',
-    icon: Plug,
-    items: ['Supabase (Database)', 'Stripe (Payments)', 'Auth0 (Authentication)', 'Resend (Email)'],
   },
   {
     title: 'Requirements',
@@ -79,7 +77,7 @@ export default function TechnicalSpecs() {
           <h2 className="text-fluid-4xl desktop:text-fluid-4xl large-desktop:text-fluid-4xl font-bold tracking-tight text-white">
             Technical Specifications
           </h2>
-          <p className="text-fluid-xl mt-4 text-gray-400">Everything you need to know.</p>
+          <p className="text-fluid-xl mt-4 text-gray-400">Capabilities at a glance.</p>
         </ScrollReveal>
 
         {/* Specs Grid */}
@@ -147,8 +145,8 @@ export default function TechnicalSpecs() {
         >
           <h3 className="text-fluid-2xl font-bold text-white">Ready to get started?</h3>
           <p className="mt-4 text-gray-400">
-            PrepFlow works in any modern web browser. No installation required. Start managing your
-            kitchen in minutes.
+            PrepFlow works in any modern web browser. No installation required. Get started in your
+            browser.
           </p>
         </ScrollReveal>
       </div>

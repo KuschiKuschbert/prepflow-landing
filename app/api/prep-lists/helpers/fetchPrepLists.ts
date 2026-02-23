@@ -89,7 +89,7 @@ export async function fetchRelatedData(prepLists: PrepList[]) {
     sectionIds.length > 0
       ? supabaseAdmin
           .from('kitchen_sections')
-          .select('id, name, section_name, color_code, color')
+          .select('id, section_name, color_code, color')
           .in('id', sectionIds)
       : Promise.resolve({ data: [], error: null }),
     // Fetch prep list items

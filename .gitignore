@@ -119,6 +119,9 @@ pnpm-lock.yaml
 lint_report.json
 lint_report.txt
 architecture_full.txt
+CRAWL_REPORT.md
+CRAWL_REPORT.json
+QA_AUDIT_REPORT.md
 
 # SSL Certificates (local development)
 .certificates/

@@ -109,7 +109,7 @@ export async function GET(request: NextRequest) {
         *,
         recipes (
           id,
-          name,
+          recipe_name,
           description
         )
       `,

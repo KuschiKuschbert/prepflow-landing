@@ -28,7 +28,7 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
 
   return (
     <DashboardWidget title="Overview" icon={LayoutDashboard} className="h-full">
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid grid-cols-1 gap-6">
         <DashboardCard
           title="Total Ingredients"
           value={stats.totalIngredients}

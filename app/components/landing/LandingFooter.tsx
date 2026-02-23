@@ -14,7 +14,8 @@ export default function LandingFooter() {
           <div className="tablet:col-span-2">
             <h3 className="text-fluid-xl mb-4 font-bold text-white">PrepFlow</h3>
             <p className="text-fluid-sm text-gray-400">
-              Restaurant profitability optimization tool built by chefs for kitchens worldwide.
+              Restaurant profitability optimization for Australian cafés, restaurants, and food
+              trucks.
             </p>
           </div>
 

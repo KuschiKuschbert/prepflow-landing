@@ -22,6 +22,9 @@ import { ModernMobileNav } from './ModernMobileNav';
 // Below-the-fold components (lazy-loaded for better performance)
 const CloserLook = lazy(() => import('./CloserLook'));
 const Performance = lazy(() => import('./Performance'));
+const HowItWorksSection = lazy(() =>
+  import('./sections/HowItWorksSection').then(mod => ({ default: mod.HowItWorksSection })),
+);
 const TechnicalSpecs = lazy(() => import('./TechnicalSpecs'));
 const FinalCTA = lazy(() => import('./FinalCTA'));
 const LandingFooter = lazy(() => import('./LandingFooter'));
@@ -155,6 +158,11 @@ export default function LandingPageClient() {
           {/* Performance - Visual comparisons and performance metrics */}
           <Suspense fallback={<LandingSectionSkeleton />}>
             <Performance />
+          </Suspense>
+
+          {/* How It Works - Add → Analyze → Act */}
+          <Suspense fallback={<LandingSectionSkeleton />}>
+            <HowItWorksSection />
           </Suspense>
 
           {/* Technical Specs - Organized capabilities and features */}

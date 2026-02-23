@@ -55,7 +55,9 @@ export interface SectionData {
 
 export interface DBKitchenSection {
   id: string;
-  name: string;
+  /** Schema may use name or section_name depending on migration */
+  name?: string;
+  section_name?: string;
 }
 
 export interface DBRecipe {

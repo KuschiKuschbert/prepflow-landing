@@ -14,19 +14,8 @@
 
 - `app/components/landing/Hero.tsx` - Hero section
 - `app/components/landing/TourModal.tsx` - Tour modal component
-- `app/components/landing/HowItWorks.tsx` - Process explanation
-- `app/components/landing/sections/` - Landing page sections:
-  - `BenefitsSection.tsx` - Outcomes section
-  - `FeaturesSection.tsx` - Features showcase
-  - `FAQSection.tsx` - Frequently asked questions
-  - `LeadMagnetSection.tsx` - Email capture form
-  - `TrustSection.tsx` - Security and trust features
-  - `HowItWorksSection.tsx` - Process explanation
-  - `MyStorySection.tsx` - Founder story
-  - `ProblemOutcomeSection.tsx` - Problem/solution presentation
-  - `PracticeSection.tsx` - Practice examples
-  - `ContributingMarginSection.tsx` - Margin contribution explanation
-  - `GlobalFeaturesSection.tsx` - Global features showcase
+- `app/components/landing/LandingPageClient.tsx` - Main landing page (Hero, Highlights, CloserLook, Performance, HowItWorksSection, TechnicalSpecs, FinalCTA, Footer)
+- `app/components/landing/sections/HowItWorksSection.tsx` - Process explanation (Add → Analyze → Act)
 
 ### QA Checklist
 

@@ -91,10 +91,10 @@ export const ModernMobileNav = memo(function ModernMobileNav({
       ariaLabel: 'View features',
     },
     {
-      href: '#pricing',
-      label: 'Pricing',
+      href: '#cta',
+      label: 'Get Started',
       icon: DollarSign,
-      ariaLabel: 'View pricing',
+      ariaLabel: 'Get started',
     },
   ];
 

@@ -38,10 +38,10 @@ export function CurbOSPricing() {
   };
 
   return (
-    <section className="relative px-4 sm:px-6 lg:px-8">
+    <section className="tablet:px-6 desktop:px-8 relative px-4">
       <div className="mx-auto max-w-7xl">
         <div className="text-center">
-          <h1 className="font-sans text-4xl font-black tracking-tight text-white sm:text-6xl">
+          <h1 className="tablet:text-6xl font-sans text-4xl font-black tracking-tight text-white">
             PLANS FOR EVERY <span className="text-[#CCFF00]">KITCHEN</span>
           </h1>
           <p className="mt-4 text-xl text-gray-400">
@@ -50,7 +50,7 @@ export function CurbOSPricing() {
         </div>
 
         {/* Pricing Cards Grid */}
-        <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4">
+        <div className="tablet:grid-cols-2 mt-16 grid grid-cols-1 gap-8 xl:grid-cols-4">
           {/* 1. Starter */}
           <div className="relative rounded-2xl border border-white/10 bg-[#111] p-8 shadow-xl transition-all hover:-translate-y-1 hover:border-white/20">
             <h3 className="flex items-center gap-2 text-lg font-bold text-white">

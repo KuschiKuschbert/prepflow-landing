@@ -69,6 +69,22 @@ npm run test:e2e:debug
 
 Opens Playwright Inspector for step-by-step debugging.
 
+### Run Smoke Test (Quick)
+
+```bash
+npm run test:smoke
+```
+
+Runs a minimal set of key pages (landing, webapp, ingredients, recipes). Auth is bypassed (`AUTH0_BYPASS_DEV=true`). Fails on console errors.
+
+### Run Crawl (Full Page Coverage)
+
+```bash
+npm run test:crawl
+```
+
+Crawls all webapp pages, asserts no console errors. Generates `CRAWL_REPORT.md` and `CRAWL_REPORT.json` (see [Crawl Report](#crawl-report)). Auth bypassed.
+
 ### View Test Report
 
 ```bash
@@ -118,7 +134,24 @@ Opens the HTML test report in your browser.
 - Maximum depth: 3 levels
 - 5 monkey interactions per page
 
-### 3. Stress Tests (`stress-test.spec.ts`)
+### 3. Crawl Console Errors (`crawl-console-errors.spec.ts`)
+
+**Purpose**: Comprehensive page crawl to verify zero console errors across the webapp.
+
+**What it tests**:
+
+- Landing page
+- All webapp pages (via link following + seeded routes)
+- Asserts no non-allowlisted `console.error` or `console.warn` on any page
+
+**Outputs**:
+
+- `CRAWL_REPORT.md` - Per-page breakdown, fix checklist
+- `CRAWL_REPORT.json` - Machine-readable for CI/scripts; cross-reference: see `CRAWL_REPORT.md` for interpretation
+
+**Duration**: ~5-10 minutes
+
+### 5. Stress Tests (`stress-test.spec.ts`)
 
 **Purpose**: Tests application under stress conditions.
 
@@ -141,7 +174,7 @@ Opens the HTML test report in your browser.
 
 ## Understanding the QA Audit Report
 
-After tests complete, `QA_AUDIT_REPORT.md` is generated in the project root.
+After full E2E tests complete, `QA_AUDIT_REPORT.md` is generated in the project root.
 
 ### Report Structure
 
@@ -182,6 +215,28 @@ Screenshots are saved to `test-failures/` directory with descriptive names:
 
 - Format: `error-{type}-{url-slug}-{timestamp}.png`
 - Example: `error-console.error-webapp_ingredients-2025-01-15T10-30-45-123Z.png`
+
+## Crawl Report
+
+When you run `npm run test:crawl`, two reports are generated:
+
+1. **CRAWL_REPORT.md** - Human-readable per-page breakdown with fix checklist
+2. **CRAWL_REPORT.json** - Machine-readable for CI/scripts; cross-reference: see `CRAWL_REPORT.md` for interpretation
+
+The Markdown report includes a link to the JSON. The JSON includes a `markdownReport` field pointing to the MD file.
+
+**Use the JSON for**:
+
+- CI artifact uploads
+- Automated failure parsing
+- Scripts that consume error data
+
+**Use the MD for**:
+
+- Manual triage and fixing
+- Understanding error context and stack traces
+
+See `e2e/README.md` for a quick reference of all report outputs.
 
 ## Global Error Listener
 

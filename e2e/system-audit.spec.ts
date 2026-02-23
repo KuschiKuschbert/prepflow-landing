@@ -13,6 +13,7 @@ import { ensureAuthenticated } from './fixtures/auth-helper';
 import {
   collectPageErrors,
   getCollectedErrors,
+  getNonAllowlistedErrors,
   setupGlobalErrorListener,
 } from './fixtures/global-error-listener';
 import type { TestResultsSummary } from './helpers/report-generator';
@@ -90,6 +91,10 @@ test.describe('System Audit', () => {
     }
 
     const errors = getCollectedErrors();
+    const nonAllowlistedErrors = getNonAllowlistedErrors();
+
+    // Fail on any console.error, console.warn (non-allowlisted), uncaught, or network 5xx
+    expect(nonAllowlistedErrors.length).toBe(0);
 
     _testResults = {
       total: visitedPages.size,

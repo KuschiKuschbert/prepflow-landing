@@ -20,7 +20,7 @@ export default function KitchenOperations() {
       <DashboardWidget title="Kitchen Operations" icon={Settings} className="h-full">
         <div className="animate-pulse space-y-4">
           <div className="h-6 w-32 rounded bg-[var(--muted)]" />
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid grid-cols-1 gap-4">
             {[...Array(3)].map((_, i) => (
               <div key={i} className="h-24 rounded-xl bg-[var(--muted)]/50" />
             ))}

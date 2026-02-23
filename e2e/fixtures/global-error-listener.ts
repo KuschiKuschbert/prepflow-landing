@@ -144,6 +144,52 @@ export async function collectPageErrors(page: Page): Promise<void> {
 }
 
 /**
+ * Allowlist patterns for known third-party console output.
+ * Errors matching any pattern are excluded from assertion failures.
+ * Add patterns only when a known third-party (Partytown, Auth0, etc.) emits unavoidable output.
+ */
+const CONSOLE_ERROR_ALLOWLIST: RegExp[] = [
+  /partytown/i,
+  /auth0/i,
+  /stripe/i,
+  /hydration/i, // Next.js hydration mismatch - evaluate if acceptable for your app
+  /square.*unauthorized/i, // Square Status Hook / Mappings - expected when not admin
+  /feature.?flag.*unauthorized/i, // Feature Flags - expected when not admin or not authenticated
+];
+
+/**
+ * Whether to fail tests on console.warn (default: true).
+ * Set E2E_FAIL_ON_WARN=false to only fail on console.error.
+ */
+const FAIL_ON_WARN = process.env.E2E_FAIL_ON_WARN !== 'false';
+
+/**
+ * Check if an error matches any allowlist pattern
+ */
+function isAllowlisted(error: ErrorRecord): boolean {
+  const message = (error.message || '').toLowerCase();
+  const url = (error.url || '').toLowerCase();
+  const combined = `${message} ${url}`;
+  return CONSOLE_ERROR_ALLOWLIST.some(pattern => pattern.test(combined));
+}
+
+/**
+ * Get errors that are NOT allowlisted and should cause test failure.
+ * Includes console.error (always) and console.warn (when FAIL_ON_WARN is true).
+ * Uncaught and network 5xx are always included (never allowlisted).
+ */
+export function getNonAllowlistedErrors(): ErrorRecord[] {
+  return errorCollection.filter(error => {
+    if (error.type === 'uncaught') return true;
+    if (error.type === 'network' && error.statusCode && error.statusCode >= 500) return true;
+    if (error.type === 'console.error') return !isAllowlisted(error);
+    if (error.type === 'console.warn') return FAIL_ON_WARN && !isAllowlisted(error);
+    if (error.type === 'network') return false; // 4xx network errors - keep as-is
+    return true;
+  });
+}
+
+/**
  * Get all collected errors
  */
 export function getCollectedErrors(): ErrorRecord[] {
