@@ -124,6 +124,7 @@ export function FeatureImageContainer({
                 alt={previousImage.screenshotAlt}
                 width={1200}
                 height={800}
+                unoptimized
                 className="h-full w-full object-cover object-center"
                 style={{
                   maskImage:
@@ -131,7 +132,6 @@ export function FeatureImageContainer({
                   WebkitMaskImage:
                     'radial-gradient(ellipse 95% 95% at center, black 85%, transparent 100%)',
                 }}
-                quality={90}
                 loading="lazy"
                 sizes="(max-width: 1024px) 100vw, 60vw"
               />
@@ -161,6 +161,7 @@ export function FeatureImageContainer({
                 alt={currentImage.screenshotAlt}
                 width={1200}
                 height={800}
+                unoptimized
                 className="h-full w-full object-cover object-center"
                 style={{
                   maskImage:
@@ -168,7 +169,6 @@ export function FeatureImageContainer({
                   WebkitMaskImage:
                     'radial-gradient(ellipse 95% 95% at center, black 85%, transparent 100%)',
                 }}
-                quality={90}
                 loading="lazy"
                 sizes="(max-width: 1024px) 100vw, 60vw"
                 onLoad={onImageLoad}

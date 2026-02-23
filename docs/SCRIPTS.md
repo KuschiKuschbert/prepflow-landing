@@ -484,6 +484,58 @@ npx tsx scripts/your-repair-script.ts
 
 ## Screenshots & Assets
 
+### Capture Landing Page Screenshots
+
+**Script:** `scripts/capture-landing-screenshots.js`
+**Command:** `npm run capture:screenshots`
+**Referenced in:** Landing Page Screenshot Replacement Plan
+
+Captures current webapp screens for the landing page (Hero, ProductFeatures, Highlights, CloserLook).
+
+**Prerequisites:**
+
+- Dev server running: `npm run dev` (port 3000)
+- Authenticated session (webapp routes are protected)
+
+**First run (manual login):**
+
+```bash
+npm run capture:screenshots -- --headed
+```
+
+A browser window opens. Log in via Auth0 when prompted. After you reach the webapp, press Enter in the terminal. The script captures all 9 screenshots and persists your session to `.screenshot-session/` for future headless runs.
+
+**Subsequent runs (headless):**
+
+```bash
+npm run capture:screenshots
+```
+
+Uses the saved session in `.screenshot-session/`—no login required.
+
+**Options:**
+
+- `--base-url=<url>` — Base URL (default: `http://localhost:3000`)
+- `--headed` — Show browser for manual login
+
+**Output:** PNG files in `public/images/`:
+
+- `dashboard-screenshot.png`
+- `ingredients-management-screenshot.png`
+- `cogs-calculator-screenshot.png`
+- `recipe-book-screenshot.png`
+- `performance-analysis-screenshot.png`
+- `functions-screenshot.png`
+- `temperature-monitoring-screenshot.png`
+- `cleaning-roster-screenshot.png`
+- `settings-screenshot.png`
+
+**Auth alternatives:** If you prefer not to persist session, set `DISABLE_ALLOWLIST=true` in `.env.local` to bypass allowlist, then capture with any authenticated session. The `--headed` flow is recommended for CI or one-off runs.
+
+**After capturing:** Next.js caches optimized images. If you still see old screenshots, run `rm -rf .next/cache/images` and restart the dev server.
+
+---
+
 ### Add Screenshots
 
 **Script:** `scripts/add-screenshots.sh`

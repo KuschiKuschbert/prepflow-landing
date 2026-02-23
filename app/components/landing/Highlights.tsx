@@ -4,7 +4,15 @@ import { GlowCard } from '@/components/ui/GlowCard';
 import { Icon } from '@/components/ui/Icon';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { motion } from 'framer-motion';
-import { BarChart3, BookOpen, DollarSign, Leaf, LucideIcon, Thermometer } from 'lucide-react';
+import {
+  BarChart3,
+  BookOpen,
+  CalendarDays,
+  DollarSign,
+  Leaf,
+  LucideIcon,
+  Thermometer,
+} from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
 
@@ -30,6 +38,13 @@ const highlights: Highlight[] = [
     icon: DollarSign,
     screenshot: '/images/dashboard-screenshot.png',
     color: '#D925C7',
+  },
+  {
+    name: 'Functions & Events',
+    description: 'Catering, weddings, private dining—calendar, runsheets, and clients, all in place.',
+    icon: CalendarDays,
+    screenshot: '/images/functions-events-screenshot.png',
+    color: '#FF6B00',
   },
   {
     name: 'Temperature & Compliance',
@@ -62,10 +77,10 @@ const HighlightCard = React.memo(function HighlightCard({
   index: number;
 }) {
   return (
-    <ScrollReveal variant="fade-up" delay={index * 0.1}>
+    <ScrollReveal variant="fade-up" delay={index * 0.1} className="h-full">
       <GlowCard
         glowColor={`rgba(${parseInt(highlight.color.slice(1, 3), 16)}, ${parseInt(highlight.color.slice(3, 5), 16)}, ${parseInt(highlight.color.slice(5, 7), 16)}, 0.1)`}
-        className="group relative cursor-pointer overflow-hidden p-8"
+        className="group relative flex h-full min-h-[240px] cursor-pointer flex-col overflow-hidden p-8"
       >
         <HighlightIcon icon={highlight.icon} />
 
@@ -73,7 +88,9 @@ const HighlightCard = React.memo(function HighlightCard({
         <h3 className="text-fluid-xl mb-3 font-light text-white">{highlight.name}</h3>
 
         {/* Description */}
-        <p className="text-fluid-base leading-relaxed text-gray-400">{highlight.description}</p>
+        <p className="text-fluid-base flex-1 leading-relaxed text-gray-400">
+          {highlight.description}
+        </p>
 
         <HighlightImageOverlay highlight={highlight} />
         <HighlightAccent highlight={highlight} />
@@ -112,9 +129,17 @@ function HighlightImageOverlay({ highlight }: { highlight: Highlight }) {
 }
 
 function HighlightAccent({ highlight }: { highlight: Highlight }) {
+  const accentClass =
+    highlight.name.includes('Ingredients') || highlight.name.includes('Recipe')
+      ? 'bg-[#29E7CD]'
+      : highlight.name.includes('COGS') || highlight.name.includes('Menu')
+        ? 'bg-[#D925C7]'
+        : highlight.name.includes('Functions')
+          ? 'bg-[#FF6B00]'
+          : 'bg-[#3B82F6]';
   return (
     <motion.div
-      className={`absolute bottom-0 left-0 h-1 w-full ${highlight.name.includes('Ingredients') || highlight.name.includes('Recipe') ? 'bg-[#29E7CD]' : highlight.name.includes('COGS') || highlight.name.includes('Menu') ? 'bg-[#D925C7]' : 'bg-[#3B82F6]'}`}
+      className={`absolute bottom-0 left-0 h-1 w-full ${accentClass}`}
       whileHover={{ height: '8px' }}
       transition={{ duration: 0.3 }}
     />
