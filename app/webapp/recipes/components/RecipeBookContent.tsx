@@ -83,7 +83,9 @@ export function RecipeBookContent({ initialDishes, initialRecipes }: RecipeBookC
           preselectedRecipeId={preselectedRecipeId}
         />
       )}
-      {activeTab === 'menu-builder' && <MenuBuilderTab />}
+      {activeTab === 'menu-builder' && (
+        <MenuBuilderTab initialDishes={initialDishes} initialRecipes={initialRecipes} />
+      )}
     </div>
   );
 }

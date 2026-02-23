@@ -1,6 +1,7 @@
 'use client';
 
 import type { AppFunction } from '@/app/api/functions/helpers/schemas';
+import { getCachedData, cacheData } from '@/lib/cache/data-cache';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Icon } from '@/components/ui/Icon';
@@ -78,15 +79,23 @@ function getDayCount(func: ExtendedFunction): number {
   );
 }
 
+const CACHE_KEY_FUNCTIONS = 'functions_list';
+const CACHE_KEY_CUSTOMERS = 'functions_customers';
+
 export default function FunctionsPage() {
-  const [functions, setFunctions] = useState<ExtendedFunction[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // Cache-first: initialize from cache for instant display on repeat visits
+  const [functions, setFunctions] = useState<ExtendedFunction[]>(
+    () => getCachedData<ExtendedFunction[]>(CACHE_KEY_FUNCTIONS) ?? [],
+  );
+  const [isLoading, setIsLoading] = useState(() => !getCachedData(CACHE_KEY_FUNCTIONS));
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [calendarMonth, setCalendarMonth] = useState(new Date());
   const [showMobileCalendar, setShowMobileCalendar] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [customerOptions, setCustomerOptions] = useState<CustomerOption[]>([]);
+  const [customerOptions, setCustomerOptions] = useState<CustomerOption[]>(
+    () => getCachedData<CustomerOption[]>(CACHE_KEY_CUSTOMERS) ?? [],
+  );
   const { showConfirm, ConfirmDialog } = useConfirm();
 
   useEffect(() => {
@@ -95,12 +104,14 @@ export default function FunctionsPage() {
   }, []);
 
   const fetchFunctions = async () => {
-    setIsLoading(true);
+    if (!getCachedData(CACHE_KEY_FUNCTIONS)) setIsLoading(true);
     try {
-      const response = await fetch('/api/functions');
+      const response = await fetch('/api/functions', { cache: 'no-store' });
       if (response.ok) {
         const data = await response.json();
-        setFunctions(Array.isArray(data) ? data : []);
+        const list = Array.isArray(data) ? data : [];
+        setFunctions(list);
+        cacheData(CACHE_KEY_FUNCTIONS, list);
       }
     } catch {
       // Silently fail
@@ -111,10 +122,12 @@ export default function FunctionsPage() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await fetch('/api/customers');
+      const response = await fetch('/api/customers', { cache: 'no-store' });
       if (response.ok) {
         const data = await response.json();
-        setCustomerOptions(data);
+        const list = Array.isArray(data) ? data : [];
+        setCustomerOptions(list);
+        cacheData(CACHE_KEY_CUSTOMERS, list);
       }
     } catch {
       // Non-critical

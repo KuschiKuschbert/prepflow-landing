@@ -27,7 +27,6 @@ export async function fetchRecipeWithIngredients(recipeId: string) {
         ingredients (
           id,
           ingredient_name,
-          name,
           unit,
           category
         )

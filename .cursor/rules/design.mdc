@@ -808,6 +808,10 @@ The application uses sessionStorage-based caching and intelligent prefetching to
   - **Ingredients**: Caches first page of ingredients
   - **Performance**: Caches performance analysis data
   - **Temperature Logs**: Caches first page with default filters
+  - **Recipe-Sharing**: Caches recipes and shares for instant display
+  - **Functions**: Caches functions list and customers
+  - **Order-Lists**: Uses menu data with cache-first where applicable
+  - **Locked menu view**: Uses light API (`?locked=1`) for faster load; MenuCard prefetches on hover
 
 - **Instant Display Pattern**: All pages follow this pattern:
   1. Initialize state with cached data (if available) for instant display

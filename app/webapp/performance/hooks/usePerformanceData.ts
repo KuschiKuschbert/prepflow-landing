@@ -24,7 +24,11 @@ export function usePerformanceData(dateRange?: DateRange) {
     setState(prev => ({ ...prev, loading: true, error: null }));
 
     try {
-      const newState = await fetchPerformanceApi(dateRange);
+      // Fetch main performance data and previous period data in parallel
+      const [newState] = await Promise.all([
+        fetchPerformanceApi(dateRange),
+        fetchPreviousPeriodData(dateRange),
+      ]);
       logger.dev('✅ usePerformanceData: Received data:', {
         itemsCount: newState.performanceItems.length,
         hasMetadata: !!newState.metadata,
@@ -37,9 +41,6 @@ export function usePerformanceData(dateRange?: DateRange) {
       if (newState.performanceItems.length > 0) {
         onPerformanceAnalyzed();
       }
-
-      // Fetch previous period data for trend comparison
-      await fetchPreviousPeriodData(dateRange);
     } catch (error) {
       logger.error('❌ usePerformanceData: Error fetching performance data:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';

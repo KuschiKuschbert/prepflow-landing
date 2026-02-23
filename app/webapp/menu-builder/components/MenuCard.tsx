@@ -2,6 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
+import { prefetchApi } from '@/lib/cache/data-cache';
 import { Menu } from '@/lib/types/menu-builder';
 import { Check, Edit2, Lock, PartyPopper, Printer, Trash2, X } from 'lucide-react';
 import { memo } from 'react';
@@ -71,17 +72,14 @@ export const MenuCard = memo(function MenuCard({
     menu.menu_type === 'function' || (menu.menu_type && menu.menu_type.startsWith('function_'));
   const functionConfig = isFunctionMenu ? FUNCTION_MENU_CONFIG : null;
 
-  if (isLocked) {
-    logger.dev('[MenuCard] Menu is locked, print button should be visible', {
-      menuId: menu.id,
-      menuName: menu.menu_name,
-      hasOnPrintClick: !!onPrintClick,
-    });
-  }
-
   return (
     <div
       key={menu.id}
+      onMouseEnter={() => {
+        if (isLocked) {
+          prefetchApi(`/api/menus/${menu.id}?locked=1`);
+        }
+      }}
       className={`group relative cursor-pointer overflow-visible rounded-2xl border p-6 transition-all hover:shadow-lg ${
         isFunctionMenu
           ? 'border-l-4 border-t-[var(--border)] border-r-[var(--border)] border-b-[var(--border)] border-l-[var(--primary)] bg-gradient-to-br from-[var(--primary)]/5 via-[var(--surface)] to-[var(--accent)]/5 hover:border-l-[var(--accent)]'

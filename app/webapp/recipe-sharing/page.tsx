@@ -4,6 +4,7 @@ import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { markFirstDone } from '@/lib/page-help/first-done-storage';
+import { getCachedData, cacheData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
 import { useOnRecipeShared } from '@/lib/personality/hooks';
 import { useNotification } from '@/contexts/NotificationContext';
@@ -32,13 +33,24 @@ interface RecipeShare {
   recipes: Recipe;
 }
 
+const CACHE_KEY_RECIPES = 'recipe_sharing_recipes';
+const CACHE_KEY_SHARES = 'recipe_sharing_shares';
+
 export default function RecipeSharingPage() {
   const { t } = useTranslation();
   const { showSuccess, showError } = useNotification();
   const onRecipeShared = useOnRecipeShared();
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [recipeShares, setRecipeShares] = useState<RecipeShare[]>([]);
-  const [loading, setLoading] = useState(false);
+  // Cache-first: initialize from cache for instant display on repeat visits
+  const [recipes, setRecipes] = useState<Recipe[]>(
+    () => getCachedData<Recipe[]>(CACHE_KEY_RECIPES) ?? [],
+  );
+  const [recipeShares, setRecipeShares] = useState<RecipeShare[]>(
+    () => getCachedData<RecipeShare[]>(CACHE_KEY_SHARES) ?? [],
+  );
+  const [loading, setLoading] = useState(() => {
+    const hasCache = getCachedData(CACHE_KEY_RECIPES) || getCachedData(CACHE_KEY_SHARES);
+    return !hasCache;
+  });
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -61,9 +73,15 @@ export default function RecipeSharingPage() {
 
   const fetchRecipes = async () => {
     try {
-      const response = await fetch(`/api/recipes?userId=${userId}`);
+      const response = await fetch(`/api/recipes?pageSize=200&userId=${userId}`, {
+        cache: 'no-store',
+      });
       const result = await response.json();
-      if (result.success) setRecipes(result.data);
+      const recipesData = result.recipes ?? result.data ?? [];
+      if (result.success && Array.isArray(recipesData)) {
+        setRecipes(recipesData);
+        cacheData(CACHE_KEY_RECIPES, recipesData);
+      }
     } catch (err) {
       logger.error('Failed to fetch recipes:', err);
     }
@@ -71,10 +89,12 @@ export default function RecipeSharingPage() {
 
   const fetchRecipeShares = async () => {
     try {
-      const response = await fetch(`/api/recipe-share?userId=${userId}`);
+      const response = await fetch(`/api/recipe-share?userId=${userId}`, { cache: 'no-store' });
       const result = await response.json();
       if (result.success) {
-        setRecipeShares(result.data);
+        const sharesData = result.data ?? [];
+        setRecipeShares(sharesData);
+        cacheData(CACHE_KEY_SHARES, sharesData);
       } else {
         setError(result.message || 'Failed to fetch recipe shares');
       }

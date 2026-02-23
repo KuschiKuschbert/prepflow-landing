@@ -1,4 +1,5 @@
 'use client';
+import { cacheData } from '@/lib/cache/data-cache';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { PageTipsCard } from '@/components/ui/PageTipsCard';
 import { markFirstDone } from '@/lib/page-help/first-done-storage';
@@ -19,6 +20,20 @@ interface MenuBuilderClientProps {
   selectedMenu: Menu | null;
   setSelectedMenu: (menu: Menu | null) => void;
   onBack: () => void;
+  /** Pre-seed dishes/recipes cache from server (avoids refetch when arriving from recipes page) */
+  initialDishes?: Array<{
+    id: string;
+    dish_name: string;
+    description?: string;
+    selling_price: number;
+  }>;
+  initialRecipes?: Array<{
+    id: string;
+    recipe_name: string;
+    description?: string;
+    yield?: number;
+    selling_price?: number;
+  }>;
 }
 
 type MenuTab = 'a_la_carte' | 'function' | 'all';
@@ -27,12 +42,9 @@ export default function MenuBuilderClient({
   selectedMenu,
   setSelectedMenu,
   onBack,
+  initialDishes,
+  initialRecipes,
 }: MenuBuilderClientProps) {
-  logger.dev('🟡 [MenuBuilderClient] COMPONENT EXECUTING - NEW CODE VERSION', {
-    selectedMenuId: selectedMenu?.id,
-    timestamp: new Date().toISOString(),
-  });
-
   const {
     menus,
     setMenus,
@@ -50,6 +62,13 @@ export default function MenuBuilderClient({
   const onBackRef = useRef(onBack);
   onBackRef.current = onBack;
   const hasInitializedRef = useRef(false);
+
+  // Pre-seed dishes/recipes cache when arriving from recipes page (avoids duplicate fetch)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (initialDishes?.length) cacheData('menu_builder_dishes', initialDishes);
+    if (initialRecipes?.length) cacheData('menu_builder_recipes', initialRecipes);
+  }, [initialDishes, initialRecipes]);
 
   const {
     handleCreateMenu,
@@ -74,13 +93,7 @@ export default function MenuBuilderClient({
         const result = await fetchMenus(updateSelected, showLoading);
         if (result?.updateSelected && result?.menus && selectedMenu) {
           const updatedMenu = result.menus.find((m: Menu) => m.id === selectedMenu.id);
-          if (updatedMenu) {
-            logger.dev(`[MenuBuilderClient] fetchMenus - Updating selectedMenu`, {
-              oldMenu: selectedMenu,
-              newMenu: updatedMenu,
-            });
-            setSelectedMenu(updatedMenu);
-          }
+          if (updatedMenu) setSelectedMenu(updatedMenu);
         }
       } catch (err) {
         logger.error('[MenuBuilderClient.tsx] Error in catch block:', {
@@ -173,18 +186,6 @@ export default function MenuBuilderClient({
       markFirstDone('menu-builder');
     }
   }, [menus.length]);
-
-  // Log when selectedMenu prop changes
-  useEffect(() => {
-    if (selectedMenu) {
-      logger.dev('[MenuBuilderClient] Rendering MenuEditor with selectedMenu', {
-        menuId: selectedMenu.id,
-        menuName: selectedMenu.menu_name,
-        isLocked: selectedMenu.is_locked,
-        lockedAt: selectedMenu.locked_at,
-      });
-    }
-  }, [selectedMenu]);
 
   // Only show skeleton if we have no cached data AND are checking/loading
   // If we have cached menus, show them immediately even while checking DB

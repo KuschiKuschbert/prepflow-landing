@@ -81,7 +81,9 @@ export default function MenuList({
 
       try {
         // Fetch menu with items (quick fetch, no AI generation)
-        const response = await fetch(`/api/menus/${menu.id}`, { cache: 'no-store' });
+        // Use light API (?locked=1) for locked menus to skip per-item enrichment
+        const url = menu.is_locked ? `/api/menus/${menu.id}?locked=1` : `/api/menus/${menu.id}`;
+        const response = await fetch(url, { cache: 'no-store' });
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
           throw new Error(errorData.error || errorData.message || 'Failed to fetch menu data');

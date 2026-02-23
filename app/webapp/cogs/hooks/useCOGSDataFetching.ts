@@ -18,15 +18,15 @@ export function useCOGSDataFetching() {
       setLoading(true);
       setError(null);
 
-      // Fetch ingredients using API endpoint (same as ingredients page) to avoid RLS issues
-      const ingredientsResponse = await fetch('/api/ingredients?pageSize=1000', {
-        cache: 'no-store',
-      });
-      const ingredientsResult = await ingredientsResponse.json();
-
-      // Fetch recipes using API endpoint (same as recipes page) to avoid RLS issues
-      const recipesResponse = await fetch('/api/recipes?pageSize=1000', { cache: 'no-store' });
-      const recipesResult = await recipesResponse.json();
+      // Fetch ingredients and recipes in parallel
+      const [ingredientsResponse, recipesResponse] = await Promise.all([
+        fetch('/api/ingredients?pageSize=1000', { cache: 'no-store' }),
+        fetch('/api/recipes?pageSize=1000', { cache: 'no-store' }),
+      ]);
+      const [ingredientsResult, recipesResult] = await Promise.all([
+        ingredientsResponse.json(),
+        recipesResponse.json(),
+      ]);
 
       if (!ingredientsResponse.ok || ingredientsResult.error) {
         logger.error('Error fetching ingredients:', ingredientsResult.error);

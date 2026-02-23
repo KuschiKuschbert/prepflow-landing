@@ -12,6 +12,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 export async function createShareRecord(shareData: {
   recipe_id: string;
   share_type: string;
+  user_id?: string;
   recipient_email?: string;
   notes?: string;
 }) {
@@ -25,6 +26,7 @@ export async function createShareRecord(shareData: {
     .insert({
       recipe_id: shareData.recipe_id,
       share_type: shareData.share_type,
+      user_id: shareData.user_id,
       recipient_email: shareData.recipient_email,
       notes: shareData.notes,
       status: 'pending',

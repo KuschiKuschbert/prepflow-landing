@@ -154,11 +154,11 @@ Remove `"minimatch": ">=10.2.1"` from overrides. Run `npm install` and `npm run 
 
 **Symptom:** 500 on `/api/roster/shifts`; Postgres error `column shifts.user_id does not exist`.
 
-**Root Cause:** The shifts table schema may differ from code expectations (e.g. multi-tenancy migration renamed to `created_by`, `owner_id`, or uses a different segregation pattern). API code filters by `user_id`.
+**Root Cause:** The multi-tenancy migration (`20260203000000`) added `user_id` to `roster_shifts`, but the actual table is named `shifts`. The shifts table was never migrated.
 
-**Fix:** Check Supabase schema for `shifts` table. If column was renamed, update roster shift handlers to use the correct column. If using RLS/tenant isolation, ensure the filter column matches the schema. Add migration if the table was created without `user_id`.
+**Fix:** Migration `20260224000000_add_recipe_shares_and_shifts_user_id.sql` adds `user_id` to `shifts` and backfills from `employees.user_id`. Run `supabase db push` or apply the migration.
 
-**Derived Rule:** When roster/shifts APIs fail with column errors, verify `shifts` table schema matches API expectations (user_id vs created_by etc.).
+**Derived Rule:** When roster/shifts APIs fail with column errors, verify `shifts` table schema matches API expectations. The table name is `shifts`, not `roster_shifts`.
 
 ---
 
@@ -168,6 +168,6 @@ Remove `"minimatch": ">=10.2.1"` from overrides. Run `npm install` and `npm run 
 
 **Root Cause:** The `recipe_shares` table may not exist in the current database (migration not applied, or table was never created in this environment).
 
-**Fix:** Create the `recipe_shares` table via Supabase migration if it does not exist. Schema should include: id, recipe_id, shared_with_user_id, shared_by_user_id, created_at. Run `supabase db push` or apply the migration. Reload schema cache if needed (`NOTIFY pgrst, 'reload schema'`).
+**Fix:** Migration `20260224000000_add_recipe_shares_and_shifts_user_id.sql` creates the `recipe_shares` table with: id, recipe_id, user_id, share_type, recipient_email, notes, status, created_at, updated_at. Run `supabase db push` or apply the migration. The POST route now requires auth and passes user_id to createShareRecord.
 
 **Derived Rule:** recipe-share feature requires `recipe_shares` table; ensure migration is applied in all environments.

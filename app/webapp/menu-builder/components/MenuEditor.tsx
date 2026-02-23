@@ -59,6 +59,7 @@ function MenuEditorComponent({ menu, onMenuUpdated }: MenuEditorProps) {
   } = useMenuData({
     menuId: menu.id,
     onError: showError,
+    isLocked: menu.is_locked ?? false,
   });
 
   const menuItems = useStableMenuItems(rawMenuItems, menu.id);

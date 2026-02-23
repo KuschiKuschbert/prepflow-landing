@@ -1120,8 +1120,13 @@ The application uses sessionStorage-based caching and intelligent prefetching to
    - Prefetch on mount for likely-to-be-accessed pages
    - Use link prefetch for browser-level optimization
    - Avoid prefetching when data changes frequently
+   - **Prefetch Requirement**: When adding new webapp routes, add corresponding entries to `lib/cache/prefetch-config.ts` PREFETCH_MAP
 
-7. **Memoization Strategy**: Use React memoization to prevent unnecessary re-renders
+7. **Light API Pattern**: When building read-only features (display, print), check if the API supports a lightweight query param to skip expensive enrichment
+   - Example: `GET /api/menus/[id]?locked=1` skips per-item price/dietary enrichment for locked menu display and print
+   - Use light API for MenuList print when `menu.is_locked`; MenuCard prefetches on hover for locked menus
+
+8. **Memoization Strategy**: Use React memoization to prevent unnecessary re-renders
    - Use `React.memo()` for components that receive stable props
    - Use `useMemo()` for expensive computations (filtering, sorting, transforming)
    - Use `useCallback()` for functions passed as props to memoized components
@@ -1248,6 +1253,8 @@ try {
 10. **Never call `fetchData()` after successful mutations** - Rely on optimistic updates
 11. Monitor performance using browser DevTools
 12. Consider pagination for large datasets
+13. **Cache-first for list pages**: When building new list/list-detail pages, use the instant display pattern (getCachedData on init, fetch in background, cacheData on success)
+14. **Prefetch requirement**: When adding new webapp routes, add corresponding entries to `lib/cache/prefetch-config.ts` PREFETCH_MAP
 
 **Implementation Guidelines:** Identify N+1 patterns, create batch endpoints, use parallel hooks, implement caching, add prefetching routes, implement optimistic updates, test performance, document patterns.
 

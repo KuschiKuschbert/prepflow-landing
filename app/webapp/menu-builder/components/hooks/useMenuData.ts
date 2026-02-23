@@ -11,6 +11,8 @@ import { refreshStatistics as refreshStatisticsHelper } from './useMenuData/help
 interface UseMenuDataProps {
   menuId: string;
   onError?: (message: string) => void;
+  /** When true, use phased loading: fetch only menu first (snappy), then dishes/recipes/stats in background */
+  isLocked?: boolean;
 }
 
 interface UseMenuDataReturn {
@@ -27,7 +29,11 @@ interface UseMenuDataReturn {
   setStatistics: React.Dispatch<React.SetStateAction<MenuStatistics | null>>;
 }
 
-export function useMenuData({ menuId: rawMenuId, onError }: UseMenuDataProps): UseMenuDataReturn {
+export function useMenuData({
+  menuId: rawMenuId,
+  onError,
+  isLocked = false,
+}: UseMenuDataProps): UseMenuDataReturn {
   // Defensive coding: Clean menu ID if it has trailing comma or other garbage
   // This fixes the "can't find menu,L" error where ",L" is appended to the ID
   const menuId = rawMenuId?.split(',')[0]?.trim();
@@ -94,6 +100,8 @@ export function useMenuData({ menuId: rawMenuId, onError }: UseMenuDataProps): U
       setStatistics,
       setLoading,
       showLoading: !hasCachedData,
+      isLockedMenu: isLocked,
+      getCurrentMenuId: () => prevMenuIdRef.current,
     });
   }, [
     menuId,
@@ -101,6 +109,7 @@ export function useMenuData({ menuId: rawMenuId, onError }: UseMenuDataProps): U
     dishesCacheKey,
     recipesCacheKey,
     onError,
+    isLocked,
     setMenuItems,
     setDishes,
     setRecipes,

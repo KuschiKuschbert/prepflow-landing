@@ -31,7 +31,8 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     const validationError = validateMenuId(menuId);
     if (validationError) return validationError;
 
-    const menu = await fetchMenuWithItems(menuId, userId);
+    const locked = _req.nextUrl.searchParams.get('locked') === '1';
+    const menu = await fetchMenuWithItems(menuId, userId, { locked });
 
     return NextResponse.json({
       success: true,

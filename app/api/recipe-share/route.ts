@@ -1,5 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -45,6 +46,8 @@ export async function POST(request: NextRequest) {
 
     const { recipeId, shareType, recipientEmail, notes } = validationResult.data;
 
+    const { userId } = await getAuthenticatedUser(request);
+
     // Fetch recipe with ingredients
     const recipe = await fetchRecipeWithIngredients(recipeId);
 
@@ -52,6 +55,7 @@ export async function POST(request: NextRequest) {
     const shareRecord = await createShareRecord({
       recipe_id: recipeId,
       share_type: shareType,
+      user_id: userId,
       recipient_email: recipientEmail,
       notes,
     });
