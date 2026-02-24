@@ -17,6 +17,7 @@ export interface OrchestratorConfig {
     selfOptimize: boolean;
     metaLearning: boolean;
     ruleEvolution: boolean;
+    skillEvolution: boolean;
     autoRefactor: boolean;
     predictiveAnalysis: boolean;
     architectureAnalysis: boolean;
@@ -64,6 +65,11 @@ export class RSIOrchestrator {
       // 5. Rule Evolution
       if (config.modules.ruleEvolution) {
         await this.runScript('rsi:rule', config.dryRun, ['generate']);
+      }
+
+      // 5b. Skill Evolution (from error-learning + RSI - runs during rsi:evolve and skill:evolve)
+      if (config.modules.skillEvolution) {
+        await this.runScript('skill:evolve', config.dryRun, ['--auto-map']);
       }
 
       // 6. Auto-Refactoring (Expensive, usually separate)

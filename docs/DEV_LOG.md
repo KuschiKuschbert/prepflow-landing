@@ -1,6 +1,15 @@
 # Dev Log
 
 ## 2026-02-24
+- **Automation extensions implemented**: (1) RSI orchestrator passes `--auto-map` to skill:evolve. (2) Error-learning workflow: skill:evolve --auto-map, troubleshooting:apply, commit+push learned docs when CI succeeds on main. (3) Safe-merge runs dev:log:from-git --yes --count=5 after changelog. (4) CI: new e2e-crawl job on main (test:crawl, 15min timeout, uploads CRAWL_REPORT artifacts).
+- **fix: resolve minimatch ReDoS vulnerability (GHSA-3ppc-4f35-3m26)**: - Add overrides: minimatch ^10.2.1, test-exclude 7.0.2
+- test-exclude 7.x uses minimatch 10.x (6.x required 5.x)
+- 0 vulnerabilities; lint, type-check, test, test:coverage, build pass
+- Document in SECURITY_BEST_PRACTICES and TROUBLESHOOTING_LOG
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+- **Automation plan implemented**: Added skill:merge, skill:map-suggest, dev:log, file-size hints, changelog in safe-merge, troubleshooting:suggest, rsi:derived-summary
 
 - **minimatch ReDoS vulnerability resolved**: npm audit showed 27 high-severity vulnerabilities (GHSA-3ppc-4f35-3m26). Added package.json overrides: `"minimatch": "^10.2.1"` and `"test-exclude": "7.0.2"`. test-exclude 7.x uses minimatch 10.x (6.x required 5.x). Result: 0 vulnerabilities; lint, type-check, test, test:coverage, build all pass. Documented in TROUBLESHOOTING_LOG and docs/SECURITY_BEST_PRACTICES.md (Dependency Vulnerabilities).
 - **Codebase check and cleanup fixes**:

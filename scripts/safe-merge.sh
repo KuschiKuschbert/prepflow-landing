@@ -112,8 +112,23 @@ git checkout main
 git pull origin main
 git merge "$CURRENT_BRANCH"
 
-# 3. Cleanup Phase
-echo -e "\n${YELLOW}🧹 Phase 3: Cleanup${NC}"
+# 3. Changelog Phase (informational)
+echo -e "\n${YELLOW}📝 Phase 3: Changelog${NC}"
+echo -n "Updating CHANGELOG from commits... "
+if npm run changelog 2>/dev/null; then
+    echo -e "${GREEN}Done${NC}"
+else
+    echo -e "${YELLOW}Skipped (no new commits or changelog script issue)${NC}"
+fi
+echo -n "Appending merged commits to DEV_LOG... "
+if npm run dev:log:from-git -- --yes --count=5 2>/dev/null; then
+    echo -e "${GREEN}Done${NC}"
+else
+    echo -e "${YELLOW}Skipped${NC}"
+fi
+
+# 4. Cleanup Phase
+echo -e "\n${YELLOW}🧹 Phase 4: Cleanup${NC}"
 read -p "Delete branch $CURRENT_BRANCH? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then

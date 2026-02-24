@@ -45,10 +45,13 @@ jobs:
     name: Detect Fixes
     runs-on: ubuntu-latest
     if: success() # Only run if CI workflow succeeded (errors were fixed)
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 10 # Need git history for fix detection
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
+          fetch-depth: 10
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -62,17 +65,26 @@ jobs:
         run: |
           node scripts/error-learning/auto-document-fix.js check || true
         continue-on-error: true
-      - name: Generate rules
+      - name: Generate rules and skill proposals
         run: |
-          # Generate rules from knowledge base (if patterns detected)
-          node -e "
-            const { generateRulesFromKnowledgeBase } = require('./lib/error-learning/rule-generator.ts');
-            generateRulesFromKnowledgeBase().catch(err => {
-              console.error('Rule generation failed:', err);
-              process.exit(0); // Don't fail the workflow
-            });
-          " || true
+          npm run skill:evolve -- --auto-map || true
         continue-on-error: true
+      - name: Apply troubleshooting entries
+        run: |
+          npm run troubleshooting:apply || true
+        continue-on-error: true
+      - name: Commit and push learned docs
+        if: github.event.workflow_run && github.event.workflow_run.head_branch == 'main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/TROUBLESHOOTING_LOG.md docs/skill-learning/skill-mapping.json docs/SKILL_LEARNING.md 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "No learned doc changes to commit."
+          else
+            git commit -m "docs: sync from error-learning (troubleshooting, skill-mapping, SKILL_LEARNING)"
+            git push origin HEAD:main
+          fi
 
   learning-report:
     name: Generate Learning Report
