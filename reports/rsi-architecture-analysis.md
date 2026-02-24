@@ -1,9 +1,9 @@
 # 🏗️ RSI Architecture Analysis Report
 
-**Date:** 2/12/2026, 7:04:15 AM
+**Date:** 2/24/2026, 4:04:24 PM
 
 **Detected Design Patterns:** 6
-**Detected Anti-Patterns:** 464
+**Detected Anti-Patterns:** 475
 
 ## ⚠️ Anti-Patterns Detected
 
@@ -118,7 +118,7 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/api/admin/tiers/route.ts`
-**Description:** Found 18 magic numbers
+**Description:** Found 22 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
@@ -207,6 +207,12 @@
 
 ### Magic Numbers (MEDIUM)
 
+**File:** `app/api/compliance-records/route.ts`
+**Description:** Found 12 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
 **File:** `app/api/compliance-types/route.ts`
 **Description:** Found 16 magic numbers
 **Suggestion:** Extract magic numbers to named constants
@@ -280,7 +286,7 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/api/dishes/[id]/route.ts`
-**Description:** Found 12 magic numbers
+**Description:** Found 14 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
@@ -292,13 +298,19 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/api/employees/[id]/qualifications/[qual_id]/route.ts`
-**Description:** Found 11 magic numbers
+**Description:** Found 13 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/api/employees/[id]/qualifications/route.ts`
 **Description:** Found 13 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
+**File:** `app/api/employees/route.ts`
+**Description:** Found 12 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
@@ -418,7 +430,7 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/api/menus/[id]/items/[itemId]/route.ts`
-**Description:** Found 12 magic numbers
+**Description:** Found 14 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
@@ -430,7 +442,7 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/api/menus/[id]/items/bulk/route.ts`
-**Description:** Found 13 magic numbers
+**Description:** Found 15 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
@@ -467,12 +479,6 @@
 
 **File:** `app/api/menus/[id]/lock/route.ts`
 **Description:** Found 14 magic numbers
-**Suggestion:** Extract magic numbers to named constants
-
-### Magic Numbers (MEDIUM)
-
-**File:** `app/api/menus/[id]/menu-display/export/helpers/menuDisplayStyles.ts`
-**Description:** Found 22 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
@@ -514,7 +520,7 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/api/order-lists/[id]/route.ts`
-**Description:** Found 14 magic numbers
+**Description:** Found 16 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
@@ -522,6 +528,12 @@
 **File:** `app/api/performance/route.ts`
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
+
+### Magic Numbers (MEDIUM)
+
+**File:** `app/api/performance/route.ts`
+**Description:** Found 12 magic numbers
+**Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
 
@@ -538,7 +550,7 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/api/prep-lists/route.ts`
-**Description:** Found 13 magic numbers
+**Description:** Found 17 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
@@ -570,6 +582,18 @@
 **File:** `app/api/recipes/[id]/ingredients/helpers/fetchRecipeMetadata.ts`
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
+
+### Magic Numbers (MEDIUM)
+
+**File:** `app/api/recipes/[id]/ingredients/route.ts`
+**Description:** Found 12 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
+**File:** `app/api/recipes/[id]/route.ts`
+**Description:** Found 12 magic numbers
+**Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
 
@@ -610,7 +634,7 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/api/roster/templates/[id]/template-shifts/route.ts`
-**Description:** Found 21 magic numbers
+**Description:** Found 23 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
@@ -645,14 +669,20 @@
 
 ### Magic Numbers (MEDIUM)
 
-**File:** `app/api/staff/employees/[id]/qualifications/route.ts`
+**File:** `app/api/staff/employees/[id]/qualifications/[qual_id]/route.ts`
 **Description:** Found 12 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
 
-**File:** `app/api/staff/employees/[id]/route.ts`
+**File:** `app/api/staff/employees/[id]/qualifications/route.ts`
 **Description:** Found 14 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
+**File:** `app/api/staff/employees/[id]/route.ts`
+**Description:** Found 16 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
@@ -796,31 +826,31 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/components/landing/components/FeatureButton.tsx`
-**Description:** Found 47 magic numbers
+**Description:** Found 50 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/components/landing/components/FeatureImageContainer.tsx`
-**Description:** Found 13 magic numbers
+**Description:** Found 14 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
 
 **File:** `app/components/landing/hooks/utils/animationEffects.ts`
-**Description:** Code has 7 levels of nesting
+**Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
 ### Spaghetti Code (HIGH)
 
 **File:** `app/components/landing/hooks/utils/imageTransitions.ts`
-**Description:** Code has 7 levels of nesting
+**Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
 ### Spaghetti Code (HIGH)
 
 **File:** `app/components/landing/hooks/utils/toggleHandler.ts`
-**Description:** Code has 7 levels of nesting
+**Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
 ### Spaghetti Code (HIGH)
@@ -1006,7 +1036,7 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/generate-background/page.tsx`
-**Description:** Found 41 magic numbers
+**Description:** Found 40 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
@@ -1099,12 +1129,6 @@
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
-### Magic Numbers (MEDIUM)
-
-**File:** `app/webapp/cogs/components/SuccessMessage.tsx`
-**Description:** Found 12 magic numbers
-**Suggestion:** Extract magic numbers to named constants
-
 ### Spaghetti Code (HIGH)
 
 **File:** `app/webapp/cogs/hooks/useIngredientConversion.ts`
@@ -1174,8 +1198,14 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/webapp/components/TemperatureStatus.tsx`
-**Description:** Found 16 magic numbers
+**Description:** Found 15 magic numbers
 **Suggestion:** Extract magic numbers to named constants
+
+### Spaghetti Code (HIGH)
+
+**File:** `app/webapp/components/UpcomingFunctionsWidget.tsx`
+**Description:** Code has 6 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
 
 ### Spaghetti Code (HIGH)
 
@@ -1281,6 +1311,48 @@
 
 ### Spaghetti Code (HIGH)
 
+**File:** `app/webapp/functions/[id]/components/RunsheetAddForm.tsx`
+**Description:** Code has 6 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
+
+**File:** `app/webapp/functions/[id]/components/RunsheetAddFormMealLink.tsx`
+**Description:** Code has 6 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Magic Numbers (MEDIUM)
+
+**File:** `app/webapp/functions/[id]/components/RunsheetItemRow.tsx`
+**Description:** Found 20 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Spaghetti Code (HIGH)
+
+**File:** `app/webapp/functions/[id]/components/RunsheetItemRowEditForm.tsx`
+**Description:** Code has 6 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
+
+**File:** `app/webapp/functions/components/MiniCalendarPanel.tsx`
+**Description:** Code has 7 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
+
+**File:** `app/webapp/functions/page.tsx`
+**Description:** Code has 7 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
+
+**File:** `app/webapp/guide/components/GuideNavigation.tsx`
+**Description:** Code has 6 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
+
 **File:** `app/webapp/guide/components/formats/components/ScreenshotAnnotations.tsx`
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
@@ -1291,10 +1363,22 @@
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
+### Magic Numbers (MEDIUM)
+
+**File:** `app/webapp/guide/data/guides.ts`
+**Description:** Found 13 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
 ### Spaghetti Code (HIGH)
 
 **File:** `app/webapp/guide/hooks/useGuideEngagementTracking.ts`
 **Description:** Code has 6 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
+
+**File:** `app/webapp/guide/page.tsx`
+**Description:** Code has 7 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
 ### Spaghetti Code (HIGH)
@@ -1320,12 +1404,6 @@
 **File:** `app/webapp/ingredients/components/IngredientWizardStep4.tsx`
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
-
-### Magic Numbers (MEDIUM)
-
-**File:** `app/webapp/ingredients/components/ModernIngredientFilters.tsx`
-**Description:** Found 12 magic numbers
-**Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
 
@@ -1431,12 +1509,6 @@
 
 ### Spaghetti Code (HIGH)
 
-**File:** `app/webapp/menu-builder/components/MenuBuilderClient.tsx`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
-
 **File:** `app/webapp/menu-builder/components/MenuCard.tsx`
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
@@ -1492,7 +1564,7 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/webapp/menu-builder/components/MenuStatisticsPanel.tsx`
-**Description:** Found 15 magic numbers
+**Description:** Found 16 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
@@ -1511,6 +1583,12 @@
 
 **File:** `app/webapp/menu-builder/components/hooks/helpers/useCategoryRename.ts`
 **Description:** Code has 6 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
+
+**File:** `app/webapp/menu-builder/components/hooks/useMenuData/dataLoading.ts`
+**Description:** Code has 7 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
 ### Spaghetti Code (HIGH)
@@ -1594,7 +1672,7 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/webapp/performance/components/PerformanceActions.tsx`
-**Description:** Found 51 magic numbers
+**Description:** Found 49 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
@@ -1602,12 +1680,6 @@
 **File:** `app/webapp/performance/components/PerformanceEmptyState.tsx`
 **Description:** Code has 7 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
-
-### Magic Numbers (MEDIUM)
-
-**File:** `app/webapp/performance/components/PerformanceFilters/ImportButton.tsx`
-**Description:** Found 11 magic numbers
-**Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
 
@@ -1954,7 +2026,7 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/webapp/specials/components/RecipeCard.tsx`
-**Description:** Found 24 magic numbers
+**Description:** Found 22 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
@@ -1968,12 +2040,6 @@
 **File:** `app/webapp/square/components/sections/OverviewSection.tsx`
 **Description:** Code has 7 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
-
-### Magic Numbers (MEDIUM)
-
-**File:** `app/webapp/square/components/sections/OverviewSection.tsx`
-**Description:** Found 16 magic numbers
-**Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
 
@@ -1990,7 +2056,7 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/webapp/staff/components/StaffCard.tsx`
-**Description:** Found 22 magic numbers
+**Description:** Found 19 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
@@ -2278,7 +2344,7 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `lib/exports/components/preview-data.ts`
-**Description:** Found 12 magic numbers
+**Description:** Found 18 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
@@ -2364,6 +2430,12 @@
 **File:** `lib/populate-helpers/basic-data.ts`
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
+
+### Magic Numbers (MEDIUM)
+
+**File:** `lib/populate-helpers/customers-data.ts`
+**Description:** Found 15 magic numbers
+**Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
 
@@ -2605,12 +2677,6 @@
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
-### Spaghetti Code (HIGH)
-
-**File:** `components/Arcade/AchievementsDropdown.tsx`
-**Description:** Code has 6 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
 ### Magic Numbers (MEDIUM)
 
 **File:** `components/Arcade/WebAppBackground.tsx`
@@ -2829,9 +2895,10 @@
 🏗️  The Architect: Starting Architectural Scan...
 
 🔄 Checking for Circular Dependencies...
+✅ No circular dependencies found.
 
 🛡️  Checking Client/Server Boundaries...
-Scanning 2643 files for boundaries...
+Scanning 2700 files for boundaries...
 ✅ Client/Server boundaries respected.
 
 📚 Checking Lib vs Components Boundaries...

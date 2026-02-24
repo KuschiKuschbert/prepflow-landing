@@ -5,6 +5,8 @@
 
 import { JSONStorage } from './storage/json-storage';
 
+import { logger } from '@/lib/logger';
+
 async function main() {
   const args = process.argv.slice(2);
   const statsFlag = args.includes('--stats');
@@ -21,29 +23,29 @@ async function main() {
     const storage = new JSONStorage();
     const recipes = storage.getAllRecipes();
 
-    console.log(`Total Recipes: ${recipes.length}`);
+    logger.dev(`Total Recipes: ${recipes.length}`);
     return;
   }
 
   if (searchFlag && searchQuery) {
-    console.log(`Searching for recipes matching: "${searchQuery}"...`);
+    logger.dev(`Searching for recipes matching: "${searchQuery}"...`);
     const storage = new JSONStorage();
     const recipes = storage.getAllRecipes();
     const results = recipes.filter(r =>
       r.recipe_name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
-    console.log(`Found ${results.length} matches:`);
-    results.slice(0, 10).forEach(r => console.log(`- ${r.recipe_name} (${r.source_url})`));
+    logger.dev(`Found ${results.length} matches:`);
+    results.slice(0, 10).forEach(r => logger.dev(`- ${r.recipe_name} (${r.source_url})`));
     return;
   }
 
   if (sourceArg) {
-    console.log(`Scraping has been decommissioned.`);
+    logger.dev(`Scraping has been decommissioned.`);
     return;
   }
 
-  console.log('Use --stats or --search to query the local database.');
+  logger.dev('Use --stats or --search to query the local database.');
 }
 
 main().catch(console.error);

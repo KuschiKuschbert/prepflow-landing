@@ -2,6 +2,8 @@ import { ingredientsMatch, normalizeIngredient } from '@/lib/ingredient-normaliz
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 
+import { logger } from '@/lib/logger';
+
 // Updated type definition to reflect that ingredients can be objects or strings
 interface Recipe {
   id: string;
@@ -195,7 +197,7 @@ export async function GET(request: Request) {
 
       if (rpcError) {
         // eslint-disable-next-line no-console
-        console.error(`Stock Match RPC Error (${rpcName}):`, rpcError);
+        logger.error(`Stock Match RPC Error (${rpcName}):`, rpcError);
         return NextResponse.json({ data: [], meta: { total: 0, page: 1 } });
       }
 
@@ -366,7 +368,7 @@ export async function GET(request: Request) {
     });
   } catch (error: unknown) {
     // eslint-disable-next-line no-console
-    console.error('Search error:', error);
+    logger.error('Search error:', error);
     const message = error instanceof Error ? error.message : 'An unknown error occurred';
     const stack = error instanceof Error ? error.stack : undefined;
     const rawError = JSON.stringify(error, null, 2);

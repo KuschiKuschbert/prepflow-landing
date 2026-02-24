@@ -1,6 +1,7 @@
 # Dev Log
 
 ## 2026-02-24
+
 - **feat(automation): extend RSI, error-learning, safe-merge, and CI crawl**: - RSI: pass --auto-map to skill:evolve for automatic pattern mapping
 - Error-learning: skill:evolve --auto-map, troubleshooting:apply, commit learned docs to main
 - Safe-merge: add dev:log:from-git --yes after changelog

@@ -6,7 +6,7 @@
 
 import { printWithTemplate } from '@/lib/exports/print-template';
 import { formatCleaningScheduleForPrint } from './formatCleaningScheduleForPrint';
-import type { CleaningArea, CleaningTask } from './cleaning-schedule-types';
+import type { CleaningTask } from './cleaning-schedule-types';
 
 export type { CleaningArea, CleaningTask } from './cleaning-schedule-types';
 

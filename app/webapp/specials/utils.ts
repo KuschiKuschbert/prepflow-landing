@@ -2,6 +2,8 @@ import { parseIngredientString } from '@/lib/recipe-normalization/ingredient-par
 import { convertToStandardUnit } from '@/lib/unit-conversion';
 import { RecipeIngredientWithDetails, Recipe as UnifiedRecipe } from '@/lib/types/recipes';
 
+import { logger } from '@/lib/logger';
+
 export interface AIIngredient {
   name: string;
   original_text?: string;
@@ -100,7 +102,7 @@ export function adaptAiToUnified(aiRecipe: APIRecipe): {
 } {
   // Debug log to trace data
   // eslint-disable-next-line no-console
-  console.log('[Specials] Adapting recipe:', {
+  logger.dev('[Specials] Adapting recipe:', {
     id: aiRecipe.id,
     name: aiRecipe.name,
     recipe_name: aiRecipe.recipe_name,
