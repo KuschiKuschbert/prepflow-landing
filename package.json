@@ -166,7 +166,7 @@
     "canvas-confetti": "^1.9.4",
     "cheerio": "^1.1.2",
     "date-fns": "^4.1.0",
-    "framer-motion": "^12.23.24",
+    "framer-motion": "^12.34.3",
     "googleapis": "^171.2.0",
     "html2canvas": "^1.4.1",
     "lucide-react": "^0.563.0",
