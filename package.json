@@ -223,7 +223,7 @@
     "prettier-plugin-tailwindcss": "^0.7.2",
     "puppeteer": "^24.34.0",
     "sharp": "^0.34.3",
-    "tailwindcss": "^4.1.13",
+    "tailwindcss": "^4.2.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.2"
   },
