@@ -189,7 +189,7 @@ jobs:
         run: npm ci
 
       - name: Download performance results
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         if: steps.artifact_check.outputs.has_artifact == 'true'
         with:
           name: performance-results
