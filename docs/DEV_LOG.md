@@ -2,6 +2,7 @@
 
 ## 2026-02-24
 
+- **minimatch ReDoS vulnerability resolved**: npm audit showed 27 high-severity vulnerabilities (GHSA-3ppc-4f35-3m26). Added package.json overrides: `"minimatch": "^10.2.1"` and `"test-exclude": "7.0.2"`. test-exclude 7.x uses minimatch 10.x (6.x required 5.x). Result: 0 vulnerabilities; lint, type-check, test, test:coverage, build all pass. Documented in TROUBLESHOOTING_LOG and docs/SECURITY_BEST_PRACTICES.md (Dependency Vulnerabilities).
 - **Codebase check and cleanup fixes**:
   - **Root cause**: Traced widespread TypeScript corruption to `npm run cleanup:fix` dead-code removal. It was stripping `export const`/`export function` declarations and leaving orphaned bodies.
   - **Fix**: Hardened `scripts/cleanup/fixes/dead-code.js` – never remove `export function`/`export async function` or `export const X = z.object({` / template literals.

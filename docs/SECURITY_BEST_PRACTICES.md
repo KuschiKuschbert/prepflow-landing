@@ -140,6 +140,43 @@ Before committing code:
 - **Service role keys**: Every 180 days
 - **API keys**: Per service provider recommendations
 
+## 🔬 Dependency Vulnerabilities
+
+### **Regular Audits**
+
+- **Weekly:** Run `npm audit` and review results
+- **Pre-deploy:** `npm run pre-deploy` runs `npm audit --audit-level=moderate`
+- **Fix promptly:** Address high/critical vulnerabilities within 1 sprint
+
+### **minimatch ReDoS (GHSA-3ppc-4f35-3m26)**
+
+**Symptom:** `npm audit` reports 27+ high severity vulnerabilities; Dependabot alerts for minimatch &lt;10.2.1.
+
+**Root Cause:** minimatch &lt;10.2.1 has a ReDoS (Regular Expression Denial of Service) via repeated wildcards. Used transitively by ESLint, Jest, eslint-config-next, test-exclude, and others.
+
+**Fix (package.json overrides):**
+
+```json
+"overrides": {
+  "minimatch": "^10.2.1",
+  "test-exclude": "7.0.2"
+}
+```
+
+- **minimatch ^10.2.1:** Forces all transitive deps to use the patched version.
+- **test-exclude 7.0.2:** test-exclude 6.x required minimatch 5.x (incompatible API); 7.x uses minimatch ^10.2.2 and is compatible with babel-plugin-istanbul ^6.0.0.
+
+**Verification:**
+
+```bash
+npm install && npm audit        # Should show 0 vulnerabilities
+npm run test:coverage           # Must pass (Jest coverage uses test-exclude)
+```
+
+**Derived Rule:** When npm overrides are used for security fixes, verify both `npm audit` and `npm run test:coverage` pass. Prefer upgrading to fixed package versions over long-term pinning of vulnerable versions.
+
+**Reference:** [GHSA-3ppc-4f35-3m26](https://github.com/advisories/GHSA-3ppc-4f35-3m26)
+
 ## 📚 Additional Resources
 
 - [OWASP Secrets Management](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html)

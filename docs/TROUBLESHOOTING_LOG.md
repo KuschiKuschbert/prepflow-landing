@@ -128,25 +128,24 @@ Format: **Symptom** | **Root Cause** | **Fix** | **Derived Rule**
 
 ---
 
-## minimatch is not a function (Jest test:coverage fails)
+## minimatch ReDoS + test:coverage compatibility (minimatch, test-exclude)
 
-**Symptom:** `TypeError: minimatch is not a function` when running `npm run test:coverage`; 20+ test suites fail at `test-exclude` / `babel-plugin-istanbul`.
+**Symptom:** (1) `npm audit` reports 27+ high severity vulnerabilities (minimatch ReDoS GHSA-3ppc-4f35-3m26). (2) With `"minimatch": "^10.2.1"` override, `npm run test:coverage` fails: `TypeError: minimatch is not a function` at test-exclude.
 
-**Root Cause:** The override `"minimatch": ">=10.2.1"` forced minimatch v10+ everywhere. `test-exclude` (used by babel-plugin-istanbul for coverage) expects the old minimatch API where `minimatch` is a callable function; v10 exports differently.
+**Root Cause:** minimatch &lt;10.2.1 has ReDoS. A global `minimatch` override fixes ESLint/etc., but `test-exclude` 6.x expects minimatch 5.x API (callable function); minimatch 10 exports differently.
 
-**Fix:** Replace the top-level minimatch override with a targeted override so `test-exclude` gets minimatch v5.1.6:
+**Fix:** Use both overrides—global patched minimatch and upgraded test-exclude:
 
 ```json
 "overrides": {
-  "test-exclude": {
-    "minimatch": "5.1.6"
-  }
+  "minimatch": "^10.2.1",
+  "test-exclude": "7.0.2"
 }
 ```
 
-Remove `"minimatch": ">=10.2.1"` from overrides. Run `npm install` and `npm run test:coverage`.
+test-exclude 7.x uses minimatch ^10.2.2 and is compatible with babel-plugin-istanbul ^6.0.0. This yields 0 vulnerabilities and passing `test:coverage`.
 
-**Derived Rule:** test-exclude requires minimatch 5.x (function API); use nested override to avoid breaking ESLint and other deps that need minimatch 10+.
+**Derived Rule:** Prefer upgrading test-exclude to 7.x over pinning minimatch 5.1.6 for test-exclude (which leaves vulnerabilities). See `docs/SECURITY_BEST_PRACTICES.md` (Dependency Vulnerabilities).
 
 ---
 

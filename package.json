@@ -217,9 +217,8 @@
   },
   "overrides": {
     "js-yaml": ">=4.1.1",
+    "minimatch": "^10.2.1",
     "tar": "^7.5.6",
-    "test-exclude": {
-      "minimatch": "5.1.6"
-    }
+    "test-exclude": "7.0.2"
   }
 }
