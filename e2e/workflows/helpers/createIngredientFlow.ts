@@ -10,16 +10,24 @@ export async function createIngredientFlow(
   ingredientName: string,
   testSteps: string[],
 ): Promise<void> {
-  testSteps.push('Step 1: Navigate to Ingredients page');
-  await page.goto('/webapp/ingredients');
-  await page.waitForLoadState('networkidle');
+  testSteps.push('Step 1: Navigate to Ingredients page and open Add form');
+  await page.goto('/webapp/ingredients?action=new');
+  await page.waitForLoadState('domcontentloaded');
+  await page.waitForTimeout(1500); // Allow form to open from action=new
   await collectPageErrors(page);
 
-  testSteps.push('Step 2: Click Add Ingredient button');
-  const addIngredientButton = page.locator('button:has-text("Add"), button:has-text("➕")').first();
-  await addIngredientButton.waitFor({ state: 'visible', timeout: 10000 });
-  await addIngredientButton.click();
-  await page.waitForTimeout(1000);
+  // If ?action=new didn't open form (e.g. hydration delay), click Add button as fallback
+  const addFormVisible = await page
+    .locator('input[placeholder*="Fresh Tomatoes"]')
+    .isVisible({ timeout: 2000 })
+    .catch(() => false);
+  if (!addFormVisible) {
+    const addBtn = page.getByRole('button', { name: /Add|Add your first ingredient/i }).first();
+    if (await addBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await addBtn.click();
+      await page.waitForTimeout(1000);
+    }
+  }
   await collectPageErrors(page);
 
   testSteps.push('Step 3: Fill ingredient form with metric units');
