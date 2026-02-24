@@ -1,6 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { updateMenuSchema } from '../helpers/schemas';
 import { buildMenuUpdateData } from './helpers/buildMenuUpdateData';
 import { deleteMenu } from './helpers/deleteMenu';
@@ -86,6 +87,16 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     });
   } catch (err: unknown) {
     if (err instanceof NextResponse) return err;
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          err.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
     if (ApiErrorHandler.isApiError(err)) {
       return NextResponse.json(ApiErrorHandler.toResponseData(err), {
         status: ApiErrorHandler.getStatus(err),

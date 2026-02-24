@@ -2,6 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { handleCreateComplianceRecord } from './helpers/createComplianceRecordHandler';
 import { handleDeleteComplianceRecord } from './helpers/deleteComplianceRecordHandler';
 import { handleComplianceError } from './helpers/handleComplianceError';
@@ -82,6 +83,16 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ success: true, data: [] });
   } catch (err: unknown) {
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          err.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
     return handleComplianceError(err, 'GET');
   }
 }
@@ -146,6 +157,16 @@ export async function PUT(request: NextRequest) {
       data,
     });
   } catch (err: unknown) {
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          err.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
     return handleComplianceError(err, 'PUT');
   }
 }

@@ -3,8 +3,10 @@ import { groupBy } from '@/lib/api/batch-utils';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 
 import { handleMissingNestedIngredients } from './helpers/missing-ingredients';
+import { batchRecipeIdsSchema } from './helpers/schemas';
 import { BatchIngredientData, BatchRecipeIngredientRow } from './helpers/types';
 
 // Helper to safely parse request body
@@ -29,17 +31,19 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await safeParseBody(request);
-    const { recipeIds } = body;
-
-    if (!Array.isArray(recipeIds) || recipeIds.length === 0) {
+    const parseResult = batchRecipeIdsSchema.safeParse(body);
+    if (!parseResult.success) {
       return NextResponse.json(
-        ApiErrorHandler.createError('recipeIds must be a non-empty array', 'VALIDATION_ERROR', 400),
+        ApiErrorHandler.createError(
+          parseResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
         { status: 400 },
       );
     }
 
-    // Normalize recipe IDs
-    const normalizedIds = recipeIds.map(id => String(id).trim()).filter(Boolean);
+    const normalizedIds = parseResult.data.recipeIds.map(id => id.trim()).filter(Boolean);
 
     if (normalizedIds.length === 0) {
       return NextResponse.json({ items: [] });
@@ -129,6 +133,16 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ items: grouped });
   } catch (err) {
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          err.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
     logger.error('[Recipes API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,

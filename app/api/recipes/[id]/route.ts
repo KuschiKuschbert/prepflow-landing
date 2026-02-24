@@ -10,6 +10,7 @@ import { logger } from '@/lib/logger';
 import { triggerRecipeSync } from '@/lib/square/sync/hooks';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { handleDeleteRecipe } from './helpers/deleteRecipeHandler';
 import { enrichRecipeWithAllergens } from './helpers/enrichRecipeWithAllergens';
 import { handleRecipeUpdate } from './helpers/handleRecipeUpdate';
@@ -122,6 +123,16 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       recipe: updatedRecipe,
     });
   } catch (err: unknown) {
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          err.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
     logger.error('[Recipes API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,

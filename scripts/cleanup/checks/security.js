@@ -64,7 +64,7 @@ function checkSecurityPatterns(content, filePath) {
 
   // 1. Input Validation Enhancement
   if (isAPIRoute) {
-    const hasZodImport = /import.*z.*from.*['"]zod['"]/.test(content);
+    const hasZodImport = /import\s+.*from\s+['"]zod['"]/.test(content);
     const hasZodSchema = /z\.object\(/.test(content) || /z\.string\(/.test(content);
     const hasRequestParsing =
       /req\.json\(\)/.test(content) ||
@@ -228,10 +228,15 @@ function checkSecurityPatterns(content, filePath) {
       });
     }
 
-    // Check for raw SQL queries with user input
-    const hasRawSQL = /\.rpc\(|\.query\(/.test(content);
+    // Check for raw SQL with user input concatenation (not parameterized)
+    // Supabase .rpc(name, paramsObject) is safe - params are parameterized
+    const hasUnsafeRpcConcat =
+      /\.rpc\s*\(\s*[`'"].*\${\s*\w+\s*}/.test(content) || /\.rpc\s*\(\s*\w+\s*\+/.test(content);
+    const hasUnsafeQueryConcat =
+      /\.query\s*\(\s*[`'"].*\${\s*\w+\s*}/.test(content) ||
+      /\.query\s*\(\s*\w+\s*\+/.test(content);
     const hasUserInput = /req\.|request\.|body\.|params\./.test(content);
-    if (hasRawSQL && hasUserInput) {
+    if ((hasUnsafeRpcConcat || hasUnsafeQueryConcat) && hasUserInput) {
       violations.push({
         type: 'raw-sql-with-input',
         line: findLineNumber(lines, /\.rpc\(|\.query\(/),

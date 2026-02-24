@@ -3,6 +3,7 @@ import { requireAuth } from '@/lib/auth0-api-helpers';
 import { sendEmail } from '@/lib/email/sender';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { checkRateLimit } from './helpers/checkRateLimit';
 import { createTicket } from './helpers/createTicket';
 import { detectSeverity } from './helpers/detectSeverity';
@@ -116,6 +117,16 @@ export async function POST(req: NextRequest) {
       ticket_id: ticketResult.ticketId,
     });
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
     logger.error('[Support API] Unexpected error:', {
       error: error instanceof Error ? error.message : String(error),
       context: { endpoint: '/api/support/contact', method: 'POST' },

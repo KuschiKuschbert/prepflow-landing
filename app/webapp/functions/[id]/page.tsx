@@ -2,6 +2,7 @@
 
 import type { AppFunction } from '@/app/api/functions/helpers/schemas';
 import { Button } from '@/components/ui/Button';
+import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import { useConfirm } from '@/hooks/useConfirm';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
@@ -30,6 +31,7 @@ export default function FunctionDetailPage() {
   const router = useRouter();
   const functionId = params.id as string;
   const { showConfirm, ConfirmDialog } = useConfirm();
+  const { showSuccess, showError } = useNotification();
 
   const [func, setFunc] = useState<ExtendedFunction | null>(null);
   const [runsheetItems, setRunsheetItems] = useState<RunsheetItemWithRelations[]>([]);
@@ -40,7 +42,6 @@ export default function FunctionDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState<Partial<AppFunction>>({});
-  const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -99,34 +100,40 @@ export default function FunctionDetailPage() {
   };
 
   const handleSave = async () => {
-    setIsSaving(true);
-    try {
-      const saveData = { ...editData };
-      if (saveData.same_day && saveData.start_date) {
-        saveData.end_date = saveData.start_date;
-      }
-      if (saveData.location !== undefined) {
-        saveData.location =
-          (typeof saveData.location === 'string' ? saveData.location.trim() : null) || null;
-      }
-      // Normalize customer_id: empty string fails UUID validation, use null instead
-      if (saveData.customer_id === '' || saveData.customer_id === undefined) {
-        saveData.customer_id = null;
-      }
-      // Ensure attendees is a number (schema expects number, not string)
-      if (saveData.attendees !== undefined) {
-        saveData.attendees = Number(saveData.attendees) || 0;
-      }
+    if (!func) return;
+    const saveData = { ...editData };
+    if (saveData.same_day && saveData.start_date) {
+      saveData.end_date = saveData.start_date;
+    }
+    if (saveData.location !== undefined) {
+      saveData.location =
+        (typeof saveData.location === 'string' ? saveData.location.trim() : null) || null;
+    }
+    if (saveData.customer_id === '' || saveData.customer_id === undefined) {
+      saveData.customer_id = null;
+    }
+    if (saveData.attendees !== undefined) {
+      saveData.attendees = Number(saveData.attendees) || 0;
+    }
 
+    const originalFunc = { ...func };
+    const optimisticFunc = { ...func, ...saveData };
+    setFunc(optimisticFunc);
+    setIsEditing(false);
+
+    try {
       const res = await fetch(`/api/functions/${functionId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(saveData),
       });
       if (res.ok) {
-        setIsEditing(false);
-        await fetchFunction();
+        const data = await res.json();
+        setFunc(data.function ?? { ...func, ...saveData });
+        showSuccess('Changes saved');
       } else {
+        setFunc(originalFunc);
+        setIsEditing(true);
         const err = await res.json().catch(() => ({}));
         logger.dev('Function PATCH failed', {
           status: res.status,
@@ -142,12 +149,12 @@ export default function FunctionDetailPage() {
             : null) ||
           err.error ||
           'Failed to save changes';
-        setError(msg);
+        showError(msg);
       }
     } catch {
-      setError('Failed to save changes');
-    } finally {
-      setIsSaving(false);
+      setFunc(originalFunc);
+      setIsEditing(true);
+      showError('Failed to save changes');
     }
   };
 
@@ -166,12 +173,13 @@ export default function FunctionDetailPage() {
     try {
       const res = await fetch(`/api/functions/${functionId}`, { method: 'DELETE' });
       if (res.ok) {
+        showSuccess('Function deleted');
         router.push('/webapp/functions');
       } else {
-        setError('Failed to delete function');
+        showError('Failed to delete function');
       }
     } catch {
-      setError('Failed to delete function');
+      showError('Failed to delete function');
     }
   };
 
@@ -230,14 +238,14 @@ export default function FunctionDetailPage() {
                 </>
               ) : (
                 <>
-                  <Button variant="primary" size="sm" onClick={handleSave} loading={isSaving}>
+                  <Button variant="primary" size="sm" onClick={handleSave}>
                     <Icon icon={Save} size="sm" className="mr-2" /> Save
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setIsEditing(false)}
-                    disabled={isSaving}
+                    disabled={false}
                   >
                     <Icon icon={X} size="sm" className="mr-2" /> Cancel
                   </Button>

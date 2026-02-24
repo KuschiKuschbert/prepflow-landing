@@ -2,6 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { updateDishSchema } from '../helpers/schemas';
 import { enrichDishWithAllergens } from './helpers/enrichDishWithAllergens';
 import { fetchDishWithRelations } from './helpers/fetchDishWithRelations';
@@ -73,6 +74,16 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 
     return handlePutRequest(request, dishId);
   } catch (err) {
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          err.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
     logger.error('[route.ts] Error in catch block:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,

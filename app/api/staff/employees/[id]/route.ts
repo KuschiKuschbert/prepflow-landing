@@ -12,6 +12,7 @@ import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { checkEmployeeExists } from './helpers/checkEmployeeExists';
 import { deleteEmployee } from './helpers/deleteEmployee';
 import { getEmployee } from './helpers/getEmployee';
@@ -112,6 +113,16 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 
     return result;
   } catch (err) {
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          err.issues[0]?.message || 'Invalid request data',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
     logger.error('[Staff Employees API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,

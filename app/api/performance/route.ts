@@ -3,6 +3,7 @@ import { evaluateGate } from '@/lib/feature-gate';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { getDishIdsForMenu, getFilterMenuId } from './helpers/filter-utils';
 import { handlePerformanceError } from './helpers/handlePerformanceError';
 import { processPerformanceData } from './helpers/processPerformanceData';
@@ -145,6 +146,16 @@ export async function POST(request: NextRequest) {
     });
   } catch (err: unknown) {
     const e = err;
+    if (e instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          e.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
     logger.error('[Performance API] Unexpected error:', {
       error: e instanceof Error ? e.message : String(e),
       context: { endpoint: '/api/performance', method: 'POST' },

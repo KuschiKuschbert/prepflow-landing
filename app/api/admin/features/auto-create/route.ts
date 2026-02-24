@@ -4,6 +4,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { processHiddenFlags } from './helpers/processHiddenFlags';
 import { processRegularFlags } from './helpers/processRegularFlags';
 import { autoCreateSchema } from './types';
@@ -61,6 +62,16 @@ export async function POST(request: NextRequest) {
       message: `Created ${createdCount} flags, skipped ${skippedCount} existing flags`,
     });
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
     logger.error('[route.ts] Error in catch block:', {
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,

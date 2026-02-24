@@ -9,6 +9,7 @@ import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { validateComplianceSchema } from './helpers/schemas';
 import { performComplianceValidation } from './helpers/validateCompliance';
 
@@ -60,6 +61,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(result);
   } catch (err) {
     if (err instanceof NextResponse) return err;
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          err.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
 
     logger.error('[Compliance API] Validation error:', err);
     return NextResponse.json(

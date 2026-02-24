@@ -48,6 +48,18 @@ function removeUnusedExport(filePath, lineNum, exportName) {
   let modified = false;
   let newLines = [...lines];
 
+  // Never remove export function/async function - entry points, often multi-line
+  if (/export\s+(async\s+)?function\s+/i.test(targetLine)) {
+    return false;
+  }
+
+  // Never remove export const X = when value spans multiple lines (z.object, template literal)
+  if (/export\s+const\s+\w+\s*=/.test(targetLine)) {
+    if (/\s*=\s*z\.object\s*\(\{/.test(targetLine) || /\s*=\s*`/.test(targetLine)) {
+      return false;
+    }
+  }
+
   // Pattern 1: export const/function/class/type/interface Name
   if (targetLine.includes(`export `) && targetLine.includes(exportName)) {
     // Check if it's a single-line export

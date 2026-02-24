@@ -29,9 +29,9 @@ export function ExportThemeSelector() {
   if (!mounted) return null;
 
   return (
-    <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
+    <div className="desktop:grid-cols-12 grid grid-cols-1 gap-8">
       {/* Controls Column */}
-      <div className="space-y-8 lg:col-span-4">
+      <div className="desktop:col-span-4 space-y-8">
         <div>
           <h2 className="mb-4 text-xl font-semibold text-[var(--foreground)]">Theme Selection</h2>
           <p className="mb-6 text-sm text-[var(--foreground-muted)]">
@@ -98,9 +98,8 @@ export function ExportThemeSelector() {
           </p>
         </div>
       </div>
-
       {/* Preview Column */}
-      <div className="lg:col-span-8">
+      <div className="desktop:col-span-8">
         <div className="sticky top-6">
           <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-1 shadow-sm">
             <ThemePreview theme={selectedTheme} variant={previewVariant} />

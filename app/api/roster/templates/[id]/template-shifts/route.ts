@@ -9,6 +9,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 
 async function getAuthenticatedUser(request: NextRequest) {
   const supabaseAdmin = createSupabaseAdmin();
@@ -217,6 +218,16 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     });
   } catch (err) {
     if (err instanceof NextResponse) return err;
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          err.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
 
     logger.error('[Template Shifts API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

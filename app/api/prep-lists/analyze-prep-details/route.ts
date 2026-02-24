@@ -26,6 +26,7 @@ import { fetchRecipesWithInstructions } from './helpers/fetchRecipes';
  * @param {string} [request.body.countryCode] - Country code (default: 'AU')
  * @returns {Promise<NextResponse>} Prep details analysis response
  */
+import { z } from 'zod';
 import { analyzePrepDetailsSchema } from '../helpers/schemas';
 
 export async function POST(request: NextRequest) {
@@ -103,6 +104,16 @@ export async function POST(request: NextRequest) {
       prepDetails,
     });
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
     logger.error('Prep details analysis error:', error);
     return NextResponse.json(
       ApiErrorHandler.createError(

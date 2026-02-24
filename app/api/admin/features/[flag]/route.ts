@@ -3,6 +3,7 @@ import { requireAdmin } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import {
   deleteFeatureFlag,
   handleRouteError,
@@ -42,6 +43,12 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ fla
       flag: flagData,
     });
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request data', 'VALIDATION_ERROR', 400, error.issues),
+        { status: 400 },
+      );
+    }
     return handleRouteError(error, { endpoint: '/api/admin/features/[flag]', method: 'PUT' });
   }
 }

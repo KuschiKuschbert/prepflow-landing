@@ -1,5 +1,20 @@
 # Dev Log
 
+## 2026-02-24
+
+- **Codebase check and cleanup fixes**:
+  - **Root cause**: Traced widespread TypeScript corruption to `npm run cleanup:fix` dead-code removal. It was stripping `export const`/`export function` declarations and leaving orphaned bodies.
+  - **Fix**: Hardened `scripts/cleanup/fixes/dead-code.js` – never remove `export function`/`export async function` or `export const X = z.object({` / template literals.
+  - **Optimistic updates**: Customers page (create), Functions detail page (save/delete), useRunsheetMutations (add/delete/update notifications). Removed `isSaving`, no fetch-after-mutation, rollback on error.
+  - **Revert**: Breakpoint codemod incorrectly replaced size keys (`sm`, `md`, `lg`) in object literals with `tablet`/`desktop`. Reverted `components/` and `lib/ui/` changes.
+  - **Current state**: type-check passes. Modified files: `customers/page.tsx`, `functions/[id]/page.tsx`, `useRunsheetMutations.ts`, `dead-code.js`.
+- **Breakpoint codemod fix**: Rewrote codemod to use jscodeshift AST – only transforms Tailwind class strings in `className`/`class` (JSX) and object property values (style configs). Never replaces object keys like `{ sm: '...', md: '...', lg: '...' }` (size variants). Handles `Property` and `ObjectProperty` node types.
+- **Breakpoint codemod applied**: Ran on app/components/lib – 2 files updated (ExportThemeSelector, tailwind-utils).
+- **File size fix**: useRunsheetMutations (132→115 lines) – extracted `buildOptimisticRunsheetUpdate` to `runsheet-mutations-helpers.ts`. `npm run lint:filesize` passes.
+- **Cleanup check fixes**: (1) api-patterns & security: accept any `import from 'zod'` (was only `import.*z.*from`), so routes with `ZodSchema` pass. (2) security: narrow raw-sql check to only flag template literal/string concat in .rpc()/.query(), not parameterized Supabase RPC. (3) recipes/ingredients/batch: add Zod validation via batchRecipeIdsSchema. Violations: API Zod 29→28, security other 1→0.
+- **Zod catch handling added**: menus (POST), admin/errors/[id] (GET, PUT), compliance-records (PUT) – `if (err instanceof z.ZodError)` with 400 response at start of catch.
+- **Zod imports + ZodError handling (batch)**: Applied to ~30 API mutation routes: admin/features/_, admin/support-tickets, admin/tiers, compliance/validate, dishes/[id], employees/_, menus/[id]/_, order-lists/[id], performance, prep-lists/_, recipes/_, roster/templates/_, staff/employees/\*, support/contact. type-check passes.
+
 ## 2026-02-23 (continued)
 
 - **File size refactoring – crawl spec and report-generator**: Resolved 2 file size violations.

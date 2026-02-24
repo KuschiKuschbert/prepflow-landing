@@ -1,5 +1,6 @@
 'use client';
 
+import { useNotification } from '@/contexts/NotificationContext';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import type {
@@ -8,6 +9,7 @@ import type {
   RecipeOption,
   RunsheetItemWithRelations,
 } from '../components/RunsheetPanel';
+import { buildOptimisticRunsheetUpdate } from './runsheet-mutations-helpers';
 
 interface UseRunsheetMutationsParams {
   functionId: string;
@@ -28,6 +30,7 @@ export function useRunsheetMutations({
   dayItemsLength,
 }: UseRunsheetMutationsParams) {
   const router = useRouter();
+  const { showSuccess, showError } = useNotification();
   const handleAddItem = useCallback(
     async (data: {
       day_number: number;
@@ -46,9 +49,12 @@ export function useRunsheetMutations({
       if (res.ok) {
         const newItem = await res.json();
         setItems(prev => [...prev, newItem]);
+        showSuccess('Item added');
+      } else {
+        showError('Failed to add item');
       }
     },
-    [functionId, dayItemsLength, setItems],
+    [functionId, dayItemsLength, setItems, showSuccess, showError],
   );
   const handleDeleteItem = useCallback(
     async (itemId: string) => {
@@ -57,9 +63,14 @@ export function useRunsheetMutations({
       const res = await fetch(`/api/functions/${functionId}/runsheet/${itemId}`, {
         method: 'DELETE',
       });
-      if (!res.ok) setItems(original);
+      if (res.ok) {
+        showSuccess('Item removed');
+      } else {
+        setItems(original);
+        showError('Failed to remove item');
+      }
     },
-    [functionId, items, setItems],
+    [functionId, items, setItems, showSuccess, showError],
   );
 
   const handleUpdateItem = useCallback(
@@ -75,22 +86,7 @@ export function useRunsheetMutations({
       },
     ) => {
       const original = [...items];
-      const optimistic: Partial<RunsheetItemWithRelations> = { ...data };
-      if (data.menu_id && menus.length > 0) {
-        const m = menus.find(x => x.id === data.menu_id);
-        optimistic.menus = m ? { id: m.id, menu_name: m.menu_name, menu_type: m.menu_type } : null;
-      } else if (data.menu_id === null) optimistic.menus = null;
-      if (data.dish_id && dishes.length > 0) {
-        const d = dishes.find(x => x.id === data.dish_id);
-        optimistic.dishes = d
-          ? { id: d.id, dish_name: d.dish_name, selling_price: d.selling_price }
-          : null;
-      } else if (data.dish_id === null) optimistic.dishes = null;
-      if (data.recipe_id && recipes.length > 0) {
-        const r = recipes.find(x => x.id === data.recipe_id);
-        optimistic.recipes = r ? { id: r.id, recipe_name: r.recipe_name } : null;
-      } else if (data.recipe_id === null) optimistic.recipes = null;
-
+      const optimistic = buildOptimisticRunsheetUpdate(data, menus, dishes, recipes);
       setItems(prev => prev.map(i => (i.id === itemId ? { ...i, ...optimistic } : i)));
 
       const res = await fetch(`/api/functions/${functionId}/runsheet/${itemId}`, {
@@ -102,11 +98,13 @@ export function useRunsheetMutations({
       if (res.ok) {
         const updated = await res.json();
         setItems(prev => prev.map(i => (i.id === itemId ? { ...i, ...updated } : i)));
+        showSuccess('Item updated');
       } else {
         setItems(original);
+        showError('Failed to update item');
       }
     },
-    [functionId, items, menus, dishes, recipes, setItems],
+    [functionId, items, menus, dishes, recipes, setItems, showSuccess, showError],
   );
 
   const handleMenuClick = useCallback(

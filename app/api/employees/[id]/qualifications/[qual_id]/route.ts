@@ -2,6 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { deleteQualification } from './helpers/deleteQualification';
 import { updateQualificationSchema } from './helpers/schemas';
 import { updateQualification } from './helpers/updateQualification';
@@ -79,6 +80,16 @@ export async function PUT(
     return NextResponse.json(result);
   } catch (err) {
     if (err instanceof NextResponse) return err;
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          err.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
 
     logger.error('[Employee Qualifications API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

@@ -2,6 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { UpdateMenuItemInput } from '../../../types';
 import { deleteMenuItem } from './helpers/deleteMenuItem';
 import { updateMenuItemSchema } from './helpers/schemas';
@@ -81,6 +82,16 @@ export async function PUT(
 
     return NextResponse.json(result);
   } catch (err: unknown) {
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          err.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
     logger.error('Unexpected error:', err);
     return NextResponse.json(
       ApiErrorHandler.createError(

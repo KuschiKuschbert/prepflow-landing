@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/Card';
 import { Icon } from '@/components/ui/Icon';
 import { Modal } from '@/components/ui/Modal';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
+import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import { Building, Mail, Phone, Plus, Search, Users } from 'lucide-react';
 import Link from 'next/link';
@@ -17,6 +18,7 @@ import type { CreateCustomerData } from './components/CreateCustomerForm';
 import { CreateCustomerForm } from './components/CreateCustomerForm';
 
 export default function CustomersPage() {
+  const { showSuccess, showError } = useNotification();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -48,19 +50,43 @@ export default function CustomersPage() {
   };
 
   const handleCreateCustomer = async (data: CreateCustomerData) => {
-    const response = await fetch('/api/customers', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      const err = await response.json().catch(() => ({}));
-      throw new Error(err.error || 'Failed to create customer');
-    }
-
+    const tempId = `temp-${Date.now()}`;
+    const tempCustomer: Customer = {
+      id: tempId,
+      first_name: data.first_name,
+      last_name: data.last_name,
+      email: data.email,
+      phone: data.phone ?? null,
+      company: data.company ?? null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      user_id: '',
+    };
+    const original = [...customers];
+    setCustomers(prev => [...prev, tempCustomer]);
     setIsCreateModalOpen(false);
-    await fetchCustomers();
+
+    try {
+      const response = await fetch('/api/customers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.error || 'Failed to create customer');
+      }
+
+      const created = await response.json();
+      setCustomers(prev => prev.map(c => (c.id === tempId ? created : c)));
+      showSuccess('Customer added successfully');
+    } catch (err) {
+      setCustomers(original);
+      setIsCreateModalOpen(true);
+      showError(err instanceof Error ? err.message : 'Failed to create customer');
+      throw err;
+    }
   };
 
   return (

@@ -2,6 +2,7 @@ import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { deleteOrderList } from './helpers/deleteOrderList';
 import { updateOrderListSchema } from './helpers/schemas';
 import { updateOrderList } from './helpers/updateOrderList';
@@ -52,6 +53,16 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 
     return NextResponse.json(result);
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
     logger.error('Order lists API error:', error);
     return NextResponse.json(
       ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500, {

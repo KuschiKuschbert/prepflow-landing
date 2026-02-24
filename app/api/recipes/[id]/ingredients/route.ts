@@ -2,6 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { backfillMissingIngredients } from './helpers/backfillMissingIngredients';
 import { fetchIngredientsWithCategoryFallback } from './helpers/fetchIngredients';
 import { handleRecipeIngredientsError } from './helpers/handleRecipeIngredientsError';
@@ -136,6 +137,16 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       data,
     });
   } catch (err: unknown) {
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          err.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
     logger.error('[Recipes API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: {

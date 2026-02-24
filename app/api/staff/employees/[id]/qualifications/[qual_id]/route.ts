@@ -2,6 +2,7 @@ import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { createQualificationSchema } from '../../../helpers/schemas';
 
 const QUALIFICATION_SELECT = `
@@ -67,6 +68,16 @@ export async function PUT(
       data,
     });
   } catch (err) {
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          err.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
     logger.error('[Staff Qualifications API] Unexpected error in PUT:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/staff/employees/[id]/qualifications/[qual_id]', method: 'PUT' },

@@ -2,6 +2,7 @@ import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { fetchTicket } from './helpers/fetchTicket';
 import { handleTicketApiError } from './helpers/handleError';
 import { updateTicket, updateTicketSchema } from './helpers/updateTicket';
@@ -89,6 +90,12 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       message: 'Ticket updated successfully',
     });
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request data', 'VALIDATION_ERROR', 400, error.issues),
+        { status: 400 },
+      );
+    }
     logger.error('[route.ts] Error in catch block:', {
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,

@@ -371,19 +371,21 @@ export function useMyHook(param: string) {
 - `md:` → `tablet:` (481px+)
 - `lg:` → `desktop:` (1025px+)
 
-**Handles:**
-- String literals in JSX attributes (`className="sm:text-lg"`)
-- Template literals in JSX (`className={`sm:text-lg ${var}`}`)
-- Object properties (`className: "sm:text-lg"`)
-- String concatenations
+**Targets only Tailwind class strings (AST-based):**
+- JSX `className="sm:text-lg"` or `class="..."`
+- JSX `className={`sm:text-lg ${var}`}` template literals
+- Object property **values** (e.g. `container: 'sm:px-6 lg:px-8'` in style configs)
+
+**Does NOT replace object keys** like `{ sm: '...', md: '...', lg: '...' }` (size variants).
 
 **Usage:**
 ```bash
 # Dry-run (preview changes)
-npm run codemod:breakpoints
+npx jscodeshift -t scripts/codemods/breakpoint-migration.js --parser tsx app components lib --dry
 
 # Apply changes
-npm run codemod:breakpoints:write
+npx jscodeshift -t scripts/codemods/breakpoint-migration.js --parser tsx app components lib
+# Or via cleanup fix: npm run cleanup:fix
 ```
 
 #### **2. Console Migration Codemod**

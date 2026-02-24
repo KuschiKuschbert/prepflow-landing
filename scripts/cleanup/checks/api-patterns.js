@@ -73,7 +73,8 @@ function analyzeAPIPatterns(content, filePath) {
   const hasSuccessFormat = /success:\s*true/.test(content) || /success:\s*true,/.test(content);
 
   // 5. Check for input validation (Zod) for mutation methods
-  const hasZodImport = /import.*z.*from.*['"]zod['"]/.test(content);
+  // Accept any import from zod (z, ZodSchema, etc.) or z.object/z.string in file
+  const hasZodImport = /import\s+.*from\s+['"]zod['"]/.test(content);
   const hasZodSchema = /z\.object\(/.test(content) || /z\.string\(/.test(content);
   const hasRequestParsing =
     /req\.json\(\)/.test(content) ||

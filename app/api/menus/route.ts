@@ -1,6 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { createNewMenu, fetchMenuCounts } from './helpers/helpers';
 import { Menu, createMenuSchema } from './helpers/schemas';
 
@@ -119,6 +120,16 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     if (err instanceof NextResponse) return err;
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          err.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
     if (ApiErrorHandler.isApiError(err)) {
       return NextResponse.json(ApiErrorHandler.toResponseData(err), {
         status: ApiErrorHandler.getStatus(err),

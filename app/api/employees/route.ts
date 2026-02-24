@@ -3,7 +3,7 @@ import { logger } from '@/lib/logger';
 import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
-import { ZodSchema } from 'zod';
+import { z, ZodSchema } from 'zod';
 import { createEmployee } from './helpers/createEmployee';
 import { handleDeleteEmployee } from './helpers/deleteEmployeeHandler';
 import { handleEmployeeError } from './helpers/handleEmployeeError';
@@ -108,6 +108,16 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     if (err instanceof NextResponse) return err;
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          err.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
 
     logger.error('[Employees API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
@@ -140,6 +150,16 @@ export async function PUT(request: NextRequest) {
     });
   } catch (err) {
     if (err instanceof NextResponse) return err;
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          err.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
 
     logger.error('[Employees API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

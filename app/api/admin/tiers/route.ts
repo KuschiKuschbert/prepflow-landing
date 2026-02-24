@@ -2,6 +2,7 @@ import { requireAdmin } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { createTier, tierConfigSchema } from './helpers/createTier';
 import { deleteTier } from './helpers/deleteTier';
 import { fetchTiers } from './helpers/fetchTiers';
@@ -81,6 +82,16 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ tier: result.tier });
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
     logger.error('[Admin Tiers] Unexpected error:', error);
     return NextResponse.json(
       ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500),
@@ -127,6 +138,16 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json({ tier: result.tier });
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
     logger.error('[Admin Tiers] Unexpected error:', error);
     return NextResponse.json(
       ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500),
