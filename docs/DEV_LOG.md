@@ -1,6 +1,35 @@
 # Dev Log
 
 ## 2026-02-24
+- **feat(automation): extend RSI, error-learning, safe-merge, and CI crawl**: - RSI: pass --auto-map to skill:evolve for automatic pattern mapping
+- Error-learning: skill:evolve --auto-map, troubleshooting:apply, commit learned docs to main
+- Safe-merge: add dev:log:from-git --yes after changelog
+- CI: add e2e-crawl job on main (test:crawl, 15min, upload artifacts)
+- **fix: resolve minimatch ReDoS vulnerability (GHSA-3ppc-4f35-3m26)**: - Add overrides: minimatch ^10.2.1, test-exclude 7.0.2
+- test-exclude 7.x uses minimatch 10.x (6.x required 5.x)
+- 0 vulnerabilities; lint, type-check, test, test:coverage, build pass
+- Document in SECURITY_BEST_PRACTICES and TROUBLESHOOTING_LOG
+- **fix: add Zod imports and ZodError handling to API mutation routes**: - Add import { z } from 'zod' and ZodError catch handling to ~30 API routes
+- Add batchRecipeIdsSchema for recipes/ingredients/batch validation
+- Extract runsheet-mutations-helpers for useRunsheetMutations (file size)
+- Breakpoint codemod: AST-based, only Tailwind className/class strings
+- Api-patterns: accept any import from zod (ZodSchema, z)
+- Security: narrow raw-sql check to unsafe patterns only
+- **perf: webapp loading optimizations - parallel fetches, cache-first, light API, prefetch**: - COGS: parallelize ingredients + recipes fetch
+- Performance: parallelize main + previous-period fetch
+- MenuList print: use ?locked=1 for locked menus
+- Prefetch: add recipe-sharing, ingredients, customers, dish-builder routes
+- Recipe-sharing: cache-first pattern
+- Functions: cache-first pattern
+- Locked menu: phased loading, light API, MenuCard prefetch on hover
+- Menu builder: pass initialDishes/initialRecipes from recipes tab
+- Docs: PERFORMANCE.md, development.mdc, design.mdc updated
+- Trim MenuCard/MenuBuilderClient to meet file size limits
+- **chore: file size refactoring, format, pre-deploy fixes, and deploy prep**: - Refactor crawl-console-errors.spec.ts and report-generator.ts for file size compliance
+- Add crawl-constants, crawl-helpers, report-generator modules
+- Format code, fix breakpoints, voice consistency, schema fixes
+- Ignore CRAWL_REPORT and QA_AUDIT_REPORT generated artifacts
+
 - **Automation extensions implemented**: (1) RSI orchestrator passes `--auto-map` to skill:evolve. (2) Error-learning workflow: skill:evolve --auto-map, troubleshooting:apply, commit+push learned docs when CI succeeds on main. (3) Safe-merge runs dev:log:from-git --yes --count=5 after changelog. (4) CI: new e2e-crawl job on main (test:crawl, 15min timeout, uploads CRAWL_REPORT artifacts).
 - **fix: resolve minimatch ReDoS vulnerability (GHSA-3ppc-4f35-3m26)**: - Add overrides: minimatch ^10.2.1, test-exclude 7.0.2
 - test-exclude 7.x uses minimatch 10.x (6.x required 5.x)
