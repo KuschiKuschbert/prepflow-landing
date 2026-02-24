@@ -111,22 +111,37 @@ echo ""
 run_check "Script audit" "npm run audit:scripts"
 echo ""
 
-# 8. Cleanup check (optional - can be verbose)
+# 8. Test (blocking - CI-equivalent)
+run_check "Test" "npm run test"
+echo ""
+
+# 9. File size check (blocking)
+run_check "File size check" "npm run lint:filesize"
+echo ""
+
+# 10. Cleanup check (blocking on critical violations only)
 echo -e "${BLUE}▶ Cleanup check...${NC}"
-if npm run cleanup:check > /dev/null 2>&1; then
-    echo -e "${GREEN}✅ Cleanup check passed${NC}"
+set +e
+npm run cleanup:check
+CLEANUP_EXIT=$?
+set -e
+if [ $CLEANUP_EXIT -eq 1 ]; then
+    echo -e "${RED}❌ Cleanup check failed (critical violations)${NC}"
+    echo -e "${YELLOW}   Run: npm run cleanup:check${NC}"
+    FAILED=1
+elif [ $CLEANUP_EXIT -eq 2 ]; then
+    echo -e "${YELLOW}⚠️  Cleanup found warnings (non-blocking)${NC}"
 else
-    echo -e "${YELLOW}⚠️  Cleanup check found issues (non-blocking)${NC}"
-    echo -e "${YELLOW}   Run manually: npm run cleanup:check${NC}"
+    echo -e "${GREEN}✅ Cleanup check passed${NC}"
 fi
 echo ""
 
-# 9. Build check (most important - this is what Vercel runs)
+# 11. Build check (most important - this is what Vercel runs)
 echo -e "${BLUE}▶ Build check (this is what Vercel runs)...${NC}"
 if npm run build >/dev/null 2>&1; then
     echo -e "${GREEN}✅ Build check passed${NC}"
 
-    # Bundle budget check (Phase 5: The Auditor)
+    # 12. Bundle budget check (Phase 5: The Auditor)
     echo -e "${BLUE}▶ Bundle budget check...${NC}"
     if npm run check:bundle; then
         echo -e "${GREEN}✅ Bundle budget passed${NC}"
@@ -154,9 +169,12 @@ else
     echo -e "${YELLOW}💡 Quick fix commands:${NC}"
     echo -e "   npm audit              # Review vulnerabilities"
     echo -e "   npm audit fix          # Fix vulnerabilities automatically"
+    echo -e "   npm run test          # Fix test failures"
     echo -e "   npm run lint          # Fix linting issues"
     echo -e "   npm run type-check    # Fix TypeScript errors"
     echo -e "   npm run format        # Fix formatting issues"
+    echo -e "   npm run lint:filesize # See file size violations"
+    echo -e "   npm run cleanup:check # See cleanup violations"
     echo -e "   npm run build         # See build errors"
     echo ""
     exit 1

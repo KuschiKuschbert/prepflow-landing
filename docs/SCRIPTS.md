@@ -159,6 +159,65 @@ npm run changelog
 - Groups commits by type
 - Generates formatted CHANGELOG.md entry
 
+**Integration:** Runs automatically in Phase 3 of `scripts/safe-merge.sh` after merge.
+
+---
+
+### Dev Log Auto-Append
+
+**Script:** `scripts/dev-log.js`, `scripts/dev-log-from-git.js`
+**Commands:** `npm run dev:log`, `npm run dev:log:from-git`
+**Referenced in:** `.cursorrules` (session logging)
+
+Appends bullets to `docs/DEV_LOG.md` under today's date.
+
+**Usage:**
+
+```bash
+npm run dev:log "Summary of changes"
+npm run dev:log "Summary" "Optional detail"
+npm run dev:log:from-git              # From last 3 commits, prompts to confirm
+npm run dev:log:from-git -- --yes      # Skip prompt
+npm run dev:log:from-git -- --count=1  # Only last commit
+```
+
+---
+
+### Skill Learning (merge, map-suggest, map-apply)
+
+**Scripts:** `scripts/skill-learning/merge.js`, `scripts/skill-learning/map-suggest.js`, `scripts/skill-learning/map-apply.js`
+**Commands:**
+
+- `npm run skill:merge <skill-name>` – Merge a proposal into the live skill
+- `npm run skill:merge --all` – Merge all pending proposals
+- `npm run skill:merge -- --interactive` – Interactive review with diff and y/n/s prompt (or `skill:merge:review`)
+- `npm run skill:map-suggest` – Suggest skill-mapping.json entries for unmapped error patterns
+- `npm run skill:map-apply` – Apply suggestions to skill-mapping.json (`--dry-run` to preview)
+- `npm run skill:evolve -- --auto-map` – Evolve and auto-apply mapping suggestions
+
+**Referenced in:** `docs/SKILL_LEARNING.md`
+
+---
+
+### Troubleshooting Sync
+
+**Script:** `scripts/troubleshooting-sync.js`
+**Commands:** `npm run troubleshooting:suggest`, `npm run troubleshooting:apply`
+
+Suggests or applies TROUBLESHOOTING_LOG entries from knowledge-base errors not yet documented.
+
+- `troubleshooting:suggest` – Print suggested entries
+- `troubleshooting:apply` – Append suggested entries to docs/TROUBLESHOOTING_LOG.md (`--dry-run` to preview)
+
+---
+
+### RSI Derived Summary
+
+**Script:** `scripts/rsi-derived-summary.js`
+**Command:** `npm run rsi:derived-summary`
+
+Generates `docs/rsi/DERIVED_RULES_SUMMARY.md` from recent RSI improvements (last 7 days by default). Runs automatically after `npm run rsi:run`.
+
 ---
 
 ### Codemods
@@ -660,14 +719,16 @@ Runs the same deploy-critical checks as CI (`.github/workflows/ci-cd.yml`). Orde
 
 1. Node version check (>=22.0.0)
 2. Dependencies installation (`npm ci`)
-3. Security audit (`npm audit --audit-level=moderate`)
+3. Security audit (`npm audit --audit-level=critical`)
 4. Lint check (`npm run lint`)
 5. Type check (`npm run type-check`)
 6. Format check (`npm run format:check`)
 7. Script audit (`npm run audit:scripts`)
-8. Cleanup check (`npm run cleanup:check`) - **Advisory only** (non-blocking)
-9. Build check (`npm run build`) - Most important, this is what Vercel runs
-10. Bundle budget check (`npm run check:bundle`)
+8. **Test** (`npm run test`) - **Blocking** (CI-equivalent)
+9. File size check (`npm run lint:filesize`) - **Blocking**
+10. Cleanup check (`npm run cleanup:check`) - **Blocking on critical** (warnings non-blocking)
+11. Build check (`npm run build`) - Most important, this is what Vercel runs
+12. Bundle budget check (`npm run check:bundle`)
 
 **Usage:**
 
@@ -681,11 +742,39 @@ npm run pre-deploy
 - `0` - All checks passed, safe to deploy
 - `1` - One or more checks failed, fix issues before deploying
 
-**Integration:** Should be run manually before pushing to `main`. Pre-deploy mirrors CI blocking checks—passing locally indicates CI will pass. Consider adding to pre-push hook (future enhancement).
+**Integration:** Pre-deploy is the single source of truth for local verification. `scripts/safe-merge.sh` delegates to it before merging. Pre-push runs only lint + type-check (lightweight). CI mirrors pre-deploy checks.
 
 **See Also:**
 
 - `operations.mdc` (Deployment Process) - Complete deployment checklist
+- `docs/GIT_WORKFLOW.md` - Safe-merge and pre-push flow
+
+---
+
+### Safe Merge
+
+**Script:** `scripts/safe-merge.sh`
+**Command:** `./scripts/safe-merge.sh`
+**Referenced in:** `docs/GIT_WORKFLOW.md`, `docs/brain/GIT.md`
+
+Manual merge protocol. **Delegates verification to `npm run pre-deploy`** (single source of truth). Do not use `git merge` directly into `main`.
+
+**Phases:**
+
+1. **Verification:** Runs `npm run pre-deploy` (lint, type-check, test, file size, cleanup, build). Use `--fast` for lint + type-check only; `--skip-lint` for merge-only (emergency).
+2. **Merge:** Checkout main, pull, merge feature branch.
+3. **Changelog:** Runs `npm run changelog` and `npm run dev:log:from-git`.
+4. **Cleanup:** Prompts to delete the merged branch.
+
+**Usage:**
+
+```bash
+./scripts/safe-merge.sh        # Full verification via pre-deploy
+./scripts/safe-merge.sh --fast # Lint + type-check only
+./scripts/safe-merge.sh --skip-lint  # Skip verification (emergency)
+```
+
+**Note:** Pre-push does not invoke safe-merge. Pre-push runs only lint + type-check.
 
 ---
 
@@ -979,15 +1068,18 @@ Will run all test suites (unit, integration, E2E).
 ### Pre-Commit
 
 - `lint:filesize` - File size checks (via lint-staged)
+- `format` - Prettier (via lint-staged)
 
-### Pre-Deployment
+### Pre-Push
 
 - `lint` - ESLint checks
 - `type-check` - TypeScript validation
-- `format:check` - Prettier formatting check
-- `build` - Production build
-- `audit:deps` - Dependency audit
-- `verify-vercel-setup.sh` - Vercel setup verification
+- Lightweight only (under 30s). Full verification in CI and safe-merge.
+
+### Pre-Deployment (npm run pre-deploy)
+
+- Single source of truth: lint, type-check, format:check, audit:scripts, test, lint:filesize, cleanup:check, build, check:bundle
+- Safe-merge delegates to it before merging
 
 ### CI Pipeline
 
@@ -1007,21 +1099,29 @@ Will run all test suites (unit, integration, E2E).
 
 ## Quick Reference
 
-| Script               | Command                       | Category    | Status     |
-| -------------------- | ----------------------------- | ----------- | ---------- |
-| File Size Check      | `npm run lint:filesize`       | Development | ✅ Active  |
-| Breakpoint Detection | `npm run detect-breakpoints`  | Development | ✅ Active  |
-| CHANGELOG Generation | `npm run changelog`           | Development | ✅ Active  |
-| Breakpoint Codemod   | `npm run codemod:breakpoints` | Development | ✅ Active  |
-| Console Codemod      | `npm run codemod:console`     | Development | ✅ Active  |
-| Bundle Analysis      | `npm run analyze`             | Performance | ✅ Active  |
-| Dependency Audit     | `npm run audit:deps`          | Testing     | ✅ Active  |
-| Unit Tests           | `npm test`                    | Testing     | ✅ Active  |
-| Test Coverage        | `npm run test:coverage`       | Testing     | ✅ Active  |
-| Integration Tests    | `npm run test:integration`    | Testing     | 📋 Planned |
-| E2E Tests            | `npm run test:e2e`            | Testing     | ✅ Active  |
-| E2E Smoke            | `npm run test:smoke`          | Testing     | ✅ Active  |
-| E2E Crawl            | `npm run test:crawl`          | Testing     | ✅ Active  |
+| Script                | Command                           | Category    | Status     |
+| --------------------- | --------------------------------- | ----------- | ---------- |
+| File Size Check       | `npm run lint:filesize`           | Development | ✅ Active  |
+| Breakpoint Detection  | `npm run detect-breakpoints`      | Development | ✅ Active  |
+| CHANGELOG Generation  | `npm run changelog`               | Development | ✅ Active  |
+| Dev Log               | `npm run dev:log`                 | Development | ✅ Active  |
+| Skill Merge           | `npm run skill:merge`             | Automation  | ✅ Active  |
+| Skill Map Suggest     | `npm run skill:map-suggest`       | Automation  | ✅ Active  |
+| Skill Map Apply       | `npm run skill:map-apply`         | Automation  | ✅ Active  |
+| Troubleshooting Apply | `npm run troubleshooting:apply`   | Automation  | ✅ Active  |
+| Dev Log From Git      | `npm run dev:log:from-git`        | Development | ✅ Active  |
+| Troubleshooting Sync  | `npm run troubleshooting:suggest` | Automation  | ✅ Active  |
+| RSI Derived Summary   | `npm run rsi:derived-summary`     | Automation  | ✅ Active  |
+| Breakpoint Codemod    | `npm run codemod:breakpoints`     | Development | ✅ Active  |
+| Console Codemod       | `npm run codemod:console`         | Development | ✅ Active  |
+| Bundle Analysis       | `npm run analyze`                 | Performance | ✅ Active  |
+| Dependency Audit      | `npm run audit:deps`              | Testing     | ✅ Active  |
+| Unit Tests            | `npm test`                        | Testing     | ✅ Active  |
+| Test Coverage         | `npm run test:coverage`           | Testing     | ✅ Active  |
+| Integration Tests     | `npm run test:integration`        | Testing     | 📋 Planned |
+| E2E Tests             | `npm run test:e2e`                | Testing     | ✅ Active  |
+| E2E Smoke             | `npm run test:smoke`              | Testing     | ✅ Active  |
+| E2E Crawl             | `npm run test:crawl`              | Testing     | ✅ Active  |
 
 ---
 

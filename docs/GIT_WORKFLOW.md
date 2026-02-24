@@ -65,6 +65,8 @@ git commit -m "feat: add amazing new feature"
 
 We do **NOT** use standard `git merge`. We use a guarded protocol script to ensure stability.
 
+**Safe-merge is manual:** Run it yourself when merging into `main`. Pre-push does **not** invoke it.
+
 ### The Command
 
 ```bash
@@ -73,11 +75,11 @@ We do **NOT** use standard `git merge`. We use a guarded protocol script to ensu
 
 ### What It Does
 
-1.  **Verifies**: Runs Lint, Type-Check, and Security Audit.
-2.  **Tests**: Runs specific unit tests related to changes (or all tests).
-3.  **Builds**: Simulates a production build (NEXT_BUILD).
-4.  **Merges**: Only if ALL checks pass, it merges your branch into `main`.
-5.  **Cleans**: Deletes the local feature branch.
+1.  **Verifies**: Delegates to `npm run pre-deploy` (single source of truth: lint, type-check, test, file size, cleanup, build).
+2.  **Merges**: Only if ALL checks pass, it merges your branch into `main`.
+3.  **Cleans**: Deletes the local feature branch.
+
+**Flags:** `--fast` runs lint + type-check only (quick gate). `--skip-lint` skips verification entirely (emergency use).
 
 > **Failure:** If `safe-merge.sh` fails, READ THE LOGS, fix the errors, and try again. Do not force merge.
 
@@ -91,8 +93,9 @@ Deployment to Vercel is **automatic** when `main` is updated effectively.
     ```bash
     git push origin main
     ```
-2.  **CI/CD**: GitHub Actions will run the full suite (Lint, Test, Build).
-3.  **Deploy**: If Green, Vercel promotes the build to Production.
+2.  **Pre-push**: Runs lightweight checks (lint + type-check only, under 30s). Full verification is in CI and safe-merge.
+3.  **CI/CD**: GitHub Actions will run the full suite (Lint, Test, Build).
+4.  **Deploy**: If Green, Vercel promotes the build to Production.
 
 ---
 

@@ -36,72 +36,29 @@ done
 
 echo -e "${YELLOW}📍 Merging branch: $CURRENT_BRANCH${NC}"
 if [ "$FAST_MODE" == "true" ]; then
-    echo -e "${YELLOW}⚡ FAST MODE enabled. Skipping full build.${NC}"
+    echo -e "${YELLOW}⚡ FAST MODE enabled. Lint + type-check only.${NC}"
 fi
 if [ "$SKIP_LINT" == "true" ]; then
     echo -e "${YELLOW}⚠️  SKIP_LINT enabled. Skipping lint verification.${NC}"
 fi
 
-# 1. Verification Phase
+# 1. Verification Phase (delegates to pre-deploy - single source of truth)
 echo -e "\n${YELLOW}🔍 Phase 1: Verification${NC}"
-
-echo -n "Running Lint... "
 if [ "$SKIP_LINT" == "true" ]; then
-    echo -e "${YELLOW}Skipped (--skip-lint)${NC}"
-else
-    if npm run lint; then
-        echo -e "${GREEN}Passed${NC}"
-    else
-        echo -e "${RED}Failed${NC}"
+    echo -e "${YELLOW}⚠️  SKIP_LINT enabled. Skipping verification (merge only).${NC}"
+elif [ "$FAST_MODE" == "true" ]; then
+    echo -e "${YELLOW}⚡ FAST MODE: Skipping pre-deploy (lint + type-check only)${NC}"
+    if ! npm run lint; then
+        echo -e "${RED}Verification failed. Fix issues and try again.${NC}"
         exit 1
     fi
-fi
-
-echo -n "Running Tests... "
-# Only run if 'test' script exists and isn't just "echo"
-if grep -q "\"test\": \"jest\"" package.json; then
-   if npm run test; then
-       echo -e "${GREEN}Passed${NC}"
-   else
-       echo -e "${RED}Failed${NC}"
-       exit 1
-   fi
+    if ! npm run type-check; then
+        echo -e "${RED}Verification failed. Fix issues and try again.${NC}"
+        exit 1
+    fi
 else
-    echo -e "${YELLOW}Skipped (No strict test command found)${NC}"
-fi
-
-echo -n "Running Architecture Check... "
-if npm run check:architecture; then
-    echo -e "${GREEN}Passed${NC}"
-else
-    echo -e "${RED}Failed (Architectural Violation)${NC}"
-    exit 1
-fi
-
-echo -n "Running Sentinel Health Check... "
-if npm run check:health; then
-    echo -e "${GREEN}Passed${NC}"
-else
-    echo -e "${RED}Failed (Health Violation)${NC}"
-    exit 1
-fi
-
-echo -n "Running The Auditor (Security)... "
-if npm run check:security; then
-    echo -e "${GREEN}Passed${NC}"
-else
-    echo -e "${RED}Failed (Security/Performance Violation)${NC}"
-    exit 1
-fi
-
-echo -n "Running Build... "
-if [ "$FAST_MODE" == "true" ]; then
-    echo -e "${YELLOW}Skipped (--fast)${NC}"
-else
-    if npm run build; then
-        echo -e "${GREEN}Passed${NC}"
-    else
-        echo -e "${RED}Failed${NC}"
+    if ! npm run pre-deploy; then
+        echo -e "${RED}Verification failed. Fix issues and try again.${NC}"
         exit 1
     fi
 fi
