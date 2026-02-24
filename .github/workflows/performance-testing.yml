@@ -5,9 +5,9 @@ name: Performance Testing
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, development]
   pull_request:
-    branches: [main]
+    branches: [main, development]
   schedule:
     - cron: '0 2 * * *' # Daily at 2 AM
   workflow_dispatch: # Enable manual triggering
@@ -37,6 +37,7 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
 
       - name: Start application
         run: |
@@ -224,65 +225,3 @@ jobs:
 
               execSync(`curl -X POST -H 'Content-type: application/json' --data '${JSON.stringify(message)}' ${webhookUrl}`);
             }
-
-  performance-monitoring:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'schedule'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build application
-        run: npm run build
-
-      - name: Start application
-        run: |
-          # Generate a random token for performance testing if not provided
-          PERFORMANCE_TOKEN=${{ secrets.PERFORMANCE_TEST_TOKEN || 'perf-test-token-$(date +%s)' }}
-          echo "PERFORMANCE_TEST_TOKEN=$PERFORMANCE_TOKEN" >> $GITHUB_ENV
-          PERFORMANCE_TEST_TOKEN=$PERFORMANCE_TOKEN npm start &
-        env:
-          PORT: 3000
-
-      - name: Wait for application
-        run: npx wait-on http://localhost:3000 --timeout 60000
-
-      - name: Run comprehensive performance tests
-        run: |
-          # Run Lighthouse CI
-          PERFORMANCE_TEST_TOKEN=${{ env.PERFORMANCE_TEST_TOKEN }} npx lhci autorun
-
-          # Run bundle analysis
-          npm run analyze || echo "Bundle analysis failed, continuing..."
-
-          # Run performance budget check
-          node scripts/check-performance-budget.js || echo "Performance budget check failed, continuing..."
-
-          # Generate performance report
-          node scripts/generate-performance-report.js || echo "Performance report generation failed, continuing..."
-
-      - name: Upload performance monitoring results
-        uses: actions/upload-artifact@v4
-        with:
-          name: performance-monitoring-$(date +%Y%m%d)
-          path: |
-            .lighthouseci/
-            performance-budget-report.json
-            bundle-analysis-report.json
-            performance-monitoring-report.json
-
-      - name: Send performance monitoring report
-        run: node scripts/send-performance-report.js || echo "Performance report sending failed, continuing..."
-        env:
-          PERFORMANCE_WEBHOOK_URL: ${{ secrets.PERFORMANCE_WEBHOOK_URL }}
-          ALERT_EMAIL_TO: ${{ secrets.ALERT_EMAIL_TO }}

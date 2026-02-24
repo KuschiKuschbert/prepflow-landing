@@ -5,6 +5,8 @@ on:
     workflows: ['🚀 CI/CD Pipeline']
     types:
       - completed
+  schedule:
+    - cron: '0 3 * * 0' # Weekly Sunday 3 AM UTC
   workflow_dispatch:
 
 jobs:
@@ -20,7 +22,6 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - name: Capture build errors
-        if: failure()
         run: |
           # Capture TypeScript errors
           npm run type-check 2>&1 | tee /tmp/ts-errors.txt || true
@@ -89,7 +90,7 @@ jobs:
   learning-report:
     name: Generate Learning Report
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || github.event.schedule
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
