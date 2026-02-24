@@ -7,7 +7,7 @@ import type {
   MenuOption,
   RecipeOption,
   RunsheetItemWithRelations,
-} from '../components/RunsheetPanel';
+} from '../components/runsheet-types';
 
 type UpdateData = {
   menu_id?: string | null;

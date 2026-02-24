@@ -4,10 +4,10 @@ import { useIngredientData } from '../../hooks/useIngredientData';
 import { useIngredientMigration } from '../../hooks/useIngredientMigration';
 import { useIngredientsQuery } from '../../hooks/useIngredientsQuery';
 import { useRegionalUnits } from '../../hooks/useRegionalUnits';
-import { Ingredient } from './useIngredientsClientController';
+import type { ExistingIngredient } from '../types';
 
 export function useIngredientDataSync(
-  setIngredients: (ingredients: Ingredient[]) => void,
+  setIngredients: (ingredients: ExistingIngredient[]) => void,
   queryParams: any, // Typed as IngredientsQueryParams in usage
 ) {
   const { availableUnits } = useRegionalUnits();
@@ -29,7 +29,7 @@ export function useIngredientDataSync(
   }, [loading, isLoading]);
 
   useEffect(() => {
-    if (ingredientsData?.items) setIngredients(ingredientsData.items as Ingredient[]);
+    if (ingredientsData?.items) setIngredients(ingredientsData.items as ExistingIngredient[]);
   }, [ingredientsData]);
 
   return {

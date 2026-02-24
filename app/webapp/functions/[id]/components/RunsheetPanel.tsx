@@ -1,6 +1,6 @@
 'use client';
 
-import type { AppFunction, RunsheetItem } from '@/app/api/functions/helpers/schemas';
+import type { AppFunction } from '@/app/api/functions/helpers/schemas';
 import { Card } from '@/components/ui/Card';
 import { Icon } from '@/components/ui/Icon';
 import { ClipboardList } from 'lucide-react';
@@ -9,43 +9,15 @@ import { ExportDayButton } from './ExportDayButton';
 import { FunctionAllergenSummary } from './FunctionAllergenSummary';
 import { RunsheetAddForm } from './RunsheetAddForm';
 import { RunsheetItemRow } from './RunsheetItemRow';
+import type {
+  DishOption,
+  MenuOption,
+  RecipeOption,
+  RunsheetItemWithRelations,
+} from './runsheet-types';
 import { useRunsheetPanel } from '../hooks/useRunsheetPanel';
 
-export type RunsheetItemWithRelations = RunsheetItem & {
-  menus?: { id: string; menu_name: string; menu_type: string } | null;
-  dishes?: {
-    id: string;
-    dish_name: string;
-    selling_price: number;
-    is_vegetarian?: boolean | null;
-    is_vegan?: boolean | null;
-    allergens?: string[] | null;
-  } | null;
-  recipes?: {
-    id: string;
-    recipe_name: string;
-    is_vegetarian?: boolean | null;
-    is_vegan?: boolean | null;
-    allergens?: string[] | null;
-  } | null;
-};
-
-export interface DishOption {
-  id: string;
-  dish_name: string;
-  selling_price: number;
-}
-
-export interface RecipeOption {
-  id: string;
-  recipe_name: string;
-}
-
-export interface MenuOption {
-  id: string;
-  menu_name: string;
-  menu_type: string;
-}
+export type { DishOption, MenuOption, RecipeOption, RunsheetItemWithRelations } from './runsheet-types';
 
 interface RunsheetPanelProps {
   func: AppFunction;

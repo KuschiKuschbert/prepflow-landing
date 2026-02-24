@@ -2,15 +2,10 @@
  * Record processing utilities for cleaning records formatting
  */
 
-import type { TaskWithCompletions } from '@/lib/cleaning/completion-logic';
 import { getTaskStatusForDate } from './helpers';
-import type { CleaningRecordExportData } from '../formatCleaningRecordsForPrint';
+import type { CleaningRecord, CleaningRecordExportData } from '../cleaning-records-export-types';
 
-export interface CleaningRecord {
-  task: TaskWithCompletions;
-  date: string;
-  status: { status: string; color: string; completedDate?: string };
-}
+export type { CleaningRecord } from '../cleaning-records-export-types';
 
 /**
  * Process cleaning tasks into individual records

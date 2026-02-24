@@ -1,5 +1,5 @@
 'use client';
-import { StatisticsGrid } from './MenuItemHoverStatistics';
+import { StatisticsGrid } from './MenuItemHoverStatistics/components/StatisticsGrid';
 
 interface ItemStatistics {
   cogs: number;

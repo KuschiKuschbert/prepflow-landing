@@ -4,13 +4,9 @@ import { useMemo, useState } from 'react';
 import { Recipe, RecipePriceData } from '@/lib/types/recipes';
 import { filterRecipes } from '../utils/recipeFiltering';
 import { sortRecipes } from '../utils/recipeSorting';
+import type { RecipeSortField } from '../utils/recipe-filtering-types';
 
-export type RecipeSortField =
-  | 'name'
-  | 'recommended_price'
-  | 'profit_margin'
-  | 'contributing_margin'
-  | 'created';
+export type { RecipeSortField } from '../utils/recipe-filtering-types';
 
 export interface RecipeFilters {
   searchTerm: string;

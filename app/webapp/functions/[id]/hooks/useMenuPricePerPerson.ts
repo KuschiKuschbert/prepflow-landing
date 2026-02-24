@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { RunsheetItemWithRelations } from '../components/RunsheetPanel';
+import type { RunsheetItemWithRelations } from '../components/runsheet-types';
 
 export function useMenuPricePerPerson(items: RunsheetItemWithRelations[]) {
   const [menuPricePerPerson, setMenuPricePerPerson] = useState<Record<string, number>>({});

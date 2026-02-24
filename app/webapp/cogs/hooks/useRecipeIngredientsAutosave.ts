@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 import { COGSCalculation } from '@/lib/types/cogs';
-import { serializeCalculations } from './utils/recipeIngredientsAutosaveUtils';
 import { useAutosaveResetEffect } from './helpers/autosaveEffects';
 import { useAutosaveDebounce } from './helpers/autosaveDebounce';
+import { serializeCalculations } from './utils/recipeIngredientsAutosaveUtils';
+import type { AutosaveStatus } from './helpers/autosave-types';
 
-export type AutosaveStatus = 'idle' | 'saving' | 'saved' | 'error';
+export type { AutosaveStatus } from './helpers/autosave-types';
 
 interface UseRecipeIngredientsAutosaveOptions {
   recipeId: string | null;

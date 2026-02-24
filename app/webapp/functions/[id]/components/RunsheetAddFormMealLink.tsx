@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { UtensilsCrossed } from 'lucide-react';
-import type { DishOption, MenuOption, RecipeOption } from './RunsheetPanel';
+import type { DishOption, MenuOption, RecipeOption } from './runsheet-types';
 
 type LinkTab = 'dishes' | 'recipes' | 'menus';
 

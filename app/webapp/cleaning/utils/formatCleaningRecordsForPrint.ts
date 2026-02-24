@@ -3,22 +3,15 @@
  * Converts cleaning tasks with completions into HTML table format
  */
 
-import type { TaskWithCompletions } from '@/lib/cleaning/completion-logic';
 import { processCleaningRecords } from './formatCleaningRecordsForPrint/processRecords';
 import {
   generateEmptyStateHTML,
   generateMetaHTML,
   generateTableHTML,
 } from './formatCleaningRecordsForPrint/htmlGeneration';
+import type { CleaningRecordExportData } from './cleaning-records-export-types';
 
-export interface CleaningRecordExportData {
-  tasks: TaskWithCompletions[];
-  dateRange?: {
-    start: string;
-    end: string;
-  };
-  statusFilter?: 'all' | 'completed' | 'pending' | 'overdue';
-}
+export type { CleaningRecordExportData } from './cleaning-records-export-types';
 
 /**
  * Format cleaning records data as HTML for print/export

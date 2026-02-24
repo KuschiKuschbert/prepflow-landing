@@ -1,6 +1,6 @@
 'use client';
 
-import type { CreateFunctionData } from './CreateFunctionForm';
+import type { CreateFunctionData } from './create-function-form-types';
 
 const inputClasses =
   'w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2.5 text-sm text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)] focus:outline-none transition-colors';

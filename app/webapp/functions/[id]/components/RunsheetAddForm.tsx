@@ -7,7 +7,7 @@ import { logger } from '@/lib/logger';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { RunsheetAddFormMealLink } from './RunsheetAddFormMealLink';
-import type { DishOption, MenuOption, RecipeOption } from './RunsheetPanel';
+import type { DishOption, MenuOption, RecipeOption } from './runsheet-types';
 
 type LinkTab = 'dishes' | 'recipes' | 'menus';
 

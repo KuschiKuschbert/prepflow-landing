@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { AutosaveStatus } from '../useRecipeIngredientsAutosave';
+import type { AutosaveStatus } from './autosave-types';
 
 interface AutosaveEffectsProps {
   enabled: boolean;

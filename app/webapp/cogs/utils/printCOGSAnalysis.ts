@@ -5,28 +5,12 @@
  */
 
 import { printWithTemplate } from '@/lib/exports/print-template';
-import type { COGSCalculation, PricingCalculation } from '@/lib/types/cogs';
 import { formatCOGSHeader } from './printCOGSAnalysis/formatHeader';
 import { formatCOGSCostTable } from './printCOGSAnalysis/formatCostTable';
 import { formatCOGSPricing } from './printCOGSAnalysis/formatPricing';
+import type { PrintCOGSAnalysisOptions } from './printCOGSAnalysis-types';
 
-export interface Recipe {
-  id: string;
-  recipe_name: string;
-  yield: number;
-  yield_unit: string;
-}
-
-export interface PrintCOGSAnalysisOptions {
-  recipe: Recipe | null;
-  calculations: COGSCalculation[];
-  dishPortions: number;
-  totalCOGS: number;
-  costPerPortion: number;
-  pricingCalculation?: PricingCalculation;
-  targetGrossProfit?: number;
-  pricingStrategy?: string;
-}
+export type { PrintCOGSAnalysisOptions, Recipe } from './printCOGSAnalysis-types';
 
 /**
  * Format COGS analysis for printing

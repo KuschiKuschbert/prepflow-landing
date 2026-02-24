@@ -2,7 +2,7 @@
  * Format header section for COGS analysis print
  */
 
-import type { Recipe } from '../printCOGSAnalysis';
+import type { Recipe } from '../printCOGSAnalysis-types';
 
 /**
  * Format recipe/dish header for print

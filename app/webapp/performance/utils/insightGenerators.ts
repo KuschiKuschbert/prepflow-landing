@@ -1,4 +1,4 @@
-import { PerformanceInsight } from '../hooks/usePerformanceInsights';
+import type { PerformanceInsight } from '../hooks/performance-insight-types';
 import { PerformanceItem } from '@/lib/types/performance';
 
 export function generateHiddenGemInsight(hiddenGems: PerformanceItem[]): PerformanceInsight | null {

@@ -2,7 +2,7 @@
  * Fetch AI insights for performance items.
  */
 import { logger } from '@/lib/logger';
-import type { PerformanceInsight } from '../../usePerformanceInsights';
+import type { PerformanceInsight } from '../../performance-insight-types';
 import type { PerformanceItem } from '@/lib/types/performance';
 
 interface FetchAIInsightsParams {

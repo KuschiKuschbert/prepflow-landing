@@ -1,7 +1,7 @@
 /**
  * Generate order items table HTML.
  */
-import type { OrderListItem } from '../../printOrderList';
+import type { OrderListItem } from '../../printOrderList-types';
 
 export function generateOrderItemsTable(items: OrderListItem[]): string {
   return `

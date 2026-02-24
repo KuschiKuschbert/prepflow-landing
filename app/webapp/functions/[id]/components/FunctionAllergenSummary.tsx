@@ -7,7 +7,7 @@ import { AllergenDisplay } from '@/components/ui/AllergenDisplay';
 import { Icon } from '@/components/ui/Icon';
 import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
 import { Leaf } from 'lucide-react';
-import type { RunsheetItemWithRelations } from './RunsheetPanel';
+import type { RunsheetItemWithRelations } from './runsheet-types';
 
 interface FunctionAllergenSummaryProps {
   items: RunsheetItemWithRelations[];

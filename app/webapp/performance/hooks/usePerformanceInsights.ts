@@ -11,19 +11,9 @@ import {
   sortInsightsByPriority,
 } from '../utils/insightGenerators';
 import { fetchAIInsights } from './usePerformanceInsights/helpers/fetchAIInsights';
+import type { PerformanceInsight } from './performance-insight-types';
 
-export interface PerformanceInsight {
-  id: string;
-  type: 'hidden_gem' | 'bargain_bucket' | 'burnt_toast' | 'chefs_kiss';
-  title: string;
-  message: string;
-  items: PerformanceItem[];
-  priority: 'high' | 'medium' | 'low';
-  potentialImpact?: {
-    description: string;
-    value: number;
-  };
-}
+export type { PerformanceInsight } from './performance-insight-types';
 
 export function usePerformanceInsights(
   performanceItems: PerformanceItem[],

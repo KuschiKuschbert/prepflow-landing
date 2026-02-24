@@ -8,7 +8,7 @@ import type {
   MenuOption,
   RecipeOption,
   RunsheetItemWithRelations,
-} from '../components/RunsheetPanel';
+} from '../components/runsheet-types';
 import { buildOptimisticRunsheetUpdate } from './runsheet-mutations-helpers';
 
 interface UseRunsheetMutationsParams {

@@ -4,7 +4,7 @@
  */
 
 import { logger } from '@/lib/logger';
-import { IngredientData } from '../../useIngredientData';
+import type { IngredientData } from '../ingredient-data-types';
 
 interface RecipeIngredientApiResponse {
   items?: Array<{

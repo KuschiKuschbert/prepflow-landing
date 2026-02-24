@@ -3,8 +3,7 @@
  */
 
 import { escapeHtml } from '@/lib/exports/template-utils';
-import type { CleaningRecordExportData } from '../formatCleaningRecordsForPrint';
-import type { CleaningRecord } from './processRecords';
+import type { CleaningRecord, CleaningRecordExportData } from '../cleaning-records-export-types';
 import { getAreaName, formatDate, formatFrequencyType } from './helpers';
 
 /**

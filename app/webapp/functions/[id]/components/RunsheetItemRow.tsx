@@ -21,7 +21,7 @@ import type {
   MenuOption,
   RecipeOption,
   RunsheetItemWithRelations,
-} from './RunsheetPanel';
+} from './runsheet-types';
 
 interface RunsheetItemRowProps {
   item: RunsheetItemWithRelations;

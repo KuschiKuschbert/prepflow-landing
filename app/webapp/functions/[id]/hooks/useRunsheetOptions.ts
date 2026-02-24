@@ -2,7 +2,7 @@
 
 import { logger } from '@/lib/logger';
 import { useCallback, useEffect, useState } from 'react';
-import type { DishOption, MenuOption, RecipeOption } from '../components/RunsheetPanel';
+import type { DishOption, MenuOption, RecipeOption } from '../components/runsheet-types';
 
 export function useRunsheetOptions() {
   const [menus, setMenus] = useState<MenuOption[]>([]);

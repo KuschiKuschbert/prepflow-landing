@@ -1,7 +1,7 @@
 import { parseIngredientsCSV } from '@/app/webapp/ingredients/hooks/helpers/csvImport';
 import { logger } from '@/lib/logger';
 import { useState } from 'react';
-import type { Ingredient } from './useCSVImport';
+import type { Ingredient } from './csv-import-types';
 
 export function useCSVParser() {
   const [csvData, setCsvData] = useState<string>('');

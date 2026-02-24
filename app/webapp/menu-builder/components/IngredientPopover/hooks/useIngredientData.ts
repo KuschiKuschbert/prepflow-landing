@@ -2,27 +2,9 @@ import { logger } from '@/lib/logger';
 import { useEffect, useRef, useState } from 'react';
 import { fetchDishIngredients } from './useIngredientData/helpers/fetchDishIngredients';
 import { fetchRecipeIngredients } from './useIngredientData/helpers/fetchRecipeIngredients';
+import type { IngredientData, RecipeSource } from './useIngredientData/ingredient-data-types';
 
-export interface IngredientData {
-  id: string;
-  ingredient_name: string;
-  brand?: string;
-  quantity?: number;
-  unit?: string;
-  allergens?: string[];
-  allergen_source?: {
-    manual?: boolean;
-    ai?: boolean;
-  };
-}
-
-export interface RecipeSource {
-  source_type: 'recipe';
-  source_id: string;
-  source_name: string;
-  quantity?: number;
-  unit?: string;
-}
+export type { IngredientData, RecipeSource } from './useIngredientData/ingredient-data-types';
 
 export function useIngredientData(
   isOpen: boolean,

@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { IngredientData, RecipeSource } from '../../useIngredientData';
+import type { IngredientData, RecipeSource } from '../ingredient-data-types';
 import { fetchRecipeIngredients } from './fetchRecipeIngredients';
 
 interface DishApiResponse {

@@ -4,6 +4,9 @@ import { Button } from '@/components/ui/Button';
 import { useEffect, useState } from 'react';
 import { CreateFunctionFormDateTimeSection } from './CreateFunctionFormDateTimeSection';
 import { CreateFunctionFormInfoBox } from './CreateFunctionFormInfoBox';
+import type { CreateFunctionData } from './create-function-form-types';
+
+export type { CreateFunctionData } from './create-function-form-types';
 
 interface CreateFunctionFormProps {
   onSubmit: (data: CreateFunctionData) => Promise<void>;
@@ -15,20 +18,6 @@ interface CreateFunctionFormProps {
     company: string | null;
     address?: string | null;
   }>;
-}
-
-export interface CreateFunctionData {
-  name: string;
-  type: 'Birthday' | 'Christmas Party' | 'Wedding' | 'Wake' | 'Kids Birthday' | 'Other';
-  start_date: string;
-  start_time: string | null;
-  end_date: string | null;
-  end_time: string | null;
-  same_day: boolean;
-  attendees: number;
-  customer_id: string | null;
-  location: string | null;
-  notes: string | null;
 }
 
 const EVENT_TYPES = [

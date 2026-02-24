@@ -19,7 +19,7 @@ async function checkCircularDependencies() {
     });
 
     const circular = res.circular();
-    const MAX_ALLOWED_CIRCULAR = 27; // Baseline (Iteration 9 - pre-merge)
+    const MAX_ALLOWED_CIRCULAR = 0; // All cycles fixed (Iteration 10)
 
     if (circular.length > MAX_ALLOWED_CIRCULAR) {
       console.error(

@@ -3,7 +3,7 @@
  * Generates HTML content for cleaning schedules
  */
 
-import type { CleaningTask } from './printCleaningSchedule';
+import type { CleaningTask } from './cleaning-schedule-types';
 
 /**
  * Format cleaning schedule for print/export

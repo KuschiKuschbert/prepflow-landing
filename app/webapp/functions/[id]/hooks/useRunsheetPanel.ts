@@ -2,7 +2,7 @@
 
 import type { AppFunction } from '@/app/api/functions/helpers/schemas';
 import { useEffect, useState } from 'react';
-import type { RunsheetItemWithRelations } from '../components/RunsheetPanel';
+import type { RunsheetItemWithRelations } from '../components/runsheet-types';
 import { useMenuPricePerPerson } from './useMenuPricePerPerson';
 import { useRunsheetMutations } from './useRunsheetMutations';
 import { useRunsheetOptions } from './useRunsheetOptions';

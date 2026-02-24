@@ -1,5 +1,5 @@
 import { Recipe, RecipePriceData } from '@/lib/types/recipes';
-import { RecipeSortField } from '../hooks/useRecipeFiltering';
+import type { RecipeSortField } from './recipe-filtering-types';
 
 export function sortRecipes(
   recipes: Recipe[],
