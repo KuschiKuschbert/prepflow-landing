@@ -8,11 +8,7 @@ import { generateOrderHeader, getStatusLabel } from './printOrderList/helpers/ge
 import { generateOrderItemsTable } from './printOrderList/helpers/generateOrderItemsTable';
 import type { PrintOrderListOptions } from './printOrderList-types';
 
-export type {
-  OrderList,
-  OrderListItem,
-  PrintOrderListOptions,
-} from './printOrderList-types';
+export type { OrderList, OrderListItem, PrintOrderListOptions } from './printOrderList-types';
 
 /**
  * Format order list for printing

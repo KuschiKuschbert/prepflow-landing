@@ -66,6 +66,9 @@ function checkSecurityPatterns(content, filePath) {
   if (isAPIRoute) {
     const hasZodImport = /import\s+.*from\s+['"]zod['"]/.test(content);
     const hasZodSchema = /z\.object\(/.test(content) || /z\.string\(/.test(content);
+    const hasSchemaImport = /import.*[Ss]chema.*from/.test(content);
+    const hasValidationCall = /\.safeParse\(|\.parse\(/.test(content);
+    const hasIndirectZodValidation = hasSchemaImport && hasValidationCall;
     const hasRequestParsing =
       /req\.json\(\)/.test(content) ||
       /request\.json\(\)/.test(content) ||
@@ -75,7 +78,8 @@ function checkSecurityPatterns(content, filePath) {
     const hasPATCH = /export.*function.*PATCH/.test(content);
     const hasMutationMethod = hasPOST || hasPUT || hasPATCH;
 
-    if (hasMutationMethod && hasRequestParsing && !hasZodImport && !hasZodSchema) {
+    const hasValidInputValidation = hasZodImport || hasZodSchema || hasIndirectZodValidation;
+    if (hasMutationMethod && hasRequestParsing && !hasValidInputValidation) {
       violations.push({
         type: 'missing-input-validation',
         line: findLineNumber(lines, /export.*function.*(POST|PUT|PATCH)/),

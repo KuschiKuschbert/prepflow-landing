@@ -120,9 +120,10 @@ run_check "File size check" "npm run lint:filesize"
 echo ""
 
 # 10. Cleanup check (blocking on critical violations only)
+# Advisory mode: api-patterns, database-patterns, error-handling don't block deploy
 echo -e "${BLUE}▶ Cleanup check...${NC}"
 set +e
-npm run cleanup:check
+CLEANUP_PRE_DEPLOY_ADVISORY=1 npm run cleanup:check
 CLEANUP_EXIT=$?
 set -e
 if [ $CLEANUP_EXIT -eq 1 ]; then

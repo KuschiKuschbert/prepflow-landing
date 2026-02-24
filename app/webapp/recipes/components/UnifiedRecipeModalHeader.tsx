@@ -1,6 +1,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
+import { logger } from '@/lib/logger';
 import { Calculator, ChefHat, Copy, Edit, FileText, Printer, Share2, X } from 'lucide-react';
 import { Recipe } from '@/lib/types/recipes';
 
@@ -47,6 +48,7 @@ export function UnifiedRecipeModalHeader({
       await navigator.clipboard.writeText(window.location.href);
       showSuccess('Link copied to clipboard');
     } catch (err) {
+      logger.error('[UnifiedRecipeModalHeader] Clipboard copy failed:', { error: err });
       showInfo('Share menu opened');
     }
   };

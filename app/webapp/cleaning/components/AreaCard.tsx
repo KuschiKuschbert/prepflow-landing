@@ -92,6 +92,7 @@ function AreaCardComponent({ area, onAddTask, onViewTasks, onDelete }: AreaCardP
               onClick={handleAddTaskClick}
               className="flex items-center gap-1.5 rounded-lg bg-[var(--muted)]/50 px-3 py-1.5 text-xs font-medium text-[var(--foreground-secondary)] transition-all duration-200 hover:bg-[var(--muted)] hover:text-[var(--primary)]"
               title="Add task to this area"
+              aria-label={`Add task to ${area.area_name}`}
             >
               <Icon icon={Plus} size="xs" aria-hidden={true} />
               Add Task

@@ -1,6 +1,7 @@
 'use client';
 
 import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
 import { Icon } from '@/components/ui/Icon';
 import { getSavedExportTheme } from '@/lib/exports/utils/themeUtils';
 import { Download, Printer } from 'lucide-react';
@@ -81,6 +82,9 @@ export function ExportDayButton({ functionId, dayNumber }: ExportDayButtonProps)
         printWindow.focus();
         setTimeout(() => printWindow.print(), 300);
       }
+    } catch (err) {
+      logger.error('[ExportDayButton] Print failed:', { error: err });
+      showError('Export hit a snag, chef. Give it another go.');
     } finally {
       setIsExporting(false);
     }
@@ -103,6 +107,9 @@ export function ExportDayButton({ functionId, dayNumber }: ExportDayButtonProps)
       a.download = dayNumber != null ? `runsheet-day-${dayNumber}.html` : 'runsheet-full.html';
       a.click();
       URL.revokeObjectURL(url);
+    } catch (err) {
+      logger.error('[ExportDayButton] Download failed:', { error: err });
+      showError('Export hit a snag, chef. Give it another go.');
     } finally {
       setIsExporting(false);
     }

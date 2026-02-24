@@ -7,6 +7,7 @@ import { usePhotoUpload } from './hooks/usePhotoUpload';
 
 // New Imports
 import { PageTipsCard } from '@/components/ui/PageTipsCard';
+import { logger } from '@/lib/logger';
 import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { RecipeIngredientWithDetails, Recipe as UnifiedRecipe } from '@/lib/types/recipes';
 import { SpecialsFilters } from './components/SpecialsFilters';
@@ -65,15 +66,19 @@ export default function AISpecialsPage() {
   // 1. Re-fetch when Filters Change (Debounced or Immediate)
   // We use an effect here to sync filter state with data fetching
   useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchRecipes(
-        true, // reset
-        ingredients,
-        inputInternal.length > 3 ? inputInternal : undefined,
-        filterTags,
-        selectedCuisines,
-        readyToCook,
-      );
+    const timer = setTimeout(async () => {
+      try {
+        await fetchRecipes(
+          true, // reset
+          ingredients,
+          inputInternal.length > 3 ? inputInternal : undefined,
+          filterTags,
+          selectedCuisines,
+          readyToCook,
+        );
+      } catch (err) {
+        logger.error('[Specials Page] fetchRecipes failed:', { error: err });
+      }
     }, 300);
     return () => clearTimeout(timer);
     // We intentionally omit fetchRecipes from deps to avoid loops if strict deps

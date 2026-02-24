@@ -1,3 +1,4 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { generatePrintTemplate } from '@/lib/exports/print-template';
 import { getLogoBase64 } from '@/lib/exports/pdf-template/helpers/getLogoServer';
@@ -41,7 +42,10 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       .single();
 
     if (funcError || !appFunction) {
-      return NextResponse.json({ error: 'Function not found' }, { status: 404 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Function not found', 'NOT_FOUND', 404),
+        { status: 404 },
+      );
     }
 
     let itemsQuery = supabase
@@ -66,18 +70,21 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
     if (itemsError) {
       logger.error('Error fetching runsheet items for export:', { error: itemsError });
-      return NextResponse.json({ error: 'Failed to fetch runsheet data' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to fetch runsheet data', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     const validation = validateNotesAgainstRunsheet(appFunction.notes, items || []);
     if (!validation.valid) {
       return NextResponse.json(
-        {
-          error: 'allergen_notes_conflict',
-          conflicts: validation.conflicts,
-          message:
-            'Event notes mention dietary/allergen requirements that conflict with runsheet meals. Please update your notes or change the menu to comply.',
-        },
+        ApiErrorHandler.createError(
+          'Event notes mention dietary/allergen requirements that conflict with runsheet meals. Please update your notes or change the menu to comply.',
+          'allergen_notes_conflict',
+          422,
+          validation.conflicts,
+        ),
         { status: 422 },
       );
     }
@@ -106,6 +113,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   } catch (error) {
     if (error instanceof NextResponse) return error;
     logger.error('Error in GET /api/functions/[id]/export:', { error });
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal Server Error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }

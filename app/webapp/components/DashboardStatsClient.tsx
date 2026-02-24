@@ -3,6 +3,7 @@
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
+import { logger } from '@/lib/logger';
 import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
 import { supabase } from '@/lib/supabase';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -23,26 +24,31 @@ function DashboardStatsClientContent() {
   } = useQuery({
     queryKey: ['dashboard', 'stats'],
     queryFn: async () => {
-      const response = await fetch('/api/dashboard/stats', { cache: 'no-store' });
-      if (!response.ok) {
-        const json = await response.json().catch(() => ({}));
-        throw new Error(json.error || 'Failed to load dashboard statistics');
+      try {
+        const response = await fetch('/api/dashboard/stats', { cache: 'no-store' });
+        if (!response.ok) {
+          const json = await response.json().catch(() => ({}));
+          throw new Error(json.error || 'Failed to load dashboard statistics');
+        }
+        const json = await response.json();
+        if (!json?.success) {
+          throw new Error(json?.error || 'Failed to load dashboard statistics');
+        }
+        return {
+          totalIngredients: json.totalIngredients || 0,
+          totalRecipes: json.totalRecipes || 0,
+          averageDishPrice: json.averageDishPrice || 0,
+          totalMenuDishes: json.totalMenuDishes,
+          recipesReady: json.recipesReady,
+          recipesWithoutCost: json.recipesWithoutCost,
+          ingredientsLowStock: json.ingredientsLowStock,
+          temperatureChecksToday: json.temperatureChecksToday,
+          cleaningTasksPending: json.cleaningTasksPending,
+        } as DashboardStatsData;
+      } catch (err) {
+        logger.error('[DashboardStats] Failed to fetch stats:', { error: err });
+        throw err;
       }
-      const json = await response.json();
-      if (!json?.success) {
-        throw new Error(json?.error || 'Failed to load dashboard statistics');
-      }
-      return {
-        totalIngredients: json.totalIngredients || 0,
-        totalRecipes: json.totalRecipes || 0,
-        averageDishPrice: json.averageDishPrice || 0,
-        totalMenuDishes: json.totalMenuDishes,
-        recipesReady: json.recipesReady,
-        recipesWithoutCost: json.recipesWithoutCost,
-        ingredientsLowStock: json.ingredientsLowStock,
-        temperatureChecksToday: json.temperatureChecksToday,
-        cleaningTasksPending: json.cleaningTasksPending,
-      } as DashboardStatsData;
     },
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,

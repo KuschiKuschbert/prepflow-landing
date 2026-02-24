@@ -53,7 +53,9 @@ function findComponentFiles() {
         }
       } else if (/\.(tsx|jsx)$/.test(entry.name)) {
         // Exclude cleanup scripts - they're utility scripts, not application code
-        if (!fullPath.includes('scripts/cleanup/')) {
+        // Exclude test files - they use console for test output and mocks
+        const isTestFile = /\.(test|spec)\.(tsx|ts|jsx|js)$/.test(entry.name);
+        if (!fullPath.includes('scripts/cleanup/') && !isTestFile) {
           files.push(fullPath);
         }
       }

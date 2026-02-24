@@ -1,4 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js';
+import { logger } from '@/lib/logger';
 
 export interface IntegrityStats {
   totalRecipes: number;
@@ -12,6 +13,7 @@ export async function checkRecipeIntegrity(
 ): Promise<{ totalRecipes: number; recipesWithNoLines: number }> {
   const { data: recipes, error: recipesError } = await supabase.from('recipes').select('id');
   if (recipesError) {
+    logger.error('[DB Integrity] Error fetching recipes:', { error: recipesError });
     throw recipesError;
   }
 
@@ -23,6 +25,7 @@ export async function checkRecipeIntegrity(
       .from('recipe_ingredients')
       .select('recipe_id');
     if (countErr) {
+      logger.error('[DB Integrity] Error fetching recipe_ingredients:', { error: countErr });
       throw countErr;
     }
     const withLines = new Set((counts || []).map(r => r.recipe_id));
@@ -41,6 +44,7 @@ export async function checkIngredientIntegrity(
     .select('ingredient_id');
 
   if (riErr) {
+    logger.error('[DB Integrity] Error fetching recipe_ingredients:', { error: riErr });
     throw riErr;
   }
 
@@ -55,6 +59,7 @@ export async function checkIngredientIntegrity(
       .select('id')
       .in('id', uniqueIngIds);
     if (ingErr) {
+      logger.error('[DB Integrity] Error fetching ingredients:', { error: ingErr });
       throw ingErr;
     }
     const present = new Set((ingRows || []).map(r => r.id));

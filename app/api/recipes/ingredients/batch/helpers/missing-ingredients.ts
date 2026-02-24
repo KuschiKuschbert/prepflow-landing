@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { BatchIngredientData, BatchRecipeIngredientRow } from './types';
 
@@ -21,6 +22,12 @@ export async function handleMissingNestedIngredients(
           'id, ingredient_name, cost_per_unit, unit, trim_peel_waste_percentage, yield_percentage',
         )
         .in('id', uniqueIds);
+      if (ingError) {
+        logger.error('[Recipes Batch] Error fetching ingredients for missing nested:', {
+          error: ingError.message,
+          ingredientIds: uniqueIds,
+        });
+      }
       if (!ingError && ingRows) {
         const byId: Record<string, BatchIngredientData> = {};
         (ingRows as BatchIngredientData[]).forEach((ir: BatchIngredientData) => {

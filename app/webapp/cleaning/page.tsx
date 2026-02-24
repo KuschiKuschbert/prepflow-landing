@@ -1,6 +1,7 @@
 'use client';
 
 import { PageTipsCard } from '@/components/ui/PageTipsCard';
+import { logger } from '@/lib/logger';
 import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
@@ -95,10 +96,14 @@ function CleaningRosterContent() {
 
   const handleAddArea = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = await addArea(newArea);
-    if (result.success) {
-      setNewArea({ area_name: '', description: '', cleaning_frequency: '' });
-      setShowAddArea(false);
+    try {
+      const result = await addArea(newArea);
+      if (result.success) {
+        setNewArea({ area_name: '', description: '', cleaning_frequency: '' });
+        setShowAddArea(false);
+      }
+    } catch (err) {
+      logger.error('[Cleaning Page] Error adding area:', { error: err });
     }
   };
 

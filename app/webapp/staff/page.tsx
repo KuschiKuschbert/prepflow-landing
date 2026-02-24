@@ -1,5 +1,6 @@
 'use client';
 
+import { logger } from '@/lib/logger';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { Suspense, useState } from 'react';
@@ -51,8 +52,12 @@ export default function StaffPage() {
             qualificationTypes={qualificationTypes}
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onSubmit={async (data: any) => {
-              const success = await addStaffMember(data);
-              if (success) setIsAddModalOpen(false);
+              try {
+                const success = await addStaffMember(data);
+                if (success) setIsAddModalOpen(false);
+              } catch (err) {
+                logger.error('[Staff Page] addStaffMember failed:', { error: err });
+              }
             }}
             onCancel={() => setIsAddModalOpen(false)}
           />

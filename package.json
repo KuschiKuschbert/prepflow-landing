@@ -7,6 +7,7 @@
   },
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:simulation": "next dev",
     "dev:legacy": "node server.js",
     "dev:http": "next dev --turbopack",
     "verify-config": "npx tsx scripts/verify-build-config.ts",

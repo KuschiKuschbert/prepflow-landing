@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 
 /**
  * Fill ingredient form with test data
@@ -16,38 +16,57 @@ export async function fillIngredientForm(
     storageLocation?: string;
   },
 ): Promise<void> {
-  // Wait for wizard to appear (look for step 1 fields)
-  await page.waitForSelector('input[placeholder*="Fresh Tomatoes"]', { timeout: 15000 });
+  // Wait for wizard to appear (step 1: name input - "e.g., Fresh Tomatoes" or "e.g., Tomatoes")
+  const nameInputSelector =
+    'input[placeholder*="Fresh Tomatoes"], input[placeholder*="Tomatoes"], input[placeholder*="ingredient" i]';
+  await page.waitForSelector(nameInputSelector, { timeout: 15000 });
   await page.waitForTimeout(1000); // Let wizard fully render
 
+  // Ensure wizard form is in view (may be in drawer/modal)
+  const wizardForm = page.locator('form, [role="dialog"], .rounded-2xl.border').first();
+  await wizardForm.scrollIntoViewIfNeeded().catch(() => {});
+
   // Step 1: Fill basic info (Ingredient Name, Brand, Pack Size, Pack Unit, Pack Price)
-  const nameInput = page.locator('input[placeholder*="Fresh Tomatoes"]').first();
+  const nameInput = page.locator(nameInputSelector).first();
   await nameInput.waitFor({ state: 'visible', timeout: 10000 });
+  await nameInput.clear();
   await nameInput.fill(data.name);
-  await page.waitForTimeout(300);
+  await page.waitForTimeout(500);
 
   // Fill pack size (placeholder: "e.g., 5")
   const packSizeInput = page.locator('input[placeholder*="e.g., 5"]').first();
   await packSizeInput.waitFor({ state: 'visible', timeout: 5000 });
+  await packSizeInput.clear();
   await packSizeInput.fill(data.packSize);
   await page.waitForTimeout(300);
 
-  // Select pack size unit - find select that's near the pack size input
-  // The select should be after the pack size input in the form
-  const packSizeUnitSelect = page.locator('label:has-text("Pack Unit") + select, select').nth(1);
+  // Select pack size unit - use div containing Pack Unit label to avoid matching Display unit select
+  const packSizeUnitSelect = page.locator('div:has(label:has-text("Pack Unit")) select').first();
   await packSizeUnitSelect.waitFor({ state: 'visible', timeout: 5000 });
-  await packSizeUnitSelect.selectOption(data.packSizeUnit);
-  await page.waitForTimeout(300);
+  await page.waitForTimeout(500); // Allow availableUnits to populate
+  const unitValue = (data.packSizeUnit || 'g').toLowerCase();
+  try {
+    await packSizeUnitSelect.selectOption(unitValue, { timeout: 3000 });
+  } catch {
+    try {
+      await packSizeUnitSelect.selectOption({ label: /Grams \\(g\\)|grams/i }, { timeout: 3000 });
+    } catch {
+      await packSizeUnitSelect.selectOption({ index: 1 }, { timeout: 3000 }); // First real option
+    }
+  }
+  await page.waitForTimeout(800); // Allow pack_size_unit + unit to propagate (unit is derived from pack_size_unit)
 
   // Fill pack price (placeholder: "e.g., 12.99 or 1,234.56")
   const packPriceInput = page.locator('input[placeholder*="12.99"]').first();
   await packPriceInput.waitFor({ state: 'visible', timeout: 5000 });
   await packPriceInput.fill(data.packPrice);
-  await page.waitForTimeout(1000); // Wait for cost calculations
+  await packPriceInput.blur(); // Trigger blur to commit pack_price and run cost calculation
+  await page.waitForTimeout(1500); // Wait for cost calculations and unit auto-set (validation requires unit)
 
-  // Click "Next →" to go to step 2
-  const nextButton = page.locator('button:has-text("Next →")').first();
-  await nextButton.waitFor({ state: 'visible', timeout: 5000 });
+  // Click "Next →" to go to step 2 (must be enabled - requires name, pack_size, pack_size_unit, pack_price>0, unit)
+  const nextButton = page.getByRole('button', { name: 'Next →' });
+  await nextButton.waitFor({ state: 'visible', timeout: 8000 });
+  await expect(nextButton).toBeEnabled({ timeout: 20000 }); // Wait for validation to pass
   await nextButton.click();
   await page.waitForTimeout(1000);
 
@@ -124,13 +143,15 @@ export async function fillRecipeForm(
 }
 
 /**
- * Fill temperature log form with test data
+ * Fill temperature log form with test data.
+ * AddTemperatureLogForm uses controlled inputs without name attributes.
+ * Date/time are auto-set by the form; we only fill equipment, temperature, location, notes.
  */
 export async function fillTemperatureLogForm(
   page: Page,
   data: {
-    date: string;
-    time: string;
+    date?: string;
+    time?: string;
     temperature: string;
     equipmentId?: string;
     temperatureType?: string;
@@ -138,37 +159,41 @@ export async function fillTemperatureLogForm(
     notes?: string;
   },
 ): Promise<void> {
-  // Fill date
-  const dateInput = page.locator('input[type="date"][name*="date"]').first();
-  await dateInput.fill(data.date);
-
-  // Fill time
-  const timeInput = page.locator('input[type="time"][name*="time"]').first();
-  await timeInput.fill(data.time);
-
-  // Fill temperature
-  const tempInput = page.locator('input[name*="temperature"], input[type="number"]').first();
-  await tempInput.fill(data.temperature);
-
-  // Select equipment or temperature type
+  // Equipment select (required) - first select in form
+  const equipmentSelect = page.locator('form').locator('select').first();
   if (data.equipmentId) {
-    const equipmentSelect = page.locator('select[name*="equipment"]').first();
     await equipmentSelect.selectOption(data.equipmentId);
   } else if (data.temperatureType) {
-    const typeSelect = page.locator('select[name*="temperature_type"]').first();
-    await typeSelect.selectOption(data.temperatureType);
+    await equipmentSelect.selectOption({ value: data.temperatureType });
+  } else {
+    await equipmentSelect.selectOption({ index: 1 });
   }
 
-  // Fill location if provided
+  // Temperature input - placeholder "e.g., 3.5"
+  const tempInput = page.locator('input[type="number"][placeholder*="3.5"]').first();
+  await tempInput.fill(data.temperature);
+
+  // Location input - placeholder "e.g., Main Fridge, Freezer 1" or "e.g., Chicken Curry..."
   if (data.location) {
-    const locationInput = page.locator('input[name*="location"]').first();
+    const locationInput = page
+      .locator(
+        'input[type="text"][placeholder*="Fridge"], input[type="text"][placeholder*="Freezer"], input[type="text"][placeholder*="Chicken"]',
+      )
+      .first();
     await locationInput.fill(data.location);
   }
 
-  // Fill notes if provided
+  // Notes - checkbox to expand, then fill textarea
   if (data.notes) {
-    const notesTextarea = page.locator('textarea[name*="notes"]').first();
-    await notesTextarea.fill(data.notes);
+    const notesCheckbox = page
+      .locator('label:has-text("Add Notes") input[type="checkbox"]')
+      .first();
+    if (await notesCheckbox.isVisible({ timeout: 1000 }).catch(() => false)) {
+      await notesCheckbox.check();
+      await page.waitForTimeout(300);
+      const notesTextarea = page.locator('textarea[placeholder*="Additional notes"]').first();
+      await notesTextarea.fill(data.notes);
+    }
   }
 }
 

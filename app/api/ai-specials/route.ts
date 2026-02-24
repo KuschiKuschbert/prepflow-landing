@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { handleGetRequest } from './helpers/handleGetRequest';
 import { handlePostRequest } from './helpers/handlePostRequest';

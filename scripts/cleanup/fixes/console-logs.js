@@ -16,7 +16,7 @@ async function fixConsoleLogs(files = null) {
   const errors = [];
 
   try {
-    const filesArg = files ? files.join(' ') : 'app components';
+    const filesArg = files ? files.join(' ') : 'app components lib hooks';
     const command = `npx jscodeshift -t scripts/codemods/console-migration.js --write ${filesArg}`;
     execSync(command, { encoding: 'utf-8', cwd: process.cwd(), stdio: 'inherit' });
     changes.push({ file: 'multiple', changes: 'migrated' });

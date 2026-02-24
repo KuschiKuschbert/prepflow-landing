@@ -82,7 +82,10 @@ export default async function middleware(req: NextRequest) {
     pathname.startsWith('/api/recipe-scraper/process-recipes') ||
     pathname.startsWith('/api/recipe-scraper/status');
 
-  if (isApi && !isPublicApi && !isAuthRoute && !isStatusPollingApi) {
+  // Skip rate limiting when DISABLE_RATE_LIMIT is set (e.g. Playwright simulation)
+  const isRateLimitDisabled = process.env.DISABLE_RATE_LIMIT === 'true';
+
+  if (isApi && !isPublicApi && !isAuthRoute && !isStatusPollingApi && !isRateLimitDisabled) {
     const rateLimitResult = checkRateLimitFromRequest(req);
     if (!rateLimitResult.allowed) {
       logger.warn('[Middleware] Rate limit exceeded:', {

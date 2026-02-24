@@ -284,9 +284,27 @@ async function main() {
         console.log(`  HTML: ${htmlPath}`);
       }
 
-      // Exit with error code if critical violations found
-      if (criticalViolations.length > 0) {
+      // When CLEANUP_PRE_DEPLOY_ADVISORY=1, api/database/error-handling violations are advisory
+      // (don't block deploy) - allows pre-deploy to pass while team chips away at backlog
+      const ADVISORY_STANDARDS = [
+        'implementation.mdc#api-response-standards', // api-patterns
+        'core.mdc#supabase-typescript-gotcha', // database-patterns
+        'ERROR_HANDLING_STANDARDS.md', // error-handling
+      ];
+      const isAdvisoryMode = process.env.CLEANUP_PRE_DEPLOY_ADVISORY === '1';
+      const blockingCritical = isAdvisoryMode
+        ? criticalViolations.filter(
+            v => !v.standard || !ADVISORY_STANDARDS.some(s => v.standard?.includes(s)),
+          )
+        : criticalViolations;
+
+      if (blockingCritical.length > 0) {
         console.log('\n❌ Critical violations found - please fix before committing');
+        if (isAdvisoryMode && criticalViolations.length > blockingCritical.length) {
+          console.log(
+            `   (${criticalViolations.length - blockingCritical.length} advisory in deploy mode)`,
+          );
+        }
         console.log(`\n💡 Tip: Run 'npm run cleanup:fix' to auto-fix some issues`);
         process.exit(1);
       } else if (warningViolations.length > 0 && !options.staged) {

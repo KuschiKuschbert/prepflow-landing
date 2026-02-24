@@ -4,6 +4,7 @@ import { AllergenDisplay } from '@/components/ui/AllergenDisplay';
 import { DietaryBadge } from '@/components/ui/DietaryBadge';
 import { Icon } from '@/components/ui/Icon';
 import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
+import { logger } from '@/lib/logger';
 import { format } from 'date-fns';
 import {
   BookOpen,
@@ -131,6 +132,8 @@ export function RunsheetItemRow({
         recipe_id: editType === 'meal' ? editRecipeId || null : null,
       });
       setIsEditing(false);
+    } catch (err) {
+      logger.error('[RunsheetItemRow] Save edit failed:', { error: err });
     } finally {
       setIsSaving(false);
     }

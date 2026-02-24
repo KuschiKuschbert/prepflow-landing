@@ -1,4 +1,5 @@
 import { logAdminApiAction } from '@/lib/admin-audit';
+import { logger } from '@/lib/logger';
 import { requireAdmin } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { supabaseAdmin } from '@/lib/supabase';

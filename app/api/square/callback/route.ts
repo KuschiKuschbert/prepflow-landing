@@ -6,6 +6,7 @@
  * comprehensive OAuth setup and usage guide.
  */
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { standardAdminChecks } from '@/lib/admin-auth';
 import { getDetectedBaseUrl } from '@/lib/auth0';
 import { logger } from '@/lib/logger';
@@ -34,7 +35,10 @@ export async function GET(request: NextRequest) {
     const { supabase, adminUser, error: authError } = await standardAdminChecks(request);
     if (authError) return authError;
     if (!supabase || !adminUser?.email) {
-      return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database unavailable', 'SERVER_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     // Check feature flag

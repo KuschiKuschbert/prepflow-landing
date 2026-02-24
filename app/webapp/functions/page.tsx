@@ -2,6 +2,7 @@
 
 import type { AppFunction } from '@/app/api/functions/helpers/schemas';
 import { getCachedData, cacheData } from '@/lib/cache/data-cache';
+import { logger } from '@/lib/logger';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Icon } from '@/components/ui/Icon';
@@ -113,8 +114,8 @@ export default function FunctionsPage() {
         setFunctions(list);
         cacheData(CACHE_KEY_FUNCTIONS, list);
       }
-    } catch {
-      // Silently fail
+    } catch (err) {
+      logger.error('[Functions Page] fetchFunctions failed:', { error: err });
     } finally {
       setIsLoading(false);
     }
@@ -129,8 +130,8 @@ export default function FunctionsPage() {
         setCustomerOptions(list);
         cacheData(CACHE_KEY_CUSTOMERS, list);
       }
-    } catch {
-      // Non-critical
+    } catch (err) {
+      logger.error('[Functions Page] fetchCustomers failed:', { error: err });
     }
   };
 

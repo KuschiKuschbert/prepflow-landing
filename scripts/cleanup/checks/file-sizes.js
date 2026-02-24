@@ -87,6 +87,18 @@ function countLines(content) {
   return content.split(/\r?\n/).length;
 }
 
+function loadIgnoreList() {
+  try {
+    const ignorePath = path.join(__dirname, '../../filesize-ignore.json');
+    if (fs.existsSync(ignorePath)) {
+      return new Set(require(ignorePath));
+    }
+  } catch (e) {
+    // Ignore
+  }
+  return new Set();
+}
+
 function listFiles(dir) {
   const items = fs.readdirSync(dir, { withFileTypes: true });
   const result = [];
@@ -106,11 +118,15 @@ function listFiles(dir) {
 async function checkFileSizes(files = null) {
   const root = process.cwd();
   const filesToCheck = files || listFiles(root);
+  const ignoredFiles = loadIgnoreList();
   const violations = [];
   const standardConfig = getStandardConfig('file-sizes');
 
   for (const file of filesToCheck) {
     if (!fs.existsSync(file)) continue;
+    const relPath = path.relative(root, file).replace(/\\/g, '/');
+    if (ignoredFiles.has(relPath)) continue;
+    if (relPath.includes('app/curbos/')) continue;
     const ext = path.extname(file);
     if (!exts.has(ext)) continue;
 

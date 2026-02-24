@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
 import {
   verifyAppleConnection,
   verifyMicrosoftConnection,
@@ -7,6 +8,11 @@ import {
 } from '@/lib/auth0-apple-microsoft-connection';
 import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+
+const EnableConnectionsSchema = z.object({
+  enableApple: z.boolean().optional(),
+  enableMicrosoft: z.boolean().optional(),
+});
 
 /**
  * Check Apple and Microsoft connection status
@@ -80,15 +86,26 @@ export async function GET() {
  */
 export async function POST(request: Request) {
   try {
-    let body: { enableApple?: boolean; enableMicrosoft?: boolean } = {};
+    let body: unknown;
     try {
       body = await request.json();
     } catch {
-      // No body provided, enable both
       body = { enableApple: true, enableMicrosoft: true };
     }
 
-    const { enableApple = true, enableMicrosoft = true } = body;
+    const parsed = EnableConnectionsSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          parsed.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { enableApple = true, enableMicrosoft = true } = parsed.data;
 
     const results: {
       apple?: { success: boolean; enabled: boolean; message: string };

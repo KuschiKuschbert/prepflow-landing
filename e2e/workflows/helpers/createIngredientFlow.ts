@@ -13,28 +13,44 @@ export async function createIngredientFlow(
   testSteps.push('Step 1: Navigate to Ingredients page and open Add form');
   await page.goto('/webapp/ingredients?action=new');
   await page.waitForLoadState('domcontentloaded');
-  await page.waitForTimeout(1500); // Allow form to open from action=new
+  // Wait for loading to finish and wizard to open (action=new useEffect + hydration)
+  await page.waitForTimeout(4000);
   await collectPageErrors(page);
 
-  // If ?action=new didn't open form (e.g. hydration delay), click Add button as fallback
-  const addFormVisible = await page
-    .locator('input[placeholder*="Fresh Tomatoes"]')
-    .isVisible({ timeout: 2000 })
+  // Ingredient name input: "e.g., Fresh Tomatoes" or "e.g., Tomatoes" (wizard step 1)
+  const nameInputSelector =
+    'input[placeholder*="Fresh Tomatoes"], input[placeholder*="Tomatoes"], input[placeholder*="ingredient name" i]';
+  let addFormVisible = await page
+    .locator(nameInputSelector)
+    .first()
+    .isVisible({ timeout: 8000 })
     .catch(() => false);
   if (!addFormVisible) {
-    const addBtn = page.getByRole('button', { name: /Add|Add your first ingredient/i }).first();
-    if (await addBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+    const addBtn = page
+      .locator(
+        'button:has-text("Add"), button:has-text("Add your first ingredient"), button:has-text("Add ingredient")',
+      )
+      .first();
+    if (await addBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
       await addBtn.click();
-      await page.waitForTimeout(1000);
+      await page.waitForTimeout(3000);
+      addFormVisible = await page
+        .locator(nameInputSelector)
+        .first()
+        .isVisible({ timeout: 8000 })
+        .catch(() => false);
     }
+  }
+  if (!addFormVisible) {
+    throw new Error('Ingredient add form did not open - check ?action=new or Add button');
   }
   await collectPageErrors(page);
 
   testSteps.push('Step 3: Fill ingredient form with metric units');
   await fillIngredientForm(page, {
     name: ingredientName,
-    packSize: '5',
-    packSizeUnit: 'KG',
+    packSize: '500',
+    packSizeUnit: 'g',
     packPrice: '12.50',
     category: 'Vegetables',
   });
@@ -43,8 +59,8 @@ export async function createIngredientFlow(
   testSteps.push('Step 4: Navigate through wizard and submit');
   await fillIngredientForm(page, {
     name: ingredientName,
-    packSize: '5',
-    packSizeUnit: 'KG',
+    packSize: '500',
+    packSizeUnit: 'g',
     packPrice: '12.50',
   });
 

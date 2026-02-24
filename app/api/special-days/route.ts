@@ -1,3 +1,4 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
@@ -32,13 +33,19 @@ export async function GET(req: Request) {
 
     if (error) {
       logger.error('Error fetching special days:', error);
-      return NextResponse.json({ error: 'Failed to fetch special days' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to fetch special days', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     return NextResponse.json(specialDays);
   } catch (error) {
     logger.error('Error in GET /api/special-days:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal Server Error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }
 
@@ -64,18 +71,29 @@ export async function POST(req: Request) {
 
     if (error) {
       logger.error('Error creating special day:', error);
-      return NextResponse.json({ error: 'Failed to create special day' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to create special day', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     return NextResponse.json(specialDay, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid data', details: (error as z.ZodError).issues },
+        ApiErrorHandler.createError(
+          'Invalid data',
+          'VALIDATION_ERROR',
+          400,
+          (error as z.ZodError).issues,
+        ),
         { status: 400 },
       );
     }
     logger.error('Error in POST /api/special-days:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal Server Error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }

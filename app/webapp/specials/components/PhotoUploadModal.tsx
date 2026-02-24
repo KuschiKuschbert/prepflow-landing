@@ -1,5 +1,6 @@
 'use client';
 import { Icon } from '@/components/ui/Icon';
+import { logger } from '@/lib/logger';
 import { useTranslation } from '@/lib/useTranslation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Bot, Camera, Upload, X } from 'lucide-react';
@@ -50,11 +51,14 @@ export function PhotoUploadModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedFile) return;
-    await onSubmit(selectedFile, prompt);
-    // cleaning up state is handled by parent or onClose usually, but we can reset here if we want to reuse modal
-    if (!isProcessing) {
-      setSelectedFile(null);
-      setPrompt('');
+    try {
+      await onSubmit(selectedFile, prompt);
+      if (!isProcessing) {
+        setSelectedFile(null);
+        setPrompt('');
+      }
+    } catch (err) {
+      logger.error('[PhotoUploadModal] Submit failed:', { error: err });
     }
   };
 

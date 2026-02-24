@@ -1,4 +1,5 @@
 import { standardAdminChecks } from '@/lib/admin-auth';
+import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { NextRequest, NextResponse } from 'next/server';
 import QRCode from 'qrcode';

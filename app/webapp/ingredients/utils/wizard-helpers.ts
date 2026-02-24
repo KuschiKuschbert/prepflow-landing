@@ -95,7 +95,9 @@ export function checkValidation(step: number, formData: Partial<Ingredient>): bo
     if (!formData.pack_size?.trim()) return false;
     if (!formData.pack_size_unit) return false;
     if (!formData.pack_price || formData.pack_price <= 0) return false;
-    if (!formData.unit) return false;
+    // unit is auto-synced from pack_size_unit in wizard; allow pack_size_unit as fallback
+    const workingUnit = formData.unit || formData.pack_size_unit;
+    if (!workingUnit) return false;
   }
   return true;
 }
@@ -116,7 +118,8 @@ export function getValidationErrors(
     if (!formData.pack_size_unit) newErrors.pack_size_unit = 'Pack unit is required';
     if (!formData.pack_price || formData.pack_price <= 0)
       newErrors.pack_price = 'Pack price must be greater than 0';
-    if (!formData.unit) newErrors.unit = 'Working unit is required';
+    const workingUnit = formData.unit || formData.pack_size_unit;
+    if (!workingUnit) newErrors.unit = 'Working unit is required';
   }
 
   return newErrors;

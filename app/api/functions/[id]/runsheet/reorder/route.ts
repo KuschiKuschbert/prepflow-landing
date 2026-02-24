@@ -1,3 +1,4 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
@@ -17,7 +18,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       .single();
 
     if (!func) {
-      return NextResponse.json({ error: 'Function not found' }, { status: 404 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Function not found', 'NOT_FOUND', 404),
+        { status: 404 },
+      );
     }
 
     const body = await req.json();
@@ -36,7 +40,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
     if (errors.length > 0) {
       logger.error('Error reordering runsheet items:', { errors: errors.map(e => e.error) });
-      return NextResponse.json({ error: 'Failed to reorder some items' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to reorder some items', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({ success: true });
@@ -44,11 +51,19 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     if (error instanceof NextResponse) return error;
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid data', details: (error as z.ZodError).issues },
+        ApiErrorHandler.createError(
+          'Invalid data',
+          'VALIDATION_ERROR',
+          400,
+          (error as z.ZodError).issues,
+        ),
         { status: 400 },
       );
     }
     logger.error('Error in POST /api/functions/[id]/runsheet/reorder:', { error });
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal Server Error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }

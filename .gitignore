@@ -133,6 +133,9 @@ QA_AUDIT_REPORT.md
 /playwright-report/
 /playwright/.cache/
 
+# Simulation reports (output from npm run test:simulation)
+e2e/simulation/reports/
+
 # Python virtual environment
 *.pyc
 *.pyo
@@ -154,5 +157,6 @@ scripts/guide-screenshot-regions.json
 
 # Playwright Authentication State
 e2e/auth.json
+e2e/simulation-auth.json
 performance-reports/
 .lighthouseci/

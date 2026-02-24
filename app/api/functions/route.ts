@@ -1,3 +1,4 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
@@ -34,14 +35,20 @@ export async function GET(req: NextRequest) {
 
     if (error) {
       logger.error('Error fetching functions:', { error });
-      return NextResponse.json({ error: 'Failed to fetch functions' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to fetch functions', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     return NextResponse.json(functions);
   } catch (error) {
     if (error instanceof NextResponse) return error;
     logger.error('Error in GET /api/functions:', { error });
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal Server Error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }
 
@@ -69,7 +76,10 @@ export async function POST(req: NextRequest) {
 
     if (funcError || !newFunction) {
       logger.error('Error creating function:', { error: funcError });
-      return NextResponse.json({ error: 'Failed to create function' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to create function', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     return NextResponse.json(newFunction, { status: 201 });
@@ -77,11 +87,19 @@ export async function POST(req: NextRequest) {
     if (error instanceof NextResponse) return error;
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid data', details: (error as z.ZodError).issues },
+        ApiErrorHandler.createError(
+          'Invalid data',
+          'VALIDATION_ERROR',
+          400,
+          (error as z.ZodError).issues,
+        ),
         { status: 400 },
       );
     }
     logger.error('Error in POST /api/functions:', { error });
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal Server Error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }

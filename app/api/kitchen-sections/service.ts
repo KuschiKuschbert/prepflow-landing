@@ -4,14 +4,15 @@ import { Dish, DishSection, KitchenSection, NormalizedDish } from './types';
 
 export async function fetchSections(supabase: SupabaseClient) {
   try {
+    // Use section_name (DB schema); color_code/color may not exist in all migrations
     const sectionsQuery = supabase
       .from('kitchen_sections')
-      .select('id, name, section_name, description, color_code, color, created_at, updated_at');
+      .select('id, section_name, description, created_at, updated_at');
     let { data, error } = await sectionsQuery.eq('is_active', true);
     if (error) {
       const fallbackQuery = supabase
         .from('kitchen_sections')
-        .select('id, name, section_name, description, color_code, color, created_at, updated_at');
+        .select('id, section_name, description, created_at, updated_at');
       const fallbackResult = await fallbackQuery;
       data = fallbackResult.data;
       error = fallbackResult.error;

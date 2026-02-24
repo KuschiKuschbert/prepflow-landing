@@ -59,12 +59,22 @@ function analyzeAPIPatterns(content, filePath) {
 
   // 1. Check for ApiErrorHandler import
   const hasApiErrorHandlerImport = /import.*ApiErrorHandler.*from/.test(content);
-  const hasApiErrorHandlerUsage = /ApiErrorHandler\.createError/.test(content);
+  const hasApiErrorHandlerUsage =
+    /ApiErrorHandler\.createError/.test(content) ||
+    /ApiErrorHandler\.fromSupabaseError/.test(content);
 
   // 2. Check for logger import and usage
   const hasLoggerImport = /import.*logger.*from.*['"]@\/lib\/logger['"]/.test(content);
   const hasLoggerErrorUsage = /logger\.error\(/.test(content);
   const hasConsoleError = /console\.error\(/.test(content);
+  // Routes that delegate to local error handlers (handleXxxError, handleRouteError)
+  const hasErrorHandlerDelegation =
+    /catch\s*\([^)]*\)\s*\{[\s\S]*?return\s+handle\w*Error\s*\(/.test(content) ||
+    /catch\s*\([^)]*\)\s*\{[\s\S]*?return\s+handleRouteError\s*\(/.test(content);
+  const hasLocalErrorHandlerImport =
+    /import[\s\S]*?handle\w*Error[\s\S]*?from\s+['\"][.\/]/.test(content) ||
+    /import[\s\S]*?handleRouteError[\s\S]*?from\s+['\"][.\/]/.test(content);
+  const delegatesErrorHandling = hasErrorHandlerDelegation && hasLocalErrorHandlerImport;
 
   // 3. Check for try-catch blocks in async handlers
   const hasTryCatch = /try\s*\{/.test(content) && /catch\s*\(/.test(content);
@@ -73,9 +83,12 @@ function analyzeAPIPatterns(content, filePath) {
   const hasSuccessFormat = /success:\s*true/.test(content) || /success:\s*true,/.test(content);
 
   // 5. Check for input validation (Zod) for mutation methods
-  // Accept any import from zod (z, ZodSchema, etc.) or z.object/z.string in file
   const hasZodImport = /import\s+.*from\s+['"]zod['"]/.test(content);
   const hasZodSchema = /z\.object\(/.test(content) || /z\.string\(/.test(content);
+  const hasSchemaImport = /import.*[Ss]chema.*from/.test(content);
+  const hasValidationCall = /\.safeParse\(|\.parse\(/.test(content);
+  const hasIndirectZodValidation = hasSchemaImport && hasValidationCall;
+  const hasValidInputValidation = hasZodImport || hasZodSchema || hasIndirectZodValidation;
   const hasRequestParsing =
     /req\.json\(\)/.test(content) ||
     /request\.json\(\)/.test(content) ||
@@ -123,8 +136,8 @@ function analyzeAPIPatterns(content, filePath) {
       });
     }
 
-    // Check for logger usage
-    if (!hasLoggerImport && (hasErrorResponse || hasTryCatch)) {
+    // Check for logger usage (skip if route delegates to local error handler)
+    if (!delegatesErrorHandling && !hasLoggerImport && (hasErrorResponse || hasTryCatch)) {
       violations.push({
         type: 'missing-logger-import',
         line: findLineNumber(lines, /import/),
@@ -138,8 +151,12 @@ function analyzeAPIPatterns(content, filePath) {
       });
     }
 
-    if ((hasErrorResponse || hasTryCatch) && !hasLoggerErrorUsage && !hasConsoleError) {
-      // Only warn if there are error responses but no logging at all
+    if (
+      !delegatesErrorHandling &&
+      (hasErrorResponse || hasTryCatch) &&
+      !hasLoggerErrorUsage &&
+      !hasConsoleError
+    ) {
       if (hasErrorResponse && !hasLoggerErrorUsage) {
         violations.push({
           type: 'missing-error-logging',
@@ -163,13 +180,11 @@ function analyzeAPIPatterns(content, filePath) {
     }
 
     // Check for input validation on mutation methods
-    if (hasMutationMethod && hasRequestParsing) {
-      if (!hasZodImport && !hasZodSchema) {
-        violations.push({
-          type: 'missing-input-validation',
-          line: findLineNumber(lines, /export.*function.*(POST|PUT|PATCH)/),
-        });
-      }
+    if (hasMutationMethod && hasRequestParsing && !hasValidInputValidation) {
+      violations.push({
+        type: 'missing-input-validation',
+        line: findLineNumber(lines, /export.*function.*(POST|PUT|PATCH)/),
+      });
     }
   }
 

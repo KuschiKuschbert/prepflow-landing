@@ -28,6 +28,7 @@ module.exports = function (fileInfo, api) {
   if (
     filePath.includes('lib/logger.ts') ||
     filePath.includes('lib/logger.js') ||
+    filePath.includes('safeLogger.ts') ||
     filePath.includes('scripts/cleanup/') ||
     filePath.includes('scripts/cleanup.js') ||
     filePath.includes('scripts/check-file-sizes.js') ||

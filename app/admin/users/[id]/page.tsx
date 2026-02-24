@@ -1,6 +1,7 @@
 'use client';
 
 import { useConfirm } from '@/hooks/useConfirm';
+import { logger } from '@/lib/logger';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { UserBasicInfo } from '../components/UserBasicInfo';
@@ -77,16 +78,20 @@ export default function UserDetailPage() {
     useUserDetail(userId);
 
   const confirmDelete = async () => {
-    const confirmed = await showConfirm({
-      title: 'Delete User',
-      message: `Are you sure you want to delete ${user?.email}? This action can't be undone and will delete all associated data.`,
-      variant: 'danger',
-      confirmLabel: 'Delete',
-      cancelLabel: 'Cancel',
-    });
+    try {
+      const confirmed = await showConfirm({
+        title: 'Delete User',
+        message: `Are you sure you want to delete ${user?.email}? This action can't be undone and will delete all associated data.`,
+        variant: 'danger',
+        confirmLabel: 'Delete',
+        cancelLabel: 'Cancel',
+      });
 
-    if (confirmed) {
-      await handleDelete();
+      if (confirmed) {
+        await handleDelete();
+      }
+    } catch (err) {
+      logger.error('[Admin Users] Error in confirmDelete:', { error: err });
     }
   };
 

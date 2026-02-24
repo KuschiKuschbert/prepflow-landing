@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 
 interface IngredientIdRow {
@@ -17,6 +18,7 @@ export async function fetchDishIngredients(dishIds: string[]) {
     .in('dish_id', dishIds);
 
   if (error) {
+    logger.error('[Menu Ingredients] Error fetching dish ingredients:', { error: error.message });
     throw new Error(`Error fetching dish ingredients: ${error.message}`);
   }
   return (data as IngredientIdRow[]) || [];
@@ -31,6 +33,7 @@ export async function fetchDishRecipes(dishIds: string[]) {
     .in('dish_id', dishIds);
 
   if (error) {
+    logger.error('[Menu Ingredients] Error fetching dish recipes:', { error: error.message });
     throw new Error(`Error fetching dish recipes: ${error.message}`);
   }
   return (data as RecipeIdRow[]) || [];
@@ -45,6 +48,7 @@ export async function fetchRecipeIngredients(recipeIds: string[]) {
     .in('recipe_id', recipeIds);
 
   if (error) {
+    logger.error('[Menu Ingredients] Error fetching recipe ingredients:', { error: error.message });
     throw new Error(`Error fetching recipe ingredients: ${error.message}`);
   }
   return (data as IngredientIdRow[]) || [];

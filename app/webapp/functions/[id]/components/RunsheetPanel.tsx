@@ -9,15 +9,15 @@ import { ExportDayButton } from './ExportDayButton';
 import { FunctionAllergenSummary } from './FunctionAllergenSummary';
 import { RunsheetAddForm } from './RunsheetAddForm';
 import { RunsheetItemRow } from './RunsheetItemRow';
-import type {
+import type { RunsheetItemWithRelations } from './runsheet-types';
+import { useRunsheetPanel } from '../hooks/useRunsheetPanel';
+
+export type {
   DishOption,
   MenuOption,
   RecipeOption,
   RunsheetItemWithRelations,
 } from './runsheet-types';
-import { useRunsheetPanel } from '../hooks/useRunsheetPanel';
-
-export type { DishOption, MenuOption, RecipeOption, RunsheetItemWithRelations } from './runsheet-types';
 
 interface RunsheetPanelProps {
   func: AppFunction;

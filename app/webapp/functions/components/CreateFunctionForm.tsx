@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/Button';
+import { logger } from '@/lib/logger';
 import { useEffect, useState } from 'react';
 import { CreateFunctionFormDateTimeSection } from './CreateFunctionFormDateTimeSection';
 import { CreateFunctionFormInfoBox } from './CreateFunctionFormInfoBox';
@@ -86,6 +87,7 @@ export function CreateFunctionForm({
     try {
       await onSubmit(submitData);
     } catch (err) {
+      logger.error('[CreateFunctionForm] Submit failed:', { error: err });
       setError(err instanceof Error ? err.message : 'Failed to create function. Please try again.');
     } finally {
       setIsSubmitting(false);

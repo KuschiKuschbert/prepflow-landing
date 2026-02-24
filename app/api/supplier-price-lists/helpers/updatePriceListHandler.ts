@@ -29,11 +29,17 @@ export async function handleUpdatePriceList(request: NextRequest, supabase: Supa
 
     // If this is being set as current, set all other price lists for this supplier as not current
     if (is_current === true) {
-      const { data: currentRecord } = await supabase
+      const { data: currentRecord, error: currentError } = await supabase
         .from('supplier_price_lists')
         .select('supplier_id')
         .eq('id', id)
         .single();
+      if (currentError) {
+        logger.error('[Supplier Price Lists API] Error fetching current record:', {
+          error: currentError.message,
+          id,
+        });
+      }
       if (currentRecord) await setCurrentPriceList(currentRecord.supplier_id, id, supabase);
     }
 

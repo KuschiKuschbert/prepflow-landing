@@ -1,3 +1,4 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
@@ -20,7 +21,10 @@ export async function PATCH(
       .single();
 
     if (!func) {
-      return NextResponse.json({ error: 'Function not found' }, { status: 404 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Function not found', 'NOT_FOUND', 404),
+        { status: 404 },
+      );
     }
 
     const body = await req.json();
@@ -43,11 +47,17 @@ export async function PATCH(
 
     if (error) {
       logger.error('Error updating runsheet item:', { error });
-      return NextResponse.json({ error: 'Failed to update runsheet item' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to update runsheet item', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     if (!updatedItem) {
-      return NextResponse.json({ error: 'Runsheet item not found' }, { status: 404 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Runsheet item not found', 'NOT_FOUND', 404),
+        { status: 404 },
+      );
     }
 
     return NextResponse.json(updatedItem);
@@ -55,12 +65,20 @@ export async function PATCH(
     if (error instanceof NextResponse) return error;
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid data', details: (error as z.ZodError).issues },
+        ApiErrorHandler.createError(
+          'Invalid data',
+          'VALIDATION_ERROR',
+          400,
+          (error as z.ZodError).issues,
+        ),
         { status: 400 },
       );
     }
     logger.error('Error in PATCH /api/functions/[id]/runsheet/[itemId]:', { error });
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal Server Error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }
 
@@ -80,7 +98,10 @@ export async function DELETE(
       .single();
 
     if (!func) {
-      return NextResponse.json({ error: 'Function not found' }, { status: 404 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Function not found', 'NOT_FOUND', 404),
+        { status: 404 },
+      );
     }
 
     const { error } = await supabase
@@ -91,13 +112,19 @@ export async function DELETE(
 
     if (error) {
       logger.error('Error deleting runsheet item:', { error });
-      return NextResponse.json({ error: 'Failed to delete runsheet item' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to delete runsheet item', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
     if (error instanceof NextResponse) return error;
     logger.error('Error in DELETE /api/functions/[id]/runsheet/[itemId]:', { error });
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal Server Error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }

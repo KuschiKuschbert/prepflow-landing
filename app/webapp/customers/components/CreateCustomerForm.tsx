@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/Button';
+import { logger } from '@/lib/logger';
 import { useState } from 'react';
 
 interface CreateCustomerFormProps {
@@ -54,6 +55,7 @@ export function CreateCustomerForm({
     try {
       await onSubmit(formData);
     } catch (err) {
+      logger.error('[CreateCustomerForm] Submit failed:', { error: err });
       setError(err instanceof Error ? err.message : 'Failed to create customer. Please try again.');
     } finally {
       setIsSubmitting(false);

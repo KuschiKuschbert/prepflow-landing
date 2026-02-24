@@ -1,4 +1,6 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { ingredientsMatch, normalizeIngredient } from '@/lib/ingredient-normalization';
+import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 
@@ -30,13 +32,20 @@ export async function GET(request: Request) {
 
     if (!ingredientsParam && !queryParam && !useStock) {
       return NextResponse.json(
-        { error: 'Ingredients, query (q), or use_stock parameter required' },
+        ApiErrorHandler.createError(
+          'Ingredients, query (q), or use_stock parameter required',
+          'BAD_REQUEST',
+          400,
+        ),
         { status: 400 },
       );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Supabase Admin not initialized' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Supabase Admin not initialized', 'SERVER_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     let ftsQuery = '';
@@ -194,8 +203,10 @@ export async function GET(request: Request) {
       const { data: rpcData, error: rpcError } = await supabaseAdmin.rpc(rpcName, rpcParams);
 
       if (rpcError) {
-        // eslint-disable-next-line no-console
-        console.error(`Stock Match RPC Error (${rpcName}):`, rpcError);
+        logger.error(`[AI Specials Search] Stock Match RPC Error (${rpcName}):`, {
+          error: rpcError.message,
+          code: rpcError.code,
+        });
         return NextResponse.json({ data: [], meta: { total: 0, page: 1 } });
       }
 
@@ -365,13 +376,20 @@ export async function GET(request: Request) {
       },
     });
   } catch (error: unknown) {
-    // eslint-disable-next-line no-console
-    console.error('Search error:', error);
-    const message = error instanceof Error ? error.message : 'An unknown error occurred';
-    const stack = error instanceof Error ? error.stack : undefined;
-    const rawError = JSON.stringify(error, null, 2);
+    logger.error('[AI Specials Search] Search error:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     return NextResponse.json(
-      { error: message, debug_stack: stack, raw: rawError },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? error instanceof Error
+            ? error.message
+            : 'An unknown error occurred'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

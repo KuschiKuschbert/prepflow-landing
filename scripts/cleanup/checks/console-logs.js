@@ -35,6 +35,7 @@ function findFiles() {
         // Exclude cleanup scripts and protect-curbos - they're utility scripts
         if (
           !fullPath.includes('lib/logger.ts') &&
+          !fullPath.includes('safeLogger.ts') &&
           !fullPath.includes('scripts/cleanup/') &&
           !fullPath.includes('scripts/protect-curbos.js')
         ) {
