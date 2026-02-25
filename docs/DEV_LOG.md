@@ -2,6 +2,35 @@
 
 ## 2026-02-25
 
+- **chore: update bundle baseline for performance page overhaul (+38KB)**
+- **feat(performance): performance page overhaul with drill-down, menu filter, and optimizations**: - Split PerformanceChartsLazy into dedicated chart components
+- Add chartDataTransformers with single-pass aggregation
+- Extract weather utils to weatherChartUtils.ts (file size compliance)
+- Add menu filter UI and prefetch with default date range
+- Consolidate API logic in performance service
+- Add drill-down from category cards/pie segments with scroll-to-table
+- Add active filter banner and filtered export/print
+- Fix CSV import: bulkImportSalesData for salesData format
+- **docs: update DEV_LOG with merged commits**
+- **feat: weather-based operational tips across app**: - Add WeatherOperationalTip component (dashboard, prep-lists, order-lists, par-levels)
+- Add FunctionsWeatherAlerts for rainy-day event alerts (next 7 days)
+- Add PerformanceWeatherInsight for days-like-today comparison
+- Wire weather context into AI Specials prompt
+- Add prefetch for weather endpoints
+- Add WeatherWidget to navigation header
+- Add Open-Meteo integration, operational-tip mapping, daily weather APIs
+- Add supabase migration for daily_weather_logs
+- Extract wmo-codes and venue-coordinates for file size compliance
+- **chore(deps): bump tailwindcss from 4.1.18 to 4.2.1**: Bumps [tailwindcss](https://github.com/tailwindlabs/tailwindcss/tree/HEAD/packages/tailwindcss) from 4.1.18 to 4.2.1.
+- [Release notes](https://github.com/tailwindlabs/tailwindcss/releases)
+- [Changelog](https://github.com/tailwindlabs/tailwindcss/blob/main/CHANGELOG.md)
+- [Commits](https://github.com/tailwindlabs/tailwindcss/commits/v4.2.1/packages/tailwindcss)
+- **updated-dependencies:**: - dependency-name: tailwindcss
+  dependency-version: 4.2.1
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+  ...
+
 - **feat: weather-based operational tips across app**: - Add WeatherOperationalTip component (dashboard, prep-lists, order-lists, par-levels)
 - Add FunctionsWeatherAlerts for rainy-day event alerts (next 7 days)
 - Add PerformanceWeatherInsight for days-like-today comparison
