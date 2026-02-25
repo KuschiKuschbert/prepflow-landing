@@ -19,6 +19,7 @@ import {
   Users,
 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { FunctionsWeatherAlerts } from '@/app/webapp/components/FunctionsWeatherAlerts';
 import { PageTipsCard } from '@/components/ui/PageTipsCard';
 import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { PageHeader } from '../components/static/PageHeader';
@@ -245,6 +246,8 @@ export default function FunctionsPage() {
           />
 
           <PageTipsCard config={PAGE_TIPS_CONFIG.functions} className="mb-6" />
+
+          <FunctionsWeatherAlerts />
 
           {/* Search + mobile calendar toggle */}
           <div className="flex items-center gap-2">

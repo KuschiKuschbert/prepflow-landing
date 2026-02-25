@@ -1,5 +1,9 @@
 import { generateAIVisionResponse } from '@/lib/ai/ai-service';
-import { buildAISpecialsPrompt, parseAISpecialsResponse } from '@/lib/ai/prompts/ai-specials';
+import {
+  buildAISpecialsPrompt,
+  parseAISpecialsResponse,
+  type WeatherContext,
+} from '@/lib/ai/prompts/ai-specials';
 import { logger } from '@/lib/logger';
 import { processImageWithAI } from './processImageWithAI';
 
@@ -41,6 +45,7 @@ export async function generateAISpecials(
   imageData: string,
   prompt?: string,
   countryCode: string = 'AU',
+  weatherContext?: WeatherContext | null,
 ): Promise<{
   ingredients: string[];
   suggestions: string[];
@@ -53,7 +58,7 @@ export async function generateAISpecials(
     const detectedIngredients = await detectIngredients(imageData, countryCode);
 
     // Pass 2: Vision analysis with context
-    const aiPrompt = await buildAISpecialsPrompt(prompt, detectedIngredients);
+    const aiPrompt = await buildAISpecialsPrompt(prompt, detectedIngredients, weatherContext);
     const visionResponse = await generateAIVisionResponse(imageData, aiPrompt, countryCode, {
       temperature: 0.7,
       maxTokens: 1500,

@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { ParLevelCard } from './components/ParLevelCard';
 import { ParLevelEditDrawer } from './components/ParLevelEditDrawer';
 import { ParLevelEmptyState } from './components/ParLevelEmptyState';
+import { WeatherOperationalTip } from '../components/WeatherOperationalTip';
 import { ParLevelHeader } from './components/ParLevelHeader';
 import { ParLevelInlineForm } from './components/ParLevelInlineForm';
 import { ParLevelSelectionModeBanner } from './components/ParLevelSelectionModeBanner';
@@ -125,6 +126,8 @@ export default function ParLevelsPage() {
           exportLoading={exportLoading}
           hasItems={parLevels.length > 0}
         />
+
+        <WeatherOperationalTip />
 
         {PAGE_TIPS_CONFIG['par-levels'] && (
           <div className="mb-6">

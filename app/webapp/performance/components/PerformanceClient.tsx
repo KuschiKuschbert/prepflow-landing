@@ -14,6 +14,7 @@ import PerformanceInsights from '../components/PerformanceInsights';
 import PerformanceSummaryCards from '../components/PerformanceSummaryCards';
 import PerformanceTable from '../components/PerformanceTable';
 import PerformanceTrends from '../components/PerformanceTrends';
+import { PerformanceWeatherInsight } from '../components/PerformanceWeatherInsight';
 import { usePerformanceData } from '../hooks/usePerformanceData';
 import { usePerformanceFilters } from '../hooks/usePerformanceFilters';
 import { DateRange } from '@/lib/types/performance';
@@ -81,6 +82,8 @@ export default function PerformanceClient() {
         </div>
       )}
 
+      <PerformanceWeatherInsight />
+
       {hasData ? (
         <>
           {/* Date Range Selector */}
@@ -102,6 +105,7 @@ export default function PerformanceClient() {
           <PerformanceCharts
             performanceItems={state.performanceItems}
             performanceHistory={state.performanceHistory}
+            weatherByDate={state.weatherByDate}
             dateRange={dateRange}
           />
 

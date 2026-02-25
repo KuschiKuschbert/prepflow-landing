@@ -6,9 +6,15 @@ import { logger } from '@/lib/logger';
  * Generates prompt for analyzing food images and suggesting specials
  */
 
+export interface WeatherContext {
+  temp_celsius: number | null;
+  weather_status: string;
+}
+
 export async function buildAISpecialsPrompt(
   customPrompt?: string,
   detectedIngredients?: string[],
+  weatherContext?: WeatherContext | null,
 ): Promise<string> {
   const basePrompt = `You are a professional restaurant chef analyzing a photo of ingredients or prepared food.
 
@@ -62,6 +68,19 @@ Return a JSON object with this structure:
 
   if (recipeContext) {
     fullPrompt += `\n\n${recipeContext}\n\n**Use these similar recipes as inspiration, but adapt them to create unique specials that showcase the ingredients in the photo.**`;
+  }
+
+  if (
+    weatherContext &&
+    (weatherContext.weather_status !== 'Unavailable' || weatherContext.temp_celsius != null)
+  ) {
+    const tempStr =
+      weatherContext.temp_celsius != null ? `${Math.round(weatherContext.temp_celsius)}°C` : '';
+    const conditions =
+      tempStr && weatherContext.weather_status
+        ? `${weatherContext.weather_status}, ${tempStr}`
+        : weatherContext.weather_status || tempStr;
+    fullPrompt += `\n\n**Today's Conditions:** ${conditions}. Suggest specials that suit these conditions—e.g. refreshing cold dishes on hot days, warm comfort food on cold or rainy days.`;
   }
 
   fullPrompt += outputFormat;

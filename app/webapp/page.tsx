@@ -14,6 +14,7 @@ import { PageHeader } from './components/static/PageHeader';
 // Static imports - needed immediately
 import QuickActions from './components/QuickActions';
 import { TargetProgressWidget } from './components/TargetProgressWidget';
+import { WeatherOperationalTip } from './components/WeatherOperationalTip';
 
 // Dynamic imports - lazy load heavy dashboard components
 const DashboardStatsClient = dynamic(() => import('./components/DashboardStatsClient'), {
@@ -83,6 +84,19 @@ export default function WebAppDashboard() {
     };
   }, []);
 
+  // Record today's weather into daily_weather_logs once per day (session throttle)
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0];
+    const key = `weather_recorded_${today}`;
+    if (typeof sessionStorage !== 'undefined' && !sessionStorage.getItem(key)) {
+      fetch('/api/weather/record-daily', { method: 'POST' })
+        .then(res => {
+          if (res.ok) sessionStorage.setItem(key, '1');
+        })
+        .catch(() => {});
+    }
+  }, []);
+
   const { user } = useUser();
   const displayName = getUserFirstName({
     name: user?.name,
@@ -101,6 +115,8 @@ export default function WebAppDashboard() {
           subtitle={subtitle}
           icon={LayoutDashboard}
         />
+
+        <WeatherOperationalTip />
 
         {PAGE_TIPS_CONFIG.dashboard && (
           <div className="mb-6">

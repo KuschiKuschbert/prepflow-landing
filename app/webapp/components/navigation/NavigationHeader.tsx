@@ -2,6 +2,7 @@
 
 import { NavbarStats } from '@/components/Arcade/NavbarStats';
 import { Icon } from '@/components/ui/Icon';
+import { WeatherWidget } from './WeatherWidget';
 import { useUserAvatar } from '@/hooks/useUserAvatar';
 import { useUserProfile } from '@/hooks/useUserProfile';
 import { logger } from '@/lib/logger';
@@ -162,6 +163,8 @@ function NavigationHeaderBase({
             </button>
 
             <NavbarStats onClick={onAchievementsClick} />
+
+            <WeatherWidget />
 
             <div className="desktop:h-8 h-6 w-px bg-[var(--border)]" />
 

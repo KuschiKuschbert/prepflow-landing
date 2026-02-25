@@ -12,6 +12,7 @@ import { logger } from '@/lib/logger';
 import { useTranslation } from '@/lib/useTranslation';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
+import { WeatherOperationalTip } from '../components/WeatherOperationalTip';
 import { PrepListsEmptyState } from './components/PrepListsEmptyState';
 import { PrepListsHeader } from './components/PrepListsHeader';
 import { PrepListsPagination } from './components/PrepListsPagination';
@@ -202,6 +203,8 @@ export default function PrepListsPage() {
     <ResponsivePageContainer>
       <div className="min-h-screen bg-transparent py-8 text-[var(--foreground)]">
         <PrepListsHeader onGenerateClick={openGenerateModal} onCreateClick={openForm} />
+
+        <WeatherOperationalTip />
 
         {PAGE_TIPS_CONFIG['prep-lists'] && (
           <div className="mb-6">

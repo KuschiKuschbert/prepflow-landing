@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { PageTipsCard } from '@/components/ui/PageTipsCard';
 import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { PageHeader } from '../components/static/PageHeader';
+import { WeatherOperationalTip } from '../components/WeatherOperationalTip';
 
 // Lazy load order list components to reduce initial bundle size
 const MenuIngredientsTable = dynamic(
@@ -185,6 +186,8 @@ export default function OrderListsPage() {
           icon={ClipboardCheck}
           showLogo={true}
         />
+
+        <WeatherOperationalTip />
 
         {PAGE_TIPS_CONFIG['order-lists'] && (
           <div className="mb-6">

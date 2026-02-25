@@ -2,6 +2,8 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { checkFeatureAccess } from '@/lib/api-feature-gate';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { fetchCurrentWeather, getVenueCoordinatesFromDb } from '@/lib/weather/open-meteo';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { generateAISpecials } from './generateAISpecials';
@@ -117,9 +119,34 @@ export async function handlePostRequest(request: NextRequest): Promise<NextRespo
       countryCode,
     });
 
+    // Fetch weather for prompt context (non-blocking; continues without if fetch fails)
+    let weatherContext: { temp_celsius: number | null; weather_status: string } | null = null;
+    try {
+      if (supabaseAdmin) {
+        const coords = await getVenueCoordinatesFromDb(supabaseAdmin);
+        const weather = await fetchCurrentWeather(coords.lat, coords.lon);
+        if (!weather.isFallback) {
+          weatherContext = {
+            temp_celsius: weather.temp_celsius,
+            weather_status: weather.weather_status,
+          };
+        }
+      }
+    } catch (weatherErr) {
+      logger.debug('[AI Specials API] Weather fetch failed, continuing without', {
+        requestId,
+        error: weatherErr instanceof Error ? weatherErr.message : String(weatherErr),
+      });
+    }
+
     // Generate AI specials
     logger.debug('[AI Specials API] Calling generateAISpecials', { requestId, userId });
-    const aiResponse = (await generateAISpecials(imageData, prompt, countryCode)) as {
+    const aiResponse = (await generateAISpecials(
+      imageData,
+      prompt,
+      countryCode,
+      weatherContext,
+    )) as {
       suggestions?: string[];
       ingredients?: unknown[];
     };
