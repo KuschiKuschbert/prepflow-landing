@@ -3,7 +3,7 @@
  */
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export function catchRecipesHandler(err: unknown, method: string): NextResponse {
   logger.error('[Recipes API] Unexpected error:', {

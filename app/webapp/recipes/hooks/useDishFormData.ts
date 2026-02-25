@@ -1,7 +1,7 @@
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import type { Ingredient } from '@/lib/types/recipes';
-import type { Dish, DishWithDetails, Recipe } from '@/lib/types/recipes';
+import type { Dish, Recipe } from '@/lib/types/recipes';
 import type { Dispatch, SetStateAction } from 'react';
 import { useEffect } from 'react';
 import type { SelectedIngredient, SelectedRecipe } from '../components/DishEditDrawerTypes';
