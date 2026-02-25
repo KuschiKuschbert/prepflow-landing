@@ -2,13 +2,19 @@
 
 import { useState } from 'react';
 import { DateRange, PerformanceItem } from '@/lib/types/performance';
-import { fetchPerformanceData as fetchPerformanceApi } from '../utils/performance-api';
+import {
+  fetchPerformanceData as fetchPerformanceApi,
+  type PerformanceFetchOptions,
+} from '../utils/performance-api';
 
 import { logger } from '@/lib/logger';
 export function usePreviousPeriodData() {
   const [previousPeriodData, setPreviousPeriodData] = useState<PerformanceItem[] | null>(null);
 
-  const fetchPreviousPeriodData = async (dateRange?: DateRange) => {
+  const fetchPreviousPeriodData = async (
+    dateRange?: DateRange,
+    options: PerformanceFetchOptions = {},
+  ) => {
     if (!dateRange?.startDate || !dateRange?.endDate) {
       setPreviousPeriodData(null);
       return;
@@ -31,7 +37,7 @@ export function usePreviousPeriodData() {
         preset: 'custom',
       };
 
-      const previousState = await fetchPerformanceApi(previousRange);
+      const previousState = await fetchPerformanceApi(previousRange, options);
       setPreviousPeriodData(previousState.performanceItems);
     } catch (error) {
       logger.warn('Could not fetch previous period data for trends:', {

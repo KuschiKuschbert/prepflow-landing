@@ -16,10 +16,14 @@ import { SummaryCardGrid } from '@/components/ui/SummaryCardGrid';
 
 interface PerformanceSummaryCardsProps {
   performanceItems: PerformanceItem[];
+  onCategoryFilter?: (className: string) => void;
 }
+
+const CATEGORY_ORDER = ["Chef's Kiss", 'Hidden Gem', 'Bargain Bucket', 'Burnt Toast'] as const;
 
 export default function PerformanceSummaryCards({
   performanceItems,
+  onCategoryFilter,
 }: PerformanceSummaryCardsProps) {
   const summary = useMemo(() => {
     if (performanceItems.length === 0) {
@@ -139,30 +143,37 @@ export default function PerformanceSummaryCards({
           <span className="text-fluid-xs text-[var(--foreground-muted)]">Categories</span>
         </div>
         <div className="space-y-0.5">
-          <div className="text-fluid-xs flex items-center justify-between">
-            <span className="text-[var(--color-success)]">Chef&apos;s Kiss</span>
-            <span className="font-semibold text-[var(--foreground)]">
-              {summary.categoryCounts["Chef's Kiss"]}
-            </span>
-          </div>
-          <div className="text-fluid-xs flex items-center justify-between">
-            <span className="text-[var(--color-info)]">Hidden Gem</span>
-            <span className="font-semibold text-[var(--foreground)]">
-              {summary.categoryCounts['Hidden Gem']}
-            </span>
-          </div>
-          <div className="text-fluid-xs flex items-center justify-between">
-            <span className="text-[var(--color-warning)]">Bargain</span>
-            <span className="font-semibold text-[var(--foreground)]">
-              {summary.categoryCounts['Bargain Bucket']}
-            </span>
-          </div>
-          <div className="text-fluid-xs flex items-center justify-between">
-            <span className="text-[var(--color-error)]">Burnt Toast</span>
-            <span className="font-semibold text-[var(--foreground)]">
-              {summary.categoryCounts['Burnt Toast']}
-            </span>
-          </div>
+          {CATEGORY_ORDER.map(cat => {
+            const count = summary.categoryCounts[cat];
+            const colorClass =
+              cat === "Chef's Kiss"
+                ? 'text-[var(--color-success)]'
+                : cat === 'Hidden Gem'
+                  ? 'text-[var(--color-info)]'
+                  : cat === 'Bargain Bucket'
+                    ? 'text-[var(--color-warning)]'
+                    : 'text-[var(--color-error)]';
+            const label = cat === 'Bargain Bucket' ? 'Bargain' : cat;
+            const content = (
+              <div className="text-fluid-xs flex items-center justify-between">
+                <span className={colorClass}>{label}</span>
+                <span className="font-semibold text-[var(--foreground)]">{count}</span>
+              </div>
+            );
+            return onCategoryFilter ? (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => onCategoryFilter(cat)}
+                className="w-full cursor-pointer rounded px-1 py-0.5 text-left transition-colors hover:bg-[var(--muted)]/50"
+                aria-label={`Filter table to show only ${cat} items`}
+              >
+                {content}
+              </button>
+            ) : (
+              <div key={cat}>{content}</div>
+            );
+          })}
         </div>
       </div>
 

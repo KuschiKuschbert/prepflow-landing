@@ -3,15 +3,21 @@
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
-import { PerformanceHistoryItem, PerformanceItem } from '@/lib/types/performance';
+import {
+  PerformanceHistoryItem,
+  PerformanceItem,
+  WeatherByDateRecord,
+} from '@/lib/types/performance';
 
 interface PerformanceChartsProps {
   performanceItems: PerformanceItem[];
   performanceHistory: PerformanceHistoryItem[];
+  weatherByDate?: Record<string, WeatherByDateRecord>;
   dateRange?: {
     startDate: Date | null;
     endDate: Date | null;
   };
+  onCategoryFilter?: (className: string) => void;
 }
 
 // Lazy load Recharts to reduce initial bundle size
@@ -30,7 +36,9 @@ const PerformanceChartsContent = dynamic(() => import('./PerformanceChartsLazy')
 export default function PerformanceCharts({
   performanceItems,
   performanceHistory,
+  weatherByDate,
   dateRange,
+  onCategoryFilter,
 }: PerformanceChartsProps) {
   const [isMobile, setIsMobile] = useState(false);
   const { ref, isIntersecting } = useIntersectionObserver({
@@ -59,8 +67,10 @@ export default function PerformanceCharts({
         <PerformanceChartsContent
           performanceItems={performanceItems}
           performanceHistory={performanceHistory}
+          weatherByDate={weatherByDate}
           dateRange={dateRange}
           isMobile={isMobile}
+          onCategoryFilter={onCategoryFilter}
         />
       )}
       {!isIntersecting && (

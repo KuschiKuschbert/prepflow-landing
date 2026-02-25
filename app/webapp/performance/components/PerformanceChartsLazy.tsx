@@ -2,304 +2,102 @@
 
 import { useMemo } from 'react';
 import {
-  Area,
-  AreaChart,
-  Bar,
-  CartesianGrid,
-  Cell,
-  Pie,
-  BarChart as ReBarChart,
-  PieChart as RePieChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
-import { PerformanceHistoryItem, PerformanceItem } from '@/lib/types/performance';
+  computeCategoryAggregates,
+  computeWeatherCorrelation,
+  deriveChartData,
+  derivePieData,
+  getTopProfitItems,
+  getTotalProfit,
+  mergeHistoryWithWeather,
+} from '../utils/chartDataTransformers';
+import type { Top3Insight } from './charts/PerformanceBarChart';
+import PerformanceAreaChart from './charts/PerformanceAreaChart';
+import PerformanceBarChart from './charts/PerformanceBarChart';
+import PerformancePieChart from './charts/PerformancePieChart';
+import PerformanceWeatherCorrelation from './charts/PerformanceWeatherCorrelation';
+import type {
+  PerformanceHistoryItem,
+  PerformanceItem,
+  WeatherByDateRecord,
+} from '@/lib/types/performance';
+
+function formatCurrency(amount: number) {
+  return new Intl.NumberFormat('en-AU', {
+    style: 'currency',
+    currency: 'AUD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
 
 interface PerformanceChartsLazyProps {
   performanceItems: PerformanceItem[];
   performanceHistory: PerformanceHistoryItem[];
+  weatherByDate?: Record<string, WeatherByDateRecord>;
   dateRange?: {
     startDate: Date | null;
     endDate: Date | null;
   };
   isMobile: boolean;
+  onCategoryFilter?: (className: string) => void;
 }
 
 export default function PerformanceChartsLazy({
   performanceItems,
   performanceHistory,
+  weatherByDate = {},
   dateRange,
   isMobile,
+  onCategoryFilter,
 }: PerformanceChartsLazyProps) {
-  const chartData = useMemo(
-    () => [
-      {
-        name: "Chef's Kiss",
-        value:
-          performanceItems
-            .filter(item => item.menu_item_class === "Chef's Kiss")
-            .reduce((acc, item) => acc + item.gross_profit_percentage, 0) /
-          Math.max(
-            1,
-            performanceItems.filter(item => item.menu_item_class === "Chef's Kiss").length,
-          ),
-        color: 'var(--color-success)',
-      },
-      {
-        name: 'Hidden Gem',
-        value:
-          performanceItems
-            .filter(item => item.menu_item_class === 'Hidden Gem')
-            .reduce((acc, item) => acc + item.gross_profit_percentage, 0) /
-          Math.max(
-            1,
-            performanceItems.filter(item => item.menu_item_class === 'Hidden Gem').length,
-          ),
-        color: 'var(--color-info)',
-      },
-      {
-        name: 'Bargain Bucket',
-        value:
-          performanceItems
-            .filter(item => item.menu_item_class === 'Bargain Bucket')
-            .reduce((acc, item) => acc + item.gross_profit_percentage, 0) /
-          Math.max(
-            1,
-            performanceItems.filter(item => item.menu_item_class === 'Bargain Bucket').length,
-          ),
-        color: 'var(--color-warning)',
-      },
-      {
-        name: 'Burnt Toast',
-        value:
-          performanceItems
-            .filter(item => item.menu_item_class === 'Burnt Toast')
-            .reduce((acc, item) => acc + item.gross_profit_percentage, 0) /
-          Math.max(
-            1,
-            performanceItems.filter(item => item.menu_item_class === 'Burnt Toast').length,
-          ),
-        color: 'var(--color-error)',
-      },
-    ],
-    [performanceItems],
-  );
+  const aggregates = useMemo(() => computeCategoryAggregates(performanceItems), [performanceItems]);
+  const chartData = useMemo(() => deriveChartData(aggregates), [aggregates]);
+  const pieData = useMemo(() => derivePieData(aggregates), [aggregates]);
 
-  const pieData = useMemo(
-    () => [
-      {
-        name: "Chef's Kiss",
-        value: performanceItems.filter(item => item.menu_item_class === "Chef's Kiss").length,
-        color: 'var(--color-success)',
-      },
-      {
-        name: 'Hidden Gem',
-        value: performanceItems.filter(item => item.menu_item_class === 'Hidden Gem').length,
-        color: 'var(--color-info)',
-      },
-      {
-        name: 'Bargain Bucket',
-        value: performanceItems.filter(item => item.menu_item_class === 'Bargain Bucket').length,
-        color: 'var(--color-warning)',
-      },
-      {
-        name: 'Burnt Toast',
-        value: performanceItems.filter(item => item.menu_item_class === 'Burnt Toast').length,
-        color: 'var(--color-error)',
-      },
-    ],
-    [performanceItems],
-  );
-
-  // Top 3 profit generators
-  const topProfitItems = useMemo(() => {
-    return [...performanceItems]
-      .sort((a, b) => b.gross_profit * b.number_sold - a.gross_profit * a.number_sold)
-      .slice(0, 3);
-  }, [performanceItems]);
-
-  const totalProfit = useMemo(() => {
-    return performanceItems.reduce((sum, item) => sum + item.gross_profit * item.number_sold, 0);
-  }, [performanceItems]);
-
-  const top3ProfitPercentage = useMemo(() => {
-    if (totalProfit === 0) return 0;
+  const topProfitItems = useMemo(() => getTopProfitItems(performanceItems, 3), [performanceItems]);
+  const totalProfit = useMemo(() => getTotalProfit(performanceItems), [performanceItems]);
+  const top3Insight: Top3Insight | undefined = useMemo(() => {
+    if (topProfitItems.length === 0 || totalProfit === 0) return undefined;
     const top3Profit = topProfitItems.reduce(
       (sum, item) => sum + item.gross_profit * item.number_sold,
       0,
     );
-    return (top3Profit / totalProfit) * 100;
+    return {
+      itemNames: topProfitItems.map(item => item.name),
+      percentage: (top3Profit / totalProfit) * 100,
+      totalAmount: formatCurrency(top3Profit),
+    };
   }, [topProfitItems, totalProfit]);
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-AU', {
-      style: 'currency',
-      currency: 'AUD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
+  const chartDataWithWeather = useMemo(
+    () => mergeHistoryWithWeather(performanceHistory, weatherByDate),
+    [performanceHistory, weatherByDate],
+  );
+  const weatherCorrelation = useMemo(
+    () => computeWeatherCorrelation(performanceHistory, weatherByDate),
+    [performanceHistory, weatherByDate],
+  );
+
+  const hasHistory = performanceHistory.length > 0;
+  const hasWeatherData =
+    hasHistory && (weatherCorrelation.rainy.count > 0 || weatherCorrelation.dry.count > 0);
+  const showEmptyTimeSeries =
+    !hasHistory && dateRange?.startDate != null && dateRange?.endDate != null;
 
   return (
     <div className="mb-8 space-y-6">
-      {/* Chart Insights */}
-      {topProfitItems.length > 0 && (
-        <div className="rounded-2xl border border-[var(--border)] bg-gradient-to-r from-[var(--primary)]/10 to-[var(--accent)]/10 p-4">
-          <p className="text-sm text-[var(--foreground-secondary)]">
-            <span className="font-semibold text-[var(--button-active-text)]">Insight:</span> Your
-            top 3 items ({topProfitItems.map(item => item.name).join(', ')}) generate{' '}
-            <span className="font-semibold text-[var(--primary)]">
-              {top3ProfitPercentage.toFixed(1)}%
-            </span>{' '}
-            of total profit (
-            {formatCurrency(
-              topProfitItems.reduce((sum, item) => sum + item.gross_profit * item.number_sold, 0),
-            )}
-            )
-          </p>
-        </div>
-      )}
-
-      {/* Charts Grid */}
       <div className="large-desktop:grid-cols-2 grid grid-cols-1 gap-6">
-        {/* Bar Chart - Profit by Category */}
-        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
-          <h3 className="desktop:text-xl mb-4 text-lg font-semibold text-[var(--foreground)]">
-            Average Profit Margin by Category
-          </h3>
-          <div className="h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <ReBarChart data={chartData} margin={{ top: 10, right: 20, bottom: 0, left: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
-                <XAxis dataKey="name" stroke="var(--foreground-muted)" tick={{ fontSize: 12 }} />
-                <YAxis
-                  stroke="var(--foreground-muted)"
-                  tickFormatter={(v: number | string) =>
-                    `${typeof v === 'number' ? v.toFixed(0) : v}%`
-                  }
-                  tick={{ fontSize: 12 }}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'var(--surface)',
-                    border: '1px solid var(--border)',
-                    color: 'var(--foreground)',
-                  }}
-                  formatter={(value: number | string) => [
-                    `${(value as number).toFixed(1)}%`,
-                    'Avg Profit Margin',
-                  ]}
-                />
-                <Bar dataKey="value" radius={[6, 6, 0, 0]}>
-                  {chartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Bar>
-              </ReBarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Pie Chart - Category Distribution */}
-        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
-          <h3 className="desktop:text-xl mb-4 text-lg font-semibold text-[var(--foreground)]">
-            Category Distribution
-          </h3>
-          <div className="h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <RePieChart>
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'var(--surface)',
-                    border: '1px solid var(--border)',
-                    color: 'var(--foreground)',
-                  }}
-                  formatter={(value: number | string, name: string) => [String(value), name]}
-                />
-                <Pie dataKey="value" data={pieData} outerRadius={isMobile ? 80 : 100} label>
-                  {pieData.map((entry, index) => (
-                    <Cell key={`pie-cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-              </RePieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+        <PerformanceBarChart chartData={chartData} insight={top3Insight} />
+        <PerformancePieChart
+          pieData={pieData}
+          isMobile={isMobile}
+          onCategoryFilter={onCategoryFilter}
+        />
       </div>
 
-      {/* Time Series Chart */}
-      {performanceHistory.length > 0 ? (
-        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
-          <h3 className="desktop:text-xl mb-4 text-lg font-semibold text-[var(--foreground)]">
-            Profit Over Time
-          </h3>
-          <div className="h-80 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart
-                data={performanceHistory}
-                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-              >
-                <defs>
-                  <linearGradient id="colorProfit" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.1} />
-                    <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <XAxis
-                  dataKey="date"
-                  stroke="var(--foreground-muted)"
-                  tick={{ fontSize: 12 }}
-                  tickFormatter={(value: number | string) => {
-                    const d = new Date(value);
-                    return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short' });
-                  }}
-                />
-                <YAxis
-                  stroke="var(--foreground-muted)"
-                  tick={{ fontSize: 12 }}
-                  tickFormatter={(value: number) =>
-                    new Intl.NumberFormat('en-AU', {
-                      style: 'currency',
-                      currency: 'AUD',
-                      notation: 'compact',
-                    }).format(value)
-                  }
-                />
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'var(--surface)',
-                    border: '1px solid var(--border)',
-                    color: 'var(--foreground)',
-                  }}
-                  labelFormatter={(value: number | string) => {
-                    const d = new Date(value);
-                    return d.toLocaleDateString('en-AU', {
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric',
-                    });
-                  }}
-                  formatter={(value: number | string) => [
-                    formatCurrency(value as number),
-                    'Gross Profit',
-                  ]}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="grossProfit"
-                  stroke="var(--primary)"
-                  fillOpacity={1}
-                  fill="url(#colorProfit)"
-                  strokeWidth={2}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      ) : dateRange?.startDate && dateRange?.endDate ? (
+      {hasHistory ? (
+        <PerformanceAreaChart chartDataWithWeather={chartDataWithWeather} />
+      ) : showEmptyTimeSeries ? (
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
           <h3 className="desktop:text-xl mb-4 text-lg font-semibold text-[var(--foreground)]">
             Performance Over Time
@@ -311,6 +109,10 @@ export default function PerformanceChartsLazy({
             <p className="text-sm text-[var(--foreground-subtle)]">No sales data found.</p>
           </div>
         </div>
+      ) : null}
+
+      {hasWeatherData ? (
+        <PerformanceWeatherCorrelation weatherCorrelation={weatherCorrelation} />
       ) : null}
     </div>
   );

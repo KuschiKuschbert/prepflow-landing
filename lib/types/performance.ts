@@ -68,9 +68,18 @@ export interface PerformanceHistoryItem {
   itemsSold: number;
 }
 
+/** Daily weather record for performance correlation */
+export interface WeatherByDateRecord {
+  temp_celsius_max: number | null;
+  temp_celsius_min: number | null;
+  precipitation_mm: number;
+  weather_status: string;
+}
+
 export interface PerformanceState {
   performanceItems: PerformanceItem[];
   performanceHistory: PerformanceHistoryItem[];
+  weatherByDate?: Record<string, WeatherByDateRecord>;
   metadata: PerformanceMetadata | null;
   performanceAlerts: PerformanceAlert[];
   performanceScore: number;

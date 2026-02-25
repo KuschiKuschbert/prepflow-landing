@@ -29,7 +29,6 @@
   "lib/ingredient-normalization.ts",
   "lib/unit-conversion/density-map.ts",
   "app/webapp/components/navigation/nav-items.tsx",
-  "app/webapp/performance/components/PerformanceChartsLazy.tsx",
   "app/webapp/specials/hooks/useSpecialsData.ts",
   "app/webapp/time-attendance/components/hooks/useGeofence.ts",
   "app/api/time-attendance/clock-out/route.ts",

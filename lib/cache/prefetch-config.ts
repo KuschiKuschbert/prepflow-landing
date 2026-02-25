@@ -1,8 +1,22 @@
 /**
+ * Build performance API URL with default 30-day date range (matches PerformanceClient default).
+ * Used for prefetching so data is ready when user navigates to performance page.
+ */
+function getPerformancePrefetchUrl(): string {
+  const end = new Date();
+  end.setHours(23, 59, 59, 999);
+  const start = new Date(end);
+  start.setDate(start.getDate() - 29);
+  start.setHours(0, 0, 0, 0);
+  const startStr = start.toISOString().split('T')[0];
+  const endStr = end.toISOString().split('T')[0];
+  return `/api/performance?startDate=${startStr}&endDate=${endStr}`;
+}
+
+/**
  * Prefetch configuration for all navigation links
  * Maps routes to their API endpoints for smart prefetching
  */
-
 export const PREFETCH_MAP: Record<string, string[]> = {
   '/webapp': [
     '/api/dashboard/stats',
@@ -19,7 +33,7 @@ export const PREFETCH_MAP: Record<string, string[]> = {
     '/api/dishes?pageSize=200',
   ],
   '/webapp/recipe-sharing': ['/api/recipes?pageSize=200', '/api/recipe-share'],
-  '/webapp/performance': ['/api/performance', '/api/weather/performance-insight'],
+  '/webapp/performance': ['/api/menus', '/api/weather/performance-insight'],
   '/webapp/temperature': ['/api/temperature-logs'],
   '/webapp/cleaning': ['/api/cleaning-areas', '/api/cleaning-tasks'],
   '/webapp/compliance': ['/api/compliance-records', '/api/compliance-types'],
@@ -50,10 +64,15 @@ export const PREFETCH_MAP: Record<string, string[]> = {
 };
 
 /**
- * Get prefetch endpoints for a route
+ * Get prefetch endpoints for a route.
+ * Performance route gets dynamic 30-day default date range for instant load.
  */
 export function getPrefetchEndpoints(route: string): string[] {
-  return PREFETCH_MAP[route] || [];
+  const base = PREFETCH_MAP[route] || [];
+  if (route === '/webapp/performance') {
+    return [getPerformancePrefetchUrl(), ...base];
+  }
+  return base;
 }
 
 /**

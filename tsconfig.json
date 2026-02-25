@@ -27,7 +27,6 @@
     "auth.ts",
     "middleware.ts",
     "next.config.ts",
-    "playwright.config.ts",
     "app/**/*.ts",
     "app/**/*.tsx",
     "components/**/*.ts",

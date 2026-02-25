@@ -4,9 +4,10 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { getDishIdsForMenu, getFilterMenuId } from './helpers/filter-utils';
+import { bulkImportSalesData } from './helpers/bulkImportSalesData';
 import { handlePerformanceError } from './helpers/handlePerformanceError';
 import { processPerformanceData } from './helpers/processPerformanceData';
+import { fetchDishesForPerformance, getFilterMenuId } from './service';
 import { upsertSalesData } from './helpers/upsertSalesData';
 
 export async function GET(request: NextRequest) {
@@ -31,73 +32,73 @@ export async function GET(request: NextRequest) {
     const menuIdParam = searchParams.get('menuId');
     const lockedMenuOnly = searchParams.get('lockedMenuOnly') === 'true';
 
-    // If filtering by locked menu, find the locked menu first
-    // If filtering by locked menu, find the locked menu first
     const targetMenuId = await getFilterMenuId(supabaseAdmin, menuIdParam, lockedMenuOnly);
+    const dishes = await fetchDishesForPerformance(supabaseAdmin, targetMenuId);
 
-    // Build base query
-    let dishesQuery = supabaseAdmin.from('menu_dishes').select(
-      `
-        *,
-        sales_data (
-          id,
-          number_sold,
-          popularity_percentage,
-          date
-        )
-      `,
-    );
-
-    // Filter by menu if menuId is provided
-    if (targetMenuId) {
-      const dishIds = await getDishIdsForMenu(supabaseAdmin, targetMenuId);
-
-      if (dishIds.length > 0) {
-        dishesQuery = dishesQuery.in('id', dishIds);
-        logger.dev('[Performance API] Filtering dishes by menu:', {
-          menuId: targetMenuId,
-          dishCount: dishIds.length,
-        });
-      } else {
-        // No dishes in this menu, return empty result
-        logger.dev('[Performance API] No dishes found in menu:', { menuId: targetMenuId });
-        return NextResponse.json({
-          success: true,
-          data: [],
-          message: 'No dishes found in the specified menu',
-          metadata: {
-            methodology: 'PrepFlow COGS Dynamic',
-            filteredByMenu: targetMenuId,
-          },
-        });
-      }
-    }
-
-    const { data: dishes, error: dishesError } = await dishesQuery.order('created_at', {
-      ascending: false,
-    });
-
-    if (dishesError) {
-      logger.error('[Performance API] Database error fetching dishes:', {
-        error: dishesError.message,
-        code: dishesError.code,
-        context: { endpoint: '/api/performance', operation: 'GET', table: 'menu_dishes' },
+    if (dishes.length === 0 && targetMenuId) {
+      return NextResponse.json({
+        success: true,
+        data: [],
+        message: 'No dishes found in the specified menu',
+        metadata: {
+          methodology: 'PrepFlow COGS Dynamic',
+          filteredByMenu: targetMenuId,
+        },
       });
-
-      const apiError = ApiErrorHandler.fromSupabaseError(dishesError, 500);
-      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     // Process performance data
-    const { performanceData, metadata } = processPerformanceData(
+    const { performanceData, performanceHistory, metadata } = processPerformanceData(
       dishes || [],
       startDateParam,
       endDateParam,
     );
 
+    // Fetch daily weather logs for correlation (non-blocking; empty if table missing or error)
+    let weatherByDate: Record<
+      string,
+      {
+        temp_celsius_max: number | null;
+        temp_celsius_min: number | null;
+        precipitation_mm: number;
+        weather_status: string;
+      }
+    > = {};
+    if (supabaseAdmin && (startDateParam || endDateParam)) {
+      let weatherQuery = supabaseAdmin
+        .from('daily_weather_logs')
+        .select('log_date, temp_celsius_max, temp_celsius_min, precipitation_mm, weather_status');
+      if (startDateParam) weatherQuery = weatherQuery.gte('log_date', startDateParam);
+      if (endDateParam) weatherQuery = weatherQuery.lte('log_date', endDateParam);
+      const { data: weatherLogs } = await weatherQuery;
+      if (weatherLogs?.length) {
+        weatherByDate = Object.fromEntries(
+          weatherLogs.map(
+            (w: {
+              log_date: string;
+              temp_celsius_max: number | null;
+              temp_celsius_min: number | null;
+              precipitation_mm: number;
+              weather_status: string;
+            }) => [
+              w.log_date,
+              {
+                temp_celsius_max: w.temp_celsius_max,
+                temp_celsius_min: w.temp_celsius_min,
+                precipitation_mm: Number(w.precipitation_mm) || 0,
+                weather_status: w.weather_status || 'Unknown',
+              },
+            ],
+          ),
+        );
+      }
+    }
+
     return NextResponse.json({
       success: true,
       data: performanceData,
+      performanceHistory,
+      weatherByDate,
       message: 'Performance data retrieved successfully',
       metadata,
     });
@@ -112,9 +113,39 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { dish_id, number_sold, popularity_percentage, date } = await request.json();
+    if (!supabaseAdmin) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
+    }
 
-    if (!dish_id || !number_sold || !popularity_percentage) {
+    const body = await request.json();
+
+    // Bulk import: { salesData: [{ dish_name, number_sold, popularity_percentage }, ...] }
+    if (Array.isArray(body.salesData) && body.salesData.length > 0) {
+      const records = body.salesData.map(
+        (r: { dish_name?: string; number_sold?: number; popularity_percentage?: number }) => ({
+          dish_name: String(r.dish_name ?? '').trim(),
+          number_sold: Number(r.number_sold) || 0,
+          popularity_percentage: Number(r.popularity_percentage) || 0,
+        }),
+      );
+      const { imported, errors } = await bulkImportSalesData(records);
+      return NextResponse.json({
+        success: true,
+        data: { imported, errors },
+        message:
+          errors.length > 0
+            ? `Imported ${imported} records. ${errors.length} issue(s): ${errors.slice(0, 5).join('; ')}${errors.length > 5 ? '...' : ''}`
+            : `Imported ${imported} sales records successfully`,
+      });
+    }
+
+    // Single record: { dish_id, number_sold, popularity_percentage, date? }
+    const { dish_id, number_sold, popularity_percentage, date } = body;
+
+    if (!dish_id || number_sold == null || popularity_percentage == null) {
       return NextResponse.json(
         ApiErrorHandler.createError(
           'dish_id, number_sold, and popularity_percentage are required',
@@ -125,17 +156,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
     const data = await upsertSalesData({
       dish_id,
-      number_sold,
-      popularity_percentage,
+      number_sold: Number(number_sold),
+      popularity_percentage: Number(popularity_percentage),
       date,
     });
 

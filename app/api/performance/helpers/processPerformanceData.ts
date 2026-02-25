@@ -64,12 +64,14 @@ export function processPerformanceData(
 
     return {
       ...dish,
+      name: (dish as { name?: string }).name ?? (dish as { dish_name?: string }).dish_name ?? '',
       number_sold: aggregatedSales.numberSold,
       popularity_percentage: aggregatedSales.popularityPercentage,
       profit_category: metrics.profitCategory,
       popularity_category: metrics.popularityCategory,
       menu_item_class: metrics.menuItemClass,
       food_cost: metrics.foodCost,
+      cost_per_serving: metrics.foodCost, // Same as food_cost for export/print compatibility
       contribution_margin: metrics.contributionMargin,
       gross_profit: metrics.grossProfitExclGST, // Gross profit excluding GST
       gross_profit_percentage: dish.profit_margin ?? 0,

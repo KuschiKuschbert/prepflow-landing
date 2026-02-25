@@ -47,7 +47,7 @@ export default function PerformanceFilters({
 
   const handlePrint = () =>
     handlePrintHelper(
-      performanceItems,
+      filteredAndSortedItems,
       dateRange,
       metadata,
       performanceScore,
@@ -58,7 +58,7 @@ export default function PerformanceFilters({
   const handleExport = async (format: ExportFormat) =>
     handleExportHelper(
       format,
-      performanceItems,
+      filteredAndSortedItems,
       dateRange,
       metadata,
       performanceScore,
@@ -80,14 +80,14 @@ export default function PerformanceFilters({
           <PrintButton
             onClick={handlePrint}
             loading={printLoading}
-            disabled={performanceItems.length === 0}
+            disabled={filteredAndSortedItems.length === 0}
             size="sm"
             variant="secondary"
           />
           <ExportButton
             onExport={handleExport}
             loading={exportLoading}
-            disabled={performanceItems.length === 0}
+            disabled={filteredAndSortedItems.length === 0}
             availableFormats={['csv', 'pdf', 'html']}
             size="sm"
             variant="secondary"

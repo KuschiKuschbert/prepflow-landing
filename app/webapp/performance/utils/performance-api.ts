@@ -7,9 +7,19 @@ import { calculatePerformanceScore } from './calculatePerformanceScore';
 import type { SalesData } from './csv-utils/helpers/mapCSVRowToSalesData';
 
 import { logger } from '@/lib/logger';
-export async function fetchPerformanceData(dateRange?: DateRange, lockedMenuOnly = false) {
+export interface PerformanceFetchOptions {
+  menuId?: string | null;
+  lockedMenuOnly?: boolean;
+}
+
+export async function fetchPerformanceData(
+  dateRange?: DateRange,
+  options: PerformanceFetchOptions = {},
+) {
+  const { menuId, lockedMenuOnly = false } = options;
   logger.dev('🔄 Fetching performance data from /api/performance...', {
     dateRange,
+    menuId,
     lockedMenuOnly,
   });
 
@@ -20,6 +30,9 @@ export async function fetchPerformanceData(dateRange?: DateRange, lockedMenuOnly
   }
   if (dateRange?.endDate) {
     params.append('endDate', dateRange.endDate.toISOString().split('T')[0]);
+  }
+  if (menuId) {
+    params.append('menuId', menuId);
   }
   if (lockedMenuOnly) {
     params.append('lockedMenuOnly', 'true');
@@ -44,11 +57,12 @@ export async function fetchPerformanceData(dateRange?: DateRange, lockedMenuOnly
     hasMetadata: !!data.metadata,
   });
 
-  // API returns { success: true, data: [...], metadata: {...} }
+  // API returns { success, data, performanceHistory, weatherByDate, metadata }
   const performanceItems = data.data || [];
   const result = {
     performanceItems,
     performanceHistory: data.performanceHistory || [],
+    weatherByDate: data.weatherByDate || {},
     metadata: data.metadata || null,
     performanceAlerts: [],
     performanceScore: calculatePerformanceScore(performanceItems),
