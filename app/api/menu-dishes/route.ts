@@ -56,6 +56,28 @@ export async function GET(_request: NextRequest) {
       if (!allDishesError && allDishesData) {
         dishes = allDishesData as unknown as Dish[];
       }
+    } else if (dishesQueryError?.code === '42703') {
+      // Column does not exist (e.g. category, kitchen_section_id) - retry with minimal columns
+      logger.warn('dishes optional columns not found, fetching minimal set');
+      const { data: fallbackData, error: fallbackError } = await supabaseAdmin
+        .from('dishes')
+        .select('id, dish_name, description, selling_price');
+
+      if (!fallbackError && fallbackData) {
+        dishes = (fallbackData as unknown as Dish[]).map(d => ({
+          ...d,
+          category: null,
+          kitchen_section_id: null,
+        }));
+      } else {
+        dishesError = fallbackError;
+        logger.error('Error fetching dishes (fallback):', fallbackError);
+        return NextResponse.json({
+          success: true,
+          data: [],
+          message: 'Could not fetch dishes',
+        });
+      }
     } else if (dishesQueryError?.code === '42P01') {
       // Table doesn't exist (42P01 = undefined_table)
       logger.warn('dishes table does not exist, trying menu_dishes table');
@@ -113,19 +135,10 @@ export async function GET(_request: NextRequest) {
         if (!dishSectionsResult.error && dishSectionsResult.data) {
           dishSections = dishSectionsResult.data as unknown as DishSection[];
         } else {
-          logger.warn('dish_sections table might not exist or query failed:', {
-            error: dishSectionsResult.error?.message || String(dishSectionsResult.error),
-            code: dishSectionsResult.error?.code,
-            details: dishSectionsResult.error?.details,
-            hint: dishSectionsResult.error?.hint,
-          });
+          logger.warn('dish_sections query failed:', dishSectionsResult.error);
         }
       } catch (err) {
-        logger.warn('Error querying dish_sections:', {
-          error: err instanceof Error ? err.message : String(err),
-          stack: err instanceof Error ? err.stack : undefined,
-        });
-        // Continue without dish_sections mapping
+        logger.warn('Error querying dish_sections:', err);
       }
     }
 
@@ -160,11 +173,7 @@ export async function GET(_request: NextRequest) {
         data: [],
         message: 'Dishes tables not found. Please run database setup.',
         instructions: [
-          'The dishes or menu_dishes table does not exist.',
-          'To set up the database:',
-          '1. Visit /api/setup-menu-builder (GET) to get the SQL migration',
-          '2. Or open menu-builder-schema.sql from the project root',
-          '3. Copy and run the SQL in your Supabase SQL Editor',
+          'The dishes or menu_dishes table does not exist. Visit /api/setup-menu-builder for SQL.',
         ],
       });
     }
