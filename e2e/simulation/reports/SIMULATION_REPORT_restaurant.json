@@ -1,0 +1,712 @@
+{
+  "summary": {
+    "personaCount": 1,
+    "totalErrors": 0,
+    "totalBottlenecks": 2,
+    "totalFaultyPaths": 68
+  },
+  "errors": [],
+  "bottlenecks": [
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createParLevel",
+      "durationMs": 17600,
+      "thresholdMs": 5000,
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBEcmp6TlcydlNkdWVHRFFKUUZ6UlQ1R1h1anB6bWN1UaFup2NvbnNlbnSjdGlk2SBwWkNDWDJSaFFrdFR2SEI0OUdxM3lnV1kyS3NUX09BSKNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "timestamp": "2026-02-25T06:29:59.861Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "createParLevel",
+      "durationMs": 16758,
+      "thresholdMs": 5000,
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBIQUtHSzRvRmRZQm1yZ1BKd2xPTkdYVndEWGJOTm1VVaFup2NvbnNlbnSjdGlk2SBpTDBMZWJmc0NHbEg5aFpOSUpjUDdXRVVYNlZpekhvMKNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "timestamp": "2026-02-25T06:32:49.625Z"
+    }
+  ],
+  "faultyPaths": [
+    {
+      "type": "faulty-path",
+      "personaId": "cafe",
+      "action": "createTemperatureLog",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBlVWt4ZEJmT1NZTk14TWJzTFFtVEhXRWx5S21tall6YaFup2NvbnNlbnSjdGlk2SBSc21FM1c4WUpBdXBFR1gxdXZkRlI2RmdVVlVnVW4zb6NjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createTemperatureLog] locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Add Temperature Log\"), button:has-text(\"Add Temperature\"), button:has-text(\"Add Log\"), button:has-text(\"➕\")').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:27:00.486Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "cafe",
+      "action": "createPrepList",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBXN0NxZFBmLVNMZml3OHJxQnh4WGk5UmMxbVdpX1NMTaFup2NvbnNlbnSjdGlk2SBORzN3dDFxZGJMLWxvVUY3aTVpOE5vX1hQZVJlcmJ5eKNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createPrepList] locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Generate from Menu\"), button:has-text(\"Generate\")').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:27:18.410Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "cafe",
+      "action": "createIngredient",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA4TDBNdmJVWUhOUGRzYXdndXNoWGcxU2x5M2FUN1B0d6Fup2NvbnNlbnSjdGlk2SBoR1AzaExJRFZGRFM5WGhaR3lYTENFMzFlUk1raW0ybaNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#ingredients",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createIngredient] page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[placeholder*=\"Fresh Tomatoes\"]') to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:27:36.669Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "cafe",
+      "action": "createTemperatureLog",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBYRlBHUjdGbFhFQ1QwMTJHUVRjVGR0Ymd6TjE0bWZvaqFup2NvbnNlbnSjdGlk2SBDbmtWay1tSURjTTJJRmpXd0l3R1l1Vm1DV1RBckhUb6NjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createTemperatureLog] locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Add Temperature Log\"), button:has-text(\"Add Temperature\"), button:has-text(\"Add Log\"), button:has-text(\"➕\")').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:28:02.559Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "cafe",
+      "action": "createOrderList",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBXaU5UQllCODlYNm4xcHV1dWFzamdjVUVvbUN4c0VSSaFup2NvbnNlbnSjdGlk2SBsS3RRdHhjVFQ0RGVxZld0UjJSc0xYd2pGNGREc1JJdqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createOrderList] locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#menu-select').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:28:14.400Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "cafe",
+      "action": "createCleaningTask",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA3dDJJZVZSZm43OWRpU3ZrNXhYNm5mQ1NkMUotMnBaeqFup2NvbnNlbnSjdGlk2SBZMm9uYmh5VUU1RFBja18zWTYweU9GaXdkbGhUdDl5a6NjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createCleaningTask] locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /Cleaning Areas/i }).first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:28:28.066Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "cafe",
+      "action": "createPrepList",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SB6QzE2bzNUbk50UDVFT1dzYmRfT3VrbXRvNTBMMUVsb6Fup2NvbnNlbnSjdGlk2SBCb21pY2NBMXdKVlNTMjFkYW9meVVZUkNwSW5keWg3SqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createPrepList] locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Generate from Menu\"), button:has-text(\"Generate\")').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:28:46.303Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "cafe",
+      "action": "createTemperatureLog",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBjeDFCVjlGaFRPdnU2bTVtMElNYUVCRTh6MXliSlZ1bqFup2NvbnNlbnSjdGlk2SBOWXdqRzViWFExSVBSOEl5dVJNMGw4RHRobVlFZVJfLaNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createTemperatureLog] locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Add Temperature Log\"), button:has-text(\"Add Temperature\"), button:has-text(\"Add Log\"), button:has-text(\"➕\")').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:29:07.244Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "cafe",
+      "action": "createRecipe",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBWTTZaTHZ5S0JIbnp4Mm0zbDN3aVBrR2RMRGc0U05oYqFup2NvbnNlbnSjdGlk2SBXQ2xtVG5GSU9Vdzk5T20zYjNqTGtDVl92REllRGd6bqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createRecipe] locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Recipe', exact: true }).first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:29:42.260Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "cafe",
+      "action": "createTemperatureLog",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBYa2x5dmpHSzFJNTY5cWR3VzBLTkJsRXFMdVluTldyUqFup2NvbnNlbnSjdGlk2SBsZHB6aDI4N1pLTjhiNnhvQ2hHNVdQOFZoREZoZDlTN6NjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createTemperatureLog] locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Add Temperature Log\"), button:has-text(\"Add Temperature\"), button:has-text(\"Add Log\"), button:has-text(\"➕\")').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:30:21.269Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "cafe",
+      "action": "createPrepList",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBWbGdLTDNiM0l2azJ1SThUNlNlcE1kR3RFLV8wa1FidaFup2NvbnNlbnSjdGlk2SBLRWNlSHVaSnJYVl8zLW15OHc2akY3UmZuX1FTcTlyaaNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createPrepList] locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Generate from Menu\"), button:has-text(\"Generate\")').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:30:42.985Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "cafe",
+      "action": "createTemperatureLog",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1NGhCc0dBMWNoa2NGeXl1OGJnX2FseDQwSV9DTHdmZ6Fup2NvbnNlbnSjdGlk2SBJS0pIT001Y0NIT1Y1S2ZYcFJWUjNuVDJwdEJMTDZBM6NjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createTemperatureLog] locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Add Temperature Log\"), button:has-text(\"Add Temperature\"), button:has-text(\"Add Log\"), button:has-text(\"➕\")').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:31:04.181Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "cafe",
+      "action": "createOrderList",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SB3SVR1TC1iamJOWW51T1doMG9pMndfYkc5WDNJdFRpX6Fup2NvbnNlbnSjdGlk2SB1ZGFnNXRFZTlwbVh2dms2eFZ6RWJVT3hjLWlfaUI1c6NjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createOrderList] locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#menu-select').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:31:14.372Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "cafe",
+      "action": "createTemperatureLog",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SB5aHEzRVByQXczdHowdjdvQTdMLVU4YzZrRnJkdkx5aqFup2NvbnNlbnSjdGlk2SBXaFdpR2RMbVhadzhaNDhoaFR3QVFFZ3d1d1dqV2U4X6NjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createTemperatureLog] locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Add Temperature Log\"), button:has-text(\"Add Temperature\"), button:has-text(\"Add Log\"), button:has-text(\"➕\")').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:31:36.779Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "cafe",
+      "action": "createPrepList",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBnclNCU0xZdy1tOWtWbnVENDI3cGpYSzJHSkFFOEJ1ZqFup2NvbnNlbnSjdGlk2SA4MWtkMWFBckkyOS1HU0U1VU5xaWtyUXMtN3kzSFk5LaNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createPrepList] locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Generate from Menu\"), button:has-text(\"Generate\")').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:31:53.545Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "food-truck",
+      "action": "createOrderList",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBQTHozSWJ2SDV5Yk42ZmI4OWRvRzRZMnUwNnB3X0R4eKFup2NvbnNlbnSjdGlk2SBCQVNjVjFhak42d29keFFoX2lhaEFyc0djSFhORkZoRqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createOrderList] locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#menu-select').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:32:15.580Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "food-truck",
+      "action": "createPrepList",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SB5RV9MaFloR3pnckd5UzRMTGp3RUpRa1pEa3FkNWxPT6Fup2NvbnNlbnSjdGlk2SA3ZVNfQXdMdk1sYUpuUlRWakFsWjI5X3RhWC0zNkZXYqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createPrepList] locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Generate from Menu\"), button:has-text(\"Generate\")').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:32:32.865Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "food-truck",
+      "action": "createIngredient",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBmLXVlanZxelhXVzJobjEwUllpMlc4NVQycnlPX2RERaFup2NvbnNlbnSjdGlk2SBlSEFIUW5jVFVWc0k4YkpaZmcyY1kzc0R5TUE0Y3F5SaNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#ingredients",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createIngredient] page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[placeholder*=\"Fresh Tomatoes\"]') to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:33:09.364Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "food-truck",
+      "action": "createTemperatureLog",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBIbzdxQy1ISlYyUDNIV3lLNV80dDBuSkhEeWU2RzROQ6Fup2NvbnNlbnSjdGlk2SBvVEpaT3V2VGhKMXQ2YU81MjFCWWh1VTlWRFZBcWstNKNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createTemperatureLog] locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Add Temperature Log\"), button:has-text(\"Add Temperature\"), button:has-text(\"Add Log\"), button:has-text(\"➕\")').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:33:32.057Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "food-truck",
+      "action": "createOrderList",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBKT2I4aTAwZEZ0cmVrRXMwOC1EWUQ1OGFmYVpCNHNTbKFup2NvbnNlbnSjdGlk2SBoOU1fR0hWRHJrTFVzV3FwMXlCTkhwX2ljV3RwdEVLTKNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createOrderList] locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#menu-select').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:33:45.488Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "food-truck",
+      "action": "createPrepList",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBhNHZMRzRIaE5oWlFiUExILVVfbHIxZkN6TTFaNUdoSqFup2NvbnNlbnSjdGlk2SB2VUdUTGlxNGhyRHNLVHlPclVJRjdYSWxBVlY5cDF5baNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createPrepList] locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Generate from Menu\"), button:has-text(\"Generate\")').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:34:02.702Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "food-truck",
+      "action": "createTemperatureLog",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SAzcTBiR2VsTDVDZVlfX2NYd09FNG5HVmxrR0hLbGpibKFup2NvbnNlbnSjdGlk2SBmNEo4TURuZFV6cGFOb1NOZzVkSU5ZNHVkODluZElRX6NjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createTemperatureLog] locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Add Temperature Log\"), button:has-text(\"Add Temperature\"), button:has-text(\"Add Log\"), button:has-text(\"➕\")').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:34:28.483Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "food-truck",
+      "action": "createIngredient",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBGckVUbzVoekJUeDFfUmFzU0VBNkEyQ1dGTHpxRlhrZKFup2NvbnNlbnSjdGlk2SBzQ2xoZFpzdXVXSVpqYjlJNjJkQmk1VGswYXpXM3ZJQaNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#ingredients",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createIngredient] page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[placeholder*=\"Fresh Tomatoes\"]') to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:34:46.006Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "food-truck",
+      "action": "createComplianceRecord",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA4TlJ5cTRqWlI5UVlDZ0lRMmU4NGstZkUwalAwMEt1MKFup2NvbnNlbnSjdGlk2SBodTRqbG5zWjBqajBXSTM3OTlLbHFjWlI2RWlEaXhGQqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createComplianceRecord] locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Add Compliance Record\")').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:35:01.641Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "food-truck",
+      "action": "createPrepList",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SB5U1BPNUh5RFlhQ0drYXpiakxsYW1oQzBKNHBXQ0xHc6Fup2NvbnNlbnSjdGlk2SB6ckgtMDR3d3hqenhFMmxlZTlLN1Fkc0ptQ2VKYmlidaNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createPrepList] locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Generate from Menu\"), button:has-text(\"Generate\")').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:35:18.363Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "food-truck",
+      "action": "createOrderList",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBadVl4dkVuV0xCeFZqWkdzN0FZLUhaLWJ1ejVvYWpKbKFup2NvbnNlbnSjdGlk2SB2NUpkQUJndklzRnRkRmFIeGFBdHdjZnk5cWFNcWdqLaNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createOrderList] locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#menu-select').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:35:28.789Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "food-truck",
+      "action": "createRecipe",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBwdm1tOF9aNjRQTXNWREg0ejA3WXZBUWVXY2RLWGo0VqFup2NvbnNlbnSjdGlk2SBTZzFXM05uVXluOFFZSm1BMFRyWWZDeURwZG4yZGhKWaNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createRecipe] locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Recipe', exact: true }).first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:36:03.718Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "food-truck",
+      "action": "createTemperatureLog",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBFZlhQd2tvTXNGQm1FZUtBUmZXc0hKcGYwRTMtdjJFZ6Fup2NvbnNlbnSjdGlk2SBXc3VOb2JOaV9TcjlrSHVHbUxDZ3h3cG1VQklNZzc5OaNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createTemperatureLog] locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Add Temperature Log\"), button:has-text(\"Add Temperature\"), button:has-text(\"Add Log\"), button:has-text(\"➕\")').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:36:28.570Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "food-truck",
+      "action": "createOrderList",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBPd3o5WWNjZEo1R2lpWkVDSWlUYzIwaFBaOHpVcGhHR6Fup2NvbnNlbnSjdGlk2SBqX2FROVplZURCaXlwd0Vnamwyb2pzai1kZXhhbW1tbaNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createOrderList] locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#menu-select').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:36:43.963Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "food-truck",
+      "action": "createPrepList",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBqRU1DMHJPNGdmSHk3ZmZacnJxTTVldjVXUzRpNnpNUaFup2NvbnNlbnSjdGlk2SB1NWJicW5CaF8wS0dzTjhaY21oalI1S0hZT0NmSTYwSKNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createPrepList] locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Generate from Menu\"), button:has-text(\"Generate\")').first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:37:00.686Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "food-truck",
+      "action": "viewCustomers",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBuTTEzajhTQkFyMkk4T2YwNVlodk1MRnhfMXpxZlI4V6Fup2NvbnNlbnSjdGlk2SB3UTBCdHlEbXdhUlpmMkRJYXVWUU5RNUFqYnhmSFpXbqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "expected": "Action completes successfully",
+      "actual": "navigation-failed",
+      "errorMessage": "[viewCustomers] page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at http://localhost:3000/webapp/customers\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/webapp/customers\", waiting until \"load\"\u001b[22m\n",
+      "timestamp": "2026-02-25T06:37:02.224Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "food-truck",
+      "action": "viewCalendar",
+      "url": "chrome-error://chromewebdata/",
+      "expected": "Action completes successfully",
+      "actual": "navigation-failed",
+      "errorMessage": "[viewCalendar] page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at http://localhost:3000/webapp/calendar\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/webapp/calendar\", waiting until \"load\"\u001b[22m\n",
+      "timestamp": "2026-02-25T06:37:02.308Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "createRecipe",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBSY0hKcUhGVnBWQW15VEQ3eEpVYWxCWHhDaDVvNEZCOaFup2NvbnNlbnSjdGlk2SB3LU1kSVp5bTdnbWFIR3RiRTM3TkFoU3BfMTA5bmxjZ6NjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createRecipe] locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Recipe', exact: true }).first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-25T06:37:38.580Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "addIngredientToRecipe",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[addIngredientToRecipe] locator.click: Test timeout of 600000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[placeholder*=\"recipe\"], input[role=\"combobox\"]').first()\u001b[22m\n",
+      "timestamp": "2026-02-25T06:47:02.452Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "assignDishToMenu",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[assignDishToMenu] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.454Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "viewCOGS",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[viewCOGS] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.457Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "createDish",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[createDish] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.461Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "viewPerformance",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "form-timeout",
+      "errorMessage": "[viewPerformance] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.463Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "createMenu",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[createMenu] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.465Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "createIngredient",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[createIngredient] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.466Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "createFunction",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[createFunction] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.468Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "viewRecipeSharing",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[viewRecipeSharing] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.469Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "viewSquare",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[viewSquare] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.470Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "createRecipe",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[createRecipe] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.472Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "createTemperatureLog",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[createTemperatureLog] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.473Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "viewCompliance",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[viewCompliance] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.475Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "viewFunctions",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[viewFunctions] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.476Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "viewRoster",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[viewRoster] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.478Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "assignDishToMenu",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[assignDishToMenu] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.479Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "createEquipmentMaintenance",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[createEquipmentMaintenance] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.482Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "viewSuppliers",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[viewSuppliers] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.484Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "createSupplier",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[createSupplier] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.484Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "viewTimeAttendance",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[viewTimeAttendance] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.486Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "createRecipe",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[createRecipe] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.488Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "viewPerformance",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "form-timeout",
+      "errorMessage": "[viewPerformance] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.489Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "viewDashboard",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[viewDashboard] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.491Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "printMenu",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[printMenu] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.492Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "createMenu",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[createMenu] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.494Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "createRecipe",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[createRecipe] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.496Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "createTemperatureLog",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[createTemperatureLog] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.497Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "viewAISpecials",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[viewAISpecials] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.498Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "viewPerformance",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "form-timeout",
+      "errorMessage": "[viewPerformance] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.499Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "viewCompliance",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[viewCompliance] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.499Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "viewFunctions",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[viewFunctions] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.500Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "createTemperatureEquipment",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[createTemperatureEquipment] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.502Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "viewStaff",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[viewStaff] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.504Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "viewEquipmentDetail",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[viewEquipmentDetail] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.506Z"
+    },
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "viewFunctionDetail",
+      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1QWtKZUJSa1lNM0lrUzVxTHJZNklXQWptbEVWQkVQMKFup2NvbnNlbnSjdGlk2SAyX3pfZG12NDB4UGgta1FILXB3RGNZcm5CZ1NGM0hlcqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
+      "expected": "Action completes successfully",
+      "actual": "unknown",
+      "errorMessage": "[viewFunctionDetail] page.goto: Target page, context or browser has been closed",
+      "timestamp": "2026-02-25T06:47:02.507Z"
+    }
+  ],
+  "generatedAt": "2026-02-25T06:47:14.944Z"
+}

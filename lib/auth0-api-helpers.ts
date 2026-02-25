@@ -3,50 +3,28 @@ import { isAdmin } from './admin-utils';
 import { isEmailAllowed } from './allowlist';
 import { extractUserFromSession } from './auth0-api-helpers/helpers/extractUserFromSession';
 import { getDevUser } from './auth0-api-helpers/helpers/getDevUser';
+import { getPerfTestUserIfBypass } from './auth0-api-helpers/helpers/perfBypass';
 
 const isDev = process.env.NODE_ENV === 'development';
 const authBypassDev = process.env.AUTH0_BYPASS_DEV === 'true';
 
-/**
- * Extract user from Auth0 session
- * Returns null if not authenticated or in development (bypass mode)
- */
-export async function getUserFromRequest(req: NextRequest): Promise<{
+export type AuthUser = {
   email: string;
   name?: string;
   picture?: string;
   sub: string;
   roles?: string[];
   email_verified?: boolean;
-} | null> {
-  if (isDev && authBypassDev) {
-    return getDevUser();
-  }
+};
 
-  // Performance test bypass
-  const perfTestToken = process.env.PERFORMANCE_TEST_TOKEN || 'perf-test-secret';
-  const bypassHeader =
-    req.headers.get('x-prepflow-perf-bypass') ||
-    req.headers.get('performance-test-token') ||
-    req.headers.get('x-perf-test-token');
-  const bypassCookie = req.cookies.get('prepflow-perf-bypass')?.value;
-  const bypassQuery = req.nextUrl.searchParams.get('performance-test-token');
-
-  if (
-    bypassHeader === perfTestToken ||
-    bypassCookie === perfTestToken ||
-    bypassQuery === perfTestToken
-  ) {
-    return {
-      email: 'perf-test-user@prepflow.org',
-      name: 'Performance Test User',
-      picture: 'https://via.placeholder.com/150',
-      sub: '00000000-0000-0000-0000-000000000000', // Valid UUID for Postgres
-      email_verified: true,
-      roles: [],
-    };
-  }
-
+/**
+ * Extract user from Auth0 session.
+ * Returns null if not authenticated or in development (bypass mode).
+ */
+export async function getUserFromRequest(req: NextRequest): Promise<AuthUser | null> {
+  if (isDev && authBypassDev) return getDevUser();
+  const perfUser = getPerfTestUserIfBypass(req);
+  if (perfUser) return perfUser;
   return extractUserFromSession(req);
 }
 
@@ -54,14 +32,7 @@ export async function getUserFromRequest(req: NextRequest): Promise<{
  * Require authentication in API routes
  * Returns user if authenticated, throws NextResponse with 401 if not
  */
-export async function requireAuth(req: NextRequest): Promise<{
-  email: string;
-  name?: string;
-  picture?: string;
-  sub: string;
-  roles?: string[];
-  email_verified?: boolean;
-}> {
+export async function requireAuth(req: NextRequest): Promise<AuthUser> {
   if (isDev && authBypassDev) {
     return getDevUser();
   }
@@ -97,14 +68,7 @@ export async function requireAuth(req: NextRequest): Promise<{
  * Require admin role in API routes
  * Returns user if admin, throws NextResponse with 403 if not
  */
-export async function requireAdmin(req: NextRequest): Promise<{
-  email: string;
-  name?: string;
-  picture?: string;
-  sub: string;
-  roles?: string[];
-  email_verified?: boolean;
-}> {
+export async function requireAdmin(req: NextRequest): Promise<AuthUser> {
   const user = await requireAuth(req);
 
   // Development bypass: Always allow admin

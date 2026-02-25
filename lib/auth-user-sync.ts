@@ -70,7 +70,7 @@ export async function syncUserFromAuth0(
 
 /**
  * Detect and store user country for data transfer restrictions
- * Should be called when request headers are available (e.g., in middleware or API routes)
+ * Should be called when request headers are available (e.g., in proxy or API routes)
  *
  * @param {string} email - User email
  * @param {Headers} headers - Request headers

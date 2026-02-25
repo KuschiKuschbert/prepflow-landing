@@ -176,15 +176,15 @@ function checkSecurityPatterns(content, filePath) {
   if (isAPIRoute) {
     const hasRateLimit = /rateLimit|rate-limit|ratelimit/i.test(content);
 
-    // Routes protected by middleware rate limiting (see middleware.ts)
-    // Middleware applies rate limiting to all API routes except public routes
-    // Debug/test/fix routes are intentionally excluded from middleware rate limiting
+    // Routes protected by proxy rate limiting (see proxy.ts)
+    // Proxy applies rate limiting to all API routes except public routes
+    // Debug/test/fix routes are intentionally excluded from proxy rate limiting
     const isDebugTestRoute =
       filePath.includes('/api/debug') ||
       filePath.includes('/api/test') ||
       filePath.includes('/api/fix');
 
-    // Routes that require authentication are protected (rate limiting in middleware)
+    // Routes that require authentication are protected (rate limiting in proxy)
     const hasAuthProtection =
       /requireAuth|requireAdmin|getUserFromRequest|getUserFromSession/.test(content) ||
       filePath.includes('/api/auth/') ||
@@ -194,12 +194,12 @@ function checkSecurityPatterns(content, filePath) {
       filePath.includes('/api/billing/') ||
       filePath.includes('/api/account/');
 
-    // Only check routes that are truly public and not protected by middleware
-    // Middleware applies rate limiting to all non-public API routes
+    // Only check routes that are truly public and not protected by proxy
+    // Proxy applies rate limiting to all non-public API routes
     // Debug/test routes are intentionally excluded (development/testing only)
-    // Leads route is excluded from middleware rate limiting but is a simple form submission
+    // Leads route is excluded from proxy rate limiting but is a simple form submission
     // that doesn't need strict rate limiting (spam protection handled by form validation)
-    const needsRateLimitCheck = false; // All routes are either protected by middleware or intentionally excluded
+    const needsRateLimitCheck = false; // All routes are either protected by proxy or intentionally excluded
 
     if (needsRateLimitCheck && !hasRateLimit) {
       violations.push({

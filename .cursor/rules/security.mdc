@@ -47,7 +47,7 @@ export const env = envSchema.parse(process.env);
 
 **Usage:**
 
-- Validate on app startup in `app/layout.tsx` or `middleware.ts`
+- Validate on app startup in `app/layout.tsx` or `proxy.ts`
 - Fail fast with clear error messages if validation fails
 - Never use `process.env` directly - always use validated `env` object
 
@@ -667,7 +667,7 @@ For every new API endpoint:
 **RECOMMENDED:** Implement strict CSP with nonce-based inline scripts:
 
 ```typescript
-// middleware.ts or next.config.ts
+// proxy.ts or next.config.ts
 const nonce = Buffer.from(crypto.randomBytes(16)).toString('base64');
 
 // In headers:

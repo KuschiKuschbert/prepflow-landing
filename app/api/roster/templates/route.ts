@@ -7,7 +7,7 @@
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { createSupabaseAdmin } from '@/lib/supabase';
+import { getAuthenticatedUserByEmail } from '@/lib/api-helpers/getAuthenticatedUserByEmail';
 import { NextRequest, NextResponse } from 'next/server';
 import { ZodSchema, z } from 'zod';
 
@@ -30,41 +30,14 @@ async function safeParseBody<T>(req: NextRequest, schema: ZodSchema<T>): Promise
   return result.data;
 }
 
-async function getAuthenticatedUser(request: NextRequest) {
-  const supabaseAdmin = createSupabaseAdmin();
-
-  // Authenticate user
-  const {
-    data: { user },
-    error: authError,
-  } = await supabaseAdmin.auth.getUser(
-    request.headers.get('Authorization')?.replace('Bearer ', '') || '',
-  );
-
-  // Fallback/Use Auth0 helper
-  const { requireAuth } = await import('@/lib/auth0-api-helpers');
-  const authUser = await requireAuth(request);
-
-  // Get user_id from email
-  const { data: userData, error: userError } = await supabaseAdmin
-    .from('users')
-    .select('id')
-    .eq('email', authUser.email)
-    .single();
-
-  if (userError || !userData) {
-    throw ApiErrorHandler.createError('User not found', 'NOT_FOUND', 404);
-  }
-  return { userId: userData.id, supabase: supabaseAdmin };
-}
-
 /**
  * GET /api/roster/templates
  * List roster templates with optional filters.
  */
 export async function GET(request: NextRequest) {
   try {
-    const { userId, supabase } = await getAuthenticatedUser(request);
+    const { userId, supabaseAdmin } = await getAuthenticatedUserByEmail(request);
+    const supabase = supabaseAdmin;
 
     const { searchParams } = new URL(request.url);
     const isActive = searchParams.get('is_active');
@@ -138,7 +111,8 @@ const createTemplateSchema = z.object({
  */
 export async function POST(request: NextRequest) {
   try {
-    const { userId, supabase } = await getAuthenticatedUser(request);
+    const { userId, supabaseAdmin } = await getAuthenticatedUserByEmail(request);
+    const supabase = supabaseAdmin;
 
     const body = await safeParseBody(request, createTemplateSchema);
     const { name, description, is_active } = body;

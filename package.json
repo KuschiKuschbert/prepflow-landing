@@ -6,8 +6,9 @@
     "node": "22.x"
   },
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "env -u NO_COLOR next dev --turbopack",
     "dev:legacy": "node server.js",
+    "dev:simulation": "node scripts/simulation-dev-server.js",
     "dev:http": "next dev --turbopack",
     "verify-config": "npx tsx scripts/verify-build-config.ts",
     "build": "npm run verify-config && next build",
@@ -105,6 +106,7 @@
     "test:simulation:headed": "node scripts/verify-simulation-prerequisites.js && playwright test -c playwright.simulation.config.ts --headed --workers=1",
     "simulation:fix-loop": "node scripts/simulation-fix-loop.js",
     "simulation:fix-loop:fast": "SIM_DAYS=2 node scripts/simulation-fix-loop.js",
+    "simulation:fix-loop:full-week": "SIM_DAYS=7 SIM_FULL_SCOPE=true node scripts/simulation-fix-loop.js",
     "test:simulation:4week": "node scripts/verify-simulation-prerequisites.js && SIM_WEEKS=4 SIM_FULL_SCOPE=true SIM_RESILIENT=true SIM_FAST=true playwright test -c playwright.simulation.config.ts --headed --workers=1 e2e/workflows/persona-cafe.spec.ts e2e/workflows/persona-restaurant.spec.ts e2e/workflows/persona-food-truck.spec.ts",
     "scrape:recipes": "tsx lib/recipes/cli.ts",
     "scrape:recipes:allrecipes": "tsx lib/recipes/cli.ts --source allrecipes",
@@ -155,6 +157,7 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@huggingface/inference": "^4.13.4",
+    "@playwright/test": "^1.58.2",
     "@qwik.dev/partytown": "^0.11.2",
     "@sparticuz/chromium": "^143.0.4",
     "@supabase/supabase-js": "^2.78.0",

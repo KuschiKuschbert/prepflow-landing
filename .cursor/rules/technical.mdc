@@ -24,7 +24,7 @@ alwaysApply: true
 
 - In App Router, `context.params` is a Promise. Handlers must await it:
   - `export async function GET(req, context: { params: Promise<{ id: string }> }) { const { id } = await context.params; }`
-- Prefer proxy over middleware per deprecation notice. Middleware is still present for prod allowlist, but should be migrated to proxy when feasible.
+- Uses Next.js 16 `proxy.ts` convention (replaces deprecated middleware). Proxy handles auth, allowlist, redirects, and security headers.
 
 ## Canvas Rendering with Device Pixel Ratio (DPR)
 

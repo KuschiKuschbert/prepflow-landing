@@ -37,7 +37,7 @@ export async function fetchDishData(
         quantity,
         recipes (
           id,
-          name,
+          recipe_name,
           description,
           yield,
           yield_unit,

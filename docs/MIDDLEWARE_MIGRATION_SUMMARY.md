@@ -2,10 +2,9 @@
 
 ## Quick Reference
 
-**Status:** ✅ Ready to migrate
+**Status:** ✅ Migration complete (2025-02-25)
 **Risk Level:** Low
-**Estimated Time:** 15-30 minutes
-**Migration Method:** Simple rename + code cleanup
+**Migration Method:** Renamed `middleware.ts` → `proxy.ts`, changed export to `proxy`
 
 ## What Needs to Change
 

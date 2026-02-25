@@ -6,11 +6,11 @@
  */
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { logger } from '@/lib/logger';
-import { createSupabaseAdmin } from '@/lib/supabase';
+import { getAuthenticatedUserByEmail } from '@/lib/api-helpers/getAuthenticatedUserByEmail';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import type { CreateShiftInput } from '../helpers/types';
+import { catchShiftsHandler } from './helpers/catchHandler';
 import { checkShiftExists } from './helpers/checkShiftExists';
 import { deleteShift } from './helpers/deleteShift';
 import { getShift } from './helpers/getShift';
@@ -46,73 +46,21 @@ const updateShiftSchema = z
     },
   );
 
-async function getAuthenticatedUser(request: NextRequest) {
-  const supabaseAdmin = createSupabaseAdmin();
-
-  // Authenticate user
-  const {
-    data: { user },
-    error: authError,
-  } = await supabaseAdmin.auth.getUser(
-    request.headers.get('Authorization')?.replace('Bearer ', '') || '',
-  );
-
-  // Fallback/Use Auth0 helper
-  const { requireAuth } = await import('@/lib/auth0-api-helpers');
-  const authUser = await requireAuth(request);
-
-  // Get user_id from email
-  const { data: userData, error: userError } = await supabaseAdmin
-    .from('users')
-    .select('id')
-    .eq('email', authUser.email)
-    .single();
-
-  if (userError || !userData) {
-    throw ApiErrorHandler.createError('User not found', 'NOT_FOUND', 404);
-  }
-  return { userId: userData.id, supabase: supabaseAdmin };
-}
-
 /**
  * GET /api/roster/shifts/[id]
  * Get a single shift by ID.
  */
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { userId, supabase } = await getAuthenticatedUser(request);
-
+    const { userId, supabaseAdmin } = await getAuthenticatedUserByEmail(request);
     const { id } = await context.params;
-    const exists = await checkShiftExists(supabase, id, userId);
+    const exists = await checkShiftExists(supabaseAdmin, id, userId);
 
     if (exists instanceof NextResponse) return exists;
 
-    return await getShift(supabase, id);
+    return await getShift(supabaseAdmin, id);
   } catch (err) {
-    if (err instanceof NextResponse) return err;
-
-    logger.error('[Shifts API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-      context: { endpoint: '/api/roster/shifts/[id]', method: 'GET' },
-    });
-
-    if (err && typeof err === 'object' && 'status' in err) {
-      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
-    }
-
-    return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? err instanceof Error
-            ? err.message
-            : 'Unknown error'
-          : 'Internal server error',
-        'SERVER_ERROR',
-        500,
-      ),
-      { status: 500 },
-    );
+    return catchShiftsHandler(err, 'GET');
   }
 }
 
@@ -122,24 +70,16 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
  */
 export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { userId, supabase } = await getAuthenticatedUser(request);
-
+    const { userId, supabaseAdmin } = await getAuthenticatedUserByEmail(request);
     const { id } = await context.params;
-    const shiftId = id;
 
-    // Check if shift exists and belongs to user
-    const existsResult = await checkShiftExists(supabase, shiftId, userId);
-    if (existsResult instanceof NextResponse) {
-      return existsResult;
-    }
+    const existsResult = await checkShiftExists(supabaseAdmin, id, userId);
+    if (existsResult instanceof NextResponse) return existsResult;
 
     let body: unknown;
     try {
       body = await request.json();
-    } catch (err) {
-      logger.warn('[Shifts API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
+    } catch {
       return NextResponse.json(
         ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
@@ -159,32 +99,9 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     }
 
     const updatePayload = zodValidation.data as CreateShiftInput;
-    return await updateShift(supabase, shiftId, updatePayload, existsResult.shift, userId);
+    return await updateShift(supabaseAdmin, id, updatePayload, existsResult.shift, userId);
   } catch (err) {
-    if (err instanceof NextResponse) return err;
-
-    logger.error('[Shifts API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-      context: { endpoint: '/api/roster/shifts/[id]', method: 'PUT' },
-    });
-
-    if (err && typeof err === 'object' && 'status' in err) {
-      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
-    }
-
-    return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? err instanceof Error
-            ? err.message
-            : 'Unknown error'
-          : 'Internal server error',
-        'SERVER_ERROR',
-        500,
-      ),
-      { status: 500 },
-    );
+    return catchShiftsHandler(err, 'PUT');
   }
 }
 
@@ -194,34 +111,10 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
  */
 export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { userId, supabase } = await getAuthenticatedUser(request);
-
+    const { userId, supabaseAdmin } = await getAuthenticatedUserByEmail(request);
     const { id } = await context.params;
-    return await deleteShift(supabase, id, userId);
+    return await deleteShift(supabaseAdmin, id, userId);
   } catch (err) {
-    if (err instanceof NextResponse) return err;
-
-    logger.error('[Shifts API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-      context: { endpoint: '/api/roster/shifts/[id]', method: 'DELETE' },
-    });
-
-    if (err && typeof err === 'object' && 'status' in err) {
-      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
-    }
-
-    return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? err instanceof Error
-            ? err.message
-            : 'Unknown error'
-          : 'Internal server error',
-        'SERVER_ERROR',
-        500,
-      ),
-      { status: 500 },
-    );
+    return catchShiftsHandler(err, 'DELETE');
   }
 }

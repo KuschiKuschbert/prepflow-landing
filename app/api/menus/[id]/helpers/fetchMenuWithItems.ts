@@ -8,16 +8,15 @@ import { fetchMenuItemsWithFallback } from './fetchMenuItemsWithFallback';
 import { logDetailedError } from './fetchMenuWithItems.helpers';
 
 /**
- * Lightweight pass for locked menus: copies recipe_name from recipes.name for frontend compatibility.
+ * Lightweight pass for locked menus: ensures recipe_name is set for frontend compatibility.
  * Skips expensive enrichment (recommended prices, dietary aggregation).
  */
 function lightenMenuItems(items: RawMenuItem[]): EnrichedMenuItem[] {
   return (items || []).map(item => {
     const result = { ...item } as EnrichedMenuItem;
-    if (item.recipes && 'name' in item.recipes) {
-      (result.recipes as { recipe_name?: string; name: string }).recipe_name = (
-        item.recipes as { name: string }
-      ).name;
+    const r = item.recipes as { recipe_name?: string; name?: string } | undefined;
+    if (r && (r.recipe_name ?? r.name)) {
+      (result.recipes as { recipe_name?: string }).recipe_name = r.recipe_name ?? r.name;
     }
     return result;
   });

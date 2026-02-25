@@ -2,12 +2,11 @@
  * Recipe Processor (Migrated from scripts)
  * Processes and formats scraped recipes using AI
  */
-
 import { generateTextWithGroq, isGroqAvailable, isGroqEnabled } from '@/lib/ai/groq-client';
 import { isRecipeFormatted } from '@/lib/utils/recipe-format-detection';
 import { JSONStorage } from '../storage/json-storage';
 import { ScrapedRecipe } from '../types';
-import { scraperLogger } from './logger';
+import { buildFormattingPrompt, generateTextWithOllama } from './recipe-processor/helpers';
 
 // Processing status
 interface ProcessingStatus {
@@ -69,78 +68,6 @@ export function getProcessingStatus(): ProcessingStatus {
 function updateStatus(updates: Partial<ProcessingStatus>): void {
   globalProcessingStatus = { ...globalProcessingStatus, ...updates };
   lastProgressTime = new Date();
-}
-
-async function isOllamaAvailable(): Promise<boolean> {
-  try {
-    const response = await fetch('http://localhost:11434/api/tags', {
-      method: 'GET',
-      signal: AbortSignal.timeout(2000),
-    });
-    return response.ok;
-  } catch {
-    return false;
-  }
-}
-
-async function generateTextWithOllama(
-  prompt: string,
-  options: { model?: string; timeout?: number } = {},
-): Promise<{ response: string }> {
-  const model = options.model || 'llama3.2:3b';
-  const timeout = options.timeout || 90000;
-  const apiUrl = 'http://localhost:11434/api/generate';
-  const systemPrompt =
-    'You are a precise recipe formatter. Always respond with valid JSON only, no markdown, no explanations. Follow all conversion rules strictly.\n\n';
-  const enhancedPrompt = systemPrompt + prompt;
-
-  try {
-    scraperLogger.debug('[Ollama] Generating text', { model, timeout });
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeout);
-
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model,
-        prompt: enhancedPrompt,
-        stream: false,
-        options: { temperature: 0.3, num_predict: -1, top_p: 0.9, top_k: 40 },
-      }),
-      signal: controller.signal,
-    });
-
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Ollama API error (${response.status}): ${errorText}`);
-    }
-
-    const result = await response.json();
-    return { response: result.response || '' };
-  } catch (err) {
-    throw err;
-  }
-}
-
-function buildUnitConversionGuide(): string {
-  return `## UNIT CONVERSION GUIDE (Reference - Follow Strictly)\n\n**CRITICAL RULES:**\n1. **NEVER show imperial units**\n2. **Metric units only**\n3. **Natural units in brackets**\n4. **Solids vs Liquids**\n\n**CONVERSION EXAMPLES:**\n- "1 cup butter" → "225g butter"\n- "1 bunch cilantro" → "15g (1 bunch) fresh cilantro"`;
-}
-
-function buildFormattingPrompt(recipe: ScrapedRecipe): string {
-  const unitGuide = buildUnitConversionGuide();
-  const ingredients = recipe.ingredients
-    .map(ing =>
-      typeof ing === 'string'
-        ? ing
-        : ing.original_text || `${ing.quantity || ''} ${ing.unit || ''} ${ing.name}`.trim(),
-    )
-    .join('\n');
-  const instructions = recipe.instructions.join('\n');
-
-  return `${unitGuide}\n\n---\n\n## RECIPE FORMATTING TASK\n\nRecipe Name: ${recipe.recipe_name}\nIngredients:\n${ingredients}\n\nInstructions:\n${instructions}\n\nReturn ONLY valid JSON.`;
 }
 
 export async function processSingleRecipe(

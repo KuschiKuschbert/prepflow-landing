@@ -1,48 +1,18 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { logger } from '@/lib/logger';
-import { createSupabaseAdmin } from '@/lib/supabase';
+import { getAuthenticatedUserByEmail } from '@/lib/api-helpers/getAuthenticatedUserByEmail';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { createPrepList } from './helpers/createPrepList';
 import { deletePrepList } from './helpers/deletePrepList';
 import { fetchAllPrepListData } from './helpers/fetchPrepLists';
-import { handlePrepListError } from './helpers/handlePrepListError';
+import { catchPrepListHandler } from './helpers/handlePrepListError';
 import { parseDeleteRequest } from './helpers/parseDeleteRequest';
 import { createPrepListSchema, getPrepListsSchema, updatePrepListSchema } from './helpers/schemas';
 import { transformItems } from './helpers/transformItems';
 import { updatePrepList } from './helpers/updatePrepList';
 
-async function getAuthenticatedUser(request: NextRequest) {
-  const supabaseAdmin = createSupabaseAdmin();
-
-  // Authenticate user
-  const {
-    data: { user },
-    error: authError,
-  } = await supabaseAdmin.auth.getUser(
-    request.headers.get('Authorization')?.replace('Bearer ', '') || '',
-  );
-
-  // Fallback/Use Auth0 helper
-  const { requireAuth } = await import('@/lib/auth0-api-helpers');
-  const authUser = await requireAuth(request);
-
-  // Get user_id from email
-  const { data: userData, error: userError } = await supabaseAdmin
-    .from('users')
-    .select('id')
-    .eq('email', authUser.email)
-    .single();
-
-  if (userError || !userData) {
-    throw ApiErrorHandler.createError('User not found', 'NOT_FOUND', 404);
-  }
-  return { userId: userData.id, supabaseAdmin };
-}
-
 export async function GET(request: NextRequest) {
   try {
-    const { userId: authUserId } = await getAuthenticatedUser(request);
+    const { userId: authUserId } = await getAuthenticatedUserByEmail(request);
 
     const { searchParams } = new URL(request.url);
     const params = Object.fromEntries(searchParams.entries());
@@ -73,24 +43,13 @@ export async function GET(request: NextRequest) {
       data,
     });
   } catch (err) {
-    if (err instanceof NextResponse) return err;
-    if (ApiErrorHandler.isApiError(err)) {
-      return NextResponse.json(ApiErrorHandler.toResponseData(err), {
-        status: ApiErrorHandler.getStatus(err),
-      });
-    }
-
-    logger.error('[Prep Lists API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      context: { endpoint: '/api/prep-lists', method: 'GET' },
-    });
-    return handlePrepListError(err, 'GET');
+    return catchPrepListHandler(err, 'GET');
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const { userId: authUserId } = await getAuthenticatedUser(request);
+    const { userId: authUserId } = await getAuthenticatedUserByEmail(request);
 
     let body: unknown;
     try {
@@ -131,34 +90,13 @@ export async function POST(request: NextRequest) {
       data: prepList,
     });
   } catch (err: unknown) {
-    if (err instanceof NextResponse) return err;
-    if (err instanceof z.ZodError) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          err.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-    if (ApiErrorHandler.isApiError(err)) {
-      return NextResponse.json(ApiErrorHandler.toResponseData(err), {
-        status: ApiErrorHandler.getStatus(err),
-      });
-    }
-
-    logger.error('[Prep Lists API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      context: { endpoint: '/api/prep-lists', method: 'POST' },
-    });
-    return handlePrepListError(err, 'POST');
+    return catchPrepListHandler(err, 'POST');
   }
 }
 
 export async function PUT(request: NextRequest) {
   try {
-    const { userId: authUserId } = await getAuthenticatedUser(request);
+    const { userId: authUserId } = await getAuthenticatedUserByEmail(request);
 
     let body: unknown;
     try {
@@ -190,34 +128,13 @@ export async function PUT(request: NextRequest) {
       data,
     });
   } catch (err: unknown) {
-    if (err instanceof NextResponse) return err;
-    if (err instanceof z.ZodError) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          err.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-    if (ApiErrorHandler.isApiError(err)) {
-      return NextResponse.json(ApiErrorHandler.toResponseData(err), {
-        status: ApiErrorHandler.getStatus(err),
-      });
-    }
-
-    logger.error('[Prep Lists API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      context: { endpoint: '/api/prep-lists', method: 'PUT' },
-    });
-    return handlePrepListError(err, 'PUT');
+    return catchPrepListHandler(err, 'PUT');
   }
 }
 
 export async function DELETE(request: NextRequest) {
   try {
-    const { userId: authUserId } = await getAuthenticatedUser(request);
+    const { userId: authUserId } = await getAuthenticatedUserByEmail(request);
 
     const id = parseDeleteRequest(request);
 
@@ -235,17 +152,6 @@ export async function DELETE(request: NextRequest) {
       message: 'Prep list deleted successfully',
     });
   } catch (err: unknown) {
-    if (err instanceof NextResponse) return err;
-    if (ApiErrorHandler.isApiError(err)) {
-      return NextResponse.json(ApiErrorHandler.toResponseData(err), {
-        status: ApiErrorHandler.getStatus(err),
-      });
-    }
-
-    logger.error('[Prep Lists API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      context: { endpoint: '/api/prep-lists', method: 'DELETE' },
-    });
-    return handlePrepListError(err, 'DELETE');
+    return catchPrepListHandler(err, 'DELETE');
   }
 }

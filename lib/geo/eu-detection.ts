@@ -138,7 +138,7 @@ export async function storeUserEUStatus(userEmail: string, isEU: boolean): Promi
 
 /**
  * Detect and store user's EU status
- * Should be called when request headers are available (e.g., in middleware or API routes)
+ * Should be called when request headers are available (e.g., in proxy or API routes)
  *
  * @param {string} email - User email
  * @param {Headers} headers - Request headers

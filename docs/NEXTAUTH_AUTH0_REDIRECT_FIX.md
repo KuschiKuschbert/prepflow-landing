@@ -75,7 +75,7 @@ We can't modify NextAuth source code, so we can't fix the fallback bug directly.
 Intercept `/api/auth/signin/auth0` requests in middleware and ensure they're processed correctly:
 
 ```typescript
-// In middleware.ts
+// In proxy.ts
 if (pathname === '/api/auth/signin/auth0') {
   // Let NextAuth handle it - don't redirect
   return NextResponse.next();

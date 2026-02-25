@@ -7,7 +7,6 @@ import { useSessionTimeout } from '@/hooks/useSessionTimeout';
 import { logger } from '@/lib/logger';
 import { useTheme } from '@/lib/theme/useTheme';
 import { useTranslation } from '@/lib/useTranslation';
-import dynamic from 'next/dynamic';
 import { Inter } from 'next/font/google';
 import React, { useCallback, useEffect, useState } from 'react';
 import { CountryProvider } from '../../contexts/CountryContext';
@@ -17,92 +16,19 @@ import '../globals.css';
 import ModernNavigation from './components/ModernNavigation';
 import { NetworkStatusBanner } from './components/NetworkStatusBanner';
 
-// Lazy load non-critical components to reduce initial bundle size
-const CatchTheDocketOverlay = dynamic(() => import('@/components/Loading/CatchTheDocketOverlay'), {
-  ssr: false,
-  loading: () => null, // No loading state needed for overlay
-});
-
-const SessionTimeoutWarning = dynamic(
-  () =>
-    import('@/components/webapp/SessionTimeoutWarning').then(mod => ({
-      default: mod.SessionTimeoutWarning,
-    })),
-  {
-    ssr: false,
-    loading: () => null, // No loading state needed for modal
-  },
-);
-
-const SafeAnimatedBackground = dynamic(
-  () => import('../components/landing/SafeAnimatedBackground'),
-  {
-    ssr: false,
-    loading: () => null, // Background can load asynchronously
-  },
-);
-
-const DraftRecovery = dynamic(
-  () => import('./components/DraftRecovery').then(mod => ({ default: mod.DraftRecovery })),
-  {
-    ssr: false,
-    loading: () => null, // Draft recovery can load asynchronously
-  },
-);
-
-const PersonalityScheduler = dynamic(
-  () =>
-    import('./components/PersonalityScheduler').then(mod => ({
-      default: mod.PersonalityScheduler,
-    })),
-  {
-    ssr: false,
-    loading: () => null, // Personality system can load asynchronously
-  },
-);
-
-const AchievementToast = dynamic(
-  () => import('./components/AchievementToast').then(mod => ({ default: mod.AchievementToast })),
-  {
-    ssr: false,
-    loading: () => null, // Achievement toast can load asynchronously
-  },
-);
-
-const MilestoneToast = dynamic(
-  () =>
-    import('@/components/gamification/MilestoneToast').then(mod => ({
-      default: mod.MilestoneToast,
-    })),
-  {
-    ssr: false,
-    loading: () => null, // Milestone toast can load asynchronously
-  },
-);
-
-const WebappBackground = dynamic(
-  () => import('@/components/ui/WebappBackground').then(mod => ({ default: mod.WebappBackground })),
-  {
-    ssr: false,
-    loading: () => null, // Background effects can load asynchronously
-  },
-);
-
-const SafeGradientOrbs = dynamic(() => import('../components/landing/SafeGradientOrbs'), {
-  ssr: false,
-  loading: () => null,
-});
-
-const BackgroundLogo = dynamic(() => import('@/components/ui/BackgroundLogo'), {
-  ssr: false,
-  loading: () => null,
-});
-
-const DemoWelcomeToast = dynamic(
-  () =>
-    import('@/components/demo/DemoWelcomeToast').then(mod => ({ default: mod.DemoWelcomeToast })),
-  { ssr: false },
-);
+import {
+  AchievementToast,
+  BackgroundLogo,
+  CatchTheDocketOverlay,
+  DemoWelcomeToast,
+  DraftRecovery,
+  MilestoneToast,
+  PersonalityScheduler,
+  SafeAnimatedBackground,
+  SafeGradientOrbs,
+  SessionTimeoutWarning,
+  WebappBackground,
+} from './components/webapp-dynamic-imports';
 
 // Google Fonts with performance-optimized configuration
 const inter = Inter({

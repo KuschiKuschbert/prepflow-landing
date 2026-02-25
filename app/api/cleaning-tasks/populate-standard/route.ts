@@ -1,7 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { getAuthenticatedUserByEmail } from '@/lib/api-helpers/getAuthenticatedUserByEmail';
 import { generateAllStandardTasks, KitchenSection } from '@/lib/cleaning/standard-tasks';
 import { logger } from '@/lib/logger';
-import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 interface ExistingTask {
@@ -11,41 +11,13 @@ interface ExistingTask {
   section_id: string | null;
 }
 
-async function getAuthenticatedUser(request: NextRequest) {
-  const supabaseAdmin = createSupabaseAdmin();
-
-  // Authenticate user
-  const {
-    data: { user },
-    error: authError,
-  } = await supabaseAdmin.auth.getUser(
-    request.headers.get('Authorization')?.replace('Bearer ', '') || '',
-  );
-
-  // Fallback/Use Auth0 helper
-  const { requireAuth } = await import('@/lib/auth0-api-helpers');
-  const authUser = await requireAuth(request);
-
-  // Get user_id from email
-  const { data: userData, error: userError } = await supabaseAdmin
-    .from('users')
-    .select('id')
-    .eq('email', authUser.email)
-    .single();
-
-  if (userError || !userData) {
-    throw ApiErrorHandler.createError('User not found', 'NOT_FOUND', 404);
-  }
-  return { userId: userData.id, supabase: supabaseAdmin };
-}
-
 /**
  * POST /api/cleaning-tasks/populate-standard
  * Pre-populate standard cleaning tasks based on equipment and sections
  */
 export async function POST(request: NextRequest) {
   try {
-    const { userId, supabase } = await getAuthenticatedUser(request);
+    const { userId, supabaseAdmin: supabase } = await getAuthenticatedUserByEmail(request);
 
     // Fetch areas (required)
     const { data: areas, error: areasError } = await supabase

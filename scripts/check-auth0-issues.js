@@ -70,7 +70,7 @@ function checkHardcodedUrls() {
 
   const filesToCheck = [
     'lib/auth-options.ts',
-    'lib/middleware-auth.ts',
+    'lib/auth0-middleware.ts',
     'lib/admin-utils.ts',
     'lib/admin-auth.ts',
     'app/api/auth/logout/route.ts',
@@ -133,7 +133,7 @@ function checkHardcodedUrls() {
 function checkCallbackUrlConstruction() {
   log('\n📋 Checking callback URL construction...', 'info');
 
-  const files = ['app/api/auth/signin/page.tsx', 'middleware.ts'];
+  const files = ['app/api/auth/signin/page.tsx', 'proxy.ts'];
 
   let foundIssues = false;
 

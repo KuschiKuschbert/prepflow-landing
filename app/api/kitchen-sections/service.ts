@@ -4,14 +4,15 @@ import { Dish, DishSection, KitchenSection, NormalizedDish } from './types';
 
 export async function fetchSections(supabase: SupabaseClient) {
   try {
+    // Use section_name only (DB schema; name/color_code may not exist)
     const sectionsQuery = supabase
       .from('kitchen_sections')
-      .select('id, name, section_name, description, color_code, color, created_at, updated_at');
+      .select('id, section_name, description, created_at, updated_at');
     let { data, error } = await sectionsQuery.eq('is_active', true);
     if (error) {
       const fallbackQuery = supabase
         .from('kitchen_sections')
-        .select('id, name, section_name, description, color_code, color, created_at, updated_at');
+        .select('id, section_name, description, created_at, updated_at');
       const fallbackResult = await fallbackQuery;
       data = fallbackResult.data;
       error = fallbackResult.error;
@@ -39,13 +40,23 @@ export async function fetchSections(supabase: SupabaseClient) {
 }
 
 export async function fetchDishes(supabase: SupabaseClient) {
-  // Try to get dishes with kitchen_section_id embedded
+  // Try dishes with all columns (category may not exist in some schemas)
   try {
     const { data: dws, error: dwsError } = await supabase
       .from('dishes')
       .select('id, dish_name, description, selling_price, category, kitchen_section_id');
     if (!dwsError && dws) {
       return dws as unknown as Dish[];
+    }
+  } catch {}
+
+  // Fallback: dishes without category (schema drift coverage)
+  try {
+    const { data: dwsNoCat, error: noCatError } = await supabase
+      .from('dishes')
+      .select('id, dish_name, description, selling_price, kitchen_section_id');
+    if (!noCatError && dwsNoCat) {
+      return (dwsNoCat as unknown as Dish[]).map(d => ({ ...d, category: 'Uncategorized' }));
     }
   } catch {}
 
@@ -59,13 +70,14 @@ export async function fetchDishes(supabase: SupabaseClient) {
     }
   } catch {}
 
-  // If direct column access failed, get basic dishes
+  // Last resort: basic dishes
   let dishes: Dish[] = [];
   const { data: basicDishes } = await supabase
     .from('dishes')
-    .select('id, dish_name, description, selling_price, category');
-  if (basicDishes) dishes = basicDishes as unknown as Dish[];
-  else {
+    .select('id, dish_name, description, selling_price');
+  if (basicDishes) {
+    dishes = (basicDishes as unknown as Dish[]).map(d => ({ ...d, category: 'Uncategorized' }));
+  } else {
     const { data: menuDishes } = await supabase
       .from('menu_dishes')
       .select('id, name, description, selling_price, category');

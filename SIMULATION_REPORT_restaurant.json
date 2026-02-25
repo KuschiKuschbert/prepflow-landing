@@ -1,0 +1,275 @@
+{
+  "summary": {
+    "personaCount": 1,
+    "totalErrors": 32,
+    "totalBottlenecks": 0,
+    "totalFaultyPaths": 1
+  },
+  "errors": [
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/user/subscription",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:36.813Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/features/kitchen-staff",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:36.813Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/features/roster",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:36.813Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/features/square_pos_integration",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:36.813Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/detect-country",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:36.813Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/dashboard/stats",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.148Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/functions?limit=4",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.156Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/dashboard/stats",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.156Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/dashboard/stats",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.158Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/dashboard/stats",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.160Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/dashboard/menu-summary",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.161Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/dashboard/performance-summary?lockedMenuOnly=true",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.161Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/dashboard/performance-summary?lockedMenuOnly=true",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.162Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/dashboard/stats",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.170Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/dashboard/stats",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.172Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/dashboard/stats",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.181Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/dashboard/performance-summary?lockedMenuOnly=true",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.181Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/functions?limit=4",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.192Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/dashboard/menu-summary",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.193Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/dashboard/performance-summary?lockedMenuOnly=true",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.193Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/user/subscription",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.931Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/features/kitchen-staff",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.931Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/features/roster",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.931Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/features/square_pos_integration",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:37.932Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/dishes?pageSize=1000",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:38.223Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/recipes?pageSize=1000",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:38.225Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/recipes#dishes",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[useIsAdmin] Rate limited (429)\",\n  \"timestamp\": \"2026-02-24T14:26:37.871Z\"\n}",
+      "timestamp": "2026-02-24T14:26:37.871Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/recipes#dishes",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[useEntitlements] Error fetching entitlements:\",\n  \"timestamp\": \"2026-02-24T14:26:37.889Z\",\n  \"data\": {\n    \"error\": \"Failed to fetch subscription\",\n    \"stack\": \"Error: Failed to fetch subscription\\n    at fetchEntitlementsHelper (http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__3b8389d7._.js:7929:33)\\n    at async useEntitlements.useQuery (http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__3b8389d7._.js:7985:17)\",\n    \"context\": {\n      \"endpoint\": \"/api/user/subscription\",\n      \"operation\": \"fetchEntitlements\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:26:37.889Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/recipes#dishes",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[useFeatureFlag] Rate limited (429) for key: kitchen-staff\",\n  \"timestamp\": \"2026-02-24T14:26:37.890Z\"\n}",
+      "timestamp": "2026-02-24T14:26:37.890Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/recipes#dishes",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[useFeatureFlag] Rate limited (429) for key: roster\",\n  \"timestamp\": \"2026-02-24T14:26:37.890Z\"\n}",
+      "timestamp": "2026-02-24T14:26:37.890Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/recipes#dishes",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[useFeatureFlag] Rate limited (429) for key: square_pos_integration\",\n  \"timestamp\": \"2026-02-24T14:26:37.909Z\"\n}",
+      "timestamp": "2026-02-24T14:26:37.909Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/setup-menu-builder",
+      "message": "HTTP 429 Too Many Requests",
+      "statusCode": 429,
+      "timestamp": "2026-02-24T14:26:39.426Z",
+      "personaId": "restaurant"
+    }
+  ],
+  "bottlenecks": [],
+  "faultyPaths": [
+    {
+      "type": "faulty-path",
+      "personaId": "restaurant",
+      "action": "createRecipe",
+      "url": "http://localhost:3000/webapp/recipes#menu-builder",
+      "expected": "Action completes successfully",
+      "actual": "selector-timeout",
+      "errorMessage": "[createRecipe] locator.waitFor: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Recipe', exact: true }).first() to be visible\u001b[22m\n",
+      "timestamp": "2026-02-24T14:27:27.154Z"
+    }
+  ],
+  "generatedAt": "2026-02-24T14:27:32.285Z"
+}

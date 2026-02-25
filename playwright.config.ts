@@ -88,7 +88,12 @@ export default defineConfig({
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 180 * 1000,
-    env: { ...process.env, PORT: '3000', AUTH0_BYPASS_DEV: 'true' },
+    env: {
+      ...process.env,
+      PORT: '3000',
+      AUTH0_BYPASS_DEV: 'true',
+      DISABLE_ALLOWLIST: 'true', // Allow E2E access without allowlist
+    },
   },
 
   /* Global test timeout - increased for complex workflows */

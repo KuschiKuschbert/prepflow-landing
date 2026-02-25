@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 /**
  * Admin role checking utilities (pure functions, no dependencies)
- * Extracted from admin-auth.ts to avoid importing authOptions in middleware
+ * Extracted from admin-auth.ts to avoid importing authOptions in proxy
  */
 
 export interface AuthUser {

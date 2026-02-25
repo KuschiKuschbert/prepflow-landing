@@ -25,7 +25,7 @@
   "include": [
     "next-env.d.ts",
     "auth.ts",
-    "middleware.ts",
+    "proxy.ts",
     "next.config.ts",
     "app/**/*.ts",
     "app/**/*.tsx",

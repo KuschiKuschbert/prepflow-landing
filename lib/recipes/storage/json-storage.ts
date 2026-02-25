@@ -2,34 +2,18 @@
  * JSON Storage (Migrated from scripts)
  * Stores recipes as JSON files with index management and compression
  */
-
 import * as fs from 'fs';
 import * as path from 'path';
-import { promisify } from 'util';
-import { v4 as uuidv4 } from 'uuid';
-import * as zlib from 'zlib';
 import { STORAGE_PATH } from '../config';
 import { ScrapedRecipe } from '../types';
 import { scraperLogger } from '../utils/logger';
-
-const gzip = promisify(zlib.gzip);
-const gunzip = promisify(zlib.gunzip);
-
-interface RecipeIndex {
-  recipes: RecipeIndexEntry[];
-  lastUpdated: string;
-  totalCount: number;
-}
-
-interface RecipeIndexEntry {
-  id: string;
-  recipe_name: string;
-  source: string;
-  source_url: string;
-  file_path: string;
-  scraped_at: string;
-  updated_at?: string;
-}
+import {
+  getStatisticsFromIndex,
+  searchByIngredientInIndex,
+  type RecipeIndex,
+  type RecipeIndexEntry,
+} from './json-storage/searchAndStats';
+import { readRecipeFile, saveRecipeWithIndex } from './json-storage/saveAndLoad';
 
 export class JSONStorage {
   private storagePath: string;
@@ -53,41 +37,6 @@ export class JSONStorage {
       fs.mkdirSync(sourceDir, { recursive: true });
     }
     return sourceDir;
-  }
-
-  private generateFilename(recipe: ScrapedRecipe): string {
-    const sanitized = recipe.recipe_name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '')
-      .substring(0, 100);
-
-    let id = recipe.id || uuidv4();
-    if (id.startsWith('http://') || id.startsWith('https://')) {
-      try {
-        const urlObj = new URL(id);
-        const pathParts = urlObj.pathname.split('/').filter(Boolean);
-        const numericId = pathParts.find(part => /^\d+$/.test(part));
-        if (numericId) {
-          id = numericId;
-        } else {
-          const lastPart = pathParts[pathParts.length - 1] || '';
-          id = lastPart || urlObj.pathname.replace(/[^a-z0-9]/gi, '-').substring(0, 32);
-        }
-      } catch {
-        const urlParts = id.split('/').filter(Boolean);
-        const lastPart = urlParts[urlParts.length - 1] || urlParts[urlParts.length - 2] || '';
-        id = lastPart || uuidv4();
-      }
-    }
-
-    const sanitizedId = id
-      .replace(/[^a-z0-9-]/gi, '')
-      .replace(/^-+|-+$/g, '')
-      .substring(0, 32);
-    const finalId = sanitizedId || uuidv4().substring(0, 8);
-
-    return `${sanitized}-${finalId}.json.gz`;
   }
 
   private loadIndex(): RecipeIndex {
@@ -133,45 +82,13 @@ export class JSONStorage {
       const existingEntry = index.recipes.find(
         entry => entry.source_url === recipe.source_url && entry.source === recipe.source,
       );
-
-      let filePath: string;
-      let isUpdate = false;
-
-      if (existingEntry) {
-        isUpdate = true;
-        filePath = path.isAbsolute(existingEntry.file_path)
-          ? existingEntry.file_path
-          : path.join(this.storagePath, existingEntry.file_path);
-        const parentDir = path.dirname(filePath);
-        if (!fs.existsSync(parentDir)) fs.mkdirSync(parentDir, { recursive: true });
-      } else {
-        const sourceDir = this.getSourceDir(recipe.source);
-        const filename = this.generateFilename(recipe);
-        filePath = path.join(sourceDir, filename);
-        if (!fs.existsSync(path.dirname(filePath)))
-          fs.mkdirSync(path.dirname(filePath), { recursive: true });
-
-        index.recipes.push({
-          id: recipe.id,
-          recipe_name: recipe.recipe_name,
-          source: recipe.source,
-          source_url: recipe.source_url,
-          file_path: path.relative(this.storagePath, filePath),
-          scraped_at: recipe.scraped_at,
-          updated_at: recipe.updated_at,
-        });
-      }
-
-      const jsonString = JSON.stringify(recipe, null, 2);
-      const compressed = await gzip(Buffer.from(jsonString, 'utf-8'));
-      fs.writeFileSync(filePath, compressed);
-
-      if (isUpdate && existingEntry) {
-        existingEntry.recipe_name = recipe.recipe_name;
-        existingEntry.id = recipe.id;
-        existingEntry.updated_at = recipe.updated_at;
-      }
-
+      const { filePath, isUpdate } = await saveRecipeWithIndex(
+        recipe,
+        this.storagePath,
+        index,
+        s => this.getSourceDir(s),
+        existingEntry,
+      );
       this.saveIndex(index);
       scraperLogger.info(
         `${isUpdate ? 'Updated' : 'Saved'} recipe: ${recipe.recipe_name} to ${filePath}`,
@@ -185,19 +102,7 @@ export class JSONStorage {
 
   async loadRecipe(filePath: string): Promise<ScrapedRecipe | null> {
     try {
-      if (!fs.existsSync(this.storagePath)) return null;
-      const fullPath = path.isAbsolute(filePath) ? filePath : path.join(this.storagePath, filePath);
-      if (!fs.existsSync(fullPath)) return null;
-
-      const buffer = fs.readFileSync(fullPath);
-      let content: string;
-      if (fullPath.endsWith('.json.gz')) {
-        const decompressed = await gunzip(buffer);
-        content = decompressed.toString('utf-8');
-      } else {
-        content = buffer.toString('utf-8');
-      }
-      return JSON.parse(content) as ScrapedRecipe;
+      return await readRecipeFile(filePath, this.storagePath);
     } catch (error) {
       scraperLogger.error(`Error loading recipe from ${filePath}:`, error);
       return null;
@@ -219,22 +124,7 @@ export class JSONStorage {
     try {
       if (!fs.existsSync(this.storagePath)) return [];
       const index = this.loadIndex();
-      const results: ScrapedRecipe[] = [];
-      const lowerIngredient = ingredientName.toLowerCase();
-
-      for (const entry of index.recipes) {
-        if (results.length >= limit) break;
-        try {
-          const recipe = await this.loadRecipe(entry.file_path);
-          if (!recipe) continue;
-          const hasIngredient = recipe.ingredients.some(ing => {
-            const ingName = typeof ing === 'string' ? ing : ing.name || ing.original_text;
-            return ingName.toLowerCase().includes(lowerIngredient);
-          });
-          if (hasIngredient) results.push(recipe);
-        } catch {}
-      }
-      return results;
+      return searchByIngredientInIndex(index, fp => this.loadRecipe(fp), ingredientName, limit);
     } catch (error) {
       scraperLogger.error('Error searching by ingredient:', error);
       return [];
@@ -245,10 +135,7 @@ export class JSONStorage {
     try {
       if (!fs.existsSync(this.storagePath))
         return { totalRecipes: 0, bySource: {}, lastUpdated: new Date().toISOString() };
-      const index = this.loadIndex();
-      const counts: Record<string, number> = {};
-      for (const entry of index.recipes) counts[entry.source] = (counts[entry.source] || 0) + 1;
-      return { totalRecipes: index.totalCount, bySource: counts, lastUpdated: index.lastUpdated };
+      return getStatisticsFromIndex(this.loadIndex());
     } catch (error) {
       scraperLogger.error('Error getting statistics:', error);
       return { totalRecipes: 0, bySource: {}, lastUpdated: new Date().toISOString() };

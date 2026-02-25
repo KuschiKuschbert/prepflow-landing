@@ -268,7 +268,7 @@ Monkey testing (chaos testing) automatically:
 
 The test suite handles authentication automatically:
 
-- **Development Mode**: Auth is bypassed (per `middleware.ts`)
+- **Development Mode**: Auth is bypassed (per `proxy.ts`)
 - **Production Mode**: Would require Auth0 credentials (not configured for E2E)
 
 Tests assume the user is logged in or auth is bypassed.

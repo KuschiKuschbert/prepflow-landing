@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
 
 ### 3. Middleware Updates
 
-**File:** `middleware.ts`
+**File:** `proxy.ts`
 
 **Change:** Added `/api/test` and `/api/fix` to allowed public API paths.
 
@@ -191,7 +191,7 @@ curl -X POST https://www.prepflow.org/api/fix/auth0-callback-urls
 ## Key Files Changed
 
 1. `lib/auth-options.ts` - Added `url` option to force NEXTAUTH_URL usage
-2. `middleware.ts` - Added test/fix endpoints to allowed paths
+2. `proxy.ts` - Added test/fix endpoints to allowed paths
 3. `app/api/test/auth0-comprehensive/route.ts` - Comprehensive test endpoint
 4. `app/api/test/auth0-flow/route.ts` - Flow test endpoint
 5. `app/api/fix/auth0-callback-urls/route.ts` - Auto-fix endpoint

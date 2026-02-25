@@ -12,7 +12,7 @@ export async function isAuthenticated(page: Page): Promise<boolean> {
       return false;
     }
 
-    // If we're in development mode, auth is bypassed (per middleware.ts)
+    // If we're in development mode, auth is bypassed (per proxy.ts)
     // Check if we can access webapp pages without redirect
     if (url.includes('/webapp')) {
       // Try to find user info in navigation (desktop only)

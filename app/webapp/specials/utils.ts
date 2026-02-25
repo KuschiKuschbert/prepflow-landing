@@ -1,15 +1,10 @@
-import { parseIngredientString } from '@/lib/recipe-normalization/ingredient-parser';
-import { convertToStandardUnit } from '@/lib/unit-conversion';
-import { RecipeIngredientWithDetails, Recipe as UnifiedRecipe } from '@/lib/types/recipes';
-
 import { logger } from '@/lib/logger';
+import { Recipe as UnifiedRecipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
+import { parseIngredient } from './utils/parseIngredient';
 
-export interface AIIngredient {
-  name: string;
-  original_text?: string;
-  quantity?: number;
-  unit?: string;
-}
+import type { AIIngredient } from './utils/parseIngredient';
+export type { AIIngredient } from './utils/parseIngredient';
+export { parseIngredient };
 
 export interface APIRecipe {
   id: string;
@@ -26,74 +21,6 @@ export interface APIRecipe {
   matchCount?: number;
   stockMatchPercentage?: number;
   missingIngredients?: string[];
-}
-
-// Ingredient parser with metric conversion - handles structured ingredient objects or strings
-export function parseIngredient(
-  ing: AIIngredient | string,
-  index: number,
-): RecipeIngredientWithDetails {
-  let quantity = 1;
-  let unit = 'pc';
-  let name = '';
-
-  // Handle string ingredients
-  if (typeof ing === 'string') {
-    const parsed = parseIngredientString(ing);
-    if (parsed) {
-      quantity = parsed.quantity;
-      unit = parsed.unit;
-      name = parsed.name;
-    } else {
-      // Fallback if parsing failed
-      name = ing.trim();
-    }
-  } else {
-    // Handle object ingredients
-    name = ing.name || 'Unknown ingredient';
-
-    // If we have quantity and unit from the object, use them
-    if (ing.quantity !== undefined && ing.quantity !== null) {
-      quantity = ing.quantity;
-    }
-    if (ing.unit) {
-      unit = ing.unit;
-    }
-
-    // If quantity is still 1 and unit is 'pc', try parsing original_text
-    if (quantity === 1 && unit === 'pc' && ing.original_text) {
-      const parsed = parseIngredientString(ing.original_text);
-      if (parsed && (parsed.quantity !== 1 || parsed.unit !== 'pc')) {
-        quantity = parsed.quantity;
-        unit = parsed.unit;
-        // Prefer the structured name over parsed name
-        // name stays as ing.name
-      }
-    }
-  }
-
-  // Convert to metric using existing library
-  const converted = convertToStandardUnit(quantity, unit, name);
-
-  // Generate stable unique ID with index to avoid duplicates
-  const id = `ing-${index}-${btoa(encodeURIComponent(name.slice(0, 20))).substring(0, 8)}`;
-
-  return {
-    id,
-    recipe_id: 'ai-recipe',
-    ingredient_id: id,
-    ingredient_name: name,
-    quantity: converted.value,
-    unit: converted.unit,
-    cost_per_unit: 0,
-    total_cost: 0,
-    ingredients: {
-      id,
-      ingredient_name: name,
-      cost_per_unit: 0,
-      unit: converted.unit,
-    },
-  };
 }
 
 export function adaptAiToUnified(aiRecipe: APIRecipe): {

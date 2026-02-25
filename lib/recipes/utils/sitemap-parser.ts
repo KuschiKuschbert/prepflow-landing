@@ -2,13 +2,13 @@
  * Sitemap Parser (Migrated from scripts)
  * Parses XML sitemaps to extract recipe URLs
  */
-
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import * as fs from 'fs';
 import * as path from 'path';
-import { SOURCES, SourceType, STORAGE_PATH } from '../config';
+import { SourceType, STORAGE_PATH } from '../config';
 import { scraperLogger } from './logger';
+import { EXCLUDE_PATTERNS, RECIPE_URL_PATTERNS, SITEMAP_URLS } from './sitemap-parser/config';
 
 export class SitemapParser {
   private httpClient = axios.create({
@@ -115,52 +115,14 @@ export class SitemapParser {
     }
   }
 
-  /**
-   * Filter URLs to only include recipe URLs for a specific source
-   */
   filterRecipeUrls(urls: string[], source: SourceType): string[] {
-    const patterns: Partial<Record<string, RegExp>> = {
-      [SOURCES.ALLRECIPES]: /allrecipes\.com\/recipe\//i,
-      [SOURCES.FOOD_NETWORK]: /foodnetwork\.com\/recipes\/[^/]+$/i,
-      [SOURCES.RECIPE_NLG]: /recipe-nlg/i,
-      [SOURCES.EPICURIOUS]: /epicurious\.com\/recipes\/food\/views\//i,
-      [SOURCES.BON_APPETIT]: /bonappetit\.com\/recipe\//i,
-      [SOURCES.TASTY]: /tasty\.co\/recipe\//i,
-      [SOURCES.FOOD_AND_WINE]: /foodandwine\.com\/recipe\//i,
-    };
-
-    const pattern = patterns[source as any];
+    const pattern = RECIPE_URL_PATTERNS[source];
     if (!pattern) return [];
-
-    return urls.filter(url => {
-      if (!pattern.test(url)) return false;
-      const excludePatterns = [
-        /\/collection\//i,
-        /\/category\//i,
-        /\/photos\//i,
-        /\/search\//i,
-        /\/tag\//i,
-        /\/author\//i,
-        /\/page\//i,
-      ];
-      return !excludePatterns.some(excludePattern => excludePattern.test(url));
-    });
+    return urls.filter(url => pattern.test(url) && !EXCLUDE_PATTERNS.some(ex => ex.test(url)));
   }
 
-  /**
-   * Get sitemap URL for a source
-   */
   getSitemapUrl(source: SourceType): string {
-    const sitemapUrls: Partial<Record<string, string>> = {
-      [SOURCES.ALLRECIPES]: 'https://www.allrecipes.com/sitemap.xml',
-      [SOURCES.FOOD_NETWORK]: 'https://www.foodnetwork.com/sitemap.xml',
-      [SOURCES.EPICURIOUS]: 'https://www.epicurious.com/sitemap.xml',
-      [SOURCES.BON_APPETIT]: 'https://www.bonappetit.com/sitemap.xml',
-      [SOURCES.TASTY]: 'https://tasty.co/sitemaps/tasty/sitemap.xml',
-      [SOURCES.FOOD_AND_WINE]: 'https://www.foodandwine.com/sitemap.xml',
-    };
-
-    return sitemapUrls[source as any] || '';
+    return SITEMAP_URLS[source] || '';
   }
 
   /**

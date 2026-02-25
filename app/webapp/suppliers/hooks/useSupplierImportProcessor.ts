@@ -1,10 +1,15 @@
 import type { ImportProgressState } from '@/components/ui/ImportProgress';
 import { useNotification } from '@/contexts/NotificationContext';
-import { cacheData } from '@/lib/cache/data-cache';
 import type { SupplierImportRow } from '@/lib/imports/supplier-import';
 import { logger } from '@/lib/logger';
 import { useCallback, useState } from 'react';
 import type { Supplier } from '../types';
+import {
+  buildImportCompletionProgress,
+  buildTempSupplierFromRow,
+  finalizeSupplierImport,
+  processSingleImportRow,
+} from '../utils/import-helpers';
 
 interface UseSupplierImportProcessorProps {
   suppliers: Supplier[];
@@ -26,10 +31,7 @@ export function useSupplierImportProcessor({
         showError('No suppliers to import');
         return;
       }
-
-      // Store original state for rollback
       const originalSuppliers = [...suppliers];
-
       setImportProgress({
         total: importRows.length,
         processed: 0,
@@ -47,29 +49,8 @@ export function useSupplierImportProcessor({
       try {
         for (let i = 0; i < importRows.length; i++) {
           const row = importRows[i];
-          // Use negative number for temp ID to match Supplier.id type (number)
           const tempId = -Date.now() - i;
-
-          // Create temporary supplier for optimistic update
-          const tempSupplier: Supplier = {
-            id: tempId,
-            name: row.name,
-            contact_person: row.contact_person || null,
-            email: row.email || null,
-            phone: row.phone || null,
-            address: row.address || null,
-            website: row.website || null,
-            payment_terms: row.payment_terms || null,
-            delivery_schedule: row.delivery_schedule || null,
-            minimum_order_amount: row.minimum_order_amount || null,
-            is_active: row.is_active !== undefined ? row.is_active : true,
-            notes: row.notes || null,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          };
-
-          // Optimistically add to UI immediately
-          setSuppliers(prevSuppliers => [...prevSuppliers, tempSupplier]);
+          const tempSupplier = buildTempSupplierFromRow(row, tempId);
           tempSuppliers.push({ tempId, supplier: tempSupplier });
 
           setImportProgress({
@@ -82,103 +63,27 @@ export function useSupplierImportProcessor({
             errors,
           });
 
-          try {
-            // Map import row to API format
-            const supplierData = {
-              supplier_name: row.name,
-              contact_person: row.contact_person || null,
-              email: row.email || null,
-              phone: row.phone || null,
-              address: row.address || null,
-              website: row.website || null,
-              payment_terms: row.payment_terms || null,
-              delivery_schedule: row.delivery_schedule || null,
-              minimum_order_amount: row.minimum_order_amount || null,
-              is_active: row.is_active !== undefined ? row.is_active : true,
-              notes: row.notes || null,
-            };
-
-            const response = await fetch('/api/suppliers', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(supplierData),
-            });
-
-            const result = await response.json();
-
-            if (response.ok && result.success) {
-              // Transform API response (supplier_name -> name) to match Supplier interface
-              const serverSupplier: Supplier = {
-                ...result.data,
-                name: result.data.supplier_name || result.data.name,
-              };
-
-              // Replace temp supplier with real supplier from server
-              setSuppliers(prevSuppliers =>
-                prevSuppliers.map(s => (s.id === tempId ? serverSupplier : s)),
-              );
-
-              importedSuppliers.push(serverSupplier);
-              successCount++;
-            } else {
-              // Error - remove temp supplier
-              setSuppliers(prevSuppliers => prevSuppliers.filter(s => s.id !== tempId));
-              failCount++;
-              errors.push({
-                row: i + 1,
-                error: result.error || result.message || 'Failed to import supplier',
-              });
-            }
-          } catch (err) {
-            // Error - remove temp supplier
-            setSuppliers(prevSuppliers => prevSuppliers.filter(s => s.id !== tempId));
-            const errorMessage = err instanceof Error ? err.message : 'Failed to import supplier';
-            logger.error(`[Suppliers Import] Failed to import row ${i + 1}:`, {
-              error: errorMessage,
-              err,
-            });
+          const result = await processSingleImportRow(row, i, tempId, tempSupplier, setSuppliers);
+          if (result.success && result.supplier) {
+            importedSuppliers.push(result.supplier);
+            successCount++;
+          } else {
             failCount++;
-            errors.push({
-              row: i + 1,
-              error: errorMessage,
-            });
+            errors.push({ row: i + 1, error: result.error || 'Failed to import supplier' });
           }
         }
 
-        // Cache final suppliers list
-        if (importedSuppliers.length > 0) {
-          setSuppliers(prevSuppliers => {
-            const finalList = prevSuppliers.filter(
-              s => !tempSuppliers.some(t => t.tempId === s.id),
-            );
-            const updatedList = [...finalList, ...importedSuppliers];
-            cacheData('suppliers', updatedList);
-            return updatedList;
-          });
-        } else {
-          // No successful imports - revert all optimistic updates
-          setSuppliers(() => originalSuppliers);
-        }
+        finalizeSupplierImport(importedSuppliers, tempSuppliers, originalSuppliers, setSuppliers);
 
-        setImportProgress({
-          total: importRows.length,
-          processed: importRows.length,
-          successful: successCount,
-          failed: failCount,
-          isComplete: true,
-          errors: errors.length > 0 ? errors : undefined,
-        });
-
-        if (successCount > 0) {
+        setImportProgress(
+          buildImportCompletionProgress(importRows.length, successCount, failCount, errors),
+        );
+        if (successCount > 0)
           showSuccess(
             `Successfully imported ${successCount} supplier${successCount !== 1 ? 's' : ''}`,
           );
-        }
-        if (failCount > 0) {
+        if (failCount > 0)
           showError(`Failed to import ${failCount} supplier${failCount !== 1 ? 's' : ''}`);
-        }
-
-        // Close modal after a short delay to show completion
         setTimeout(() => {
           setShowImportModal(false);
           setImportProgress(undefined);

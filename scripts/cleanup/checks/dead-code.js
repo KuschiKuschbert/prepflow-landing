@@ -28,7 +28,7 @@ const excludePatterns = [
   /error\.tsx$/,
   /not-found\.tsx$/,
   /route\.ts$/,
-  /middleware\.ts$/,
+  /proxy\.ts$/,
   /next\.config\.ts$/,
   /playwright\.config\.ts$/,
 ];

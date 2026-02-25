@@ -12,7 +12,7 @@ export const DISH_FIELDS_FULL = `
 
 export const RECIPE_FIELDS_FULL = `
   id,
-  name,
+  recipe_name,
   description,
   yield,
   allergens,
@@ -31,7 +31,7 @@ export const DISH_FIELDS_NO_DIETARY = `
 
 export const RECIPE_FIELDS_NO_DIETARY = `
   id,
-  name,
+  recipe_name,
   description,
   yield
 `;

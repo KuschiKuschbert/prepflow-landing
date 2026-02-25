@@ -4,6 +4,30 @@ Format: **Symptom** | **Root Cause** | **Fix** | **Derived Rule**
 
 ---
 
+## TS2304: Cannot find name 'logger' (roster/templates route)
+
+**Symptom:** `error TS2304: Cannot find name 'logger'` in `app/api/roster/templates/route.ts` at lines 58, 76, 133, 151.
+
+**Root Cause:** The route used `logger.error()` but did not import the logger.
+
+**Fix:** Add `import { logger } from '@/lib/logger';` at the top of the file.
+
+**Derived Rule:** All API routes that use `logger` must import it from `@/lib/logger`.
+
+---
+
+## TS2345: Argument of type 'string' is not assignable to parameter of type 'ExportTheme' (recipe-cards export)
+
+**Symptom:** `error TS2345: Argument of type 'string' is not assignable to parameter of type 'ExportTheme | undefined'` when passing `theme` from `searchParams.get('theme')` to `generateHTML()`.
+
+**Root Cause:** `searchParams.get('theme')` returns `string | null`; `generateHTML` expects `ExportTheme` (union of literal strings).
+
+**Fix:** Validate the theme param against `VALID_THEMES` (from `lib/exports/themes`) and cast: `VALID_THEMES.includes(themeParam as ExportTheme) ? (themeParam as ExportTheme) : 'cyber-carrot'`.
+
+**Derived Rule:** When passing URL params to typed functions, validate against allowed values and provide a safe default.
+
+---
+
 ## Hydration mismatch: server text doesn't match client (HowItWorksSection, useTranslation)
 
 **Symptom:** `Hydration failed because the server rendered text didn't match the client` for HowItWorksSection title ("How PrepFlow Works" vs "Get Results in 3 Simple Steps"), TechnicalSpecs items, CloserLook feature titles.

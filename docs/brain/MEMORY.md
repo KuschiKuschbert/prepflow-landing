@@ -14,3 +14,4 @@
 - [2026-01-28] **Database Timeouts**: When updating > 2000 rows, **NEVER** rely on direct migrations. Use Batch Scripts.
 - [2026-02-12] **Design Tokens**: Refactored to Tailwind v4 `@theme`. Standardized `--color-primary`, `--color-accent`, etc.
 - [2026-02-23] **Runsheet Export**: Function runsheet uses `variant: 'runsheet'` in `generatePrintTemplate`. Use `buildRunsheetContent` helper and `?day=N&theme=T` query params. See `docs/PRINT_EXPORT_IMPORT_PATTERNS.md` (Runsheet Export Flow).
+- [2026-02-25] **Day-profiles extraction**: For files that re-export data consumed elsewhere, extract data + type together (e.g. `day-profiles-data.ts` with `Action` type and profile arrays) to avoid circular imports. Main file imports and re-exports.

@@ -30,7 +30,7 @@ alwaysApply: true
 - `lib/auth0-management.ts` - Management API client for role extraction
 - `lib/auth0-api-helpers.ts` - API route helpers for authentication
 - `lib/auth0-middleware.ts` - Middleware helpers for authentication
-- `middleware.ts` - Auth0 SDK middleware integration and allowlist enforcement
+- `proxy.ts` - Auth0 SDK proxy integration and allowlist enforcement (Next.js 16 proxy convention)
 
 **MANDATORY Best Practices:**
 - ✅ User creation on first login (implemented in `lib/auth-user-sync.ts`)
@@ -45,7 +45,7 @@ alwaysApply: true
 - `/api/auth/callback` - Auth0 SDK callback handler
 - `/api/auth/logout` - Auth0 SDK logout handler
 - `/api/me` - Current user information
-- Middleware enforces allowlist on `/webapp/**` and `/api/**` (except auth routes)
+- Proxy enforces allowlist on `/webapp/**` and `/api/**` (except auth routes)
 
 **See Also:**
 - `docs/AUTH0_STRIPE_REFERENCE.md` (Auth0 Configuration section) - Complete setup guide
@@ -310,7 +310,7 @@ PrepFlow is a unified restaurant profitability optimization platform that helps 
 - **NextAuth + Auth0:** User authentication via NextAuth with Auth0 provider
 - **Supabase:** Database only (PostgreSQL) - not used for user authentication
 - **Session Management:** Secure token storage and refresh via NextAuth
-- **Allowlist Enforcement:** Middleware enforces email allowlist on `/webapp/**` and `/api/**` routes
+- **Allowlist Enforcement:** Proxy enforces email allowlist on `/webapp/**` and `/api/**` routes
 - **Role-Based Access:** User and admin permissions managed via Auth0
 
 ### **Subscription Management**

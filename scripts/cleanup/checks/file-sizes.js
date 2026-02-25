@@ -33,6 +33,9 @@ function detectCategory(filePath) {
     return null;
   }
 
+  // Exclude Partytown vendor files (third-party, generated - do not refactor)
+  if (p.includes('~partytown')) return null;
+
   // Configuration/data files exception (500 lines)
   if (
     p.includes('-styles.ts') ||

@@ -166,7 +166,6 @@ PrepFlow automatically applies Queensland food safety regulations to all tempera
 - Performance monitoring
 - SEO enhancement
 - User testing
-- File size compliance (3 pages need refactoring)
 
 **See:** [Feature Implementation Guide](docs/FEATURE_IMPLEMENTATION.md) for complete status
 

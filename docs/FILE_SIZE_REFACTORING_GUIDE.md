@@ -138,6 +138,7 @@ export function ProcessingStatus() {
 
 - `ProcessingStatus.tsx` - Extracted 4 sub-components + utils
 - `RecipeListSection.tsx` - Extracted RecipeCard, SearchFilters, utils
+- **E2E day-profiles (Feb 2025)**: `day-profiles.ts` (387→130) – Extracted `day-profiles-data.ts` with `Action` type + CAFE/RESTAURANT/FOOD_TRUCK_DAY_PROFILE arrays. Main file imports and re-exports. Avoid circular imports by keeping type + data together in the extracted module.
 
 ### Pattern 4: Extract API Route Helpers
 

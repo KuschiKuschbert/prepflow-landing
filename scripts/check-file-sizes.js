@@ -60,6 +60,9 @@ function detectCategory(filePath) {
   // Exclude protected curbos area
   if (p.includes('/app/curbos/')) return null;
 
+  // Exclude Partytown vendor files (third-party, generated - do not refactor)
+  if (p.includes('~partytown')) return null;
+
   // Standard detection logic
   if (p.includes('/app/api/')) return 'api';
   if (p.match(/\/hooks\//) || /\/hooks\/[^/]+\.(t|j)sx?$/.test(p)) return 'hook';
@@ -127,6 +130,9 @@ function main() {
 
     // Skip curbos area completely
     if (file.replace(/\\/g, '/').includes('/app/curbos/')) continue;
+
+    // Skip Partytown vendor files
+    if (file.replace(/\\/g, '/').includes('~partytown')) continue;
 
     const content = fs.readFileSync(file, 'utf8');
     const lines = countLines(content);

@@ -12,6 +12,7 @@ import {
   populateTemperatureData,
 } from '@/lib/populate-helpers';
 import { supabaseAdmin } from '@/lib/supabase';
+import { hasExistingData, runIfEmpty } from './demo-mode/runIfEmpty';
 
 export const DEMO_EMAIL = 'demo@prepflow.org';
 
@@ -21,19 +22,6 @@ export const DEMO_EMAIL = 'demo@prepflow.org';
 export function isDemoUser(email: string | null | undefined): boolean {
   if (!email) return false;
   return email.toLowerCase() === DEMO_EMAIL;
-}
-
-/**
- * Check if a table already has data (to avoid duplicate inserts).
- */
-async function hasExistingData(table: string): Promise<boolean> {
-  if (!supabaseAdmin) return false;
-  const { data, error } = await supabaseAdmin.from(table).select('id').limit(1);
-  if (error) {
-    logger.warn(`[Demo Mode] Error checking ${table}:`, { error: error.message });
-    return false;
-  }
-  return (data?.length ?? 0) > 0;
 }
 
 /**
@@ -58,6 +46,7 @@ export async function setupDemoAccount(email: string): Promise<void> {
     logger.error('[Demo Mode] Database connection not available');
     throw new Error('Database connection not available');
   }
+  const db = supabaseAdmin;
 
   logger.info('[Demo Mode] Starting demo account setup (additive mode)...', { email });
 
@@ -69,65 +58,51 @@ export async function setupDemoAccount(email: string): Promise<void> {
     };
 
     // --- Core data (these helpers already check for duplicates by name) ---
-    const { ingredientsData, recipesData } = await populateBasicData(supabaseAdmin, results);
-    await populateStaff(supabaseAdmin, results);
+    const { ingredientsData, recipesData } = await populateBasicData(db, results);
+    await populateStaff(db, results);
 
-    // Kitchen sections (check before inserting — no built-in duplicate detection)
-    if (!(await hasExistingData('kitchen_sections'))) {
-      await populateKitchenSections(supabaseAdmin, results);
-    } else {
-      logger.info('[Demo Mode] Kitchen sections already exist, skipping.');
-    }
-
-    // Dishes (helpers check for existing dishes by name)
+    await runIfEmpty(
+      'kitchen_sections',
+      () => populateKitchenSections(db, results),
+      'Kitchen sections already exist, skipping.',
+    );
     if (recipesData && ingredientsData) {
-      if (!(await hasExistingData('dishes'))) {
-        await populateDishes(supabaseAdmin, results, recipesData, ingredientsData);
-      } else {
-        logger.info('[Demo Mode] Dishes already exist, skipping.');
-      }
+      await runIfEmpty(
+        'dishes',
+        () => populateDishes(db, results, recipesData, ingredientsData),
+        'Dishes already exist, skipping.',
+      );
     }
-
-    // Menu dishes — legacy system (no built-in duplicate detection)
     if (recipesData && !(await hasExistingData('menu_dishes'))) {
-      await populateMenuDishes(supabaseAdmin, results, recipesData as any[]);
+      await populateMenuDishes(db, results, recipesData as any[]);
     }
-
-    // Menus (no built-in duplicate detection)
     if (!(await hasExistingData('menus'))) {
-      const { data: dishesData } = await supabaseAdmin.from('dishes').select('id, dish_name');
-      if (dishesData && recipesData) {
-        await populateMenus(supabaseAdmin, results, dishesData, recipesData);
-      }
+      const { data: dishesData } = await db.from('dishes').select('id, dish_name');
+      if (dishesData && recipesData) await populateMenus(db, results, dishesData, recipesData);
     } else {
       logger.info('[Demo Mode] Menus already exist, skipping.');
     }
-
-    // --- Operational data (no built-in duplicate detection — check first) ---
-
-    if (!(await hasExistingData('temperature_equipment'))) {
-      await populateTemperatureData(supabaseAdmin, results, 'AU');
-    } else {
-      logger.info('[Demo Mode] Temperature data already exists, skipping.');
-    }
-
-    if (!(await hasExistingData('cleaning_areas'))) {
-      await populateCleaningData(supabaseAdmin, results);
-    } else {
-      logger.info('[Demo Mode] Cleaning data already exists, skipping.');
-    }
-
-    if (!(await hasExistingData('compliance_types'))) {
-      await populateComplianceData(supabaseAdmin, results);
-    } else {
-      logger.info('[Demo Mode] Compliance data already exists, skipping.');
-    }
-
-    // Sales data (uses upsert internally, safe to call)
-    if (recipesData && !(await hasExistingData('sales_data'))) {
-      await populateSalesData(supabaseAdmin, results, recipesData as any[]);
-    } else {
-      logger.info('[Demo Mode] Sales data already exists, skipping.');
+    await runIfEmpty(
+      'temperature_equipment',
+      () => populateTemperatureData(db, results, 'AU'),
+      'Temperature data already exists, skipping.',
+    );
+    await runIfEmpty(
+      'cleaning_areas',
+      () => populateCleaningData(db, results),
+      'Cleaning data already exists, skipping.',
+    );
+    await runIfEmpty(
+      'compliance_types',
+      () => populateComplianceData(db, results),
+      'Compliance data already exists, skipping.',
+    );
+    if (recipesData) {
+      await runIfEmpty(
+        'sales_data',
+        () => populateSalesData(db, results, recipesData as any[]),
+        'Sales data already exists, skipping.',
+      );
     }
 
     // --- Log results ---
@@ -148,7 +123,7 @@ export async function setupDemoAccount(email: string): Promise<void> {
     }
 
     // --- Ensure User Permissions (Business Tier + Verified) ---
-    const { error: updateError } = await supabaseAdmin
+    const { error: updateError } = await db
       .from('users')
       .update({
         subscription_tier: 'business',

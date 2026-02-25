@@ -64,7 +64,7 @@
 
 ### 3. Updated Middleware
 
-**File:** `middleware.ts`
+**File:** `proxy.ts`
 
 - Added `/api/debug` to allowed public APIs
 
@@ -110,6 +110,6 @@ After fixing `NEXTAUTH_URL`:
 ## Related Files
 
 - `lib/auth-options.ts` - Auth0 provider configuration
-- `middleware.ts` - Domain redirects and auth checks
+- `proxy.ts` - Domain redirects and auth checks
 - `app/api/debug/auth/route.ts` - Diagnostic endpoint
 - `docs/AUTH0_PRODUCTION_LOGIN_FIX.md` - Complete fix guide

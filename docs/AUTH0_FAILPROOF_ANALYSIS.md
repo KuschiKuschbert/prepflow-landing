@@ -161,7 +161,7 @@ if (createError) {
 
 #### C. Middleware Error Handling
 
-```80:90:middleware.ts
+```80:90:proxy.ts
 if (!token) {
   if (isApi) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

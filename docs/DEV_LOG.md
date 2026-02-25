@@ -2,6 +2,23 @@
 
 ## 2026-02-25
 
+- **refactor: file size compliance – 7 files refactored**: All files now pass `npm run lint:filesize`. Extractions: (1) `lib/utils/haversine.ts` from time-attendance/clock-out; (2) `lib/recipes/utils/error-categorizer-rules.ts` from error-categorizer; (3) `app/webapp/recipes/hooks/useDishFormData/helpers.ts` from useDishFormData; (4) `e2e/simulation/personas/action-handlers/detailHandlers.ts` from action-handlers; (5) `e2e/simulation/personas/day-profiles-data.ts` (Action type + CAFE/RESTAURANT/FOOD_TRUCK_DAY_PROFILE) from day-profiles. Minor trims: useIngredientOperations, useIngredientsClientController. Removed unused collectPageErrors import from action-handlers.
+- **feat: production-ready deployment guards**: - Make cleanup advisory in pre-deploy (no longer blocks deploy)
+- Add format + commit after dev:log in safe-merge
+- Add format:check to pre-push hook
+- Add docs/TECH_DEBT_BACKLOG.md for gradual fixes
+- **fix: format docs/DEV_LOG.md for CI**
+- **chore: update bundle baseline for performance page overhaul (+38KB)**
+- **feat(performance): performance page overhaul with drill-down, menu filter, and optimizations**: - Split PerformanceChartsLazy into dedicated chart components
+- Add chartDataTransformers with single-pass aggregation
+- Extract weather utils to weatherChartUtils.ts (file size compliance)
+- Add menu filter UI and prefetch with default date range
+- Consolidate API logic in performance service
+- Add drill-down from category cards/pie segments with scroll-to-table
+- Add active filter banner and filtered export/print
+- Fix CSV import: bulkImportSalesData for salesData format
+- **docs: update DEV_LOG with merged commits**
+
 - **chore: update bundle baseline for performance page overhaul (+38KB)**
 - **feat(performance): performance page overhaul with drill-down, menu filter, and optimizations**: - Split PerformanceChartsLazy into dedicated chart components
 - Add chartDataTransformers with single-pass aggregation

@@ -96,9 +96,7 @@ export function useIngredientOperations({
     try {
       await handleCSVImportAction(parsedIngredients);
     } catch (err) {
-      logger.error('[IngredientsClient] Error importing CSV:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
+      logger.error('[IngredientsClient] CSV import error:', { err });
     } finally {
       setImporting(false);
     }

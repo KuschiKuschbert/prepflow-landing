@@ -214,7 +214,7 @@ https://dev-7myakdl4itf644km.us.auth0.com/oidc/logout/confirm?state=...
    - ✅ Auth0 SDK client configured correctly
    - ✅ Routes configured: `/api/auth/login`, `/api/auth/callback`, `/api/auth/logout`
 
-2. **`middleware.ts`**
+2. **`proxy.ts`**
    - ✅ Calls `auth0.middleware(req)` first for all routes
    - ✅ Handles `/api/auth/*` routes automatically
    - ✅ Enforces authentication on protected routes

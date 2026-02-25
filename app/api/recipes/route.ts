@@ -6,30 +6,22 @@
  */
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { logger } from '@/lib/logger';
-import { triggerRecipeSync } from '@/lib/square/sync/hooks';
-import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 import { buildQuery } from './helpers/buildQuery';
-import { checkExistingRecipe } from './helpers/checkExistingRecipe';
-import { createRecipe } from './helpers/createRecipe';
+import { catchRecipesHandler } from './helpers/catchHandler';
 import { filterRecipes } from './helpers/filterRecipes';
+import { resolveCreateOrUpdate } from './helpers/handleRecipeCreateOrUpdate';
 import { safeParseBody } from './helpers/parseBody';
 import { CreateRecipeInput, createRecipeSchema, RecipeResponse } from './helpers/schemas';
-import { updateRecipe } from './helpers/updateRecipe';
 import { validateRequest } from './helpers/validateRequest';
-
-import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 
 export async function GET(request: NextRequest) {
   try {
     const { userId, supabase: supabaseAdmin } = await getAuthenticatedUser(request);
-
     const { searchParams } = new URL(request.url);
     const params = validateRequest(searchParams);
-
-    // Override page size limit safely if needed, though validateRequest handles it now
-    // But we need to ensure validateRequest allows 1000.
 
     const { data: recipes, error, count } = await buildQuery(supabaseAdmin, params, userId);
 
@@ -39,7 +31,6 @@ export async function GET(request: NextRequest) {
         code: error.code,
         context: { endpoint: '/api/recipes', operation: 'GET', table: 'recipes' },
       });
-
       const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
@@ -54,23 +45,7 @@ export async function GET(request: NextRequest) {
       pageSize: params.pageSize,
     } satisfies RecipeResponse);
   } catch (err) {
-    logger.error('[Recipes API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-      context: { endpoint: '/api/recipes', method: 'GET' },
-    });
-    return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? err instanceof Error
-            ? err.message
-            : 'Unknown error'
-          : 'Internal server error',
-        'SERVER_ERROR',
-        500,
-      ),
-      { status: 500 },
-    );
+    return catchRecipesHandler(err, 'GET');
   }
 }
 
@@ -90,117 +65,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const recipeData = validationResult.data;
+    const recipeData = validationResult.data as CreateRecipeInput;
+    const { userId } = await getAuthenticatedUser(request);
 
-    const { userId, supabase: supabaseAdmin } = await getAuthenticatedUser(request);
-
-    // Check if recipe already exists
-    const { recipe: existingRecipe, error: checkError } = await checkExistingRecipe(
-      recipeData.recipe_name,
-    );
-
-    if (existingRecipe && !checkError) {
-      return await handleExistingRecipe(request, existingRecipe, recipeData);
-    }
-
-    // Create new recipe
-    return await handleNewRecipe(request, recipeData, userId);
+    return await resolveCreateOrUpdate(request, recipeData, userId);
   } catch (err) {
-    const errorMessage = err instanceof Error ? err.message : String(err);
-    logger.error('[Recipes API] Unexpected error:', {
-      error: errorMessage,
-      stack: err instanceof Error ? err.stack : undefined,
-      context: { endpoint: '/api/recipes', method: 'POST' },
-    });
-    return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development' ? errorMessage : 'Internal server error',
-        'SERVER_ERROR',
-        500,
-      ),
-      { status: 500 },
-    );
+    return catchRecipesHandler(err, 'POST');
   }
-}
-
-async function handleExistingRecipe(
-  request: NextRequest,
-  existingRecipe: { id: string | number },
-  recipeData: CreateRecipeInput,
-) {
-  // Update existing recipe
-  const { recipe: updatedRecipe, error: updateError } = await updateRecipe(
-    existingRecipe.id,
-    recipeData,
-  );
-
-  if (updateError) {
-    const apiError = ApiErrorHandler.fromSupabaseError(updateError, 500);
-    return NextResponse.json(apiError, { status: apiError.status || 500 });
-  }
-
-  // Trigger Square sync hook (non-blocking)
-  triggerSyncHook(request, existingRecipe.id, 'update');
-
-  // Invalidate cache
-  revalidateTag('recipes', 'default');
-
-  return NextResponse.json({
-    success: true,
-    recipe: updatedRecipe,
-    isNew: false,
-  } satisfies RecipeResponse);
-}
-
-async function handleNewRecipe(
-  request: NextRequest,
-  recipeData: CreateRecipeInput,
-  userId: string,
-) {
-  const { recipe: newRecipe, error: createError } = await createRecipe(
-    recipeData.recipe_name,
-    recipeData,
-    userId,
-  );
-
-  if (createError) {
-    const safeError = createError as { message: string; code?: string };
-    logger.error('[Recipes API] Database error creating recipe:', {
-      error: safeError.message || String(createError),
-      code: safeError.code,
-      context: { endpoint: '/api/recipes', operation: 'POST', recipeName: recipeData.recipe_name },
-    });
-    const apiError = ApiErrorHandler.fromSupabaseError(createError, 500);
-    return NextResponse.json(apiError, { status: apiError.status || 500 });
-  }
-
-  // Trigger Square sync hook (non-blocking)
-  if (newRecipe) {
-    triggerSyncHook(request, newRecipe.id, 'create');
-    // Invalidate cache
-    revalidateTag('recipes', 'default');
-  }
-
-  return NextResponse.json({
-    success: true,
-    recipe: newRecipe,
-    isNew: true,
-  } satisfies RecipeResponse);
-}
-
-function triggerSyncHook(
-  request: NextRequest,
-  recipeId: string | number,
-  action: 'create' | 'update',
-) {
-  (async () => {
-    try {
-      await triggerRecipeSync(request, recipeId.toString(), action);
-    } catch (err) {
-      logger.error('[Recipes API] Error triggering Square sync:', {
-        error: err instanceof Error ? err.message : String(err),
-        recipeId,
-      });
-    }
-  })();
 }

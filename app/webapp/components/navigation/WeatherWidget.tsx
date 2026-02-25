@@ -74,7 +74,7 @@ function WeatherWidgetBase() {
         className="flex h-10 w-16 animate-pulse items-center justify-center rounded-xl bg-[var(--surface-variant)]/50"
         aria-hidden
       >
-        <span className="text-xs text-gray-500">—</span>
+        <span className="text-xs text-[var(--foreground-muted)]">—</span>
       </div>
     );
   }
@@ -90,8 +90,8 @@ function WeatherWidgetBase() {
       title={`${status}${precip > 0 ? ` · ${precip} mm` : ''}`}
       aria-label={`Weather: ${status}, ${temp != null ? `${temp}°C` : 'temperature unavailable'}`}
     >
-      <Icon icon={IconComponent} size="sm" className="text-gray-400" aria-hidden />
-      <span className="text-sm text-white tabular-nums">
+      <Icon icon={IconComponent} size="sm" className="text-[var(--foreground-muted)]" aria-hidden />
+      <span className="text-sm text-[var(--foreground)] tabular-nums">
         {temp != null ? `${Math.round(temp)}°` : '—'}
       </span>
     </div>

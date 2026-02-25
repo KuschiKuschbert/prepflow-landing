@@ -365,7 +365,7 @@ fetch('https://www.prepflow.org/api/me')
 
 1. Check Auth0 Dashboard → Applications → Settings → Allowed Callback URLs
 2. Should include: `https://www.prepflow.org/api/auth/callback`
-3. Check middleware.ts for incorrect redirects
+3. Check proxy.ts for incorrect redirects
 4. Verify `[...auth0]/route.ts` exists and is correct
 
 ---

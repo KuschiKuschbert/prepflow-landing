@@ -31,96 +31,10 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 
 import type { NavigationItemConfig } from '@/lib/navigation-optimization/types';
+import { getCategoryForWorkflow, type WorkflowType } from './workflow-category-map';
 
 export type { NavigationItemConfig } from '@/lib/navigation-optimization/types';
-
-type WorkflowType = 'daily-operations' | 'setup-planning-operations' | 'menu-first';
-
-/**
- * Get category for a navigation item based on workflow type.
- *
- * @param {string} href - Navigation item href
- * @param {WorkflowType} workflow - Current workflow type
- * @returns {string} Category name for the item
- */
-function getCategoryForWorkflow(href: string, workflow: WorkflowType): string {
-  const categoryMap: Record<WorkflowType, Record<string, string>> = {
-    'daily-operations': {
-      '/webapp': 'service',
-      '/webapp/recipes': 'service',
-      '/webapp/performance': 'service',
-      '/webapp/cleaning': 'end-of-day',
-      '/webapp/temperature': 'morning-prep',
-      '/webapp/compliance': 'end-of-day',
-      '/webapp/staff': 'tools',
-      '/webapp/roster': 'operations',
-      '/webapp/suppliers': 'planning',
-      '/webapp/par-levels': 'planning',
-      '/webapp/order-lists': 'end-of-day',
-      '/webapp/sections': 'service',
-      '/webapp/menu-builder': 'service',
-      '/webapp/prep-lists': 'morning-prep',
-      '/webapp/specials': 'tools',
-
-      '/webapp/guide': 'tools',
-      '/webapp/setup': 'tools',
-      '/webapp/settings': 'tools',
-      '/webapp/functions': 'planning',
-      '/webapp/customers': 'planning',
-      '/curbos': 'tools',
-    },
-    'setup-planning-operations': {
-      '/webapp': 'analysis',
-      '/webapp/recipes': 'planning',
-      '/webapp/performance': 'analysis',
-      '/webapp/cleaning': 'operations',
-      '/webapp/temperature': 'operations',
-      '/webapp/compliance': 'operations',
-      '/webapp/staff': 'tools',
-      '/webapp/roster': 'operations',
-      '/webapp/suppliers': 'planning',
-      '/webapp/par-levels': 'planning',
-      '/webapp/order-lists': 'operations',
-      '/webapp/sections': 'planning',
-      '/webapp/menu-builder': 'planning',
-      '/webapp/prep-lists': 'operations',
-      '/webapp/specials': 'tools',
-
-      '/webapp/guide': 'tools',
-      '/webapp/setup': 'setup',
-      '/webapp/settings': 'setup',
-      '/webapp/functions': 'operations',
-      '/webapp/customers': 'operations',
-      '/curbos': 'tools',
-    },
-    'menu-first': {
-      '/webapp': 'overview',
-      '/webapp/recipes': 'menu',
-      '/webapp/performance': 'menu',
-      '/webapp/cleaning': 'operations',
-      '/webapp/temperature': 'operations',
-      '/webapp/compliance': 'operations',
-      '/webapp/staff': 'tools',
-      '/webapp/roster': 'operations',
-      '/webapp/suppliers': 'inventory',
-      '/webapp/par-levels': 'inventory',
-      '/webapp/order-lists': 'inventory',
-      '/webapp/sections': 'menu',
-      '/webapp/menu-builder': 'menu',
-      '/webapp/prep-lists': 'operations',
-      '/webapp/specials': 'tools',
-
-      '/webapp/guide': 'tools',
-      '/webapp/setup': 'tools',
-      '/webapp/settings': 'tools',
-      '/webapp/functions': 'operations',
-      '/webapp/customers': 'operations',
-      '/curbos': 'tools',
-    },
-  };
-
-  return categoryMap[workflow][href] || 'other';
-}
+export type { WorkflowType } from './workflow-category-map';
 /**
  * Hook to get navigation items organized by workflow.
  * Applies adaptive optimization when enabled.

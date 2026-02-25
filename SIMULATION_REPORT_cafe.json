@@ -1,0 +1,610 @@
+{
+  "summary": {
+    "personaCount": 1,
+    "totalErrors": 78,
+    "totalBottlenecks": 1,
+    "totalFaultyPaths": 0
+  },
+  "errors": [
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.016Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.047Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.051Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.065Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.080Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.100Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.116Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.131Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.143Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.182Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.193Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.202Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.212Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.223Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.234Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.247Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.255Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.266Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.278Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.290Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.311Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.320Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.330Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.337Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.351Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.364Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.378Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.388Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.401Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.413Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.430Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.451Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.462Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.472Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.492Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.503Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.518Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.020Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.020Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.051Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.051Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.066Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.066Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.086Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.087Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.101Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.101Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.117Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.117Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.133Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.133Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.148Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.148Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.181Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.182Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.191Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.191Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.201Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.201Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.212Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.212Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.223Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.223Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.234Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.234Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.248Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.248Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.254Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.254Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.265Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.265Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.278Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.278Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.290Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.290Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.311Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.311Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.319Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.319Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.330Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.330Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.337Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.337Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.350Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.350Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.364Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.364Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.378Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.378Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.389Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.389Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.401Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.401Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.412Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.412Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.430Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.430Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.451Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.451Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.461Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.461Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.469Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.469Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.492Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.493Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.503Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.503Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/par-levels",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"[Par Levels] API Error:\",\n  \"timestamp\": \"2026-02-24T14:23:04.518Z\",\n  \"data\": {\n    \"status\": 403,\n    \"error\": \"Forbidden - Admin access required\",\n    \"fullResponse\": {\n      \"error\": \"Forbidden - Admin access required\"\n    }\n  }\n}",
+      "timestamp": "2026-02-24T14:23:04.518Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.530Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.545Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/par-levels",
+      "message": "HTTP 403 Forbidden",
+      "statusCode": 403,
+      "timestamp": "2026-02-24T14:23:04.619Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "network",
+      "url": "http://localhost:3000/api/cleaning-tasks",
+      "message": "HTTP 400 Bad Request",
+      "statusCode": 400,
+      "timestamp": "2026-02-24T14:23:12.870Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "console.error",
+      "url": "http://localhost:3000/webapp/cleaning",
+      "message": "[ERROR] {\n  \"level\": \"error\",\n  \"message\": \"Error creating task:\",\n  \"timestamp\": \"2026-02-24T14:23:12.870Z\",\n  \"error\": {\n    \"message\": \"Invalid input: expected string, received null\",\n    \"stack\": \"Error: Invalid input: expected string, received null\\n    at handleSubmit (http://localhost:3000/_next/static/chunks/_d903e401._.js:208:23)\",\n    \"name\": \"Error\"\n  }\n}",
+      "timestamp": "2026-02-24T14:23:12.870Z",
+      "personaId": "cafe"
+    }
+  ],
+  "bottlenecks": [
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createCleaningTask",
+      "durationMs": 8881,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/cleaning",
+      "timestamp": "2026-02-24T14:23:13.405Z"
+    }
+  ],
+  "faultyPaths": [],
+  "generatedAt": "2026-02-24T14:23:13.545Z"
+}

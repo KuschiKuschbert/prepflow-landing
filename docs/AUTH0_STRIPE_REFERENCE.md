@@ -384,7 +384,7 @@ app/api/auth/
 └── [...nextauth]/
     └── route.ts             # NextAuth route handler
 
-middleware.ts                # Allowlist enforcement
+proxy.ts                     # Allowlist enforcement
 ```
 
 ### Stripe Files

@@ -19,7 +19,7 @@
 - `app/api/auth/login/route.ts` - Login handler
 - `app/api/auth/callback/route.ts` - Callback handler
 - `app/api/auth/logout/route.ts` - Logout handler
-- `middleware.ts` - Auth0 SDK middleware integration
+- `proxy.ts` - Auth0 SDK proxy integration
 
 ### User Data Flow (Working)
 
@@ -47,7 +47,7 @@
 - **Auth0 SDK Configuration:** `lib/auth0.ts` - Working correctly
 - **User Sync Logic:** `lib/auth-user-sync.ts` - Updates names correctly
 - **Session Management:** Auth0 SDK handles sessions automatically
-- **Middleware:** `middleware.ts` - Enforces authentication correctly
+- **Proxy:** `proxy.ts` - Enforces authentication correctly
 
 ## Testing Checklist
 
@@ -63,6 +63,6 @@
 
 1. Check `lib/auth0.ts` - Auth0 SDK configuration
 2. Check `lib/auth-user-sync.ts` - User sync logic
-3. Check `middleware.ts` - Authentication enforcement
+3. Check `proxy.ts` - Authentication enforcement
 4. Check environment variables (AUTH0_SECRET, AUTH0_BASE_URL, etc.)
 5. Check Auth0 Dashboard - Application settings, callback URLs

@@ -4,19 +4,21 @@
 import type { Page } from '@playwright/test';
 import { fillTemperatureLogForm, waitForFormSubmission } from '../../helpers/form-helpers';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
+import { SIM_FAST } from '../../helpers/sim-wait';
 
 export async function createTemperatureLogFlow(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Step 19: Navigate to Temperature page');
   await page.goto('/webapp/temperature');
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState(SIM_FAST ? 'domcontentloaded' : 'load');
   await collectPageErrors(page);
 
   testSteps.push('Step 20: Click Add Temperature Log button');
   const addTempButton = page
     .locator(
-      'button:has-text("Add Temperature"), button:has-text("Add Log"), button:has-text("➕")',
+      'button:has-text("Add Temperature Log"), button:has-text("Add Temperature"), button:has-text("Add Log"), button:has-text("➕")',
     )
     .first();
+  await addTempButton.waitFor({ state: 'visible', timeout: 20000 });
   await addTempButton.click();
   await page.waitForTimeout(1000);
   await collectPageErrors(page);

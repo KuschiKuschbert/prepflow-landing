@@ -25,7 +25,7 @@ export async function fetchDishRecipes(
       quantity,
       recipes (
         id,
-        name
+        recipe_name
       )
     `,
     )

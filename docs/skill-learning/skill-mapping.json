@@ -1,0 +1,14 @@
+{
+  "errorPatterns": {
+    "ConfigurationError-Runtime": "prepflow-error-recovery",
+    "SyntaxError-CI": "prepflow-guardian",
+    "HistoricalFix-Development": "prepflow-craft",
+    "BestPractice-Architecture": "prepflow-kitchen-domain",
+    "PAT-AUTH0-CONFIG": "prepflow-error-recovery"
+  },
+  "rsiTypes": {
+    "cleanup": "prepflow-guardian",
+    "lint-fix": "prepflow-craft",
+    "refactor": "prepflow-craft"
+  }
+}

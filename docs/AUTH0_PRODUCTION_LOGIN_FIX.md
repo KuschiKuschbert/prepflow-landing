@@ -175,7 +175,7 @@ Diagnostic endpoint to check production configuration:
 
 ### 4. Updated Middleware
 
-**File:** `middleware.ts`
+**File:** `proxy.ts`
 
 Added `/api/debug` to allowed public APIs for diagnostic access.
 

@@ -1,0 +1,6 @@
+{
+  "minFixCount": 3,
+  "minRsiConfidence": 0.8,
+  "skillsDir": ".agent/skills",
+  "proposedDir": "docs/skill-learning/proposed"
+}
