@@ -1,5 +1,44 @@
 # Dev Log
 
+## 2026-02-25
+
+- **feat: weather-based operational tips across app**: - Add WeatherOperationalTip component (dashboard, prep-lists, order-lists, par-levels)
+- Add FunctionsWeatherAlerts for rainy-day event alerts (next 7 days)
+- Add PerformanceWeatherInsight for days-like-today comparison
+- Wire weather context into AI Specials prompt
+- Add prefetch for weather endpoints
+- Add WeatherWidget to navigation header
+- Add Open-Meteo integration, operational-tip mapping, daily weather APIs
+- Add supabase migration for daily_weather_logs
+- Extract wmo-codes and venue-coordinates for file size compliance
+- **chore(deps): bump tailwindcss from 4.1.18 to 4.2.1**: Bumps [tailwindcss](https://github.com/tailwindlabs/tailwindcss/tree/HEAD/packages/tailwindcss) from 4.1.18 to 4.2.1.
+- [Release notes](https://github.com/tailwindlabs/tailwindcss/releases)
+- [Changelog](https://github.com/tailwindlabs/tailwindcss/blob/main/CHANGELOG.md)
+- [Commits](https://github.com/tailwindlabs/tailwindcss/commits/v4.2.1/packages/tailwindcss)
+- **updated-dependencies:**: - dependency-name: tailwindcss
+  dependency-version: 4.2.1
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+  ...
+- **chore(rsi): automated self-improvement cycle (#73)**
+- **chore(deps): bump @tanstack/react-query from 5.90.20 to 5.90.21**: Bumps [@tanstack/react-query](https://github.com/TanStack/query/tree/HEAD/packages/react-query) from 5.90.20 to 5.90.21.
+- [Release notes](https://github.com/TanStack/query/releases)
+- [Changelog](https://github.com/TanStack/query/blob/main/packages/react-query/CHANGELOG.md)
+- [Commits](https://github.com/TanStack/query/commits/@tanstack/react-query@5.90.21/packages/react-query)
+- **updated-dependencies:**: - dependency-name: "@tanstack/react-query"
+  dependency-version: 5.90.21
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+  ...
+- **chore(deps): bump framer-motion from 12.31.0 to 12.34.3**: Bumps [framer-motion](https://github.com/motiondivision/motion) from 12.31.0 to 12.34.3.
+- [Changelog](https://github.com/motiondivision/motion/blob/main/CHANGELOG.md)
+- [Commits](https://github.com/motiondivision/motion/compare/v12.31.0...v12.34.3)
+- **updated-dependencies:**: - dependency-name: framer-motion
+  dependency-version: 12.34.3
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+  ...
+
 ## 2026-02-24
 
 - **feat(automation): extend RSI, error-learning, safe-merge, and CI crawl**: - RSI: pass --auto-map to skill:evolve for automatic pattern mapping
