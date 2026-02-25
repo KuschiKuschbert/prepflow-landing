@@ -1,5 +1,3 @@
-import type { Shift } from './shift';
-
 export interface ShiftCostCalculation {
   shiftId: string;
   employeeId: string;

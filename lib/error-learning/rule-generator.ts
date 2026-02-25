@@ -4,13 +4,8 @@
  */
 
 import type { KnowledgeBasePattern, KnowledgeBaseRule } from './knowledge-base';
-import {
-  addPatternToKnowledgeBase,
-  addRuleToKnowledgeBase,
-  loadKnowledgeBase,
-} from './knowledge-base';
+import { loadKnowledgeBase } from './knowledge-base';
 import { extractPattern } from './pattern-extractor';
-import { generateRule, updateErrorPatternsFile } from './rule-manager';
 import { processAndPersistPattern } from './rule-generator/processGroup';
 
 const MIN_FIX_COUNT_FOR_RULE = 3;

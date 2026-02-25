@@ -28,7 +28,7 @@ export function adaptAiToUnified(aiRecipe: APIRecipe): {
   ingredients: RecipeIngredientWithDetails[];
 } {
   // Debug log to trace data
-  // eslint-disable-next-line no-console
+
   logger.dev('[Specials] Adapting recipe:', {
     id: aiRecipe.id,
     name: aiRecipe.name,
