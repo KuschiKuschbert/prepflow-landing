@@ -12,7 +12,8 @@ export async function addIngredientToRecipeFlow(
 ): Promise<void> {
   testSteps.push('Step 11: Navigate to COGS page');
   await page.goto('/webapp/cogs');
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded');
+  await page.waitForTimeout(1500);
   await collectPageErrors(page);
 
   testSteps.push('Step 12: Select recipe from combobox');

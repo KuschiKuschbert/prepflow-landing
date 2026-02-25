@@ -32,15 +32,7 @@ async function safeParseBody<T>(req: NextRequest, schema: ZodSchema<T>): Promise
 async function getAuthenticatedUser(request: NextRequest) {
   const supabaseAdmin = createSupabaseAdmin();
 
-  // Authenticate user
-  const {
-    data: { user },
-    error: authError,
-  } = await supabaseAdmin.auth.getUser(
-    request.headers.get('Authorization')?.replace('Bearer ', '') || '',
-  );
-
-  // Fallback/Use Auth0 helper
+  // Use Auth0 helper (handles AUTH0_BYPASS_DEV and real sessions)
   const { requireAuth } = await import('@/lib/auth0-api-helpers');
   const authUser = await requireAuth(request);
 

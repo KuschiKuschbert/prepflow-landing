@@ -8,18 +8,22 @@ import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 import type { KitchenSection, MenuDish } from '../types';
 
 export function useSectionsData(userId: string) {
-  const [kitchenSections, setKitchenSections] = useState<KitchenSection[]>(
-    () => getCachedData('kitchen_sections') || [],
-  );
-  const [menuDishes, setMenuDishes] = useState<MenuDish[]>(
-    () => getCachedData('menu_dishes') || [],
-  );
+  // Initialize with empty arrays to avoid SSR/client hydration mismatch.
+  // getCachedData reads sessionStorage which is browser-only; calling it in
+  // the useState initializer causes server-rendered HTML to differ from the
+  // client's first render when cache has data. Load cache in useEffect instead.
+  const [kitchenSections, setKitchenSections] = useState<KitchenSection[]>([]);
+  const [menuDishes, setMenuDishes] = useState<MenuDish[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Prefetch APIs on mount
+  // Prefetch APIs on mount and load from cache (client-only, safe after hydration)
   useEffect(() => {
     prefetchApis([`/api/kitchen-sections?userId=${userId}`, `/api/menu-dishes?userId=${userId}`]);
+    const cachedSections = getCachedData<KitchenSection[]>('kitchen_sections');
+    if (cachedSections) setKitchenSections(cachedSections);
+    const cachedDishes = getCachedData<MenuDish[]>('menu_dishes');
+    if (cachedDishes) setMenuDishes(cachedDishes);
   }, [userId]);
 
   const fetchKitchenSections = useCallback(async () => {
