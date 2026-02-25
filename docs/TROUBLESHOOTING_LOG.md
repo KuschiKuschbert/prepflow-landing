@@ -194,3 +194,73 @@ test-exclude 7.x uses minimatch ^10.2.2 and is compatible with babel-plugin-ista
 **Fix:** Migration `20260224000000_add_recipe_shares_and_shifts_user_id.sql` creates the `recipe_shares` table with: id, recipe_id, user_id, share_type, recipient_email, notes, status, created_at, updated_at. Run `supabase db push` or apply the migration. The POST route now requires auth and passes user_id to createShareRecord.
 
 **Derived Rule:** recipe-share feature requires `recipe_shares` table; ensure migration is applied in all environments.
+
+## Auth0 SDK.\*Configuration validation failed (ConfigurationError-Runtime)
+
+**Symptom:** Auth0 SDK.\*Configuration validation failed
+
+**Root Cause:** file: server.js; environment: CI
+
+**Fix:**
+
+1. Add AUTH0_CLIENT_ID, AUTH0_CLIENT_SECRET, AUTH0_BASE_URL, AUTH0_ISSUER_BASE_URL, and AUTH0_SECRET to the environment variables of the running process.
+
+**Derived Rule:** Ensure all required Auth0 secrets are propagated to CI/CD steps running the application.
+
+---
+
+## \bnam:\s (SyntaxError-CI)
+
+**Symptom:** \bnam:\s
+
+**Root Cause:** file: .github/workflows/\*.yml
+
+**Fix:**
+
+1. Correct typo 'nam:' to 'name:' in YAML key.
+
+**Derived Rule:** Run YAML header check or linter.
+
+---
+
+## Ingredient Matching (BestPractice-Architecture)
+
+**Symptom:** Ingredient Matching
+
+**Root Cause:** source: AI_RULES.md; date: 2026-01-28
+
+**Fix:**
+
+1. Fuzzy ingredient matching logic is defined in TWO places that MUST stay in sync:
+
+**Derived Rule:** Follow AI Rules strictly
+
+---
+
+## Missing Error Handling (HistoricalFix-Development)
+
+**Symptom:** Missing Error Handling
+
+**Root Cause:** file: missing-error-handling.md
+
+**Fix:**
+
+1. See docs/errors/fixes/missing-error-handling.md
+
+**Derived Rule:** Check historical fixes before refactoring
+
+---
+
+## TypeScript Type Errors (HistoricalFix-Development)
+
+**Symptom:** TypeScript Type Errors
+
+**Root Cause:** file: typescript-type-errors.md
+
+**Fix:**
+
+1. See docs/errors/fixes/typescript-type-errors.md
+
+**Derived Rule:** Check historical fixes before refactoring
+
+---
