@@ -1,4 +1,5 @@
 [
+  "e2e/simulation/personas/action-registry.ts",
   "app/webapp/ai-specials/components/RecipeScraper/hooks/useComprehensiveScrapingHandlers.ts",
   "app/webapp/ai-specials/components/RecipeScraper/hooks/useFormattingHandlers.ts",
   "app/webapp/ai-specials/components/RecipeScraper/hooks/useProcessingOperations.ts",

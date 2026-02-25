@@ -84,6 +84,21 @@ else
     echo -e "${YELLOW}Skipped${NC}"
 fi
 
+# Format and commit any docs modified by changelog/dev:log (ensures Prettier compliance for CI)
+echo -n "Formatting post-merge docs... "
+npm run format 2>/dev/null || true
+if [ -n "$(git status --porcelain -- docs/ CHANGELOG.md 2>/dev/null)" ]; then
+    git add docs/ CHANGELOG.md 2>/dev/null || true
+    if ! git diff --cached --quiet 2>/dev/null; then
+        git commit -m "chore: format post-merge docs"
+        echo -e "${GREEN}Done (committed)${NC}"
+    else
+        echo -e "${GREEN}Done${NC}"
+    fi
+else
+    echo -e "${GREEN}Done${NC}"
+fi
+
 # 4. Cleanup Phase
 echo -e "\n${YELLOW}🧹 Phase 4: Cleanup${NC}"
 read -p "Delete branch $CURRENT_BRANCH? (y/n) " -n 1 -r

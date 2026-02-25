@@ -726,7 +726,7 @@ Runs the same deploy-critical checks as CI (`.github/workflows/ci-cd.yml`). Orde
 7. Script audit (`npm run audit:scripts`)
 8. **Test** (`npm run test`) - **Blocking** (CI-equivalent)
 9. File size check (`npm run lint:filesize`) - **Blocking**
-10. Cleanup check (`npm run cleanup:check`) - **Blocking on critical** (warnings non-blocking)
+10. Cleanup check (`npm run cleanup:check`) - **Advisory** (technical debt; deploy proceeds; see `docs/TECH_DEBT_BACKLOG.md`)
 11. Build check (`npm run build`) - Most important, this is what Vercel runs
 12. Bundle budget check (`npm run check:bundle`)
 
@@ -742,7 +742,7 @@ npm run pre-deploy
 - `0` - All checks passed, safe to deploy
 - `1` - One or more checks failed, fix issues before deploying
 
-**Integration:** Pre-deploy is the single source of truth for local verification. `scripts/safe-merge.sh` delegates to it before merging. Pre-push runs only lint + type-check (lightweight). CI mirrors pre-deploy checks.
+**Integration:** Pre-deploy is the single source of truth for local verification. `scripts/safe-merge.sh` delegates to it before merging. Pre-push runs format:check, lint, and type-check (lightweight). CI mirrors pre-deploy checks.
 
 **See Also:**
 
@@ -764,7 +764,8 @@ Manual merge protocol. **Delegates verification to `npm run pre-deploy`** (singl
 1. **Verification:** Runs `npm run pre-deploy` (lint, type-check, test, file size, cleanup, build). Use `--fast` for lint + type-check only; `--skip-lint` for merge-only (emergency).
 2. **Merge:** Checkout main, pull, merge feature branch.
 3. **Changelog:** Runs `npm run changelog` and `npm run dev:log:from-git`.
-4. **Cleanup:** Prompts to delete the merged branch.
+4. **Format & Commit:** Runs `npm run format` and commits any doc changes (ensures Prettier compliance for CI).
+5. **Cleanup:** Prompts to delete the merged branch.
 
 **Usage:**
 
@@ -774,7 +775,7 @@ Manual merge protocol. **Delegates verification to `npm run pre-deploy`** (singl
 ./scripts/safe-merge.sh --skip-lint  # Skip verification (emergency)
 ```
 
-**Note:** Pre-push does not invoke safe-merge. Pre-push runs only lint + type-check.
+**Note:** Pre-push runs format:check, lint, and type-check. Pre-push does not invoke safe-merge or pre-deploy.
 
 ---
 
@@ -817,7 +818,7 @@ npm run check:full 2>&1 | tee logs/check-full.log
 
 **Behavior:** Blocking checks cause exit code 1; advisory checks report but do not fail. Script runs all phases and prints a summary with suggested fix commands. Default mode suppresses sub-command output; use `--verbose` or `check:full:verbose` to see full output for debugging.
 
-**See Also:** `scripts/pre-deploy-check.sh` for deploy-specific checks; `cleanup.mdc` for cleanup standards.
+**See Also:** `scripts/pre-deploy-check.sh` for deploy-specific checks; `cleanup.mdc` for cleanup standards; `docs/TECH_DEBT_BACKLOG.md` for tracking gradual fixes.
 
 ---
 

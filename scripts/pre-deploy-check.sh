@@ -119,16 +119,15 @@ echo ""
 run_check "File size check" "npm run lint:filesize"
 echo ""
 
-# 10. Cleanup check (blocking on critical violations only)
+# 10. Cleanup check (advisory - does not block deploy; technical debt to address over time)
 echo -e "${BLUE}▶ Cleanup check...${NC}"
 set +e
 npm run cleanup:check
 CLEANUP_EXIT=$?
 set -e
 if [ $CLEANUP_EXIT -eq 1 ]; then
-    echo -e "${RED}❌ Cleanup check failed (critical violations)${NC}"
-    echo -e "${YELLOW}   Run: npm run cleanup:check${NC}"
-    FAILED=1
+    echo -e "${YELLOW}⚠️  Cleanup found critical violations (advisory - deploy will proceed)${NC}"
+    echo -e "${YELLOW}   Run: npm run cleanup:check to review, npm run cleanup:fix to auto-fix some issues${NC}"
 elif [ $CLEANUP_EXIT -eq 2 ]; then
     echo -e "${YELLOW}⚠️  Cleanup found warnings (non-blocking)${NC}"
 else

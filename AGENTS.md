@@ -43,6 +43,7 @@ PrepFlow is a unified restaurant profitability optimization platform that helps 
 - **[Project Roadmap](docs/PROJECT_ROADMAP.md)** - Success metrics, future roadmap
 - **[Landing Page Guide](docs/LANDING_PAGE_GUIDE.md)** - Landing page components, style system
 - **[File Size Refactoring Guide](docs/FILE_SIZE_REFACTORING_GUIDE.md)** - Proven refactoring patterns, examples, and best practices for fixing file size violations
+- **[Tech Debt Backlog](docs/TECH_DEBT_BACKLOG.md)** - Track cleanup violations (console.log, file size, etc.) for gradual fixes
 
 ### Setup & Configuration
 
