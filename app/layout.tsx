@@ -4,8 +4,7 @@ import './globals.css';
 
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { Partytown } from '@qwik.dev/partytown/react';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import ClientAnalytics from '../components/ClientAnalytics';
 
 // cleaned: Removed performance trackers on request
 // Deployment attempt #2: testing Vercel deployment trigger
@@ -140,12 +139,7 @@ export default function RootLayout({
       <body className="geist-sans-variable geist-mono-variable antialiased">
         <ErrorBoundary>
           <Providers>{children}</Providers>
-          {process.env.NODE_ENV === 'production' && (
-            <>
-              <Analytics />
-              <SpeedInsights />
-            </>
-          )}
+          <ClientAnalytics />
           {process.env.NEXT_PUBLIC_ENABLE_GA === 'true' && (
             <>
               <GoogleAnalytics measurementId="G-W1D5LQXGJT" />

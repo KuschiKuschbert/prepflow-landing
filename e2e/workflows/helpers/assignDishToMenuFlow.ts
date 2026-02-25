@@ -7,7 +7,8 @@ import { collectPageErrors } from '../../fixtures/global-error-listener';
 export async function assignDishToMenuFlow(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Step 16: Navigate to Menu Builder');
   await page.goto('/webapp/menu-builder');
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded');
+  await page.waitForTimeout(1500);
   await collectPageErrors(page);
 
   testSteps.push('Step 17: Attempt to assign dish to menu');

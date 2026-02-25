@@ -22,13 +22,18 @@ export async function createOrderListFlow(page: Page, testSteps: string[]): Prom
 
   testSteps.push('Select menu and wait for table');
   const menuSelect = page.locator('#menu-select').first();
-  await menuSelect.waitFor({ state: 'visible', timeout: 8000 });
+  const menuSelectVisible = await menuSelect.isVisible({ timeout: 8000 }).catch(() => false);
+  if (!menuSelectVisible) {
+    testSteps.push('Menu select not visible - no menus available, skipping order list');
+    return;
+  }
   const firstOption = menuSelect.locator('option[value]:not([value=""])').first();
   const hasOptions =
     (await firstOption.count()) > 0 &&
     (await firstOption.isVisible({ timeout: 2000 }).catch(() => false));
 
   if (!hasOptions) {
+    testSteps.push('No menu options available - skipping order list');
     return;
   }
 

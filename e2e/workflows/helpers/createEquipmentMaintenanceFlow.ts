@@ -11,7 +11,8 @@ export async function createEquipmentMaintenanceFlow(
 ): Promise<void> {
   testSteps.push('Step 24: Navigate to Compliance page');
   await page.goto('/webapp/compliance');
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded');
+  await page.waitForTimeout(1500);
   await collectPageErrors(page);
 
   testSteps.push('Step 25: Switch to Equipment Maintenance tab');
