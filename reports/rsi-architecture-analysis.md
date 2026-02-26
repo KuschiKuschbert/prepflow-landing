@@ -1,9 +1,9 @@
 # 🏗️ RSI Architecture Analysis Report
 
-**Date:** 2/25/2026, 4:08:28 PM
+**Date:** 2/26/2026, 3:58:34 PM
 
 **Detected Design Patterns:** 6
-**Detected Anti-Patterns:** 467
+**Detected Anti-Patterns:** 477
 
 ## ⚠️ Anti-Patterns Detected
 
@@ -208,7 +208,7 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/api/compliance-records/route.ts`
-**Description:** Found 12 magic numbers
+**Description:** Found 13 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
@@ -227,6 +227,18 @@
 
 **File:** `app/api/curbos/public-token/route.ts`
 **Description:** Found 16 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
+**File:** `app/api/customers/[id]/route.ts`
+**Description:** Found 18 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
+**File:** `app/api/customers/route.ts`
+**Description:** Found 11 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
@@ -329,6 +341,30 @@
 
 **File:** `app/api/equipment-maintenance/route.ts`
 **Description:** Found 16 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
+**File:** `app/api/functions/[id]/route.ts`
+**Description:** Found 15 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
+**File:** `app/api/functions/[id]/runsheet/[itemId]/route.ts`
+**Description:** Found 17 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
+**File:** `app/api/functions/[id]/runsheet/route.ts`
+**Description:** Found 15 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
+**File:** `app/api/functions/route.ts`
+**Description:** Found 11 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
@@ -611,6 +647,12 @@
 
 **File:** `app/api/setup-user-avatar/route.ts`
 **Description:** Found 12 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
+**File:** `app/api/special-days/route.ts`
+**Description:** Found 11 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
@@ -2061,6 +2103,12 @@
 
 ### Spaghetti Code (HIGH)
 
+**File:** `app/webapp/temperature/hooks/useEquipmentLogs.ts`
+**Description:** Code has 6 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
+
 **File:** `app/webapp/temperature/hooks/useSampleDataGeneration.ts`
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
@@ -2283,6 +2331,12 @@
 
 ### Spaghetti Code (HIGH)
 
+**File:** `lib/error-learning/fix-storage.ts`
+**Description:** Code has 6 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
+
 **File:** `lib/error-learning/rule-generator/synthesizeRule.ts`
 **Description:** Code has 7 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
@@ -2386,7 +2440,7 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `lib/populate-helpers/customers-data.ts`
-**Description:** Found 15 magic numbers
+**Description:** Found 36 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
@@ -2797,6 +2851,12 @@
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
+### Magic Numbers (MEDIUM)
+
+**File:** `components/ui/Toast.tsx`
+**Description:** Found 16 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
 ### Spaghetti Code (HIGH)
 
 **File:** `components/ui/WebappBackground.tsx`
@@ -2850,7 +2910,7 @@
 ✅ No circular dependencies found.
 
 🛡️  Checking Client/Server Boundaries...
-Scanning 2745 files for boundaries...
+Scanning 2759 files for boundaries...
 ✅ Client/Server boundaries respected.
 
 📚 Checking Lib vs Components Boundaries...
