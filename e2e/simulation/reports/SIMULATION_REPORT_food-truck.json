@@ -2,7 +2,7 @@
   "summary": {
     "personaCount": 1,
     "totalErrors": 0,
-    "totalBottlenecks": 38,
+    "totalBottlenecks": 51,
     "totalFaultyPaths": 0
   },
   "errors": [],
@@ -10,346 +10,463 @@
     {
       "type": "bottleneck",
       "personaId": "cafe",
-      "action": "viewAISpecials",
-      "durationMs": 6829,
+      "action": "viewDashboard",
+      "durationMs": 10581,
       "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/specials",
-      "timestamp": "2026-02-26T07:15:08.311Z"
+      "url": "http://localhost:3000/webapp",
+      "timestamp": "2026-02-26T07:53:41.131Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "viewGuide",
-      "durationMs": 13001,
+      "durationMs": 10367,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/guide",
-      "timestamp": "2026-02-26T07:15:21.318Z"
+      "timestamp": "2026-02-26T07:53:54.719Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "switchTabs",
-      "durationMs": 76510,
+      "durationMs": 69440,
       "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/settings",
-      "timestamp": "2026-02-26T07:16:37.833Z"
+      "url": "http://localhost:3000/webapp/settings#security",
+      "timestamp": "2026-02-26T07:55:04.163Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createTemperatureLog",
+      "durationMs": 19726,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T07:55:23.891Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "viewParLevels",
-      "durationMs": 11010,
+      "durationMs": 7904,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/par-levels",
-      "timestamp": "2026-02-26T07:16:52.809Z"
+      "timestamp": "2026-02-26T07:55:31.795Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createOrderList",
+      "durationMs": 5918,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/order-lists",
+      "timestamp": "2026-02-26T07:55:37.718Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "viewCleaning",
-      "durationMs": 8009,
+      "durationMs": 8323,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/cleaning",
-      "timestamp": "2026-02-26T07:17:04.904Z"
+      "timestamp": "2026-02-26T07:55:46.041Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "viewSetup",
-      "durationMs": 45015,
+      "durationMs": 25591,
       "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/cleaning",
-      "timestamp": "2026-02-26T07:17:53.385Z"
-    },
-    {
-      "type": "bottleneck",
-      "personaId": "cafe",
-      "action": "interactCleaningRoster",
-      "durationMs": 6215,
-      "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/cleaning",
-      "timestamp": "2026-02-26T07:18:10.195Z"
+      "url": "http://localhost:3000/webapp/setup",
+      "timestamp": "2026-02-26T07:56:14.746Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "testSearchAndFilters",
-      "durationMs": 58988,
+      "durationMs": 70069,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/recipes#ingredients",
-      "timestamp": "2026-02-26T07:19:09.185Z"
+      "timestamp": "2026-02-26T07:57:29.409Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "createPrepList",
-      "durationMs": 32858,
+      "durationMs": 9215,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/prep-lists",
-      "timestamp": "2026-02-26T07:19:42.057Z"
+      "timestamp": "2026-02-26T07:57:38.629Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "createRecipe",
-      "durationMs": 14569,
+      "durationMs": 8718,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/recipes#dishes",
-      "timestamp": "2026-02-26T07:19:58.311Z"
+      "timestamp": "2026-02-26T07:57:51.642Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "createParLevel",
-      "durationMs": 17923,
+      "durationMs": 42163,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/par-levels",
-      "timestamp": "2026-02-26T07:20:16.237Z"
+      "timestamp": "2026-02-26T07:58:33.806Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "updateIngredientStock",
+      "durationMs": 10054,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/recipes#ingredients",
+      "timestamp": "2026-02-26T07:58:43.863Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "testSortAndViewToggles",
-      "durationMs": 50838,
+      "durationMs": 47869,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/temperature",
-      "timestamp": "2026-02-26T07:21:10.501Z"
+      "timestamp": "2026-02-26T07:59:31.738Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "createTemperatureLog",
-      "durationMs": 17844,
+      "durationMs": 17834,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/temperature",
-      "timestamp": "2026-02-26T07:21:28.346Z"
+      "timestamp": "2026-02-26T07:59:49.573Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "viewCleaning",
+      "durationMs": 9331,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/cleaning",
+      "timestamp": "2026-02-26T07:59:58.905Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "viewCompliance",
-      "durationMs": 13525,
+      "durationMs": 9062,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/compliance",
-      "timestamp": "2026-02-26T07:21:43.685Z"
+      "timestamp": "2026-02-26T08:00:07.974Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "bulkOperations",
-      "durationMs": 19086,
+      "durationMs": 34698,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/recipes",
-      "timestamp": "2026-02-26T07:22:06.311Z"
-    },
-    {
-      "type": "bottleneck",
-      "personaId": "cafe",
-      "action": "createPrepList",
-      "durationMs": 26097,
-      "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/prep-lists",
-      "timestamp": "2026-02-26T07:22:32.415Z"
+      "timestamp": "2026-02-26T08:00:47.899Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "createTemperatureLog",
-      "durationMs": 23135,
+      "durationMs": 17883,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/temperature",
-      "timestamp": "2026-02-26T07:22:55.556Z"
+      "timestamp": "2026-02-26T08:01:06.399Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "createOrderList",
-      "durationMs": 7561,
+      "durationMs": 9942,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/order-lists",
-      "timestamp": "2026-02-26T07:23:03.117Z"
+      "timestamp": "2026-02-26T08:01:16.343Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createTemperatureEquipment",
+      "durationMs": 9512,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T08:01:25.858Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "testImportExport",
-      "durationMs": 118850,
+      "durationMs": 173793,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/recipes#dishes",
-      "timestamp": "2026-02-26T07:25:02.673Z"
-    },
-    {
-      "type": "bottleneck",
-      "personaId": "cafe",
-      "action": "testQRCode",
-      "durationMs": 11460,
-      "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/temperature",
-      "timestamp": "2026-02-26T07:25:14.140Z"
+      "timestamp": "2026-02-26T08:04:19.652Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "staffOnboarding",
-      "durationMs": 22870,
+      "durationMs": 19581,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/staff",
-      "timestamp": "2026-02-26T07:25:37.011Z"
+      "timestamp": "2026-02-26T08:04:43.161Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "createTemperatureLog",
-      "durationMs": 6201,
+      "durationMs": 22454,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/temperature",
-      "timestamp": "2026-02-26T07:25:43.213Z"
+      "timestamp": "2026-02-26T08:05:05.616Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "createPrepList",
-      "durationMs": 39673,
+      "durationMs": 15929,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/prep-lists",
-      "timestamp": "2026-02-26T07:26:22.899Z"
+      "timestamp": "2026-02-26T08:05:21.548Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "viewPerformance",
-      "durationMs": 7177,
+      "durationMs": 5918,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/performance",
-      "timestamp": "2026-02-26T07:26:30.082Z"
+      "timestamp": "2026-02-26T08:05:27.468Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "viewRoster",
-      "durationMs": 37848,
+      "durationMs": 10188,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/roster",
-      "timestamp": "2026-02-26T07:27:07.947Z"
+      "timestamp": "2026-02-26T08:05:37.661Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "clockInOut",
-      "durationMs": 9465,
+      "durationMs": 8376,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/time-attendance",
-      "timestamp": "2026-02-26T07:27:22.152Z"
+      "timestamp": "2026-02-26T08:05:47.830Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "testInlineEditing",
-      "durationMs": 27037,
+      "durationMs": 9818,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/menu-builder",
-      "timestamp": "2026-02-26T07:27:49.199Z"
+      "timestamp": "2026-02-26T08:05:57.661Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "viewDashboard",
-      "durationMs": 21130,
+      "durationMs": 32577,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp",
-      "timestamp": "2026-02-26T07:28:10.793Z"
+      "timestamp": "2026-02-26T08:06:30.679Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "viewSections",
-      "durationMs": 13368,
+      "durationMs": 14399,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/sections",
-      "timestamp": "2026-02-26T07:28:24.824Z"
+      "timestamp": "2026-02-26T08:06:45.902Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "viewSettings",
-      "durationMs": 17631,
+      "durationMs": 12953,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/settings",
-      "timestamp": "2026-02-26T07:28:42.462Z"
+      "timestamp": "2026-02-26T08:06:58.871Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "testFormValidation",
-      "durationMs": 35579,
+      "durationMs": 46208,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/temperature",
-      "timestamp": "2026-02-26T07:29:18.049Z"
+      "timestamp": "2026-02-26T08:07:45.085Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "interactSettings",
-      "durationMs": 66124,
+      "durationMs": 41116,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/settings/billing",
-      "timestamp": "2026-02-26T07:30:24.220Z"
+      "timestamp": "2026-02-26T08:08:26.250Z"
     },
     {
       "type": "bottleneck",
       "personaId": "cafe",
       "action": "createCustomer",
-      "durationMs": 5765,
+      "durationMs": 10643,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/customers",
-      "timestamp": "2026-02-26T07:30:29.992Z"
-    },
-    {
-      "type": "bottleneck",
-      "personaId": "cafe",
-      "action": "createKitchenSection",
-      "durationMs": 10841,
-      "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/sections",
-      "timestamp": "2026-02-26T07:30:41.414Z"
+      "timestamp": "2026-02-26T08:08:36.898Z"
     },
     {
       "type": "bottleneck",
       "personaId": "food-truck",
-      "action": "createOrderList",
-      "durationMs": 11002,
+      "action": "viewParLevels",
+      "durationMs": 7080,
       "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/order-lists",
-      "timestamp": "2026-02-26T07:31:12.174Z"
-    },
-    {
-      "type": "bottleneck",
-      "personaId": "food-truck",
-      "action": "createPrepList",
-      "durationMs": 14916,
-      "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/prep-lists",
-      "timestamp": "2026-02-26T07:31:27.091Z"
+      "url": "http://localhost:3000/webapp/par-levels",
+      "timestamp": "2026-02-26T08:08:59.202Z"
     },
     {
       "type": "bottleneck",
       "personaId": "food-truck",
       "action": "viewDashboard",
-      "durationMs": 156051,
+      "durationMs": 12385,
       "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/par-levels",
-      "timestamp": "2026-02-26T07:34:04.140Z"
+      "url": "http://localhost:3000/webapp",
+      "timestamp": "2026-02-26T08:09:20.184Z"
     },
     {
       "type": "bottleneck",
       "personaId": "food-truck",
       "action": "switchTabs",
-      "durationMs": 117847,
+      "durationMs": 75192,
       "thresholdMs": 5000,
-      "url": "chrome-error://chromewebdata/",
-      "timestamp": "2026-02-26T07:36:01.992Z"
+      "url": "http://localhost:3000/webapp/settings",
+      "timestamp": "2026-02-26T08:10:35.386Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "createIngredient",
+      "durationMs": 46438,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/recipes",
+      "timestamp": "2026-02-26T08:11:21.825Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "createSupplier",
+      "durationMs": 8579,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/suppliers",
+      "timestamp": "2026-02-26T08:11:33.821Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "viewSections",
+      "durationMs": 25158,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/sections",
+      "timestamp": "2026-02-26T08:11:58.988Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "testSearchAndFilters",
+      "durationMs": 177829,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp",
+      "timestamp": "2026-02-26T08:14:58.732Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "createOrderList",
+      "durationMs": 45273,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/sections",
+      "timestamp": "2026-02-26T08:15:57.461Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "createPrepList",
+      "durationMs": 45013,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/order-lists",
+      "timestamp": "2026-02-26T08:17:16.610Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "viewParLevels",
+      "durationMs": 43806,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/par-levels",
+      "timestamp": "2026-02-26T08:18:02.227Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "createTemperatureEquipment",
+      "durationMs": 45015,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/par-levels",
+      "timestamp": "2026-02-26T08:18:47.245Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "viewSettingsBilling",
+      "durationMs": 33135,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/settings/billing",
+      "timestamp": "2026-02-26T08:20:37.452Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "testImportExport",
+      "durationMs": 321068,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/cleaning",
+      "timestamp": "2026-02-26T08:25:58.528Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "testInlineEditing",
+      "durationMs": 47922,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/par-levels",
+      "timestamp": "2026-02-26T08:27:52.125Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "createTemperatureLog",
+      "durationMs": 30021,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/menu-builder",
+      "timestamp": "2026-02-26T08:28:44.901Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "createIngredient",
+      "durationMs": 13606,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T08:29:39.521Z"
     }
   ],
   "faultyPaths": [],
-  "generatedAt": "2026-02-26T07:36:02.395Z"
+  "generatedAt": "2026-02-26T08:29:39.971Z"
 }
