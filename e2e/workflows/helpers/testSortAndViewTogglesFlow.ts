@@ -9,7 +9,10 @@ import { getSimWait, safeGoto } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 async function testSortOnPage(page: Page, route: string, testSteps: string[]): Promise<void> {
-  if (!(await safeGoto(page, route))) { testSteps.push(`[testSort] ${route} nav failed - skipping`); return; }
+  if (!(await safeGoto(page, route))) {
+    testSteps.push(`[testSort] ${route} nav failed - skipping`);
+    return;
+  }
   await page.waitForTimeout(getSimWait(1000));
 
   const sortButtons = page.locator(
@@ -44,7 +47,10 @@ async function testSortOnPage(page: Page, route: string, testSteps: string[]): P
 
 async function testViewToggles(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Test equipment view toggle');
-  if (!(await safeGoto(page, '/webapp/temperature'))) { testSteps.push('[testSort] temperature nav failed - skipping'); return; }
+  if (!(await safeGoto(page, '/webapp/temperature'))) {
+    testSteps.push('[testSort] temperature nav failed - skipping');
+    return;
+  }
   await page.waitForTimeout(getSimWait(800));
 
   const equipmentTab = page

@@ -17,7 +17,9 @@ export async function createDishWithAllergensFlow(
   const dishName = `${prefix}_AllergenDish`;
 
   testSteps.push('Navigate to DishBuilder (Dishes tab)');
-  if (!(await safeGoto(page, '/webapp/recipes?builder=true#dishes'))) { return; }
+  if (!(await safeGoto(page, '/webapp/recipes?builder=true#dishes'))) {
+    return;
+  }
   await page.waitForTimeout(getSimWait(4000));
   await collectPageErrors(page);
 

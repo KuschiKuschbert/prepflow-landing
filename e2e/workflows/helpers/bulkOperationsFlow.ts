@@ -10,7 +10,10 @@ import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 async function testIngredientBulkOps(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Navigate to Ingredients for bulk operations');
-  if (!(await safeGoto(page, '/webapp/ingredients'))) { testSteps.push('[bulkOps] ingredients nav failed - skipping'); return; }
+  if (!(await safeGoto(page, '/webapp/ingredients'))) {
+    testSteps.push('[bulkOps] ingredients nav failed - skipping');
+    return;
+  }
   await page.waitForTimeout(getSimWait(1200));
 
   const selectAllBtn = page
@@ -82,7 +85,10 @@ async function testIngredientBulkOps(page: Page, testSteps: string[]): Promise<v
 
 async function testRecipeBulkOps(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Navigate to Recipes for bulk operations');
-  if (!(await safeGoto(page, '/webapp/recipes'))) { testSteps.push('[bulkOps] recipes nav failed - skipping'); return; }
+  if (!(await safeGoto(page, '/webapp/recipes'))) {
+    testSteps.push('[bulkOps] recipes nav failed - skipping');
+    return;
+  }
   await page.waitForTimeout(getSimWait(1200));
 
   const selectBtn = page.locator('button:has-text("Select"), button[aria-label*="Select"]').first();

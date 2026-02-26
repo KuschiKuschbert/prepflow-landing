@@ -26,9 +26,7 @@ export async function testDeleteFlow(page: Page, testSteps: string[] = []): Prom
 
   // Try selecting via checkbox then bulk delete
   const firstCheckbox = page
-    .locator(
-      'button[aria-label*="Select"], input[type="checkbox"], button[role="checkbox"]',
-    )
+    .locator('button[aria-label*="Select"], input[type="checkbox"], button[role="checkbox"]')
     .first();
   if (await firstCheckbox.isVisible({ timeout: 5000 }).catch(() => false)) {
     await firstCheckbox.click();

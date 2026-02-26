@@ -21,8 +21,8 @@ async function testPaginationOnPage(page: Page, url: string): Promise<void> {
   const nextPageBtn = page
     .locator(
       'button[aria-label*="Next"], button[aria-label*="next"], ' +
-      'button:has-text("Next"), button:has-text("›"), button:has-text("→"), ' +
-      '[data-testid="pagination-next"]',
+        'button:has-text("Next"), button:has-text("›"), button:has-text("→"), ' +
+        '[data-testid="pagination-next"]',
     )
     .first();
 
@@ -41,8 +41,8 @@ async function testPaginationOnPage(page: Page, url: string): Promise<void> {
   const prevPageBtn = page
     .locator(
       'button[aria-label*="Previous"], button[aria-label*="prev"], ' +
-      'button:has-text("Previous"), button:has-text("‹"), button:has-text("←"), ' +
-      '[data-testid="pagination-prev"]',
+        'button:has-text("Previous"), button:has-text("‹"), button:has-text("←"), ' +
+        '[data-testid="pagination-prev"]',
     )
     .first();
 

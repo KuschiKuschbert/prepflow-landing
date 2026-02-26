@@ -12,7 +12,10 @@ import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 async function testAIRecipeInstructions(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Test AI recipe instructions');
-  if (!(await safeGoto(page, '/webapp/recipes'))) { testSteps.push('[testAI] recipes nav failed - skipping'); return; }
+  if (!(await safeGoto(page, '/webapp/recipes'))) {
+    testSteps.push('[testAI] recipes nav failed - skipping');
+    return;
+  }
   await page.waitForTimeout(getSimWait(1200));
 
   const firstRecipe = page.locator('table tbody tr, div[class*="group"][class*="rounded"]').first();
@@ -46,7 +49,10 @@ async function testAIRecipeInstructions(page: Page, testSteps: string[]): Promis
 
 async function testAISpecialsPage(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Test AI Specials page');
-  if (!(await safeGoto(page, '/webapp/specials'))) { testSteps.push('[testAI] specials nav failed - skipping'); return; }
+  if (!(await safeGoto(page, '/webapp/specials'))) {
+    testSteps.push('[testAI] specials nav failed - skipping');
+    return;
+  }
   await page.waitForTimeout(getSimWait(1000));
 
   const generateBtn = page
@@ -82,7 +88,10 @@ async function testAISpecialsPage(page: Page, testSteps: string[]): Promise<void
 
 async function testAIPrepDetails(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Test AI prep details');
-  if (!(await safeGoto(page, '/webapp/prep-lists'))) { testSteps.push('[testAI] prep-lists nav failed - skipping'); return; }
+  if (!(await safeGoto(page, '/webapp/prep-lists'))) {
+    testSteps.push('[testAI] prep-lists nav failed - skipping');
+    return;
+  }
   await page.waitForTimeout(getSimWait(1000));
 
   const aiBtn = page

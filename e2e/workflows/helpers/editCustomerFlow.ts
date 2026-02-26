@@ -25,7 +25,7 @@ export async function editCustomerFlow(page: Page, testSteps: string[] = []): Pr
   const editBtn = page
     .locator(
       'a[href*="/webapp/customers/"], button:has-text("Edit"), ' +
-      '[data-testid="customer-row"] a, tr:first-child a',
+        '[data-testid="customer-row"] a, tr:first-child a',
     )
     .first();
 

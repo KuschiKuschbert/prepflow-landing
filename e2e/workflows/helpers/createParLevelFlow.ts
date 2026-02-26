@@ -12,7 +12,9 @@ export async function createParLevelFlow(
   testSteps: string[] = [],
 ): Promise<void> {
   testSteps.push('Navigate to Par Levels');
-  if (!(await safeGoto(page, '/webapp/par-levels'))) { return; }
+  if (!(await safeGoto(page, '/webapp/par-levels'))) {
+    return;
+  }
   await page.waitForTimeout(getSimWait(800));
   await collectPageErrors(page);
 

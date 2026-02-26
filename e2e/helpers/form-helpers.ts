@@ -232,7 +232,10 @@ export async function fillEquipmentMaintenanceForm(
   // Fill maintenance date (first date input in the form)
   const dateInputs = page.locator('input[type="date"]');
   if ((await dateInputs.count()) > 0) {
-    await dateInputs.first().fill(data.maintenanceDate).catch(() => {});
+    await dateInputs
+      .first()
+      .fill(data.maintenanceDate)
+      .catch(() => {});
   }
 
   // Select maintenance type (second select in form)

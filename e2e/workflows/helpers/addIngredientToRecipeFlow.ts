@@ -12,7 +12,9 @@ export async function addIngredientToRecipeFlow(
   testSteps: string[],
 ): Promise<void> {
   testSteps.push('Step 11: Navigate to COGS page');
-  if (!(await safeGoto(page, '/webapp/cogs'))) { return; }
+  if (!(await safeGoto(page, '/webapp/cogs'))) {
+    return;
+  }
   await page.waitForTimeout(1500);
   await collectPageErrors(page);
 

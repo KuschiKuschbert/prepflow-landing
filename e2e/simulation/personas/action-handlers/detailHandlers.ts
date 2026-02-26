@@ -27,7 +27,9 @@ export async function handleShareRecipe(page: Page): Promise<void> {
   if (!(await safeGoto(page, '/webapp/recipe-sharing'))) return;
   await page.waitForTimeout(getSimWait(800));
   const shareBtn = page
-    .locator('button:has-text("Share Recipe"), button:has-text("Share Your First Recipe"), button:has-text("Share")')
+    .locator(
+      'button:has-text("Share Recipe"), button:has-text("Share Your First Recipe"), button:has-text("Share")',
+    )
     .first();
   if (await shareBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
     await shareBtn.click();
@@ -165,12 +167,7 @@ export async function handleViewPerformanceCharts(page: Page): Promise<void> {
   }
 
   // Click category filter buttons to filter the performance list
-  const categoryFilters = [
-    "Chef's Kiss",
-    'Hidden Gem',
-    'Bargain Bucket',
-    'Burnt Toast',
-  ];
+  const categoryFilters = ["Chef's Kiss", 'Hidden Gem', 'Bargain Bucket', 'Burnt Toast'];
   for (const category of categoryFilters) {
     const filterBtn = page
       .locator(`button:has-text("${category}"), [data-filter="${category}"]`)
@@ -192,7 +189,7 @@ export async function handleViewPerformanceCharts(page: Page): Promise<void> {
   const dateRangeBtn = page
     .locator(
       'button:has-text("Date Range"), button:has-text("7 days"), button:has-text("30 days"), ' +
-      'select[aria-label*="date"], select[aria-label*="range"]',
+        'select[aria-label*="date"], select[aria-label*="range"]',
     )
     .first();
   if (await dateRangeBtn.isVisible({ timeout: 2000 }).catch(() => false)) {

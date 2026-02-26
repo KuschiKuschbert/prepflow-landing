@@ -153,6 +153,7 @@ const CONSOLE_ERROR_ALLOWLIST: RegExp[] = [
   /auth0/i,
   /stripe/i,
   /hydration/i, // Next.js hydration mismatch - evaluate if acceptable for your app
+  /server rendered html didn't match/i, // Next.js hydration mismatch (pageerror variant)
   /square.*unauthorized/i, // Square Status Hook / Mappings - expected when not admin
   /feature.?flag.*unauthorized/i, // Feature Flags - expected when not admin or not authenticated
   /SafeGradientOrbs/i, // Lazy-loaded landing component - chunk URL changes on hot-reload in dev
@@ -183,7 +184,8 @@ function isAllowlisted(error: ErrorRecord): boolean {
  */
 export function getNonAllowlistedErrors(): ErrorRecord[] {
   return errorCollection.filter(error => {
-    if (error.type === 'uncaught') return true;
+    // Apply allowlist to uncaught errors too (e.g. Next.js hydration mismatches)
+    if (error.type === 'uncaught') return !isAllowlisted(error);
     if (error.type === 'network' && error.statusCode && error.statusCode >= 500) return true;
     if (error.type === 'console.error') return !isAllowlisted(error);
     if (error.type === 'console.warn') return FAIL_ON_WARN && !isAllowlisted(error);

@@ -11,7 +11,9 @@ export async function createEquipmentMaintenanceFlow(
   testSteps: string[],
 ): Promise<void> {
   testSteps.push('Step 24: Navigate to Compliance page');
-  if (!(await safeGoto(page, '/webapp/compliance'))) { return; }
+  if (!(await safeGoto(page, '/webapp/compliance'))) {
+    return;
+  }
   await page.waitForTimeout(1500);
   await collectPageErrors(page);
 

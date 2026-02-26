@@ -8,7 +8,10 @@ import { getSimWait } from '../../helpers/sim-wait';
  * Navigates to /webapp/sections, creates a new kitchen section, then
  * attempts to assign an unassigned dish to it via the dropdown select.
  */
-export async function createKitchenSectionFlow(page: Page, testSteps: string[] = []): Promise<void> {
+export async function createKitchenSectionFlow(
+  page: Page,
+  testSteps: string[] = [],
+): Promise<void> {
   testSteps.push('Navigate to kitchen sections');
 
   try {
@@ -22,7 +25,9 @@ export async function createKitchenSectionFlow(page: Page, testSteps: string[] =
 
   // Click "Add Section" button
   const addSectionBtn = page
-    .locator('button:has-text("Add Section"), button:has-text("New Section"), button:has-text("+ ")')
+    .locator(
+      'button:has-text("Add Section"), button:has-text("New Section"), button:has-text("+ ")',
+    )
     .first();
   const addBtnVisible = await addSectionBtn.isVisible({ timeout: 5000 }).catch(() => false);
   if (!addBtnVisible) {
@@ -62,9 +67,7 @@ export async function createKitchenSectionFlow(page: Page, testSteps: string[] =
     await collectPageErrors(page);
   } else {
     // Close modal if save button not found
-    const closeBtn = page
-      .locator('button[aria-label="Close"], button:has-text("Cancel")')
-      .first();
+    const closeBtn = page.locator('button[aria-label="Close"], button:has-text("Cancel")').first();
     if (await closeBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
       await closeBtn.click();
       await page.waitForTimeout(getSimWait(500));
@@ -73,9 +76,7 @@ export async function createKitchenSectionFlow(page: Page, testSteps: string[] =
   }
 
   // Attempt to assign an unassigned dish via the dropdown
-  const assignSelect = page
-    .locator('select:has(option:has-text("Assign to section"))')
-    .first();
+  const assignSelect = page.locator('select:has(option:has-text("Assign to section"))').first();
   if (await assignSelect.isVisible({ timeout: 5000 }).catch(() => false)) {
     // Get available options (section IDs)
     const options = await assignSelect.locator('option').all();

@@ -15,7 +15,9 @@ export async function createDetailedFunctionFlow(
   testSteps: string[] = [],
 ): Promise<void> {
   testSteps.push('Navigate to Functions page');
-  if (!(await safeGoto(page, '/webapp/functions'))) { return; }
+  if (!(await safeGoto(page, '/webapp/functions'))) {
+    return;
+  }
   await page.waitForTimeout(getSimWait(800));
   await collectPageErrors(page);
 

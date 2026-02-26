@@ -16,7 +16,9 @@ function futureDate(daysFromNow: number): string {
 
 export async function createComplianceRecordFlow(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Navigate to Compliance page');
-  if (!(await safeGoto(page, '/webapp/compliance'))) { return; }
+  if (!(await safeGoto(page, '/webapp/compliance'))) {
+    return;
+  }
   await page.waitForTimeout(getSimWait(1200));
   await collectPageErrors(page);
 

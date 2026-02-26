@@ -13,7 +13,9 @@ export async function updateIngredientStockFlow(
   testSteps: string[] = [],
 ): Promise<void> {
   testSteps.push('Navigate to Ingredients page');
-  if (!(await safeGoto(page, '/webapp/ingredients'))) { return; }
+  if (!(await safeGoto(page, '/webapp/ingredients'))) {
+    return;
+  }
   await page.waitForTimeout(getSimWait(1200));
   await collectPageErrors(page);
 

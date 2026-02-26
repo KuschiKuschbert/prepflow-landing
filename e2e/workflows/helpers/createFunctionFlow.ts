@@ -12,7 +12,9 @@ export async function createFunctionFlow(
   testSteps: string[] = [],
 ): Promise<void> {
   testSteps.push('Navigate to Functions');
-  if (!(await safeGoto(page, '/webapp/functions'))) { return; }
+  if (!(await safeGoto(page, '/webapp/functions'))) {
+    return;
+  }
   await page.waitForTimeout(getSimWait(500));
   await collectPageErrors(page);
 

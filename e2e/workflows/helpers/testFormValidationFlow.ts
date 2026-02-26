@@ -33,7 +33,10 @@ async function hasValidationError(page: Page): Promise<boolean> {
 
 async function testRecipeFormValidation(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Test recipe form validation - empty name');
-  if (!(await safeGoto(page, '/webapp/recipes?builder=true#dishes'))) { testSteps.push('[testFormValidation] recipe page nav failed - skipping'); return; }
+  if (!(await safeGoto(page, '/webapp/recipes?builder=true#dishes'))) {
+    testSteps.push('[testFormValidation] recipe page nav failed - skipping');
+    return;
+  }
   await page.waitForTimeout(getSimWait(500));
   await page.waitForTimeout(getSimWait(3000));
 
@@ -69,7 +72,10 @@ async function testRecipeFormValidation(page: Page, testSteps: string[]): Promis
 
 async function testIngredientFormValidation(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Test ingredient form validation - empty name');
-  if (!(await safeGoto(page, '/webapp/ingredients'))) { testSteps.push('[testFormValidation] ingredient page nav failed - skipping'); return; }
+  if (!(await safeGoto(page, '/webapp/ingredients'))) {
+    testSteps.push('[testFormValidation] ingredient page nav failed - skipping');
+    return;
+  }
   await page.waitForTimeout(getSimWait(1500));
 
   const addBtn = page.locator('button:has-text("Add Ingredient"), button:has-text("➕")').first();
@@ -109,7 +115,10 @@ async function testIngredientFormValidation(page: Page, testSteps: string[]): Pr
 
 async function testFunctionFormValidation(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Test function form validation - missing required fields');
-  if (!(await safeGoto(page, '/webapp/functions'))) { testSteps.push('[testFormValidation] functions page nav failed - skipping'); return; }
+  if (!(await safeGoto(page, '/webapp/functions'))) {
+    testSteps.push('[testFormValidation] functions page nav failed - skipping');
+    return;
+  }
   await page.waitForTimeout(getSimWait(800));
 
   const newBtn = page
@@ -130,7 +139,9 @@ async function testFunctionFormValidation(page: Page, testSteps: string[]): Prom
     if (isDisabled) {
       testSteps.push('Create Event button is disabled (form requires name) - testing by typing');
       // Type a name to enable the button, then try submitting
-      const nameInput = page.locator('input[type="text"], input[placeholder*="name"], input[placeholder*="Name"]').first();
+      const nameInput = page
+        .locator('input[type="text"], input[placeholder*="name"], input[placeholder*="Name"]')
+        .first();
       if (await nameInput.isVisible({ timeout: 2000 }).catch(() => false)) {
         await nameInput.fill('Test Validation Event');
         await page.waitForTimeout(getSimWait(300));
@@ -166,7 +177,10 @@ async function testFunctionFormValidation(page: Page, testSteps: string[]): Prom
 
 async function testTemperatureLogValidation(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Test temperature log validation - empty temperature');
-  if (!(await safeGoto(page, '/webapp/temperature'))) { testSteps.push('[testFormValidation] temperature page nav failed - skipping'); return; }
+  if (!(await safeGoto(page, '/webapp/temperature'))) {
+    testSteps.push('[testFormValidation] temperature page nav failed - skipping');
+    return;
+  }
   await page.waitForTimeout(getSimWait(1000));
 
   const addBtn = page
@@ -217,7 +231,9 @@ export async function testFormValidationFlow(page: Page, testSteps: string[]): P
     testSteps.push(`[testFormValidation] function validation skipped: ${String(e).slice(0, 60)}`);
   });
   await testTemperatureLogValidation(page, testSteps).catch(e => {
-    testSteps.push(`[testFormValidation] temperature validation skipped: ${String(e).slice(0, 60)}`);
+    testSteps.push(
+      `[testFormValidation] temperature validation skipped: ${String(e).slice(0, 60)}`,
+    );
   });
 
   testSteps.push('Form validation tests completed');

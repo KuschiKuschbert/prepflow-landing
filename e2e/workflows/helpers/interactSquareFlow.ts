@@ -32,7 +32,14 @@ export async function interactSquareFlow(page: Page, testSteps: string[] = []): 
     return;
   }
 
-  const sections = ['overview', 'configuration', 'sync', 'mappings', 'history', 'webhooks'] as const;
+  const sections = [
+    'overview',
+    'configuration',
+    'sync',
+    'mappings',
+    'history',
+    'webhooks',
+  ] as const;
 
   for (const section of sections) {
     // Click the nav link for this section
@@ -48,7 +55,10 @@ export async function interactSquareFlow(page: Page, testSteps: string[] = []): 
     } else {
       // Fallback: navigate via URL hash
       try {
-        await page.goto(`/webapp/square#${section}`, { waitUntil: 'domcontentloaded', timeout: 20000 });
+        await page.goto(`/webapp/square#${section}`, {
+          waitUntil: 'domcontentloaded',
+          timeout: 20000,
+        });
         await page.waitForTimeout(getSimWait(800));
         await collectPageErrors(page);
       } catch {
@@ -60,7 +70,7 @@ export async function interactSquareFlow(page: Page, testSteps: string[] = []): 
     const sectionHeading = page
       .locator(
         `h1:has-text("${capitalize(section)}"), h2:has-text("${capitalize(section)}"), ` +
-        `h3:has-text("${capitalize(section)}"), [id="${section}"]`,
+          `h3:has-text("${capitalize(section)}"), [id="${section}"]`,
       )
       .first();
     await sectionHeading.isVisible({ timeout: 3000 }).catch(() => false);

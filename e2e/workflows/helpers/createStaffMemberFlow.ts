@@ -13,7 +13,9 @@ export async function createStaffMemberFlow(
   testSteps: string[] = [],
 ): Promise<void> {
   testSteps.push('Navigate to Staff page');
-  if (!(await safeGoto(page, '/webapp/staff'))) { return; }
+  if (!(await safeGoto(page, '/webapp/staff'))) {
+    return;
+  }
   await page.waitForTimeout(getSimWait(800));
   await collectPageErrors(page);
 

@@ -12,7 +12,9 @@ const TASK_NAME = 'Sim test clean';
 
 export async function createCleaningTaskFlow(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Navigate to Cleaning page');
-  if (!(await safeGoto(page, '/webapp/cleaning'))) { return; }
+  if (!(await safeGoto(page, '/webapp/cleaning'))) {
+    return;
+  }
   await page.waitForTimeout(getSimWait(1200));
   await collectPageErrors(page);
 

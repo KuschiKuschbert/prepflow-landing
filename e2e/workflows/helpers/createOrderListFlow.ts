@@ -9,7 +9,9 @@ import { clickPrintIfAvailable } from './printOrExportHelpers';
 
 export async function createOrderListFlow(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Navigate to Order Lists page');
-  if (!(await safeGoto(page, '/webapp/order-lists'))) { return; }
+  if (!(await safeGoto(page, '/webapp/order-lists'))) {
+    return;
+  }
   await page.waitForTimeout(getSimWait(1200));
   await collectPageErrors(page);
 

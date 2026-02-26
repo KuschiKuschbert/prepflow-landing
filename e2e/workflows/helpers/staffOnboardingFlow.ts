@@ -24,13 +24,17 @@ export async function staffOnboardingFlow(page: Page, testSteps: string[] = []):
 
   // Find the first staff card with an onboarding button
   const onboardingBtn = page
-    .locator('button:has-text("Onboarding"), a:has-text("Onboarding"), button[aria-label*="nboarding"]')
+    .locator(
+      'button:has-text("Onboarding"), a:has-text("Onboarding"), button[aria-label*="nboarding"]',
+    )
     .first();
   const onboardingVisible = await onboardingBtn.isVisible({ timeout: 5000 }).catch(() => false);
 
   if (!onboardingVisible) {
     // Try clicking a staff card to get to the member first
-    const staffCard = page.locator('[data-testid="staff-card"], .staff-card, [class*="StaffCard"]').first();
+    const staffCard = page
+      .locator('[data-testid="staff-card"], .staff-card, [class*="StaffCard"]')
+      .first();
     const cardVisible = await staffCard.isVisible({ timeout: 5000 }).catch(() => false);
     if (!cardVisible) {
       testSteps.push('[staffOnboarding] No staff cards found - skipping');
@@ -77,9 +81,7 @@ export async function staffOnboardingFlow(page: Page, testSteps: string[] = []):
   testSteps.push('Walk through onboarding wizard steps');
 
   // Step 1: Personal Details — read-only, just click Next
-  const nextBtn = page
-    .locator('button:has-text("Next"), button:has-text("Continue")')
-    .first();
+  const nextBtn = page.locator('button:has-text("Next"), button:has-text("Continue")').first();
   if (await nextBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
     await nextBtn.click();
     await page.waitForTimeout(getSimWait(1000));
@@ -87,9 +89,7 @@ export async function staffOnboardingFlow(page: Page, testSteps: string[] = []):
   }
 
   // Step 2: ID Upload — skip actual upload, just click Next
-  const step2Next = page
-    .locator('button:has-text("Next"), button:has-text("Continue")')
-    .first();
+  const step2Next = page.locator('button:has-text("Next"), button:has-text("Continue")').first();
   if (await step2Next.isVisible({ timeout: 5000 }).catch(() => false)) {
     await step2Next.click();
     await page.waitForTimeout(getSimWait(1000));
@@ -97,9 +97,7 @@ export async function staffOnboardingFlow(page: Page, testSteps: string[] = []):
   }
 
   // Step 3: Contract Signature — click Next to skip
-  const step3Next = page
-    .locator('button:has-text("Next"), button:has-text("Continue")')
-    .first();
+  const step3Next = page.locator('button:has-text("Next"), button:has-text("Continue")').first();
   if (await step3Next.isVisible({ timeout: 5000 }).catch(() => false)) {
     await step3Next.click();
     await page.waitForTimeout(getSimWait(1000));
@@ -115,17 +113,13 @@ export async function staffOnboardingFlow(page: Page, testSteps: string[] = []):
     await page.waitForTimeout(getSimWait(300));
   }
   const accountInput = page
-    .locator(
-      'input[name*="account"], input[placeholder*="Account"], input[placeholder*="account"]',
-    )
+    .locator('input[name*="account"], input[placeholder*="Account"], input[placeholder*="account"]')
     .first();
   if (await accountInput.isVisible({ timeout: 3000 }).catch(() => false)) {
     await accountInput.fill('12345678');
     await page.waitForTimeout(getSimWait(300));
   }
-  const step4Next = page
-    .locator('button:has-text("Next"), button:has-text("Continue")')
-    .first();
+  const step4Next = page.locator('button:has-text("Next"), button:has-text("Continue")').first();
   if (await step4Next.isVisible({ timeout: 5000 }).catch(() => false)) {
     await step4Next.click();
     await page.waitForTimeout(getSimWait(1000));
