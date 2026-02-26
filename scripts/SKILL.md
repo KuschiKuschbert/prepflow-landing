@@ -106,6 +106,11 @@ npm run format
 
 ## RETROFIT LOG
 
+### 2025-02-26 — Batch 7 (testing & tooling)
+
+- `console.*` calls throughout `scripts/` are intentional — all scripts run in Node.js CLI context, not the browser. They are exempt from the console migration rule.
+- No native dialogs or rogue breakpoints found.
+
 ## LAST UPDATED
 
 2025-02-26

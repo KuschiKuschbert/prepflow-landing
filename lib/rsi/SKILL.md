@@ -59,6 +59,11 @@ npm run rsi:check    # Check without fixing
 
 ## RETROFIT LOG
 
+### 2025-02-26 — Batch 7 (testing & tooling)
+
+- `console.*` calls in all `lib/rsi/` files are intentional — RSI is a Node.js CLI agent tool, not browser code. These are exempt from the console migration rule per the SKILL.md gotchas.
+- No native dialogs, rogue breakpoints, or missing 'use client' violations found.
+
 ## LAST UPDATED
 
 2025-02-26
