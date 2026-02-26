@@ -13,6 +13,7 @@ import {
 } from '@/lib/ai/prompts/performance-tips';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { parseAndValidate } from '@/lib/api/parse-request-body';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -21,18 +22,6 @@ const performanceTipsSchema = z.object({
   performanceItems: z.array(z.any()).optional().default([]),
   countryCode: z.string().optional(),
 });
-
-// Helper to safely parse request body
-async function safeParseBody(request: NextRequest) {
-  try {
-    return await request.json();
-  } catch (err) {
-    logger.warn('[AI Performance Tips API] Failed to parse request body:', {
-      error: err instanceof Error ? err.message : String(err),
-    });
-    return null;
-  }
-}
 
 /**
  * Generate AI-powered performance tips with fallback to rule-based logic
@@ -80,21 +69,10 @@ async function getAIPerformanceTips(
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await safeParseBody(request);
+    const parsed = await parseAndValidate(request, performanceTipsSchema, '[AI Performance Tips]');
+    if (!parsed.ok) return parsed.response;
 
-    const validationResult = performanceTipsSchema.safeParse(body || {});
-    if (!validationResult.success) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validationResult.error.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    const { performanceScore, performanceItems, countryCode } = validationResult.data as {
+    const { performanceScore, performanceItems, countryCode } = parsed.data as {
       performanceScore: number;
       performanceItems: PerformanceItem[];
       countryCode?: string;

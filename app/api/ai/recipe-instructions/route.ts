@@ -11,6 +11,7 @@ import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
 import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { parseAndValidate } from '@/lib/api/parse-request-body';
 import { z } from 'zod';
 
 const recipeInstructionsSchema = z
@@ -37,32 +38,14 @@ const recipeInstructionsSchema = z
  */
 export async function POST(request: NextRequest) {
   try {
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[AI Recipe Instructions] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const parsed = await parseAndValidate(
+      request,
+      recipeInstructionsSchema,
+      '[AI Recipe Instructions]',
+    );
+    if (!parsed.ok) return parsed.response;
 
-    const validationResult = recipeInstructionsSchema.safeParse(body);
-    if (!validationResult.success) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validationResult.error.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    const { recipe, ingredients, countryCode } = validationResult.data as {
+    const { recipe, ingredients, countryCode } = parsed.data as {
       recipe: Recipe;
       ingredients: RecipeIngredientWithDetails[];
       countryCode?: string;
