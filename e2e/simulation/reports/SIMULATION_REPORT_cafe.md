@@ -4,7 +4,7 @@
 
 - Personas: 1
 - Total Errors: 0 (Auth0/SSO/image noise excluded)
-- Bottlenecks: 35
+- Bottlenecks: 22
 - Faulty Paths: 0
 
 ---
@@ -15,41 +15,28 @@
 
 ## Bottlenecks
 
-- **cafe** / **viewDashboard**: 10581ms (threshold 5000ms) @ http://localhost:3000/webapp
-- **cafe** / **viewGuide**: 10367ms (threshold 5000ms) @ http://localhost:3000/webapp/guide
-- **cafe** / **switchTabs**: 69440ms (threshold 5000ms) @ http://localhost:3000/webapp/settings#security
-- **cafe** / **createTemperatureLog**: 19726ms (threshold 5000ms) @ http://localhost:3000/webapp/temperature
-- **cafe** / **viewParLevels**: 7904ms (threshold 5000ms) @ http://localhost:3000/webapp/par-levels
-- **cafe** / **createOrderList**: 5918ms (threshold 5000ms) @ http://localhost:3000/webapp/order-lists
-- **cafe** / **viewCleaning**: 8323ms (threshold 5000ms) @ http://localhost:3000/webapp/cleaning
-- **cafe** / **viewSetup**: 25591ms (threshold 5000ms) @ http://localhost:3000/webapp/setup
-- **cafe** / **testSearchAndFilters**: 70069ms (threshold 5000ms) @ http://localhost:3000/webapp/recipes#ingredients
-- **cafe** / **createPrepList**: 9215ms (threshold 5000ms) @ http://localhost:3000/webapp/prep-lists
-- **cafe** / **createRecipe**: 8718ms (threshold 5000ms) @ http://localhost:3000/webapp/recipes#dishes
-- **cafe** / **createParLevel**: 42163ms (threshold 5000ms) @ http://localhost:3000/webapp/par-levels
-- **cafe** / **updateIngredientStock**: 10054ms (threshold 5000ms) @ http://localhost:3000/webapp/recipes#ingredients
-- **cafe** / **testSortAndViewToggles**: 47869ms (threshold 5000ms) @ http://localhost:3000/webapp/temperature
-- **cafe** / **createTemperatureLog**: 17834ms (threshold 5000ms) @ http://localhost:3000/webapp/temperature
-- **cafe** / **viewCleaning**: 9331ms (threshold 5000ms) @ http://localhost:3000/webapp/cleaning
-- **cafe** / **viewCompliance**: 9062ms (threshold 5000ms) @ http://localhost:3000/webapp/compliance
-- **cafe** / **bulkOperations**: 34698ms (threshold 5000ms) @ http://localhost:3000/webapp/recipes
-- **cafe** / **createTemperatureLog**: 17883ms (threshold 5000ms) @ http://localhost:3000/webapp/temperature
-- **cafe** / **createOrderList**: 9942ms (threshold 5000ms) @ http://localhost:3000/webapp/order-lists
-- **cafe** / **createTemperatureEquipment**: 9512ms (threshold 5000ms) @ http://localhost:3000/webapp/temperature
-- **cafe** / **testImportExport**: 173793ms (threshold 5000ms) @ http://localhost:3000/webapp/recipes#dishes
-- **cafe** / **staffOnboarding**: 19581ms (threshold 5000ms) @ http://localhost:3000/webapp/staff
-- **cafe** / **createTemperatureLog**: 22454ms (threshold 5000ms) @ http://localhost:3000/webapp/temperature
-- **cafe** / **createPrepList**: 15929ms (threshold 5000ms) @ http://localhost:3000/webapp/prep-lists
-- **cafe** / **viewPerformance**: 5918ms (threshold 5000ms) @ http://localhost:3000/webapp/performance
-- **cafe** / **viewRoster**: 10188ms (threshold 5000ms) @ http://localhost:3000/webapp/roster
-- **cafe** / **clockInOut**: 8376ms (threshold 5000ms) @ http://localhost:3000/webapp/time-attendance
-- **cafe** / **testInlineEditing**: 9818ms (threshold 5000ms) @ http://localhost:3000/webapp/menu-builder
-- **cafe** / **viewDashboard**: 32577ms (threshold 5000ms) @ http://localhost:3000/webapp
-- **cafe** / **viewSections**: 14399ms (threshold 5000ms) @ http://localhost:3000/webapp/sections
-- **cafe** / **viewSettings**: 12953ms (threshold 5000ms) @ http://localhost:3000/webapp/settings
-- **cafe** / **testFormValidation**: 46208ms (threshold 5000ms) @ http://localhost:3000/webapp/temperature
-- **cafe** / **interactSettings**: 41116ms (threshold 5000ms) @ http://localhost:3000/webapp/settings/billing
-- **cafe** / **createCustomer**: 10643ms (threshold 5000ms) @ http://localhost:3000/webapp/customers
+- **cafe** / **createIngredient**: 7304ms (threshold 5000ms) @ http://localhost:3000/webapp/recipes?action=new#ingredients
+- **cafe** / **viewDashboard**: 5702ms (threshold 5000ms) @ http://localhost:3000/webapp
+- **cafe** / **viewGuide**: 14911ms (threshold 5000ms) @ http://localhost:3000/webapp/guide
+- **cafe** / **switchTabs**: 113310ms (threshold 5000ms) @ http://localhost:3000/webapp/settings#security
+- **cafe** / **createTemperatureLog**: 5228ms (threshold 5000ms) @ http://localhost:3000/webapp/temperature
+- **cafe** / **viewParLevels**: 9472ms (threshold 5000ms) @ http://localhost:3000/webapp/par-levels
+- **cafe** / **viewSetup**: 11462ms (threshold 5000ms) @ http://localhost:3000/webapp/setup
+- **cafe** / **testSearchAndFilters**: 36248ms (threshold 5000ms) @ http://localhost:3000/webapp/recipes#ingredients
+- **cafe** / **createPrepList**: 5396ms (threshold 5000ms) @ http://localhost:3000/webapp/prep-lists
+- **cafe** / **testSortAndViewToggles**: 26003ms (threshold 5000ms) @ http://localhost:3000/webapp/temperature
+- **cafe** / **createTemperatureLog**: 17726ms (threshold 5000ms) @ http://localhost:3000/webapp/temperature
+- **cafe** / **viewCompliance**: 7216ms (threshold 5000ms) @ http://localhost:3000/webapp/compliance
+- **cafe** / **bulkOperations**: 5416ms (threshold 5000ms) @ http://localhost:3000/webapp/recipes
+- **cafe** / **createTemperatureLog**: 19542ms (threshold 5000ms) @ http://localhost:3000/webapp/temperature
+- **cafe** / **testImportExport**: 30917ms (threshold 5000ms) @ http://localhost:3000/webapp/recipes#dishes
+- **cafe** / **staffOnboarding**: 6864ms (threshold 5000ms) @ http://localhost:3000/webapp/staff
+- **cafe** / **createTemperatureLog**: 10908ms (threshold 5000ms) @ http://localhost:3000/webapp/temperature
+- **cafe** / **clockInOut**: 6978ms (threshold 5000ms) @ http://localhost:3000/webapp/time-attendance
+- **cafe** / **testInlineEditing**: 15398ms (threshold 5000ms) @ http://localhost:3000/webapp/menu-builder
+- **cafe** / **viewSections**: 10548ms (threshold 5000ms) @ http://localhost:3000/webapp/sections
+- **cafe** / **testFormValidation**: 18580ms (threshold 5000ms) @ http://localhost:3000/webapp/temperature
+- **cafe** / **interactSettings**: 59691ms (threshold 5000ms) @ http://localhost:3000/webapp/settings/billing
 
 ---
 

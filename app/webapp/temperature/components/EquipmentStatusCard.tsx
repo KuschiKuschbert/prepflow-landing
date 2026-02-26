@@ -8,6 +8,8 @@ interface EquipmentStatusCardProps {
   equipment: TemperatureEquipment;
   status: { status: string; color: string; temperature?: number };
   logs: TemperatureLog[];
+  /** Server-aggregated reading count (takes precedence over logs.length when provided) */
+  readingCount?: number;
   timeFilter: string;
   isSelected: boolean;
   isCompact: boolean;
@@ -19,12 +21,15 @@ export function EquipmentStatusCard({
   equipment,
   status,
   logs,
+  readingCount,
   timeFilter,
   isSelected,
   isCompact,
   onSelect,
   onHover,
 }: EquipmentStatusCardProps) {
+  // Use server-aggregated count when available, fall back to raw logs length
+  const displayCount = readingCount ?? logs.length;
   const isOutOfRange = status.status === 'out-of-range';
   const needsSetup = status.status === 'no-thresholds';
 
@@ -105,7 +110,7 @@ export function EquipmentStatusCard({
           </div>
           <div className="flex items-center gap-2 text-xs text-[var(--foreground-muted)]">
             <span>
-              {logs.length} reading{logs.length !== 1 ? 's' : ''}
+              {displayCount} reading{displayCount !== 1 ? 's' : ''}
             </span>
             {!isCompact && (
               <>

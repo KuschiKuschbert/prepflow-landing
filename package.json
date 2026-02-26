@@ -109,6 +109,8 @@
     "simulation:fix-loop:fast": "SIM_DAYS=2 node scripts/simulation-fix-loop.js",
     "simulation:fix-loop:full-week": "SIM_DAYS=7 SIM_FULL_SCOPE=true node scripts/simulation-fix-loop.js",
     "test:simulation:4week": "node scripts/verify-simulation-prerequisites.js && SIM_WEEKS=4 SIM_FULL_SCOPE=true SIM_RESILIENT=true SIM_FAST=true playwright test -c playwright.simulation.config.ts --headed --workers=1 e2e/workflows/persona-cafe.spec.ts e2e/workflows/persona-restaurant.spec.ts e2e/workflows/persona-food-truck.spec.ts",
+    "seed:two-months": "npx tsx scripts/seed-two-months.ts",
+    "seed:two-months:then-sim": "npm run seed:two-months && npm run test:simulation",
     "scrape:recipes": "tsx lib/recipes/cli.ts",
     "scrape:recipes:allrecipes": "tsx lib/recipes/cli.ts --source allrecipes",
     "scrape:recipes:bbc": "tsx lib/recipes/cli.ts --source bbc-good-food",
@@ -149,7 +151,9 @@
     "skill:merge": "node scripts/skill-learning/merge.js",
     "skill:merge:review": "node scripts/skill-learning/merge.js --interactive",
     "skill:map-suggest": "node scripts/skill-learning/map-suggest.js",
-    "skill:map-apply": "node scripts/skill-learning/map-apply.js"
+    "skill:map-apply": "node scripts/skill-learning/map-apply.js",
+    "seed:five-years": "npx tsx scripts/seed-five-years.ts",
+    "seed:catalog": "npx tsx scripts/seed-five-years-catalog.ts"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^4.13.3",
@@ -160,6 +164,7 @@
     "@huggingface/inference": "^4.13.4",
     "@playwright/test": "^1.58.2",
     "@qwik.dev/partytown": "^0.11.2",
+    "@sentry/nextjs": "^10.40.0",
     "@sparticuz/chromium": "^143.0.4",
     "@supabase/supabase-js": "^2.78.0",
     "@tanstack/react-query": "^5.90.21",

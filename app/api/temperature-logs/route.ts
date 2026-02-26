@@ -43,6 +43,8 @@ async function safeParseBody<T>(req: NextRequest, schema: ZodSchema<T>): Promise
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const date = searchParams.get('date');
+  const dateFrom = searchParams.get('date_from') || searchParams.get('dateFrom');
+  const dateTo = searchParams.get('date_to') || searchParams.get('dateTo');
   const type = searchParams.get('type');
   const location = searchParams.get('location');
   const equipmentId = searchParams.get('equipment_id');
@@ -61,7 +63,7 @@ export async function GET(request: NextRequest) {
       count,
     } = await buildTemperatureLogQuery(
       supabase,
-      { date, type, location, equipmentId },
+      { date, dateFrom, dateTo, type, location, equipmentId },
       page,
       pageSize,
     );

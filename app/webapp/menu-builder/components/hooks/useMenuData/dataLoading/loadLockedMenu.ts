@@ -76,8 +76,8 @@ export async function loadLockedMenu({
   const bgFetch = async () => {
     try {
       const [dishesResponse, recipesResponse, statsResponse] = await Promise.all([
-        fetch('/api/dishes?pageSize=1000', { cache: 'no-store' }),
-        fetch('/api/recipes?pageSize=1000', { cache: 'no-store' }),
+        fetch('/api/dishes/catalog', { cache: 'no-store' }),
+        fetch('/api/recipes/catalog', { cache: 'no-store' }),
         fetch(`/api/menus/${menuId}/statistics`, { cache: 'no-store' }),
       ]);
       const dishesData = await dishesResponse.json();

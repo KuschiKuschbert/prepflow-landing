@@ -1,7 +1,7 @@
 'use client';
 
 import { logger } from '@/lib/logger';
-import { Dish, Recipe, UnifiedItem } from '@/lib/types/recipes';
+import { UnifiedItem } from '@/lib/types/recipes';
 import { useCallback, useEffect, useState } from 'react';
 
 interface UseUnifiedItemsReturn {
@@ -21,10 +21,10 @@ export function useUnifiedItems(): UseUnifiedItemsReturn {
     setLoading(true);
     setError(null);
     try {
-      // Fetch recipes and dishes in parallel
+      // Fetch recipes and dishes via lightweight catalog endpoints
       const [recipesResponse, dishesResponse] = await Promise.all([
-        fetch('/api/recipes?pageSize=1000', { cache: 'no-store' }),
-        fetch('/api/dishes?pageSize=1000', { cache: 'no-store' }),
+        fetch('/api/recipes/catalog', { cache: 'no-store' }),
+        fetch('/api/dishes/catalog', { cache: 'no-store' }),
       ]);
 
       const recipesResult = await recipesResponse.json();
@@ -36,14 +36,16 @@ export function useUnifiedItems(): UseUnifiedItemsReturn {
         return;
       }
 
-      // Convert recipes to unified items
-      const recipeItems: UnifiedItem[] = (recipesResult.recipes || []).map((recipe: Recipe) => ({
+      // Convert recipes to unified items (catalog fields are a subset of Recipe)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const recipeItems: UnifiedItem[] = (recipesResult.recipes || []).map((recipe: any) => ({
         ...recipe,
         itemType: 'recipe' as const,
       }));
 
-      // Convert dishes to unified items
-      const dishItems: UnifiedItem[] = (dishesResult.dishes || []).map((dish: Dish) => ({
+      // Convert dishes to unified items (catalog fields are a subset of Dish)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const dishItems: UnifiedItem[] = (dishesResult.dishes || []).map((dish: any) => ({
         ...dish,
         itemType: 'dish' as const,
       }));

@@ -16,8 +16,10 @@ import { TemperatureLogsLoadingState } from './components/TemperatureLogsLoading
 import { useTemperaturePageData } from './hooks/useTemperaturePageData';
 import { PAGE_TIPS_CONFIG } from '@/lib/page-help/page-tips-content';
 import { useTemperaturePageHandlers } from './hooks/useTemperaturePageHandlers';
+import { logger } from '@/lib/logger';
+import { markFirstDone } from '@/lib/page-help/first-done-storage';
 
-// Lazy load temperature tabs to reduce initial bundle size (TemperatureAnalyticsTab uses Recharts)
+// Lazy load temperature tabs to reduce initial bundle size
 const TemperatureEquipmentTab = dynamic(() => import('./components/TemperatureEquipmentTab'), {
   ssr: false,
   loading: () => <PageSkeleton />,
@@ -33,17 +35,10 @@ const TemperatureAnalyticsTab = dynamic(() => import('./components/TemperatureAn
   loading: () => <PageSkeleton />,
 });
 
-import { markFirstDone } from '@/lib/page-help/first-done-storage';
-import { logger } from '@/lib/logger';
 function TemperatureLogsPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'logs' | 'equipment' | 'analytics'>('logs');
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const {
     logs,
@@ -51,7 +46,6 @@ function TemperatureLogsPageContent() {
     equipment,
     setEquipment,
     loading,
-    analyticsLoading,
     logsLoading,
     selectedDate,
     setSelectedDate,
@@ -61,7 +55,6 @@ function TemperatureLogsPageContent() {
     setPage,
     total,
     totalPages,
-    pageSize: _pageSize,
     fetchAllLogs,
     fetchEquipment,
     queryClient,
@@ -88,31 +81,28 @@ function TemperatureLogsPageContent() {
     setEquipment,
   });
 
+  // Pass allLogs to warnings hook (now always []) - hook is a no-op until refactored
   useTemperatureWarnings({ allLogs, equipment });
 
   // Mark first done for InlineHint/RescueNudge when user creates equipment or logs
   useEffect(() => {
     if (equipment.length > 0) markFirstDone('temperature-equipment');
   }, [equipment.length]);
+
   useEffect(() => {
-    if (allLogs.length > 0) markFirstDone('temperature-logs');
-  }, [allLogs.length]);
+    if (logs.length > 0) markFirstDone('temperature-logs');
+  }, [logs.length]);
 
   // Check for action=new query parameter and open add log form
   useEffect(() => {
     const action = searchParams.get('action');
     if (action === 'new' && !showAddLog) {
-      // Ensure logs tab is active
       setActiveTab('logs');
-      // Open the add log form
       setShowAddLog(true);
-      // Clean up URL by removing query parameter
-      const newUrl = window.location.pathname;
-      router.replace(newUrl);
+      router.replace(window.location.pathname);
     }
   }, [searchParams, showAddLog, setShowAddLog, router]);
 
-  // Show loading state while fetching equipment
   if (loading) {
     return (
       <ResponsivePageContainer>
@@ -174,12 +164,11 @@ function TemperatureLogsPageContent() {
 
         {activeTab === 'analytics' && (
           <TemperatureAnalyticsTab
-            allLogs={allLogs}
             equipment={equipment}
-            isLoading={analyticsLoading}
+            isLoading={loading}
             onRefreshLogs={() => {
-              logger.dev('🔄 Refreshing analytics data after sample generation...');
-              fetchAllLogs(1000, true).catch(() => {});
+              logger.dev('[Temperature] Refreshing analytics data...');
+              handleRefreshLogs();
             }}
           />
         )}

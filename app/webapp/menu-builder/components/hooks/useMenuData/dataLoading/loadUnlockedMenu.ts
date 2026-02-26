@@ -38,8 +38,8 @@ export async function loadUnlockedMenu({
 }: LoadUnlockedMenuParams): Promise<void> {
   const fetchPromise = Promise.all([
     fetch(`/api/menus/${menuId}`, { cache: 'no-store' }),
-    fetch('/api/dishes?pageSize=1000', { cache: 'no-store' }),
-    fetch('/api/recipes?pageSize=1000', { cache: 'no-store' }),
+    fetch('/api/dishes/catalog', { cache: 'no-store' }),
+    fetch('/api/recipes/catalog', { cache: 'no-store' }),
     fetch(`/api/menus/${menuId}/statistics`, { cache: 'no-store' }),
   ]);
 

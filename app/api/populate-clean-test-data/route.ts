@@ -20,6 +20,18 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
+    // Guard: dev-only — blocked in production to prevent data destruction
+    if (process.env.NODE_ENV === 'production') {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          'Test data population is disabled in production',
+          'FORBIDDEN',
+          403,
+        ),
+        { status: 403 },
+      );
+    }
+
     // Get country code from query parameter (default to 'AU')
     const { searchParams } = new URL(request.url);
     const countryCode = searchParams.get('countryCode') || 'AU';

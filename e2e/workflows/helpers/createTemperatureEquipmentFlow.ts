@@ -19,12 +19,24 @@ export async function createTemperatureEquipmentFlow(
   await page.waitForTimeout(getSimWait(500));
   await collectPageErrors(page);
 
+  // Wait for the page to settle before clicking the tab - large log datasets cause re-renders
+  await page.waitForLoadState('domcontentloaded');
+  await page.waitForTimeout(getSimWait(1500));
+
   const equipmentTab = page
     .locator('button:has-text("Equipment"), a:has-text("Equipment")')
     .first();
-  if (await equipmentTab.isVisible({ timeout: 3000 }).catch(() => false)) {
-    await equipmentTab.click();
-    await page.waitForTimeout(getSimWait(500));
+  if (await equipmentTab.isVisible({ timeout: 5000 }).catch(() => false)) {
+    // Use force:true to handle element detaching during re-renders from large log datasets
+    await equipmentTab.click({ force: true, timeout: 10000 }).catch(async () => {
+      // Re-query after potential re-render and try once more
+      await page.waitForTimeout(getSimWait(1000));
+      const freshTab = page
+        .locator('button:has-text("Equipment"), a:has-text("Equipment")')
+        .first();
+      await freshTab.click({ force: true }).catch(() => {});
+    });
+    await page.waitForTimeout(getSimWait(800));
   }
 
   const addBtn = page

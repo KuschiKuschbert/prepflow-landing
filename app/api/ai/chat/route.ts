@@ -10,6 +10,7 @@ import type { AIChatMessage, AIRequestOptions } from '@/lib/ai/types';
 
 import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { parseAndValidate } from '@/lib/api/parse-request-body';
 import { z } from 'zod';
 
 const aiChatSchema = z.object({
@@ -43,32 +44,10 @@ const aiChatSchema = z.object({
  */
 export async function POST(request: NextRequest) {
   try {
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[AI Chat API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const parsed = await parseAndValidate(request, aiChatSchema, '[AI Chat API]');
+    if (!parsed.ok) return parsed.response;
 
-    const validationResult = aiChatSchema.safeParse(body);
-    if (!validationResult.success) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validationResult.error.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    const { messages, countryCode, options } = validationResult.data;
+    const { messages, countryCode, options } = parsed.data;
     const finalCountryCode = countryCode || 'AU';
     const response = await generateAIResponse(messages, finalCountryCode, options);
 
