@@ -118,6 +118,10 @@ export function useSelection<T extends { id: string }>(items: T[]) {
 
 ## RETROFIT LOG
 
+### 2025-02-26 — Batch 1 (core infrastructure)
+
+- `hooks/useAIPerformanceTips.ts`: added missing `'use client'` directive (file uses `useState`/`useCallback`)
+
 ## LAST UPDATED
 
 2025-02-26

@@ -117,6 +117,11 @@ if (isLoading) return <TableSkeleton rows={10} columns={5} />;
 
 ## RETROFIT LOG
 
+### 2025-02-26 — Batch 1 (core infrastructure)
+
+- `components/ui/CSVImportModal.tsx`: added justification comments for `T = any` generic defaults on the interface and function signature
+- `contexts/NotificationContext.tsx`: added JSDoc to `NotificationProvider` and `useNotification` exports; re-classified as component/context (300-line limit) rather than hook (120-line limit) — 194 lines is within bounds
+
 ## LAST UPDATED
 
 2025-02-26

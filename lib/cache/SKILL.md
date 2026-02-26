@@ -94,6 +94,10 @@ useEffect(() => {
 
 ## RETROFIT LOG
 
+### 2025-02-26 — Batch 1 (core infrastructure)
+
+- `lib/cache/data-cache.ts`: added JSDoc blocks for all 6 exported functions (`cacheData`, `getCachedData`, `clearCache`, `clearAllCaches`, `prefetchApi`, `prefetchApis`)
+
 ## LAST UPDATED
 
 2025-02-26

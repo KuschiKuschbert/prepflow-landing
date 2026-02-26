@@ -15,6 +15,13 @@ function getTimestampKey(key: string): string {
   return `prepflow_cache_${key}_timestamp`;
 }
 
+/**
+ * Store data in sessionStorage with an expiry timestamp.
+ *
+ * @param {string} key - Cache key (prefixed internally with `prepflow_cache_`)
+ * @param {T} data - Serialisable data to cache
+ * @param {number} [expiryMs] - TTL in milliseconds (default: 5 minutes)
+ */
 export function cacheData<T>(key: string, data: T, expiryMs: number = CACHE_EXPIRY_MS): void {
   if (typeof window === 'undefined') return;
   try {
@@ -35,6 +42,12 @@ export function cacheData<T>(key: string, data: T, expiryMs: number = CACHE_EXPI
   }
 }
 
+/**
+ * Retrieve data from sessionStorage if it exists and has not expired.
+ *
+ * @param {string} key - Cache key used in {@link cacheData}
+ * @returns {T | null} Cached value, or `null` if missing or expired
+ */
 export function getCachedData<T>(key: string): T | null {
   if (typeof window === 'undefined') return null;
   try {
@@ -66,6 +79,11 @@ export function getCachedData<T>(key: string): T | null {
   }
 }
 
+/**
+ * Remove a single cache entry and its associated metadata from sessionStorage.
+ *
+ * @param {string} key - Cache key to invalidate
+ */
 export function clearCache(key: string): void {
   if (typeof window === 'undefined') return;
   try {
@@ -77,6 +95,10 @@ export function clearCache(key: string): void {
   }
 }
 
+/**
+ * Remove every PrepFlow cache entry from sessionStorage.
+ * Useful on logout or when a full data refresh is needed.
+ */
 export function clearAllCaches(): void {
   if (typeof window === 'undefined') return;
   try {
@@ -91,6 +113,12 @@ export function clearAllCaches(): void {
   }
 }
 
+/**
+ * Insert a `<link rel="prefetch">` tag for the given API endpoint so the
+ * browser can pre-warm the response in its HTTP cache.
+ *
+ * @param {string} endpoint - Absolute or root-relative URL to prefetch
+ */
 export function prefetchApi(endpoint: string): void {
   if (typeof window === 'undefined') return;
   try {
@@ -106,6 +134,11 @@ export function prefetchApi(endpoint: string): void {
   }
 }
 
+/**
+ * Prefetch multiple API endpoints in a single call.
+ *
+ * @param {string[]} endpoints - Array of URLs to prefetch
+ */
 export function prefetchApis(endpoints: string[]): void {
   endpoints.forEach(endpoint => prefetchApi(endpoint));
 }

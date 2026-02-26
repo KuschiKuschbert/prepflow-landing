@@ -21,6 +21,8 @@ import { ImportProgress, type ImportProgressState } from './ImportProgress';
 
 export type { CSVImportConfig } from '@/lib/imports/types';
 
+// T defaults to `any` so callers without a concrete record type still compile;
+// callers should provide a specific type (e.g. CSVImportModalProps<Ingredient>).
 export interface CSVImportModalProps<T = any> {
   /** Whether modal is open */
   isOpen: boolean;
@@ -42,6 +44,7 @@ export interface CSVImportModalProps<T = any> {
  * @param {CSVImportModalProps} props - Component props
  * @returns {JSX.Element} CSV import modal component
  */
+// Generic default `T = any` — callers should pass a concrete record type.
 export function CSVImportModal<T = any>({
   isOpen,
   onClose,

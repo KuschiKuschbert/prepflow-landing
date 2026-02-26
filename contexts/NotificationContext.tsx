@@ -20,6 +20,14 @@ interface NotificationContextType {
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
+/**
+ * Provides toast notification state to the component tree.
+ * Wraps children with `NotificationContext` and renders the toast container.
+ *
+ * @param {object} props
+ * @param {ReactNode} props.children - Components that can call {@link useNotification}
+ * @returns {JSX.Element} Provider with notification overlay
+ */
 export function NotificationProvider({ children }: { children: ReactNode }) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
@@ -187,6 +195,18 @@ function Toast({ type, message }: ToastProps) {
   );
 }
 
+/**
+ * Access the notification API inside any component wrapped by {@link NotificationProvider}.
+ *
+ * @returns {{ showSuccess, showError, showWarning, showInfo }} - Toast trigger functions
+ * @throws {Error} If called outside of `NotificationProvider`
+ *
+ * @example
+ * ```tsx
+ * const { showSuccess } = useNotification();
+ * showSuccess('Ingredient saved!');
+ * ```
+ */
 export function useNotification() {
   const context = useContext(NotificationContext);
   if (!context) throw new Error('useNotification must be used within NotificationProvider');

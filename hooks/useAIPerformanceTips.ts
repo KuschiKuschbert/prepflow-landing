@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * AI Performance Tips Hook
  *
