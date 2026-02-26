@@ -49,13 +49,21 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const { supabase, error } = await standardAdminChecks(request);
   if (error) return error;
-  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  if (!supabase)
+    return NextResponse.json(
+      ApiErrorHandler.createError('Database unavailable', 'DATABASE_ERROR', 500),
+      { status: 500 },
+    );
   return handleCreateTemperatureEquipment(supabase, request);
 }
 
 export async function DELETE(request: NextRequest) {
   const { supabase, error } = await standardAdminChecks(request);
   if (error) return error;
-  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  if (!supabase)
+    return NextResponse.json(
+      ApiErrorHandler.createError('Database unavailable', 'DATABASE_ERROR', 500),
+      { status: 500 },
+    );
   return handleDeleteTemperatureEquipment(supabase, request);
 }

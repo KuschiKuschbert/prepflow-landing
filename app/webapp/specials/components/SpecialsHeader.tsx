@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { AnimatePresence, motion } from 'framer-motion';
 import { AlertTriangle, Camera, Search, Sparkles, X } from 'lucide-react';

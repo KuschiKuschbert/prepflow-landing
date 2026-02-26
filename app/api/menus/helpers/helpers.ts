@@ -2,7 +2,10 @@ import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Menu } from './schemas';
 
-export async function fetchMenuCounts(supabase: SupabaseClient, menus: any[]): Promise<Menu[]> {
+export async function fetchMenuCounts(
+  supabase: SupabaseClient,
+  menus: { id: string }[],
+): Promise<Menu[]> {
   return Promise.all(
     menus.map(async menu => {
       const { count: itemsCount, error: itemsError } = await supabase

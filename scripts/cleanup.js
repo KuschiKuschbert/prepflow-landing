@@ -86,6 +86,9 @@ const FIX_MODULES = {
   'voice-consistency': voiceConsistencyFix,
 };
 
+// Safe fixes only - skip jscodeshift-based codemods (breakpoints, console-logs) that can fail on edge cases
+const SAFE_FIX_ORDER = ['unused-imports', 'prettier', 'dead-code', 'voice-consistency'];
+
 /**
  * Check if file is in protected curbos area
  */
@@ -126,9 +129,11 @@ function getStagedFiles() {
  */
 function parseArgs() {
   const args = process.argv.slice(2);
+  const doingFix = args.includes('--fix') || args.includes('--fix-safe');
   const options = {
-    check: args.includes('--check') || (!args.includes('--fix') && !args.includes('--report')),
+    check: args.includes('--check') || (!doingFix && !args.includes('--report')),
     fix: args.includes('--fix'),
+    fixSafe: args.includes('--fix-safe'),
     report: args.includes('--report'),
     staged: args.includes('--staged'),
     files: null,
@@ -178,16 +183,23 @@ async function runChecks(files = null) {
 }
 
 /**
- * Run all fixes
+ * Run all fixes (or only safe fixes when fixSafe is true)
  */
-async function runFixes(files = null) {
+async function runFixes(files = null, fixSafe = false) {
   const fixResults = [];
 
   // Filter out curbos files from all fixes
   const filteredFiles = filterCurbosFiles(files);
 
-  console.log('🔧 Running cleanup fixes...\n');
-  for (const [checkName, fixModule] of Object.entries(FIX_MODULES)) {
+  const fixNames = fixSafe ? SAFE_FIX_ORDER : Object.keys(FIX_MODULES);
+  console.log(
+    fixSafe
+      ? '🔧 Running safe cleanup fixes (skipping breakpoints, console-logs)...\n'
+      : '🔧 Running cleanup fixes...\n',
+  );
+  for (const checkName of fixNames) {
+    const fixModule = FIX_MODULES[checkName];
+    if (!fixModule) continue;
     try {
       console.log(`  Fixing ${checkName}...`);
       const result = await fixModule.fix(filteredFiles);
@@ -301,8 +313,8 @@ async function main() {
   }
 
   // Run fixes
-  if (options.fix) {
-    const fixResults = await runFixes(files);
+  if (options.fix || options.fixSafe) {
+    const fixResults = await runFixes(files, options.fixSafe);
 
     console.log('\n🔧 Fix Summary:');
     console.log('='.repeat(50));

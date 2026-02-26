@@ -110,15 +110,54 @@ export async function loginWithSimulationAccount(page: Page): Promise<boolean> {
 
     await fillAndSubmitAuth0Form(page, email, password);
 
-    // Wait for redirect: Auth0 callback -> localhost/webapp (or /)
+    // Wait for redirect: Auth0 callback -> localhost/webapp (or /) OR consent page
     await page.waitForURL(
       url => {
         const onLocalhost = url.hostname === 'localhost' || url.hostname.startsWith('127.0.0.1');
         const onWebapp = url.pathname.startsWith('/webapp') || url.pathname === '/';
-        return onLocalhost && onWebapp;
+        const onConsentPage = isAuth0Page(url.hostname) && url.pathname.includes('/consent');
+        return (onLocalhost && onWebapp) || onConsentPage;
       },
       { timeout: 45000 },
     );
+
+    // Handle Auth0 consent page if we landed there
+    const postLoginUrl = page.url();
+    if (isAuth0Page(new URL(postLoginUrl).hostname) && postLoginUrl.includes('/consent')) {
+      if (DEBUG) {
+        console.log('[SIM_AUTH] Consent page detected, accepting...');
+      }
+      // Accept consent - Auth0 consent page has an Accept/Allow button
+      const acceptBtn = page
+        .locator(
+          'button[name="action"][value="accept"], button:has-text("Accept"), ' +
+            'button:has-text("Allow"), button:has-text("Authorize"), ' +
+            'input[type="submit"][value="Accept"], input[type="submit"][value="Allow"]',
+        )
+        .first();
+      if (await acceptBtn.isVisible({ timeout: 8000 }).catch(() => false)) {
+        await acceptBtn.click();
+      } else {
+        // Scroll down and try again (consent UI might be below the fold)
+        await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+        await page.waitForTimeout(1000);
+        const acceptBtnLast = page
+          .locator('button[name="action"], button:has-text("Accept"), button:has-text("Allow")')
+          .last();
+        if (await acceptBtnLast.isVisible({ timeout: 3000 }).catch(() => false)) {
+          await acceptBtnLast.click();
+        }
+      }
+      // Wait for redirect back to localhost webapp after accepting consent
+      await page.waitForURL(
+        url => {
+          const onLocalhost = url.hostname === 'localhost' || url.hostname.startsWith('127.0.0.1');
+          const onWebapp = url.pathname.startsWith('/webapp') || url.pathname === '/';
+          return onLocalhost && onWebapp;
+        },
+        { timeout: 30000 },
+      );
+    }
 
     // Brief wait for app to finish loading
     await page.waitForLoadState('load', { timeout: 10000 }).catch(() => {});

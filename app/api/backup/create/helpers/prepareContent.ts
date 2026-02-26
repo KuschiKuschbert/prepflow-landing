@@ -1,5 +1,6 @@
 import { encryptBackup } from '@/lib/backup/encryption';
 import { convertToSQL } from '@/lib/backup/export';
+import type { BackupData } from '@/lib/backup/types';
 import { storeBackupMetadata } from './storeMetadata';
 
 export type BackupFormat = 'json' | 'sql' | 'encrypted';
@@ -14,8 +15,7 @@ export interface ProcessedBackup {
 export async function prepareBackupContent(
   userId: string,
   format: BackupFormat,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  backupData: any, // justified: complex dynamic export data
+  backupData: BackupData,
   encryptionMode?: 'user-password' | 'prepflow-only',
   password?: string,
 ): Promise<ProcessedBackup> {

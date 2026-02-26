@@ -7,6 +7,7 @@ import {
   aggregateDishDietaryStatus,
   aggregateRecipeDietaryStatus,
 } from '@/lib/dietary/dietary-aggregation';
+import type { ExportTheme } from '@/lib/exports/themes';
 import { logger } from '@/lib/logger';
 import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { NextRequest, NextResponse } from 'next/server';
@@ -25,7 +26,16 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     const { searchParams } = new URL(request.url);
 
     const format = searchParams.get('format') || 'html';
-    const theme = (searchParams.get('theme') || 'cyber-carrot') as any;
+    const themeParam = searchParams.get('theme') || 'cyber-carrot';
+    const VALID_THEMES: ExportTheme[] = [
+      'cyber-carrot',
+      'electric-lemon',
+      'phantom-pepper',
+      'cosmic-blueberry',
+    ];
+    const theme: ExportTheme = VALID_THEMES.includes(themeParam as ExportTheme)
+      ? (themeParam as ExportTheme)
+      : 'cyber-carrot';
 
     if (!menuId) {
       return NextResponse.json(

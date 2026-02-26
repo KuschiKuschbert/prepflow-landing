@@ -45,9 +45,9 @@ export async function getUserTablesWithData(userId: string): Promise<TableData[]
         continue;
       }
 
-      const parentIds = (parentData || [])
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .map((row: any) => row[childTable.parentIdColumn]) // justified
+      const parentRows = (parentData || []) as unknown as Record<string, unknown>[];
+      const parentIds = parentRows
+        .map(row => row[childTable.parentIdColumn])
         .filter(Boolean) as string[];
 
       if (parentIds.length > 0) {

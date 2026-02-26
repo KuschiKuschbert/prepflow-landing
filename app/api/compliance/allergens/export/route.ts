@@ -7,6 +7,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { checkFeatureAccess } from '@/lib/api-feature-gate';
 import { requireAuth } from '@/lib/auth0-api-helpers';
+import type { ExportTheme } from '@/lib/exports/themes';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
@@ -28,7 +29,16 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const format = searchParams.get('format') || 'html';
-    const theme = (searchParams.get('theme') || 'cyber-carrot') as any;
+    const themeParam = searchParams.get('theme') || 'cyber-carrot';
+    const VALID_THEMES: ExportTheme[] = [
+      'cyber-carrot',
+      'electric-lemon',
+      'phantom-pepper',
+      'cosmic-blueberry',
+    ];
+    const theme: ExportTheme = VALID_THEMES.includes(themeParam as ExportTheme)
+      ? (themeParam as ExportTheme)
+      : 'cyber-carrot';
     const excludeAllergen = searchParams.get('exclude_allergen');
     const menuIdsParam = searchParams.get('menu_ids');
     const menuIds = menuIdsParam ? menuIdsParam.split(',').filter(id => id.trim()) : null;

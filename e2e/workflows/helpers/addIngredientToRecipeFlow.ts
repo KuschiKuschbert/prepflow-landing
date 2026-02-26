@@ -1,6 +1,7 @@
 /**
  * Helper function for adding an ingredient to a recipe in COGS page.
  */
+import { safeGoto } from '../../helpers/sim-wait';
 import type { Page } from '@playwright/test';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
@@ -11,8 +12,7 @@ export async function addIngredientToRecipeFlow(
   testSteps: string[],
 ): Promise<void> {
   testSteps.push('Step 11: Navigate to COGS page');
-  await page.goto('/webapp/cogs');
-  await page.waitForLoadState('domcontentloaded');
+  if (!(await safeGoto(page, '/webapp/cogs'))) { return; }
   await page.waitForTimeout(1500);
   await collectPageErrors(page);
 

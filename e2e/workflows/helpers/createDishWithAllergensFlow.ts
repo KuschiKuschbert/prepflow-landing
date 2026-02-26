@@ -6,7 +6,7 @@
  */
 import type { Page } from '@playwright/test';
 import { waitForFormSubmission } from '../../helpers/form-helpers';
-import { getSimWait } from '../../helpers/sim-wait';
+import { getSimWait, safeGoto } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 export async function createDishWithAllergensFlow(
@@ -17,8 +17,7 @@ export async function createDishWithAllergensFlow(
   const dishName = `${prefix}_AllergenDish`;
 
   testSteps.push('Navigate to DishBuilder (Dishes tab)');
-  await page.goto('/webapp/recipes?builder=true#dishes');
-  await page.waitForLoadState('domcontentloaded');
+  if (!(await safeGoto(page, '/webapp/recipes?builder=true#dishes'))) { return; }
   await page.waitForTimeout(getSimWait(4000));
   await collectPageErrors(page);
 

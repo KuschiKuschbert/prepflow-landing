@@ -75,11 +75,18 @@ export async function GET(req: NextRequest) {
     ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
     const startDate = ninetyDaysAgo.toISOString().split('T')[0];
 
-    const { data: logs } = await supabaseAdmin
+    const { data: logs, error: logsError } = await supabaseAdmin
       .from('daily_weather_logs')
       .select('log_date, temp_celsius_max, temp_celsius_min, precipitation_mm, weather_code')
       .gte('log_date', startDate)
       .lt('log_date', today);
+
+    if (logsError) {
+      logger.error('[Weather Performance Insight] Failed to fetch daily weather logs', {
+        error: logsError,
+      });
+      return NextResponse.json({ insight: null });
+    }
 
     let similarCount = 0;
     for (const log of logs || []) {

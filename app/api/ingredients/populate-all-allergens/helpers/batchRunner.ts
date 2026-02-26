@@ -1,5 +1,13 @@
 import { processIngredientBatch } from './processIngredientBatch';
 
+export type IngredientForBatch = {
+  id: string;
+  ingredient_name: string;
+  brand?: string | null;
+  allergens?: string[] | null;
+  allergen_source?: { manual?: boolean; ai?: boolean } | null;
+};
+
 export interface BatchProcessingResult {
   successful: number;
   failed: number;
@@ -14,7 +22,7 @@ export interface BatchProcessingResult {
 }
 
 export async function processAllBatches(
-  ingredientsToProcess: any[],
+  ingredientsToProcess: IngredientForBatch[],
   batchSize: number,
   forceAi: boolean,
 ): Promise<BatchProcessingResult> {

@@ -93,7 +93,7 @@ export async function calculateDishCost(
 
   // Calculate cost from standalone ingredients
   for (const di of dishIngredients) {
-    const ingredient = di.ingredients as Record<string, any> | undefined;
+    const ingredient = di.ingredients as Record<string, unknown> | undefined;
     if (ingredient) {
       const costPerUnit =
         (ingredient.cost_per_unit_incl_trim as number) || (ingredient.cost_per_unit as number) || 0;
@@ -108,8 +108,8 @@ export async function calculateDishCost(
       }
 
       // For regular ingredients: apply waste/yield adjustments
-      const wastePercent = ingredient.trim_peel_waste_percentage || 0;
-      const yieldPercent = ingredient.yield_percentage || 100;
+      const wastePercent = (ingredient.trim_peel_waste_percentage as number) || 0;
+      const yieldPercent = (ingredient.yield_percentage as number) || 100;
 
       let adjustedCost = quantity * costPerUnit;
       if (!ingredient.cost_per_unit_incl_trim && wastePercent > 0) {

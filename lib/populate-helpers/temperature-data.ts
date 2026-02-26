@@ -66,7 +66,7 @@ export async function populateTemperatureData(
               location: log.location,
               notes: log.notes,
               logged_by: log.logged_by,
-              equipment_id: log.equipment_id || null,
+              // equipment_id column does not exist on temperature_logs table
             })),
           );
 

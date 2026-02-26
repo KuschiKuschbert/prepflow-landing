@@ -64,7 +64,5 @@ export const updateIngredientSchema = z.object({
   notes: z.string().optional(),
 });
 
-export type UpdateIngredientInput = z.infer<typeof updateIngredientSchema>;
-
 export const updateIngredientDataSchema = updateIngredientSchema.omit({ id: true });
 export type UpdateIngredientData = z.infer<typeof updateIngredientDataSchema>;

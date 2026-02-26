@@ -21,9 +21,10 @@ export async function safeParseBody(request: NextRequest) {
   }
 }
 
-// Helper to apply user filter to query
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function applyUserFilter(query: any, userId: string | null | undefined) {
+/** Query builder with eq/is filter methods - generic to preserve Supabase chain types */
+function applyUserFilter<
+  T extends { eq(column: string, value: unknown): T; is(column: string, value: unknown): T },
+>(query: T, userId: string | null | undefined): T {
   if (userId !== undefined && userId !== null) {
     return query.eq('user_id', userId);
   }

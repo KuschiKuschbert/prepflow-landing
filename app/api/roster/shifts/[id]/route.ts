@@ -7,6 +7,7 @@
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getAuthenticatedUserByEmail } from '@/lib/api-helpers/getAuthenticatedUserByEmail';
+import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import type { CreateShiftInput } from '../helpers/types';
@@ -60,6 +61,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
 
     return await getShift(supabaseAdmin, id);
   } catch (err) {
+    logger.error('[Roster Shifts] GET error:', { error: err });
     return catchShiftsHandler(err, 'GET');
   }
 }
@@ -115,6 +117,7 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
     const { id } = await context.params;
     return await deleteShift(supabaseAdmin, id, userId);
   } catch (err) {
+    logger.error('[Roster Shifts] DELETE error:', { error: err });
     return catchShiftsHandler(err, 'DELETE');
   }
 }

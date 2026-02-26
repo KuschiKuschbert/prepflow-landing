@@ -8,7 +8,7 @@
  */
 import type { Page } from '@playwright/test';
 import { waitForFormSubmission } from '../../helpers/form-helpers';
-import { getSimWait } from '../../helpers/sim-wait';
+import { getSimWait, safeGoto } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 export async function createDetailedRecipeFlow(
@@ -19,8 +19,7 @@ export async function createDetailedRecipeFlow(
   const recipeName = `${prefix}_DetailedRecipe`;
 
   testSteps.push('Navigate to Recipes page (DishBuilder view)');
-  await page.goto('/webapp/recipes?builder=true#dishes');
-  await page.waitForLoadState('domcontentloaded');
+  if (!(await safeGoto(page, '/webapp/recipes?builder=true#dishes'))) { return; }
   await page.waitForTimeout(getSimWait(4000));
   await collectPageErrors(page);
 

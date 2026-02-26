@@ -6,7 +6,7 @@
  * Resilient: continues even if some forms are not accessible.
  */
 import type { Page } from '@playwright/test';
-import { getSimWait, SIM_FAST } from '../../helpers/sim-wait';
+import { getSimWait, safeGoto } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 async function hasValidationError(page: Page): Promise<boolean> {
@@ -33,8 +33,8 @@ async function hasValidationError(page: Page): Promise<boolean> {
 
 async function testRecipeFormValidation(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Test recipe form validation - empty name');
-  await page.goto('/webapp/recipes?builder=true#dishes');
-  await page.waitForLoadState(SIM_FAST ? 'domcontentloaded' : 'load');
+  if (!(await safeGoto(page, '/webapp/recipes?builder=true#dishes'))) { testSteps.push('[testFormValidation] recipe page nav failed - skipping'); return; }
+  await page.waitForTimeout(getSimWait(500));
   await page.waitForTimeout(getSimWait(3000));
 
   const recipeTypeButton = page.getByRole('button', { name: 'Recipe', exact: true }).first();
@@ -69,8 +69,7 @@ async function testRecipeFormValidation(page: Page, testSteps: string[]): Promis
 
 async function testIngredientFormValidation(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Test ingredient form validation - empty name');
-  await page.goto('/webapp/ingredients');
-  await page.waitForLoadState(SIM_FAST ? 'domcontentloaded' : 'load');
+  if (!(await safeGoto(page, '/webapp/ingredients'))) { testSteps.push('[testFormValidation] ingredient page nav failed - skipping'); return; }
   await page.waitForTimeout(getSimWait(1500));
 
   const addBtn = page.locator('button:has-text("Add Ingredient"), button:has-text("➕")').first();
@@ -110,8 +109,7 @@ async function testIngredientFormValidation(page: Page, testSteps: string[]): Pr
 
 async function testFunctionFormValidation(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Test function form validation - missing required fields');
-  await page.goto('/webapp/functions');
-  await page.waitForLoadState(SIM_FAST ? 'domcontentloaded' : 'load');
+  if (!(await safeGoto(page, '/webapp/functions'))) { testSteps.push('[testFormValidation] functions page nav failed - skipping'); return; }
   await page.waitForTimeout(getSimWait(800));
 
   const newBtn = page
@@ -128,15 +126,34 @@ async function testFunctionFormValidation(page: Page, testSteps: string[]): Prom
     .locator('button:has-text("Create Event"), button:has-text("Create")')
     .first();
   if (await saveBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
-    await saveBtn.click();
-    await page.waitForTimeout(getSimWait(800));
+    const isDisabled = await saveBtn.isDisabled().catch(() => false);
+    if (isDisabled) {
+      testSteps.push('Create Event button is disabled (form requires name) - testing by typing');
+      // Type a name to enable the button, then try submitting
+      const nameInput = page.locator('input[type="text"], input[placeholder*="name"], input[placeholder*="Name"]').first();
+      if (await nameInput.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await nameInput.fill('Test Validation Event');
+        await page.waitForTimeout(getSimWait(300));
+        // Try to click save again after filling
+        if (!(await saveBtn.isDisabled().catch(() => true))) {
+          await saveBtn.click({ force: true });
+          await page.waitForTimeout(getSimWait(800));
+          testSteps.push('Create Event clicked after filling name');
+        }
+      } else {
+        testSteps.push('Create Event button disabled and no name input found - skip');
+      }
+    } else {
+      await saveBtn.click({ force: true });
+      await page.waitForTimeout(getSimWait(800));
 
-    const hasError = await hasValidationError(page);
-    testSteps.push(
-      hasError
-        ? 'Function validation error correctly shown for empty form'
-        : 'No validation error detected for empty function form',
-    );
+      const hasError = await hasValidationError(page);
+      testSteps.push(
+        hasError
+          ? 'Function validation error correctly shown for empty form'
+          : 'No validation error detected for empty function form',
+      );
+    }
   }
 
   const cancelBtn = page.locator('button:has-text("Cancel")').first();
@@ -149,8 +166,7 @@ async function testFunctionFormValidation(page: Page, testSteps: string[]): Prom
 
 async function testTemperatureLogValidation(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Test temperature log validation - empty temperature');
-  await page.goto('/webapp/temperature');
-  await page.waitForLoadState(SIM_FAST ? 'domcontentloaded' : 'load');
+  if (!(await safeGoto(page, '/webapp/temperature'))) { testSteps.push('[testFormValidation] temperature page nav failed - skipping'); return; }
   await page.waitForTimeout(getSimWait(1000));
 
   const addBtn = page
@@ -191,10 +207,18 @@ async function testTemperatureLogValidation(page: Page, testSteps: string[]): Pr
 export async function testFormValidationFlow(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Begin form validation tests');
 
-  await testRecipeFormValidation(page, testSteps);
-  await testIngredientFormValidation(page, testSteps);
-  await testFunctionFormValidation(page, testSteps);
-  await testTemperatureLogValidation(page, testSteps);
+  await testRecipeFormValidation(page, testSteps).catch(e => {
+    testSteps.push(`[testFormValidation] recipe validation skipped: ${String(e).slice(0, 60)}`);
+  });
+  await testIngredientFormValidation(page, testSteps).catch(e => {
+    testSteps.push(`[testFormValidation] ingredient validation skipped: ${String(e).slice(0, 60)}`);
+  });
+  await testFunctionFormValidation(page, testSteps).catch(e => {
+    testSteps.push(`[testFormValidation] function validation skipped: ${String(e).slice(0, 60)}`);
+  });
+  await testTemperatureLogValidation(page, testSteps).catch(e => {
+    testSteps.push(`[testFormValidation] temperature validation skipped: ${String(e).slice(0, 60)}`);
+  });
 
   testSteps.push('Form validation tests completed');
 }

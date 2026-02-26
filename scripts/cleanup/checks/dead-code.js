@@ -54,33 +54,25 @@ function parseTsPruneOutput(output) {
       continue;
     }
 
+    // Skip exports that are "used in module" (only used within same file - not dead)
+    if (line.includes('(used in module)')) {
+      continue;
+    }
+
     // Parse format: filePath:line - exportName
     const match = line.match(/^(.+?):(\d+) - (.+)$/);
     if (match) {
       const [, filePath, lineNum, exportName] = match;
       const fullPath = path.resolve(process.cwd(), filePath);
 
-      // Exclude test files, type definitions, and build directories
-      const isExcluded = shouldExcludeFile(fullPath);
-      if (filePath.includes('test-dead-code')) {
-        console.log('Testing specific file:', fullPath);
-        console.log('Is excluded?', isExcluded);
-        if (isExcluded) {
-          console.log(
-            'Exclusion check details:',
-            excludePatterns.map(p => ({ p: p.toString(), match: p.test(fullPath) })),
-          );
-        }
-      }
-
+      // Exclude curbos, test files, type definitions, build directories
+      const isExcluded = shouldExcludeFile(fullPath) || filePath.includes('curbos');
       if (!isExcluded) {
         unusedExports.push({
           file: filePath,
           line: parseInt(lineNum, 10),
           export: exportName,
         });
-      } else {
-        // console.log('Excluded:', filePath);
       }
     }
   }
@@ -112,10 +104,6 @@ async function checkDeadCode(files = null) {
     const command = 'npx ts-prune --project tsconfig.json 2>/dev/null || true';
     const output = execSync(command, { encoding: 'utf-8', cwd: process.cwd() });
 
-    // DEBUG LOGGING
-    console.log('Raw Output Length:', output.length);
-    console.log('First 100 chars:', output.substring(0, 100));
-
     if (!output || output.trim().length === 0) {
       return {
         passed: true,
@@ -125,7 +113,6 @@ async function checkDeadCode(files = null) {
     }
 
     const unusedExports = parseTsPruneOutput(output);
-    console.log('Parsed lines count:', unusedExports.length);
 
     // Create violations for each unused export
     for (const unused of unusedExports) {

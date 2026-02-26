@@ -1,3 +1,4 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
@@ -43,11 +44,15 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
     if (error) {
       logger.error('Error fetching function:', { error });
-      return NextResponse.json({ error: 'Failed to fetch function' }, { status: 500 });
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status ?? 500 });
     }
 
     if (!appFunction) {
-      return NextResponse.json({ error: 'Function not found' }, { status: 404 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Function not found', 'NOT_FOUND', 404),
+        { status: 404 },
+      );
     }
 
     const runsheetItems = (appFunction.function_runsheet_items || []).sort(
@@ -123,11 +128,15 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
     if (error) {
       logger.error('Error updating function:', { error });
-      return NextResponse.json({ error: 'Failed to update function' }, { status: 500 });
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status ?? 500 });
     }
 
     if (!updatedFunction) {
-      return NextResponse.json({ error: 'Function not found' }, { status: 404 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Function not found', 'NOT_FOUND', 404),
+        { status: 404 },
+      );
     }
 
     return NextResponse.json(updatedFunction);
@@ -153,7 +162,8 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
 
     if (error) {
       logger.error('Error deleting function:', { error });
-      return NextResponse.json({ error: 'Failed to delete function' }, { status: 500 });
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status ?? 500 });
     }
 
     return NextResponse.json({ success: true });

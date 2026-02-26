@@ -1,13 +1,13 @@
 /**
  * Helper function for assigning dish to menu in menu builder.
  */
+import { safeGoto } from '../../helpers/sim-wait';
 import type { Page } from '@playwright/test';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 export async function assignDishToMenuFlow(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Step 16: Navigate to Menu Builder');
-  await page.goto('/webapp/menu-builder');
-  await page.waitForLoadState('domcontentloaded');
+  if (!(await safeGoto(page, '/webapp/menu-builder'))) { return; }
   await page.waitForTimeout(1500);
   await collectPageErrors(page);
 

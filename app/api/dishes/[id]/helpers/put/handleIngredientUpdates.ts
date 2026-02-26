@@ -9,7 +9,7 @@ export async function handleIngredientUpdates(
   dishName: string,
   ingredients: DishIngredientInput[] | undefined,
   changes: string[],
-  changeDetails: any, // justified
+  changeDetails: Record<string, unknown>,
   userEmail: string,
 ): Promise<void> {
   if (!ingredients) return;

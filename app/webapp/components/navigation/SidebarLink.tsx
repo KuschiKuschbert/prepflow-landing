@@ -1,3 +1,5 @@
+'use client';
+
 import { prefersReducedMotion } from '@/lib/arcadeGuards';
 import { prefetchRoute } from '@/lib/cache/prefetch-config';
 import Link from 'next/link';

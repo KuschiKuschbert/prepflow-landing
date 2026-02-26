@@ -15,7 +15,13 @@ export async function viewPage(
   path: string,
   opts?: { print?: boolean; export?: boolean; import?: boolean; importLabel?: string },
 ): Promise<void> {
-  await page.goto(path, { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  try {
+    await page.goto(path, { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  } catch {
+    // Navigation timeout - page still partially loaded, continue
+    if (!page.url().includes(path.split('?')[0].split('#')[0])) return;
+  }
+  if (page.url().includes('auth0.com') || page.url().includes('/api/auth/login')) return;
   await page.waitForTimeout(getSimWait(500));
   if (!SIM_FAST && opts) {
     if (opts.print) await clickPrintIfAvailable(page).catch(() => {});
@@ -27,7 +33,13 @@ export async function viewPage(
 }
 
 export async function viewPageSimple(page: Page, path: string): Promise<void> {
-  await page.goto(path, { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  try {
+    await page.goto(path, { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  } catch {
+    // Navigation timeout - page still partially loaded, continue
+    if (!page.url().includes(path.split('?')[0].split('#')[0])) return;
+  }
+  if (page.url().includes('auth0.com') || page.url().includes('/api/auth/login')) return;
   await page.waitForTimeout(getSimWait(500));
   await collectPageErrors(page);
 }

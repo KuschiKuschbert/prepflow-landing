@@ -7,6 +7,7 @@
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getAuthenticatedUserByEmail } from '@/lib/api-helpers/getAuthenticatedUserByEmail';
+import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { catchTemplateShiftsHandler } from './helpers/catchHandler';
 import { fetchTemplateShifts } from './helpers/fetchShifts';
@@ -22,6 +23,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
 
     return NextResponse.json({ success: true, templateShifts: result.templateShifts });
   } catch (err) {
+    logger.error('[Roster Template Shifts] GET error:', { error: err });
     return catchTemplateShiftsHandler(err, 'GET');
   }
 }
@@ -56,6 +58,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       message: 'Template shift created successfully',
     });
   } catch (err) {
+    logger.error('[Roster Template Shifts] POST error:', { error: err });
     return catchTemplateShiftsHandler(err, 'POST');
   }
 }

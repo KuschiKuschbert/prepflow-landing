@@ -3,14 +3,13 @@
  * Order lists page is menu-centric: select menu -> view ingredients table -> print/export.
  */
 import type { Page } from '@playwright/test';
-import { getSimWait } from '../../helpers/sim-wait';
+import { getSimWait, safeGoto } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 import { clickPrintIfAvailable } from './printOrExportHelpers';
 
 export async function createOrderListFlow(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Navigate to Order Lists page');
-  await page.goto('/webapp/order-lists');
-  await page.waitForLoadState('load');
+  if (!(await safeGoto(page, '/webapp/order-lists'))) { return; }
   await page.waitForTimeout(getSimWait(1200));
   await collectPageErrors(page);
 

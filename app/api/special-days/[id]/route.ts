@@ -1,14 +1,15 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { updateSpecialDaySchema } from '../helpers/schemas';
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const user = await requireAuth(req as any);
+    const user = await requireAuth(req as NextRequest);
     const supabaseUserId = user.sub;
 
     const body = await req.json();
@@ -25,11 +26,15 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
     if (error) {
       logger.error('Error updating special day:', error);
-      return NextResponse.json({ error: 'Failed to update special day' }, { status: 500 });
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status ?? 500 });
     }
 
     if (!updatedDay) {
-      return NextResponse.json({ error: 'Special day not found' }, { status: 404 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Special day not found', 'NOT_FOUND', 404),
+        { status: 404 },
+      );
     }
 
     return NextResponse.json(updatedDay);
@@ -48,7 +53,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const user = await requireAuth(req as any);
+    const user = await requireAuth(req as NextRequest);
     const supabaseUserId = user.sub;
 
     const supabase = createSupabaseAdmin();
@@ -60,7 +65,8 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
 
     if (error) {
       logger.error('Error deleting special day:', error);
-      return NextResponse.json({ error: 'Failed to delete special day' }, { status: 500 });
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status ?? 500 });
     }
 
     return NextResponse.json({ success: true });

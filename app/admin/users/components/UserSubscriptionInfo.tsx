@@ -1,3 +1,5 @@
+'use client';
+
 interface UserSubscriptionInfoProps {
   formData: {
     subscription_status: string;

@@ -2,6 +2,25 @@
 
 ## 2026-02-25
 
+- **refactor: TypeScript any migration (Phases 1–3 complete)** – Replaced `any` with proper types across ~70 files per plan. Phase 1 API routes: supabase→SupabaseClient, theme→ExportTheme, changeDetails→Record<string, unknown>, normalizedIngredients→NormalizedIngredient[], backupData→BackupData, fetchDishRecipes Map typed. Phase 2 lib: bulk-action-handlers, square/sync/costs, analytics/types, ai/groq response-parser, recipes/logger, demo-mode, personality/scheduler-events, backup/getUserTablesWithData. Phase 3: ScrollReveal Variants, useIngredientDataSync IngredientsQueryParams, useParLevelsExport ParLevel[], buildDocuments return type, staff EmployeeForm onSubmit(formData), billing SubscriptionDetailsProps. Some justified any kept (auth0, square SDK, cleaning-tasks query). Docs: TYPESCRIPT_ANY_MIGRATION.md created and updated.
+- **refactor: TypeScript any migration – final 9 unjustified any fixed** – providers.tsx: requestIdleCallback fallback typed as `(cb: () => void) => void`; recipe-processor: `Promise<{ totalProcessed: number }>`; generate-pdf: ChromiumLaunchOptions; fetchPaginatedTasks: RangableQuery; syncFromSquare: TeamSearchable; factory: ConstructorParameters. Docs: SCRIPTS.md (audit:any), AGENTS.md (Critical Reminder #7), TECH_DEBT_BACKLOG.md (any types). `npm run audit:any` reports 0 unjustified instances.
+
+## 2026-02-25
+
+- **fix: trim menu-dishes route for file size (207→191)**
+- **refactor: file size compliance, TypeScript fixes, docs update**: - File size: 7 files refactored (haversine, error-categorizer-rules,
+  useDishFormData/helpers, action-handlers/detailHandlers, day-profiles-data)
+  - useIngredientOperations, useDishFormData merge, normalizeIngredientConstants
+- TS: Add logger to roster/templates; validate ExportTheme in recipe-cards/export
+- Docs: DEV_LOG, AGENTS, FEATURE_IMPLEMENTATION, MEMORY, TROUBLESHOOTING_LOG,
+  FILE_SIZE_REFACTORING_GUIDE
+- **fix: add missing useGeolocation hook (fixes Vercel build)**
+- **feat: production-ready deployment guards**: - Make cleanup advisory in pre-deploy (no longer blocks deploy)
+- Add format + commit after dev:log in safe-merge
+- Add format:check to pre-push hook
+- Add docs/TECH_DEBT_BACKLOG.md for gradual fixes
+- **fix: format docs/DEV_LOG.md for CI**
+
 - **refactor: file size compliance – 7 files refactored**: All files now pass `npm run lint:filesize`. Extractions: (1) `lib/utils/haversine.ts` from time-attendance/clock-out; (2) `lib/recipes/utils/error-categorizer-rules.ts` from error-categorizer; (3) `app/webapp/recipes/hooks/useDishFormData/helpers.ts` from useDishFormData; (4) `e2e/simulation/personas/action-handlers/detailHandlers.ts` from action-handlers; (5) `e2e/simulation/personas/day-profiles-data.ts` (Action type + CAFE/RESTAURANT/FOOD_TRUCK_DAY_PROFILE) from day-profiles. Minor trims: useIngredientOperations, useIngredientsClientController. Removed unused collectPageErrors import from action-handlers.
 - **feat: production-ready deployment guards**: - Make cleanup advisory in pre-deploy (no longer blocks deploy)
 - Add format + commit after dev:log in safe-merge

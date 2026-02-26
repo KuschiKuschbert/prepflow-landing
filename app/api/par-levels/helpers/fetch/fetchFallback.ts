@@ -6,7 +6,7 @@ import { IngredientRecord, ParLevelRecord } from '../types';
 
 export async function fetchFallback(
   supabaseAdmin: SupabaseClient,
-  originalError: any /* justified: raw database error */,
+  originalError: { message?: string; code?: string },
 ) {
   logger.warn('[Par Levels API] Join failed, trying without join:', {
     error: originalError.message,
@@ -42,8 +42,8 @@ export async function fetchFallback(
     };
   }
 
-  let data: any = simpleData; // justified: raw DB data
-  let error: any = null; // justified: raw DB error
+  let data: (ParLevelRecord & { ingredients?: IngredientRecord | null })[] = simpleData ?? [];
+  let error: NextResponse | null = null;
 
   // If we got data without join, fetch ingredients separately
   if (simpleData && simpleData.length > 0) {

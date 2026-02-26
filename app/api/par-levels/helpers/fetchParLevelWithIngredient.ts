@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Fetch par level with ingredient join, with fallback to separate fetch.
@@ -87,8 +88,7 @@ export async function fetchParLevelWithIngredient(parLevelId: string, ingredient
   return data;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function fetchIngredientData(supabaseAdmin: any, ingredientId: string) {
+async function fetchIngredientData(supabaseAdmin: SupabaseClient, ingredientId: string) {
   try {
     const { data: ingredientData, error: ingredientError } = await supabaseAdmin
       .from('ingredients')
@@ -111,7 +111,7 @@ async function fetchIngredientData(supabaseAdmin: any, ingredientId: string) {
 }
 
 async function fetchIngredientFallback(
-  supabaseAdmin: any,
+  supabaseAdmin: SupabaseClient,
   parLevelId: string,
   ingredientId: string,
 ) {

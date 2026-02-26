@@ -3,12 +3,19 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { UpdateIngredientData } from '../schemas';
 
+interface IngredientAllergenShape {
+  ingredient_name?: string;
+  brand?: string | null;
+  allergens?: string[];
+  allergen_source?: { manual?: boolean; ai?: boolean };
+}
+
 async function performHybridDetection(
   id: string,
   ingredientName: string,
   ingredientBrand: string | null,
-  currentIngredient: any /* justified: complex DB record */,
-  formattedUpdates: any /* justified: dynamic update payload */,
+  currentIngredient: IngredientAllergenShape,
+  formattedUpdates: Record<string, unknown>,
 ) {
   try {
     const enriched = await enrichIngredientWithAllergensHybrid({
@@ -46,7 +53,7 @@ async function performHybridDetection(
 export async function detectCurrentAllergens(
   id: string,
   updates: UpdateIngredientData,
-  formattedUpdates: any /* justified: dynamic update payload */,
+  formattedUpdates: Record<string, unknown>,
 ) {
   const allergensChanged = updates.allergens !== undefined;
   const nameOrBrandChanged = updates.ingredient_name !== undefined || updates.brand !== undefined;

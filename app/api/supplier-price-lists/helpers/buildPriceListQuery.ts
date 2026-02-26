@@ -15,18 +15,7 @@ export function buildPriceListQuery(
 ) {
   let query = supabase
     .from('supplier_price_lists')
-    .select(
-      `
-      *,
-      suppliers (
-        id,
-        name,
-        contact_person,
-        email,
-        phone
-      )
-    `,
-    )
+    .select('*')
     .order('effective_date', { ascending: false });
 
   if (supplierId) {

@@ -5,7 +5,7 @@
  * Resilient: continues even if some steps fail.
  */
 import type { Page } from '@playwright/test';
-import { getSimWait } from '../../helpers/sim-wait';
+import { getSimWait, safeGoto } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 export async function updateIngredientStockFlow(
@@ -13,8 +13,7 @@ export async function updateIngredientStockFlow(
   testSteps: string[] = [],
 ): Promise<void> {
   testSteps.push('Navigate to Ingredients page');
-  await page.goto('/webapp/ingredients');
-  await page.waitForLoadState('load');
+  if (!(await safeGoto(page, '/webapp/ingredients'))) { return; }
   await page.waitForTimeout(getSimWait(1200));
   await collectPageErrors(page);
 

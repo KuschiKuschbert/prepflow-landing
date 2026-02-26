@@ -193,15 +193,15 @@ export async function populateBasicData(
   const recipesToInsert = cleanSampleRecipes
     .filter(r => !existingRecipeNames.has(r.name?.toLowerCase().trim()))
     .map(r => {
-      // Use 'name' column and match API schema (yield and yield_unit)
+      // Use 'recipe_name' column (DB column is recipe_name, not name)
       // The API uses yield and yield_unit (see app/api/recipes/route.ts line 140-141)
       const recipeData: {
-        name: string;
+        recipe_name: string;
         yield: number;
         yield_unit: string;
         instructions: string | null;
       } = {
-        name: r.name, // Primary column name
+        recipe_name: r.name,
         yield: r.yield || 1, // Default to 1 if not provided
         yield_unit: r.yield_unit || 'servings', // Default to 'servings'
         instructions: r.instructions || null,

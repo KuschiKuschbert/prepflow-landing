@@ -4,10 +4,10 @@
 import type { Page } from '@playwright/test';
 import { collectPageErrors } from '../../../fixtures/global-error-listener';
 import { clickPrintIfAvailable } from '../../../workflows/helpers/printOrExportHelpers';
-import { getSimWait, SIM_FAST } from '../../../helpers/sim-wait';
+import { getSimWait, safeGoto } from '../../../helpers/sim-wait';
 
 export async function handleMarkCleaningComplete(page: Page): Promise<void> {
-  await page.goto('/webapp/cleaning', { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  if (!(await safeGoto(page, '/webapp/cleaning'))) return;
   await page.waitForTimeout(getSimWait(800));
   const markCompleteBtn = page
     .locator('button:has-text("Mark Complete"), button:has-text("Complete")')
@@ -24,32 +24,62 @@ export async function handleMarkCleaningComplete(page: Page): Promise<void> {
 }
 
 export async function handleShareRecipe(page: Page): Promise<void> {
-  await page.goto('/webapp/recipe-sharing', { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
-  await page.waitForTimeout(getSimWait(500));
+  if (!(await safeGoto(page, '/webapp/recipe-sharing'))) return;
+  await page.waitForTimeout(getSimWait(800));
   const shareBtn = page
-    .locator('button:has-text("Share"), button:has-text("Share Your First Recipe")')
+    .locator('button:has-text("Share Recipe"), button:has-text("Share Your First Recipe"), button:has-text("Share")')
     .first();
   if (await shareBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
     await shareBtn.click();
     await page.waitForTimeout(getSimWait(1000));
-    await page
-      .locator('button:has-text("Cancel")')
-      .first()
-      .click()
-      .catch(() => {});
+
+    // Try to select a recipe from the dropdown if the share form is open
+    const recipeSelect = page
+      .locator('select[name*="recipe"], select[aria-label*="recipe"], select[id*="recipe"]')
+      .first();
+    if (await recipeSelect.isVisible({ timeout: 3000 }).catch(() => false)) {
+      const options = await recipeSelect.locator('option').all();
+      if (options.length > 1) {
+        const optionValue = await options[1].getAttribute('value');
+        if (optionValue) {
+          await recipeSelect.selectOption(optionValue);
+          await page.waitForTimeout(getSimWait(300));
+        }
+      }
+    }
+
+    // Try to select share type (link)
+    const linkTypeBtn = page
+      .locator('button:has-text("Link"), input[value="link"], label:has-text("Link")')
+      .first();
+    if (await linkTypeBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await linkTypeBtn.click();
+      await page.waitForTimeout(getSimWait(300));
+    }
+
+    // Cancel to avoid actually sharing
+    const cancelBtn = page.locator('button:has-text("Cancel")').first();
+    if (await cancelBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await cancelBtn.click();
+      await page.waitForTimeout(getSimWait(500));
+    } else {
+      // Fallback: close via X or escape
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(getSimWait(300));
+    }
   }
   await collectPageErrors(page);
 }
 
 export async function handlePrintMenu(page: Page): Promise<void> {
-  await page.goto('/webapp/menu-builder', { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  if (!(await safeGoto(page, '/webapp/menu-builder'))) return;
   await page.waitForTimeout(getSimWait(1200));
   await clickPrintIfAvailable(page);
   await collectPageErrors(page);
 }
 
 export async function handleViewEquipmentDetail(page: Page): Promise<void> {
-  await page.goto('/webapp/temperature', { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  if (!(await safeGoto(page, '/webapp/temperature'))) return;
   await page.waitForTimeout(getSimWait(800));
   const equipmentTab = page
     .locator('button:has-text("Equipment"), [aria-label="View temperature equipment"]')
@@ -69,7 +99,7 @@ export async function handleViewEquipmentDetail(page: Page): Promise<void> {
 }
 
 export async function handleViewFunctionDetail(page: Page): Promise<void> {
-  await page.goto('/webapp/functions', { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  if (!(await safeGoto(page, '/webapp/functions'))) return;
   await page.waitForTimeout(getSimWait(800));
   const firstRow = page.locator('table tbody tr[class*="cursor-pointer"], tbody tr').first();
   if (await firstRow.isVisible({ timeout: 3000 }).catch(() => false)) {
@@ -80,7 +110,7 @@ export async function handleViewFunctionDetail(page: Page): Promise<void> {
 }
 
 export async function handleViewIngredientDetail(page: Page): Promise<void> {
-  await page.goto('/webapp/ingredients', { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  if (!(await safeGoto(page, '/webapp/ingredients'))) return;
   await page.waitForTimeout(getSimWait(800));
   const ingredientRow = page
     .locator('table tbody tr, div[class*="group"][class*="rounded"]')
@@ -93,7 +123,7 @@ export async function handleViewIngredientDetail(page: Page): Promise<void> {
 }
 
 export async function handleEditIngredient(page: Page): Promise<void> {
-  await page.goto('/webapp/ingredients', { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  if (!(await safeGoto(page, '/webapp/ingredients'))) return;
   await page.waitForTimeout(getSimWait(800));
   const editRow = page.locator('table tbody tr, div[class*="group"][class*="rounded"]').first();
   if (await editRow.isVisible({ timeout: 5000 }).catch(() => false)) {
@@ -111,7 +141,7 @@ export async function handleEditIngredient(page: Page): Promise<void> {
 }
 
 export async function handleViewCustomerDetail(page: Page): Promise<void> {
-  await page.goto('/webapp/customers', { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  if (!(await safeGoto(page, '/webapp/customers'))) return;
   await page.waitForTimeout(getSimWait(800));
   const customerRow = page
     .locator('table tbody tr[class*="cursor-pointer"], tbody tr, div[class*="group"]')
@@ -124,7 +154,7 @@ export async function handleViewCustomerDetail(page: Page): Promise<void> {
 }
 
 export async function handleViewPerformanceCharts(page: Page): Promise<void> {
-  await page.goto('/webapp/performance', { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  if (!(await safeGoto(page, '/webapp/performance'))) return;
   await page.waitForTimeout(getSimWait(1200));
   const chartTab = page
     .locator('button:has-text("Charts"), button:has-text("Analysis"), button:has-text("Visual")')
@@ -133,5 +163,45 @@ export async function handleViewPerformanceCharts(page: Page): Promise<void> {
     await chartTab.click();
     await page.waitForTimeout(getSimWait(1000));
   }
+
+  // Click category filter buttons to filter the performance list
+  const categoryFilters = [
+    "Chef's Kiss",
+    'Hidden Gem',
+    'Bargain Bucket',
+    'Burnt Toast',
+  ];
+  for (const category of categoryFilters) {
+    const filterBtn = page
+      .locator(`button:has-text("${category}"), [data-filter="${category}"]`)
+      .first();
+    if (await filterBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await filterBtn.click();
+      await page.waitForTimeout(getSimWait(600));
+      await collectPageErrors(page);
+      // Click again to clear the filter before trying the next one
+      if (await filterBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
+        await filterBtn.click();
+        await page.waitForTimeout(getSimWait(400));
+      }
+      break; // One category filter is enough to test the feature
+    }
+  }
+
+  // Click date range selector if visible
+  const dateRangeBtn = page
+    .locator(
+      'button:has-text("Date Range"), button:has-text("7 days"), button:has-text("30 days"), ' +
+      'select[aria-label*="date"], select[aria-label*="range"]',
+    )
+    .first();
+  if (await dateRangeBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await dateRangeBtn.click();
+    await page.waitForTimeout(getSimWait(800));
+    // Close any dropdown that opened
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(getSimWait(300));
+  }
+
   await collectPageErrors(page);
 }

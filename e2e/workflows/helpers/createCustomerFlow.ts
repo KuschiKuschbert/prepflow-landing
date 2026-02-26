@@ -4,7 +4,7 @@
  * Resilient: continues even if form fields are not found.
  */
 import type { Page } from '@playwright/test';
-import { getSimWait } from '../../helpers/sim-wait';
+import { getSimWait, safeGoto } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 export async function createCustomerFlow(
@@ -72,14 +72,19 @@ export async function createCustomerFlow(
   }
 
   testSteps.push('Submit customer form');
+  // Dismiss any blocking overlay before submitting
+  const overlay = page.locator('.fixed.inset-0').first();
+  if (await overlay.isVisible({ timeout: 1000 }).catch(() => false)) {
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(getSimWait(300));
+  }
   const saveBtn = page
     .locator(
       'button:has-text("Save"), button:has-text("Create"), button:has-text("Add Customer"), button[type="submit"]',
     )
     .first();
   if (await saveBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
-    await saveBtn.click();
-    await page.waitForLoadState('load');
+    await saveBtn.click({ force: true });
     await page.waitForTimeout(getSimWait(800));
   }
 

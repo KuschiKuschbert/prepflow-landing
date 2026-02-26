@@ -59,8 +59,6 @@ export default function RecipeSharingPage() {
     recipientEmail: '',
     notes: '',
   });
-  const userId = 'user-123';
-
   useEffect(() => {
     fetchRecipes();
     fetchRecipeShares();
@@ -73,7 +71,7 @@ export default function RecipeSharingPage() {
 
   const fetchRecipes = async () => {
     try {
-      const response = await fetch(`/api/recipes?pageSize=200&userId=${userId}`, {
+      const response = await fetch(`/api/recipes?pageSize=200`, {
         cache: 'no-store',
       });
       const result = await response.json();
@@ -89,7 +87,7 @@ export default function RecipeSharingPage() {
 
   const fetchRecipeShares = async () => {
     try {
-      const response = await fetch(`/api/recipe-share?userId=${userId}`, { cache: 'no-store' });
+      const response = await fetch(`/api/recipe-share`, { cache: 'no-store' });
       const result = await response.json();
       if (result.success) {
         const sharesData = result.data ?? [];

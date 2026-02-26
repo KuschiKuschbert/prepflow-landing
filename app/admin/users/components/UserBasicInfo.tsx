@@ -1,3 +1,5 @@
+'use client';
+
 interface UserBasicInfoProps {
   formData: {
     first_name: string;

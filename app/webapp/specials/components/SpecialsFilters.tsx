@@ -1,3 +1,5 @@
+'use client';
+
 interface SpecialsFiltersProps {
   readyToCook: boolean;
   setReadyToCook: (val: boolean) => void;

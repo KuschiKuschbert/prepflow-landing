@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { Image as ImageIcon } from 'lucide-react';
 import Image from 'next/image';

@@ -21,42 +21,47 @@ import { NextResponse } from 'next/server';
 export async function handleSyncOperation(
   operation: 'catalog' | 'orders' | 'staff' | 'costs' | 'initial_sync',
   direction: 'from_square' | 'to_square' | 'bidirectional' | undefined,
-  options: Record<string, any> | undefined,
+  options: Record<string, unknown> | undefined,
   userId: string,
 ) {
+  const opts = options ?? {};
   switch (operation) {
     case 'catalog':
       if (direction === 'from_square') {
-        return await syncCatalogFromSquare(userId, options?.locationId);
+        return await syncCatalogFromSquare(userId, opts.locationId as string | undefined);
       } else if (direction === 'to_square') {
-        return await syncCatalogToSquare(userId, options?.dishIds);
+        return await syncCatalogToSquare(userId, opts.dishIds as string[] | undefined);
       } else {
         return await syncCatalogBidirectional(userId);
       }
 
     case 'orders':
-      if (options?.startDate && options?.endDate) {
+      if (opts.startDate && opts.endDate) {
         return await syncOrdersFromSquare(
           userId,
-          options.startDate,
-          options.endDate,
-          options?.locationId,
+          opts.startDate as string,
+          opts.endDate as string,
+          opts.locationId as string | undefined,
         );
       } else {
-        return await syncRecentOrdersFromSquare(userId, options?.days || 30, options?.locationId);
+        return await syncRecentOrdersFromSquare(
+          userId,
+          (opts.days as number) || 30,
+          opts.locationId as string | undefined,
+        );
       }
 
     case 'staff':
       if (direction === 'from_square') {
         return await syncStaffFromSquare(userId);
       } else if (direction === 'to_square') {
-        return await syncStaffToSquare(userId, options?.employeeIds);
+        return await syncStaffToSquare(userId, opts.employeeIds as string[] | undefined);
       } else {
         return await syncStaffBidirectional(userId);
       }
 
     case 'costs':
-      return await syncCostsToSquare(userId, options?.dishIds);
+      return await syncCostsToSquare(userId, opts.dishIds as string[] | undefined);
 
     case 'initial_sync': {
       const { getSquareConfig } = await import('@/lib/square/config');

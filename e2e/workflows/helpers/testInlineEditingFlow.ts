@@ -4,12 +4,12 @@
  * Resilient: continues even if inline editing is not available.
  */
 import type { Page } from '@playwright/test';
-import { getSimWait, SIM_FAST } from '../../helpers/sim-wait';
+import { getSimWait, safeGoto } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 async function testParLevelInlineEdit(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Test par level inline editing');
-  await page.goto('/webapp/par-levels', { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  if (!(await safeGoto(page, '/webapp/par-levels'))) { testSteps.push('[testInlineEdit] par-levels nav failed - skipping'); return; }
   await page.waitForTimeout(getSimWait(1000));
 
   const editableCell = page
@@ -54,7 +54,7 @@ async function testParLevelInlineEdit(page: Page, testSteps: string[]): Promise<
 
 async function testMenuTitleInlineEdit(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Test menu title inline editing');
-  await page.goto('/webapp/menu-builder', { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  if (!(await safeGoto(page, '/webapp/menu-builder'))) { testSteps.push('[testInlineEdit] menu-builder nav failed - skipping'); return; }
   await page.waitForTimeout(getSimWait(1200));
 
   const menuTitle = page

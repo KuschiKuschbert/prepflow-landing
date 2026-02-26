@@ -2,8 +2,6 @@
  * Skill Learning - Automatic skill evolution from error-learning and RSI
  */
 
-export { loadConfig, loadSkillMapping } from './config';
-export { getSkillForErrorPattern, getSkillForRsiType } from './skill-mapper';
 export {
   maybeUpdateSkillFromPattern,
   maybeUpdateSkillFromRsi,

@@ -1,4 +1,5 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import QRCode from 'qrcode';
 import { handleComplianceError } from '../../helpers/handleComplianceError';
@@ -43,6 +44,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       },
     });
   } catch (error: unknown) {
+    logger.error('[Compliance QR] GET error:', { error });
     return handleComplianceError(error, 'GET');
   }
 }

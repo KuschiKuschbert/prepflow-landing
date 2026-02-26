@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
 import {
   verifyAppleConnection,
   verifyMicrosoftConnection,
@@ -78,13 +79,19 @@ export async function GET() {
  * Enable Apple and/or Microsoft connections
  * POST with body: { enableApple?: boolean, enableMicrosoft?: boolean }
  */
+const postBodySchema = z.object({
+  enableApple: z.boolean().optional(),
+  enableMicrosoft: z.boolean().optional(),
+});
+
 export async function POST(request: Request) {
   try {
-    let body: { enableApple?: boolean; enableMicrosoft?: boolean } = {};
+    let body: z.infer<typeof postBodySchema> = {};
     try {
-      body = await request.json();
+      const parsed = await request.json();
+      body = postBodySchema.parse(parsed ?? {});
     } catch {
-      // No body provided, enable both
+      // No body or invalid body - enable both
       body = { enableApple: true, enableMicrosoft: true };
     }
 

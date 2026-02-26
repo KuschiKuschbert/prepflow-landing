@@ -10,6 +10,13 @@ import type { SyncResult } from '../staff';
 import { updateLastStaffSyncTimestamp } from './helpers/common';
 import { processSquareTeamMember } from './helpers/processFromSquare';
 
+/** Square TeamApi.searchTeamMembers - SDK types incomplete */
+interface TeamSearchable {
+  searchTeamMembers(params: {
+    query: { filter: { status: string } };
+  }): Promise<{ result?: { teamMembers?: unknown[] } }>;
+}
+
 /**
  * Sync team members from Square to PrepFlow
  * Creates or updates employees based on Square team members
@@ -40,12 +47,9 @@ export async function syncStaffFromSquare(userId: string): Promise<SyncResult> {
       throw new Error('Square configuration not found');
     }
 
-    // Fetch Square team members
+    // Fetch Square team members (Square SDK TeamApi typing incomplete for searchTeamMembers)
     const teamApi = client.team;
-    // Type assertion for Square SDK method until stricter types are available
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const listResponse = await (teamApi as any).searchTeamMembers({
-      // justified
+    const listResponse = await (teamApi as unknown as TeamSearchable).searchTeamMembers({
       query: {
         filter: {
           status: 'ACTIVE', // Only sync active team members
@@ -65,9 +69,9 @@ export async function syncStaffFromSquare(userId: string): Promise<SyncResult> {
       userId,
     });
 
-    // Process each team member
+    // Process each team member (Square SDK returns unknown[]; we need minimal { id?: string })
     for (const teamMember of teamMembers) {
-      await processSquareTeamMember(teamMember, userId, result);
+      await processSquareTeamMember(teamMember as { id?: string }, userId, result);
     }
 
     // Update last sync timestamp

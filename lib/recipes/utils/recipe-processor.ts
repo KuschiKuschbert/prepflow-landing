@@ -115,7 +115,7 @@ export async function processSingleRecipe(
 
 export async function processRecipes(
   options: { limit?: number; model?: string; batchSize?: number; concurrency?: number } = {},
-): Promise<any> {
+): Promise<{ totalProcessed: number }> {
   const storage = new JSONStorage();
   const recipes = storage.getAllRecipes().slice(0, options.limit);
   const results = [];

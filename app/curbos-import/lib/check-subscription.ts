@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+import { logger } from '@/lib/logger';
 import { createClient } from '@supabase/supabase-js';
 
 // Initialize Supabase Client (Service Role for admin checks)
@@ -17,7 +17,7 @@ export async function checkSubscription(email: string): Promise<boolean> {
       .single();
 
     if (error || !data) {
-      console.error('Subscription check failed', error);
+      logger.error('[CurbOS] Subscription check failed', { error });
       return false;
     }
 
@@ -25,7 +25,7 @@ export async function checkSubscription(email: string): Promise<boolean> {
     // Allow 'business' tier (and implicit admins/internal if needed)
     return tier === 'business';
   } catch (e) {
-    console.error('Subscription check exception', e);
+    logger.error('[CurbOS] Subscription check exception', { error: e });
     return false;
   }
 }

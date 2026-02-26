@@ -6,7 +6,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { restoreFull, restoreMerge, restoreSelective } from '@/lib/backup/restore';
-import type { MergeOptions } from '@/lib/backup/types';
+import type { BackupData, MergeOptions } from '@/lib/backup/types';
 import { logger } from '@/lib/logger';
 import { getAppError } from '@/lib/utils/error';
 
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
       if (!result.success) {
         return result.response;
       }
-      backupData = result.data;
+      backupData = result.data as BackupData;
     } else if (backupId) {
       return NextResponse.json(
         ApiErrorHandler.createError(

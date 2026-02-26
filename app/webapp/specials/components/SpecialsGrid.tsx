@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { APIRecipe } from '../utils';
 import { RecipeCard } from './RecipeCard';

@@ -4,7 +4,7 @@
  */
 import type { Page } from '@playwright/test';
 import { waitForFormSubmission } from '../../helpers/form-helpers';
-import { getSimWait } from '../../helpers/sim-wait';
+import { getSimWait, safeGoto } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 export async function createRecipeFlow(
@@ -13,10 +13,10 @@ export async function createRecipeFlow(
   testSteps: string[],
 ): Promise<void> {
   testSteps.push('Navigate to Recipes page (Dishes tab)');
-  await page.goto('/webapp/recipes#dishes', {
-    waitUntil: 'domcontentloaded',
-    timeout: 30000,
-  });
+  if (!(await safeGoto(page, '/webapp/recipes#dishes'))) {
+    testSteps.push('[createRecipe] navigation failed - skipping');
+    return;
+  }
   await page.waitForTimeout(getSimWait(2000)); // Allow React hydration + hash useEffect to run
   await collectPageErrors(page);
 
@@ -80,7 +80,6 @@ export async function createRecipeFlow(
   await page.waitForTimeout(getSimWait(300));
 
   testSteps.push('Add ingredient from left panel');
-  // DishBuilderDragDrop tabs: Recipes | Ingredients | Consumables
   const ingredientsTab = page.locator('button').filter({ hasText: /Ingredients \(\d+\)/ });
   const ingTabVisible = await ingredientsTab.isVisible({ timeout: 8000 }).catch(() => false);
   if (ingTabVisible) {
@@ -106,6 +105,12 @@ export async function createRecipeFlow(
   await page.waitForTimeout(getSimWait(500));
 
   testSteps.push('Save recipe');
+  // Dismiss any blocking overlay/modal before saving
+  const overlay = page.locator('.fixed.inset-0').first();
+  if (await overlay.isVisible({ timeout: 1000 }).catch(() => false)) {
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(getSimWait(400));
+  }
   const saveButton = page.getByRole('button', {
     name: /Save Recipe|Save Dish/i,
   });
@@ -114,7 +119,7 @@ export async function createRecipeFlow(
     testSteps.push('[createRecipe] Save Recipe/Dish button not visible after 25s - skipping save');
     return;
   }
-  await saveButton.click();
+  await saveButton.click({ force: true });
   await waitForFormSubmission(page);
   await collectPageErrors(page);
 

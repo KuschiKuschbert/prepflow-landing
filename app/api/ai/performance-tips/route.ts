@@ -17,8 +17,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 const performanceTipsSchema = z.object({
-  performanceScore: z.number(),
-  performanceItems: z.array(z.any()).min(1, 'performanceItems array is required'),
+  performanceScore: z.number().optional().default(0),
+  performanceItems: z.array(z.any()).optional().default([]),
   countryCode: z.string().optional(),
 });
 
@@ -99,6 +99,11 @@ export async function POST(request: NextRequest) {
       performanceItems: PerformanceItem[];
       countryCode?: string;
     };
+
+    // Return empty tips when there's no data to analyze
+    if (!performanceItems || performanceItems.length === 0) {
+      return NextResponse.json({ tips: [], source: 'fallback' });
+    }
 
     // Try AI first
     const aiResult = await getAIPerformanceTips(performanceScore, performanceItems, countryCode);

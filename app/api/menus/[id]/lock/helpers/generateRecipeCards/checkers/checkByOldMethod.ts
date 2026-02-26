@@ -1,6 +1,7 @@
 import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { generateDataHash } from '../../cardBuilding';
+import type { NormalizedIngredient } from '../../normalizeIngredients';
 import { MenuItemData } from '../../types';
 import { MenuItem } from '../fetchMenuItems';
 import { ItemToGenerate } from '../types';
@@ -14,7 +15,7 @@ export async function checkByOldMethod(
   supabase: SupabaseClient,
   menuItem: MenuItem,
   menuItemData: MenuItemData,
-  normalizedIngredients: any[], // justified
+  normalizedIngredients: NormalizedIngredient[],
   signature: string,
 ): Promise<OldMethodCheckResult> {
   const currentHash = generateDataHash(menuItemData, normalizedIngredients);

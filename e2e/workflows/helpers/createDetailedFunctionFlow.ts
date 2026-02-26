@@ -6,7 +6,7 @@
  * All times use strict 24h format.
  */
 import type { Page } from '@playwright/test';
-import { getSimWait } from '../../helpers/sim-wait';
+import { getSimWait, safeGoto } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 export async function createDetailedFunctionFlow(
@@ -15,8 +15,7 @@ export async function createDetailedFunctionFlow(
   testSteps: string[] = [],
 ): Promise<void> {
   testSteps.push('Navigate to Functions page');
-  await page.goto('/webapp/functions');
-  await page.waitForLoadState('load');
+  if (!(await safeGoto(page, '/webapp/functions'))) { return; }
   await page.waitForTimeout(getSimWait(800));
   await collectPageErrors(page);
 

@@ -2,6 +2,7 @@
  * Fetch stock ingredients from DB for AI specials search.
  */
 
+import { logger } from '@/lib/logger';
 import { normalizeIngredient } from '@/lib/ingredient-normalization';
 import { supabaseAdmin } from '@/lib/supabase';
 
@@ -21,7 +22,10 @@ export async function fetchStockIngredients(): Promise<StockIngredientsResult> {
     .select('ingredient_name')
     .gt('current_stock', 0);
 
-  if (error || !data) return { stockIngredients, stockIngredientsRaw };
+  if (error || !data) {
+    if (error) logger.error('Failed to fetch stock ingredients', { error });
+    return { stockIngredients, stockIngredientsRaw };
+  }
 
   data.forEach(item => {
     const name = item.ingredient_name;

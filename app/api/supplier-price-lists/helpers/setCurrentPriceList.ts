@@ -11,8 +11,8 @@ import { SupabaseClient } from '@supabase/supabase-js';
  * @returns {Promise<void>}
  */
 export async function setCurrentPriceList(
-  supplierId: number,
-  excludeId: number | null = null,
+  supplierId: string,
+  excludeId: string | null = null,
   supabase: SupabaseClient,
 ): Promise<void> {
   if (!supabase) {

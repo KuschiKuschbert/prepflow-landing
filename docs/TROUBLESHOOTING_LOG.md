@@ -140,6 +140,18 @@ Format: **Symptom** | **Root Cause** | **Fix** | **Derived Rule**
 
 ---
 
+## column dishes.category does not exist
+
+**Symptom:** 500 on `/api/menu-dishes`, kitchen-sections; Postgres error `column dishes.category does not exist`.
+
+**Root Cause:** Migration `add-dishes-recipes-category.sql` adds `dishes.category`; some databases haven't run it.
+
+**Fix:** (1) Run migration `migrations/add-dishes-recipes-category.sql` in Supabase. (2) Code resilience: kitchen-sections/service.ts falls back to select without category; menu-dishes/route.ts handles 42703 (undefined_column) and retries without category.
+
+**Derived Rule:** When schema may lack optional columns, add fallback selects (omit column, map to default) and handle 42703.
+
+---
+
 ## column kitchen_sections.name does not exist
 
 **Symptom:** 500 on prep-lists generate-from-menu; `column kitchen_sections.name does not exist`.

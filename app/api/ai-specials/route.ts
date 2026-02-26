@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { handleGetRequest } from './helpers/handleGetRequest';
 import { handlePostRequest } from './helpers/handlePostRequest';
@@ -14,6 +15,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     return await handleGetRequest(request);
   } catch (error) {
+    logger.error('[AI Specials] GET error:', { error });
     return handleAISpecialsError(error, 'GET');
   }
 }
@@ -29,6 +31,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     return await handlePostRequest(request);
   } catch (error) {
+    logger.error('[AI Specials] POST error:', { error });
     return handleAISpecialsError(error, 'POST');
   }
 }

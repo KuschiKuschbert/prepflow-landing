@@ -1,6 +1,7 @@
 /**
  * Helper function for creating equipment maintenance record in the chef workflow test.
  */
+import { safeGoto } from '../../helpers/sim-wait';
 import type { Page } from '@playwright/test';
 import { fillEquipmentMaintenanceForm, waitForFormSubmission } from '../../helpers/form-helpers';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
@@ -10,8 +11,7 @@ export async function createEquipmentMaintenanceFlow(
   testSteps: string[],
 ): Promise<void> {
   testSteps.push('Step 24: Navigate to Compliance page');
-  await page.goto('/webapp/compliance');
-  await page.waitForLoadState('domcontentloaded');
+  if (!(await safeGoto(page, '/webapp/compliance'))) { return; }
   await page.waitForTimeout(1500);
   await collectPageErrors(page);
 

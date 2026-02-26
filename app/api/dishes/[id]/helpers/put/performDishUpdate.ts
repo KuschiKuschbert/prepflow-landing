@@ -2,8 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 
-export async function performDishUpdate(dishId: string, updateData: any) {
-  // justified
+export async function performDishUpdate(dishId: string, updateData: Record<string, unknown>) {
   if (!supabaseAdmin) {
     throw new Error('Database connection not available');
   }

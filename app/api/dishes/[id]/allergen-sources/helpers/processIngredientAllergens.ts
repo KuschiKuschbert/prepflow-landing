@@ -70,7 +70,7 @@ export async function processIngredientAllergens(
     return;
   }
 
-  dishIngredients.forEach((di: any) => {
+  dishIngredients.forEach((di: Record<string, unknown>) => {
     const ingredient = di.ingredients as unknown as IngredientRecord | null;
 
     if (!ingredient) return;
@@ -92,8 +92,8 @@ export async function processIngredientAllergens(
           source_name: ingredient.brand
             ? `${ingredient.ingredient_name} (${ingredient.brand})`
             : ingredient.ingredient_name,
-          quantity: di.quantity || undefined,
-          unit: di.unit || undefined,
+          quantity: (di.quantity as number) || undefined,
+          unit: (di.unit as string) || undefined,
           allergen_source: ingredient.allergen_source || undefined,
         });
       }

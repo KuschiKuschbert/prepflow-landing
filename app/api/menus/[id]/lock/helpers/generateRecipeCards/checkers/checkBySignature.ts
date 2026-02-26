@@ -2,6 +2,7 @@ import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { generateDataHash } from '../../cardBuilding';
 import { findExistingCardBySignature, getRecipeSignature } from '../../cardManagement';
+import type { NormalizedIngredient } from '../../normalizeIngredients';
 import { MenuItemData } from '../../types';
 import { MenuItem } from '../fetchMenuItems';
 import { ItemToGenerate } from '../types';
@@ -19,7 +20,7 @@ export async function checkBySignature(
   supabase: SupabaseClient,
   menuItem: MenuItem,
   menuItemData: MenuItemData,
-  normalizedIngredients: any[], // justified
+  normalizedIngredients: NormalizedIngredient[],
 ): Promise<SignatureCheckResult> {
   const signature = getRecipeSignature(menuItemData, menuItem) || '';
   if (!signature) {

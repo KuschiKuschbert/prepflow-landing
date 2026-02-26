@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { ChefHat, ChevronDown, ChevronUp } from 'lucide-react';
 import React from 'react';

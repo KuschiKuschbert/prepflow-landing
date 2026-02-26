@@ -69,7 +69,13 @@ export type Action =
   | 'testSortAndViewToggles'
   | 'testAIFeatures'
   | 'testQRCode'
-  | 'testInlineEditing';
+  | 'testInlineEditing'
+  | 'staffOnboarding'
+  | 'testDeleteFlow'
+  | 'testPagination'
+  | 'editCustomer'
+  | 'createKitchenSection'
+  | 'interactSquare';
 
 /** Cafe: morning-heavy, temperature and prep lists */
 export const CAFE_DAY_PROFILE: Action[][] = [
@@ -116,6 +122,7 @@ export const CAFE_DAY_PROFILE: Action[][] = [
     'createTemperatureEquipment',
     'testImportExport',
     'testQRCode',
+    'staffOnboarding',
   ],
   [
     'createTemperatureLog',
@@ -136,6 +143,8 @@ export const CAFE_DAY_PROFILE: Action[][] = [
     'testFormValidation',
     'interactSettings',
     'createCustomer',
+    'editCustomer',
+    'createKitchenSection',
   ],
 ];
 
@@ -149,6 +158,7 @@ export const RESTAURANT_DAY_PROFILE: Action[][] = [
     'createDish',
     'createDetailedRecipe',
     'testSearchAndFilters',
+    'testPagination',
   ],
   [
     'viewPerformance',
@@ -157,8 +167,10 @@ export const RESTAURANT_DAY_PROFILE: Action[][] = [
     'createFunction',
     'viewRecipeSharing',
     'viewSquare',
+    'interactSquare',
     'createDishWithAllergens',
     'switchTabs',
+    'createKitchenSection',
   ],
   [
     'createRecipe',
@@ -179,6 +191,8 @@ export const RESTAURANT_DAY_PROFILE: Action[][] = [
     'createStaffMember',
     'createCustomer',
     'clockInOut',
+    'staffOnboarding',
+    'editCustomer',
   ],
   [
     'createRecipe',
@@ -189,6 +203,7 @@ export const RESTAURANT_DAY_PROFILE: Action[][] = [
     'viewPerformanceCharts',
     'testImportExport',
     'bulkOperations',
+    'testDeleteFlow',
   ],
   [
     'createMenu',
@@ -232,6 +247,7 @@ export const FOOD_TRUCK_DAY_PROFILE: Action[][] = [
     'viewSections',
     'updateIngredientStock',
     'testSearchAndFilters',
+    'createKitchenSection',
   ],
   [
     'createOrderList',
@@ -250,6 +266,7 @@ export const FOOD_TRUCK_DAY_PROFILE: Action[][] = [
     'createComplianceRecord',
     'testFormValidation',
     'bulkOperations',
+    'testDeleteFlow',
   ],
   [
     'createPrepList',
@@ -259,6 +276,7 @@ export const FOOD_TRUCK_DAY_PROFILE: Action[][] = [
     'viewSettingsBackup',
     'testSortAndViewToggles',
     'createCustomer',
+    'testPagination',
   ],
   [
     'viewParLevels',
@@ -279,5 +297,7 @@ export const FOOD_TRUCK_DAY_PROFILE: Action[][] = [
     'navigateAllModules',
     'interactSettings',
     'testAIFeatures',
+    'staffOnboarding',
+    'editCustomer',
   ],
 ];

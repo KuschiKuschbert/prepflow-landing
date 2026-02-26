@@ -38,6 +38,15 @@ export async function getAdminUser(req?: NextRequest): Promise<AdminUser | null>
  * @throws {NextResponse} 401 or 403 response if not admin
  */
 export async function requireAdmin(request: NextRequest): Promise<AdminUser> {
+  // Bypass in development mode when AUTH0_BYPASS_DEV=true (used for simulations/E2E tests)
+  if (process.env.NODE_ENV === 'development' && process.env.AUTH0_BYPASS_DEV === 'true') {
+    return {
+      id: 'derkusch@gmail.com',
+      email: 'derkusch@gmail.com',
+      role: 'admin',
+    };
+  }
+
   const { auth0 } = await import('@/lib/auth0');
   const session = await auth0.getSession(request);
 

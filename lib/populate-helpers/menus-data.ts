@@ -40,10 +40,26 @@ export async function populateMenus(
 
   const { dishMap, recipeMap } = createMenuLookupMaps(dishesData || [], recipesData || []);
 
+  // Get a real user_id so menus are visible in the app (API filters by user_id)
+  let userId: string | null = null;
+  try {
+    const { data: userData } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1 });
+    userId = userData?.users?.[0]?.id ?? null;
+  } catch {
+    // Fallback: try users table
+    try {
+      const { data: usersRow } = await supabaseAdmin.from('users').select('id').limit(1).single();
+      userId = (usersRow as { id?: string } | null)?.id ?? null;
+    } catch {
+      logger.warn('[populateMenus] Could not resolve user_id - menus will have no user_id');
+    }
+  }
+
   // Create menus
   const menusToInsert = cleanSampleMenus.map(menu => ({
     menu_name: menu.menu_name,
     description: menu.description,
+    ...(userId ? { user_id: userId } : {}),
   }));
 
   const { data: menusData, error: menusError } = await supabaseAdmin

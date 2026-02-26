@@ -1,5 +1,6 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
+import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '../supabase';
 import type { FixDocumentation } from './types';
 
@@ -71,16 +72,16 @@ export async function documentFix(
           .eq('id', errorId);
 
         if (updateError) {
-          console.warn('[Fix Documentation] Error not found in database:', errorId);
+          logger.warn('[Fix Documentation] Error not found in database', { errorId });
         }
       }
     } catch (err) {
-      console.warn('[Fix Documentation] Could not update error status:', err);
+      logger.warn('[Fix Documentation] Could not update error status', { error: err });
     }
 
     return fixId;
   } catch (err) {
-    console.error('[Fix Documentation] Failed to document fix:', err);
+    logger.error('[Fix Documentation] Failed to document fix', { error: err });
     throw err;
   }
 }

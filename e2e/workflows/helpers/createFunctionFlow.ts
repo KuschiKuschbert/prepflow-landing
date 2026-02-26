@@ -3,7 +3,7 @@
  * Resilient: continues even if some steps fail.
  */
 import type { Page } from '@playwright/test';
-import { getSimWait } from '../../helpers/sim-wait';
+import { getSimWait, safeGoto } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 export async function createFunctionFlow(
@@ -12,8 +12,7 @@ export async function createFunctionFlow(
   testSteps: string[] = [],
 ): Promise<void> {
   testSteps.push('Navigate to Functions');
-  await page.goto('/webapp/functions');
-  await page.waitForLoadState('load');
+  if (!(await safeGoto(page, '/webapp/functions'))) { return; }
   await page.waitForTimeout(getSimWait(500));
   await collectPageErrors(page);
 
@@ -46,9 +45,12 @@ export async function createFunctionFlow(
     .locator('button:has-text("Create Event"), button:has-text("Create")')
     .first();
   if (await saveBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
-    await saveBtn.click();
-    await page.waitForLoadState('load');
-    await page.waitForTimeout(getSimWait(500));
+    if (!(await saveBtn.isDisabled().catch(() => false))) {
+      await saveBtn.click({ force: true });
+      await page.waitForTimeout(getSimWait(500));
+    } else {
+      testSteps.push('Create Event button disabled - skipping submit');
+    }
   }
   await collectPageErrors(page);
 }

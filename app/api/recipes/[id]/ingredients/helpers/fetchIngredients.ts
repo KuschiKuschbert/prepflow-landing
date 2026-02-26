@@ -64,8 +64,7 @@ export async function fetchIngredientsWithCategoryFallback(
 
     // Normalize the retry result to include category as null for type compatibility
     data =
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (retryData?.map((item: any) => {
+      (retryData?.map((item: Record<string, unknown>) => {
         const rawIngs = item.ingredients as unknown as
           | Record<string, unknown>
           | Record<string, unknown>[];

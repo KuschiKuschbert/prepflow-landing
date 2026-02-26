@@ -89,14 +89,18 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
-
-    if (!userId) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('User ID is required', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
+    let userId: string;
+    try {
+      const authUser = await getAuthenticatedUser(request);
+      userId = authUser.userId;
+    } catch {
+      // Fallback: accept userId query param for backward compat (but ignore invalid values)
+      const { searchParams } = new URL(request.url);
+      const paramUserId = searchParams.get('userId');
+      if (!paramUserId) {
+        return NextResponse.json({ success: true, data: [] });
+      }
+      userId = paramUserId;
     }
 
     if (!supabaseAdmin) {

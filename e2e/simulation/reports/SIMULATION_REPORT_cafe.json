@@ -1,173 +1,274 @@
 {
   "summary": {
     "personaCount": 1,
-    "totalErrors": 0,
-    "totalBottlenecks": 1,
-    "totalFaultyPaths": 15
+    "totalErrors": 2,
+    "totalBottlenecks": 26,
+    "totalFaultyPaths": 1
   },
-  "errors": [],
+  "errors": [
+    {
+      "type": "console.warn",
+      "url": "http://localhost:3000/webapp/temperature",
+      "message": "[WARN] {\n  \"level\": \"warn\",\n  \"message\": \"⚠️ No logs found for equipment \\\"Bain Marie Hot\\\"\",\n  \"timestamp\": \"2026-02-26T06:06:11.562Z\",\n  \"data\": {\n    \"queriedLocations\": [\n      \"Service Area\",\n      \"Bain Marie Hot\"\n    ]\n  }\n}",
+      "timestamp": "2026-02-26T06:06:11.562Z",
+      "personaId": "cafe"
+    },
+    {
+      "type": "uncaught",
+      "url": "http://localhost:3000/webapp/functions",
+      "message": "Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\nhttps://react.dev/link/hydration-mismatch\n\n  ...\n    <RedirectErrorBoundary router={{...}}>\n      <InnerLayoutRouter url=\"/webapp/fu...\" tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} ...>\n        <SegmentViewNode type=\"page\" pagePath=\"webapp/fun...\">\n          <SegmentTrieNode>\n          <ClientPageRoot Component={function FunctionsPage} serverProvidedParams={{...}}>\n            <FunctionsPage params={Promise} searchParams={Promise}>\n              <ConfirmDialogComponent>\n              <div className=\"desktop:p-...\">\n                <div className=\"desktop:bl...\">\n                  <div className=\"sticky ove...\" style={{top:\"calc(...\", ...}}>\n                    <MiniCalendarPanel events={[...]} selectedDate={null} onDateSelect={function bound dispatchSetState} ...>\n                      <div className=\"overflow-h...\">\n                        <div>\n                        <div className=\"px-2 pb-2\">\n                          <div>\n                          <div className=\"grid grid-...\">\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button\n                              onClick={function onClick}\n+                             className=\"relative flex h-7 flex-col items-center justify-center rounded-md text-[10px]...\"\n-                             className=\"relative flex h-7 flex-col items-center justify-center rounded-md text-[10px]...\"\n+                             aria-label=\"February 26, 2 events\"\n-                             aria-label=\"February 26\"\n                            >\n                              <span>\n+                             <div className=\"absolute bottom-0.5 flex gap-px\">\n                            ...\n                        ...\n                ...\n              ...\n        ...\n      ...\n",
+      "stack": "Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\nhttps://react.dev/link/hydration-mismatch\n\n  ...\n    <RedirectErrorBoundary router={{...}}>\n      <InnerLayoutRouter url=\"/webapp/fu...\" tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} ...>\n        <SegmentViewNode type=\"page\" pagePath=\"webapp/fun...\">\n          <SegmentTrieNode>\n          <ClientPageRoot Component={function FunctionsPage} serverProvidedParams={{...}}>\n            <FunctionsPage params={Promise} searchParams={Promise}>\n              <ConfirmDialogComponent>\n              <div className=\"desktop:p-...\">\n                <div className=\"desktop:bl...\">\n                  <div className=\"sticky ove...\" style={{top:\"calc(...\", ...}}>\n                    <MiniCalendarPanel events={[...]} selectedDate={null} onDateSelect={function bound dispatchSetState} ...>\n                      <div className=\"overflow-h...\">\n                        <div>\n                        <div className=\"px-2 pb-2\">\n                          <div>\n                          <div className=\"grid grid-...\">\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button\n                              onClick={function onClick}\n+                             className=\"relative flex h-7 flex-col items-center justify-center rounded-md text-[10px]...\"\n-                             className=\"relative flex h-7 flex-col items-center justify-center rounded-md text-[10px]...\"\n+                             aria-label=\"February 26, 2 events\"\n-                             aria-label=\"February 26\"\n                            >\n                              <span>\n+                             <div className=\"absolute bottom-0.5 flex gap-px\">\n                            ...\n                        ...\n                ...\n              ...\n        ...\n      ...\n\n    at throwOnHydrationMismatch (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:5531:11)\n    at beginWork (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:12386:17)\n    at runWithFiberInDEV (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:987:30)\n    at performUnitOfWork (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:18998:22)\n    at workLoopConcurrentByScheduler (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:18992:9)\n    at renderRootConcurrent (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:18974:15)\n    at performWorkOnRoot (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:17835:11)\n    at performWorkOnRootViaSchedulerTask (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:20385:7)\n    at MessagePort.performWorkUntilDeadline (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/scheduler/cjs/scheduler.development.js:45:48)",
+      "timestamp": "2026-02-26T06:08:18.460Z",
+      "personaId": "cafe"
+    }
+  ],
   "bottlenecks": [
     {
       "type": "bottleneck",
       "personaId": "cafe",
-      "action": "createParLevel",
-      "durationMs": 17600,
+      "action": "createPrepList",
+      "durationMs": 6441,
       "thresholdMs": 5000,
-      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBEcmp6TlcydlNkdWVHRFFKUUZ6UlQ1R1h1anB6bWN1UaFup2NvbnNlbnSjdGlk2SBwWkNDWDJSaFFrdFR2SEI0OUdxM3lnV1kyS3NUX09BSKNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
-      "timestamp": "2026-02-25T06:29:59.861Z"
+      "url": "http://localhost:3000/webapp/prep-lists",
+      "timestamp": "2026-02-26T06:00:45.677Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createIngredient",
+      "durationMs": 12152,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/recipes",
+      "timestamp": "2026-02-26T06:00:57.833Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "viewDashboard",
+      "durationMs": 19316,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp",
+      "timestamp": "2026-02-26T06:01:17.165Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "viewGuide",
+      "durationMs": 20425,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/guide",
+      "timestamp": "2026-02-26T06:01:38.370Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "switchTabs",
+      "durationMs": 53098,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/settings#security",
+      "timestamp": "2026-02-26T06:02:31.478Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createTemperatureLog",
+      "durationMs": 21974,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T06:02:53.453Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "viewSetup",
+      "durationMs": 10385,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/setup",
+      "timestamp": "2026-02-26T06:03:16.839Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "testSearchAndFilters",
+      "durationMs": 39603,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/recipes#ingredients",
+      "timestamp": "2026-02-26T06:03:57.206Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createTemperatureLog",
+      "durationMs": 8203,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T06:04:06.632Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "testSortAndViewToggles",
+      "durationMs": 11155,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T06:04:36.438Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createTemperatureLog",
+      "durationMs": 17752,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T06:04:54.191Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "bulkOperations",
+      "durationMs": 5790,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/recipes",
+      "timestamp": "2026-02-26T06:05:07.109Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createOrderList",
+      "durationMs": 11046,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/order-lists",
+      "timestamp": "2026-02-26T06:05:22.063Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "testImportExport",
+      "durationMs": 41014,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/recipes#dishes",
+      "timestamp": "2026-02-26T06:06:03.717Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "testQRCode",
+      "durationMs": 8027,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T06:06:11.749Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "staffOnboarding",
+      "durationMs": 5802,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/staff",
+      "timestamp": "2026-02-26T06:06:17.551Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createTemperatureLog",
+      "durationMs": 36426,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T06:06:53.979Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "viewRoster",
+      "durationMs": 6640,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/roster",
+      "timestamp": "2026-02-26T06:07:01.610Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createStaffMember",
+      "durationMs": 5081,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/staff",
+      "timestamp": "2026-02-26T06:07:06.696Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "clockInOut",
+      "durationMs": 6939,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/time-attendance",
+      "timestamp": "2026-02-26T06:07:13.636Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "testInlineEditing",
+      "durationMs": 15638,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/menu-builder",
+      "timestamp": "2026-02-26T06:07:29.277Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "viewDashboard",
+      "durationMs": 5617,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp",
+      "timestamp": "2026-02-26T06:07:35.536Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "viewSections",
+      "durationMs": 18928,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/sections",
+      "timestamp": "2026-02-26T06:07:58.826Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "testFormValidation",
+      "durationMs": 30683,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T06:08:33.925Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "interactSettings",
+      "durationMs": 22571,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/settings/billing",
+      "timestamp": "2026-02-26T06:08:56.521Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createCustomer",
+      "durationMs": 30010,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/settings/billing",
+      "timestamp": "2026-02-26T06:09:26.532Z"
     }
   ],
   "faultyPaths": [
     {
       "type": "faulty-path",
       "personaId": "cafe",
-      "action": "createTemperatureLog",
-      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBlVWt4ZEJmT1NZTk14TWJzTFFtVEhXRWx5S21tall6YaFup2NvbnNlbnSjdGlk2SBSc21FM1c4WUpBdXBFR1gxdXZkRlI2RmdVVlVnVW4zb6NjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
+      "action": "createParLevel",
+      "url": "http://localhost:3000/webapp/par-levels",
       "expected": "Action completes successfully",
       "actual": "selector-timeout",
-      "errorMessage": "[createTemperatureLog] locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Add Temperature Log\"), button:has-text(\"Add Temperature\"), button:has-text(\"Add Log\"), button:has-text(\"➕\")').first() to be visible\u001b[22m\n",
-      "timestamp": "2026-02-25T06:27:00.486Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "cafe",
-      "action": "createPrepList",
-      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBXN0NxZFBmLVNMZml3OHJxQnh4WGk5UmMxbVdpX1NMTaFup2NvbnNlbnSjdGlk2SBORzN3dDFxZGJMLWxvVUY3aTVpOE5vX1hQZVJlcmJ5eKNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
-      "expected": "Action completes successfully",
-      "actual": "selector-timeout",
-      "errorMessage": "[createPrepList] locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Generate from Menu\"), button:has-text(\"Generate\")').first() to be visible\u001b[22m\n",
-      "timestamp": "2026-02-25T06:27:18.410Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "cafe",
-      "action": "createIngredient",
-      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA4TDBNdmJVWUhOUGRzYXdndXNoWGcxU2x5M2FUN1B0d6Fup2NvbnNlbnSjdGlk2SBoR1AzaExJRFZGRFM5WGhaR3lYTENFMzFlUk1raW0ybaNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#ingredients",
-      "expected": "Action completes successfully",
-      "actual": "selector-timeout",
-      "errorMessage": "[createIngredient] page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[placeholder*=\"Fresh Tomatoes\"]') to be visible\u001b[22m\n",
-      "timestamp": "2026-02-25T06:27:36.669Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "cafe",
-      "action": "createTemperatureLog",
-      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBYRlBHUjdGbFhFQ1QwMTJHUVRjVGR0Ymd6TjE0bWZvaqFup2NvbnNlbnSjdGlk2SBDbmtWay1tSURjTTJJRmpXd0l3R1l1Vm1DV1RBckhUb6NjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
-      "expected": "Action completes successfully",
-      "actual": "selector-timeout",
-      "errorMessage": "[createTemperatureLog] locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Add Temperature Log\"), button:has-text(\"Add Temperature\"), button:has-text(\"Add Log\"), button:has-text(\"➕\")').first() to be visible\u001b[22m\n",
-      "timestamp": "2026-02-25T06:28:02.559Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "cafe",
-      "action": "createOrderList",
-      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBXaU5UQllCODlYNm4xcHV1dWFzamdjVUVvbUN4c0VSSaFup2NvbnNlbnSjdGlk2SBsS3RRdHhjVFQ0RGVxZld0UjJSc0xYd2pGNGREc1JJdqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
-      "expected": "Action completes successfully",
-      "actual": "selector-timeout",
-      "errorMessage": "[createOrderList] locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#menu-select').first() to be visible\u001b[22m\n",
-      "timestamp": "2026-02-25T06:28:14.400Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "cafe",
-      "action": "createCleaningTask",
-      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA3dDJJZVZSZm43OWRpU3ZrNXhYNm5mQ1NkMUotMnBaeqFup2NvbnNlbnSjdGlk2SBZMm9uYmh5VUU1RFBja18zWTYweU9GaXdkbGhUdDl5a6NjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
-      "expected": "Action completes successfully",
-      "actual": "selector-timeout",
-      "errorMessage": "[createCleaningTask] locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /Cleaning Areas/i }).first() to be visible\u001b[22m\n",
-      "timestamp": "2026-02-25T06:28:28.066Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "cafe",
-      "action": "createPrepList",
-      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SB6QzE2bzNUbk50UDVFT1dzYmRfT3VrbXRvNTBMMUVsb6Fup2NvbnNlbnSjdGlk2SBCb21pY2NBMXdKVlNTMjFkYW9meVVZUkNwSW5keWg3SqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
-      "expected": "Action completes successfully",
-      "actual": "selector-timeout",
-      "errorMessage": "[createPrepList] locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Generate from Menu\"), button:has-text(\"Generate\")').first() to be visible\u001b[22m\n",
-      "timestamp": "2026-02-25T06:28:46.303Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "cafe",
-      "action": "createTemperatureLog",
-      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBjeDFCVjlGaFRPdnU2bTVtMElNYUVCRTh6MXliSlZ1bqFup2NvbnNlbnSjdGlk2SBOWXdqRzViWFExSVBSOEl5dVJNMGw4RHRobVlFZVJfLaNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
-      "expected": "Action completes successfully",
-      "actual": "selector-timeout",
-      "errorMessage": "[createTemperatureLog] locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Add Temperature Log\"), button:has-text(\"Add Temperature\"), button:has-text(\"Add Log\"), button:has-text(\"➕\")').first() to be visible\u001b[22m\n",
-      "timestamp": "2026-02-25T06:29:07.244Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "cafe",
-      "action": "createRecipe",
-      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBWTTZaTHZ5S0JIbnp4Mm0zbDN3aVBrR2RMRGc0U05oYqFup2NvbnNlbnSjdGlk2SBXQ2xtVG5GSU9Vdzk5T20zYjNqTGtDVl92REllRGd6bqNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM#dishes",
-      "expected": "Action completes successfully",
-      "actual": "selector-timeout",
-      "errorMessage": "[createRecipe] locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Recipe', exact: true }).first() to be visible\u001b[22m\n",
-      "timestamp": "2026-02-25T06:29:42.260Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "cafe",
-      "action": "createTemperatureLog",
-      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBYa2x5dmpHSzFJNTY5cWR3VzBLTkJsRXFMdVluTldyUqFup2NvbnNlbnSjdGlk2SBsZHB6aDI4N1pLTjhiNnhvQ2hHNVdQOFZoREZoZDlTN6NjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
-      "expected": "Action completes successfully",
-      "actual": "selector-timeout",
-      "errorMessage": "[createTemperatureLog] locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Add Temperature Log\"), button:has-text(\"Add Temperature\"), button:has-text(\"Add Log\"), button:has-text(\"➕\")').first() to be visible\u001b[22m\n",
-      "timestamp": "2026-02-25T06:30:21.269Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "cafe",
-      "action": "createPrepList",
-      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBWbGdLTDNiM0l2azJ1SThUNlNlcE1kR3RFLV8wa1FidaFup2NvbnNlbnSjdGlk2SBLRWNlSHVaSnJYVl8zLW15OHc2akY3UmZuX1FTcTlyaaNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
-      "expected": "Action completes successfully",
-      "actual": "selector-timeout",
-      "errorMessage": "[createPrepList] locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Generate from Menu\"), button:has-text(\"Generate\")').first() to be visible\u001b[22m\n",
-      "timestamp": "2026-02-25T06:30:42.985Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "cafe",
-      "action": "createTemperatureLog",
-      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SA1NGhCc0dBMWNoa2NGeXl1OGJnX2FseDQwSV9DTHdmZ6Fup2NvbnNlbnSjdGlk2SBJS0pIT001Y0NIT1Y1S2ZYcFJWUjNuVDJwdEJMTDZBM6NjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
-      "expected": "Action completes successfully",
-      "actual": "selector-timeout",
-      "errorMessage": "[createTemperatureLog] locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Add Temperature Log\"), button:has-text(\"Add Temperature\"), button:has-text(\"Add Log\"), button:has-text(\"➕\")').first() to be visible\u001b[22m\n",
-      "timestamp": "2026-02-25T06:31:04.181Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "cafe",
-      "action": "createOrderList",
-      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SB3SVR1TC1iamJOWW51T1doMG9pMndfYkc5WDNJdFRpX6Fup2NvbnNlbnSjdGlk2SB1ZGFnNXRFZTlwbVh2dms2eFZ6RWJVT3hjLWlfaUI1c6NjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
-      "expected": "Action completes successfully",
-      "actual": "selector-timeout",
-      "errorMessage": "[createOrderList] locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#menu-select').first() to be visible\u001b[22m\n",
-      "timestamp": "2026-02-25T06:31:14.372Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "cafe",
-      "action": "createTemperatureLog",
-      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SB5aHEzRVByQXczdHowdjdvQTdMLVU4YzZrRnJkdkx5aqFup2NvbnNlbnSjdGlk2SBXaFdpR2RMbVhadzhaNDhoaFR3QVFFZ3d1d1dqV2U4X6NjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
-      "expected": "Action completes successfully",
-      "actual": "selector-timeout",
-      "errorMessage": "[createTemperatureLog] locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Add Temperature Log\"), button:has-text(\"Add Temperature\"), button:has-text(\"Add Log\"), button:has-text(\"➕\")').first() to be visible\u001b[22m\n",
-      "timestamp": "2026-02-25T06:31:36.779Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "cafe",
-      "action": "createPrepList",
-      "url": "https://auth.prepflow.org/u/consent?state=hKFo2SBnclNCU0xZdy1tOWtWbnVENDI3cGpYSzJHSkFFOEJ1ZqFup2NvbnNlbnSjdGlk2SA4MWtkMWFBckkyOS1HU0U1VU5xaWtyUXMtN3kzSFk5LaNjaWTZIENPM1ZsMzdTdVo0ZTl3a2UxUGl0Z1d2QVV5TVIySGZM",
-      "expected": "Action completes successfully",
-      "actual": "selector-timeout",
-      "errorMessage": "[createPrepList] locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Generate from Menu\"), button:has-text(\"Generate\")').first() to be visible\u001b[22m\n",
-      "timestamp": "2026-02-25T06:31:53.545Z"
+      "errorMessage": "[createParLevel] locator.click: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /Add Par Level/i }).first()\u001b[22m\n",
+      "timestamp": "2026-02-26T06:04:24.466Z"
     }
   ],
-  "generatedAt": "2026-02-25T06:32:03.001Z"
+  "generatedAt": "2026-02-26T06:09:55.003Z"
 }

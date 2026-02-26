@@ -11,7 +11,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
  */
 export async function createPriceList(
   data: {
-    supplier_id: number;
+    supplier_id: string;
     document_name: string;
     document_url: string;
     effective_date?: string | null;
@@ -24,18 +24,7 @@ export async function createPriceList(
   const { data: created, error } = await supabase
     .from('supplier_price_lists')
     .insert(data)
-    .select(
-      `
-      *,
-      suppliers (
-        id,
-        name,
-        contact_person,
-        email,
-        phone
-      )
-    `,
-    )
+    .select('*')
     .single();
 
   if (error) {

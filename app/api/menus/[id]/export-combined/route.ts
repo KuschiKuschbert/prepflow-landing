@@ -3,6 +3,7 @@
  */
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import type { ExportTheme } from '@/lib/exports/themes';
 import { logger } from '@/lib/logger';
 import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { NextRequest, NextResponse } from 'next/server';
@@ -27,7 +28,16 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
 
     const format = searchParams.get('format') || 'html';
     const include = searchParams.get('include') || 'menu,matrix';
-    const theme = (searchParams.get('theme') || 'cyber-carrot') as any;
+    const themeParam = searchParams.get('theme') || 'cyber-carrot';
+    const VALID_THEMES: ExportTheme[] = [
+      'cyber-carrot',
+      'electric-lemon',
+      'phantom-pepper',
+      'cosmic-blueberry',
+    ];
+    const theme: ExportTheme = VALID_THEMES.includes(themeParam as ExportTheme)
+      ? (themeParam as ExportTheme)
+      : 'cyber-carrot';
 
     // Validate request parameters
     const validation = validateRequest(menuId, format, include);

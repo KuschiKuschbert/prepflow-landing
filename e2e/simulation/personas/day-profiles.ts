@@ -109,6 +109,12 @@ export function actionToDomain(action: Action): string {
     testAIFeatures: 'specials',
     testQRCode: 'equipment',
     testInlineEditing: 'par-levels',
+    staffOnboarding: 'staff',
+    testDeleteFlow: 'dashboard',
+    testPagination: 'dashboard',
+    editCustomer: 'customers',
+    createKitchenSection: 'sections',
+    interactSquare: 'square',
   };
   return map[action] || 'ingredients';
 }

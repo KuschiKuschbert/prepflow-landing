@@ -12,7 +12,11 @@ export async function GET(request: NextRequest) {
   try {
     const { supabase, error } = await standardAdminChecks(request);
     if (error) return error;
-    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+    if (!supabase)
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database unavailable', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
 
     const { searchParams } = new URL(request.url);
     const supplierId = searchParams.get('supplier_id');
@@ -49,20 +53,32 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const { supabase, error } = await standardAdminChecks(request);
   if (error) return error;
-  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  if (!supabase)
+    return NextResponse.json(
+      ApiErrorHandler.createError('Database unavailable', 'DATABASE_ERROR', 500),
+      { status: 500 },
+    );
   return handleCreatePriceList(request, supabase);
 }
 
 export async function PUT(request: NextRequest) {
   const { supabase, error } = await standardAdminChecks(request);
   if (error) return error;
-  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  if (!supabase)
+    return NextResponse.json(
+      ApiErrorHandler.createError('Database unavailable', 'DATABASE_ERROR', 500),
+      { status: 500 },
+    );
   return handleUpdatePriceList(request, supabase);
 }
 
 export async function DELETE(request: NextRequest) {
   const { supabase, error } = await standardAdminChecks(request);
   if (error) return error;
-  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  if (!supabase)
+    return NextResponse.json(
+      ApiErrorHandler.createError('Database unavailable', 'DATABASE_ERROR', 500),
+      { status: 500 },
+    );
   return handleDeletePriceList(request, supabase);
 }

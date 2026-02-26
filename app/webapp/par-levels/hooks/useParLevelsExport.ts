@@ -10,9 +10,10 @@ import {
   exportParLevelsToPDF,
 } from '../utils/exportParLevels';
 import { printParLevels } from '../utils/printParLevels';
+import type { ParLevel } from '../types';
 
 interface UseParLevelsExportProps {
-  parLevels: any[]; // Using any to match existing context or fix type import later
+  parLevels: ParLevel[];
 }
 
 export function useParLevelsExport({ parLevels }: UseParLevelsExportProps) {

@@ -4,7 +4,7 @@
  * Fills name, role, email, phone, and tests the certificate expiry date picker.
  */
 import type { Page } from '@playwright/test';
-import { getSimWait } from '../../helpers/sim-wait';
+import { getSimWait, safeGoto } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 export async function createStaffMemberFlow(
@@ -13,8 +13,7 @@ export async function createStaffMemberFlow(
   testSteps: string[] = [],
 ): Promise<void> {
   testSteps.push('Navigate to Staff page');
-  await page.goto('/webapp/staff');
-  await page.waitForLoadState('load');
+  if (!(await safeGoto(page, '/webapp/staff'))) { return; }
   await page.waitForTimeout(getSimWait(800));
   await collectPageErrors(page);
 

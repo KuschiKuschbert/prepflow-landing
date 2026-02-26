@@ -88,6 +88,11 @@ function analyzeOptimisticUpdates(content, filePath) {
     return violations;
   }
 
+  // Skip fire-and-forget telemetry/analytics (record-daily, etc.) - no local state update
+  if (/record-daily|record.*daily|record.*weather/i.test(content) && /method.*POST/.test(content)) {
+    return violations;
+  }
+
   // Skip restore/backup operations - they don't update managed state lists
   if (/restore|backup/i.test(filePath)) return violations;
 

@@ -1,5 +1,6 @@
 import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import QRCode from 'qrcode';
 import { handleCleaningAreaError } from '../../helpers/handleCleaningAreaError';
@@ -47,6 +48,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       },
     });
   } catch (error: unknown) {
+    logger.error('[Cleaning Areas QR] GET error:', { error });
     return handleCleaningAreaError(error, 'GET');
   }
 }

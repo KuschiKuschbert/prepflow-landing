@@ -5,7 +5,7 @@
  */
 import type { Page } from '@playwright/test';
 import { waitForFormSubmission } from '../../helpers/form-helpers';
-import { getSimWait } from '../../helpers/sim-wait';
+import { getSimWait, safeGoto } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 function futureDate(daysFromNow: number): string {
@@ -16,8 +16,7 @@ function futureDate(daysFromNow: number): string {
 
 export async function createComplianceRecordFlow(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Navigate to Compliance page');
-  await page.goto('/webapp/compliance');
-  await page.waitForLoadState('load');
+  if (!(await safeGoto(page, '/webapp/compliance'))) { return; }
   await page.waitForTimeout(getSimWait(1200));
   await collectPageErrors(page);
 

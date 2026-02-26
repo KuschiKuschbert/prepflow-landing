@@ -63,7 +63,8 @@ export async function fetchDishRecipes(dishId: string): Promise<DishRecipe[]> {
   }
 
   // Create a map of recipe_id -> recipe data
-  const recipesMap = new Map<string, any>(
+  type RecipeMapValue = RecipeRecord & { id: string; name: string };
+  const recipesMap = new Map<string, RecipeMapValue>(
     (recipesData || []).map(r => {
       const recipeRecord = r as unknown as RecipeRecord;
       return [

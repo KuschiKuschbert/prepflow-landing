@@ -5,13 +5,25 @@
  * Resilient: continues even if clock buttons are not available.
  */
 import type { Page } from '@playwright/test';
-import { getSimWait } from '../../helpers/sim-wait';
+import { getSimWait, SIM_FAST } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 export async function clockInOutFlow(page: Page, testSteps: string[] = []): Promise<void> {
   testSteps.push('Navigate to Time Attendance page');
-  await page.goto('/webapp/time-attendance');
-  await page.waitForLoadState('load');
+  try {
+    await page.goto('/webapp/time-attendance', {
+      waitUntil: SIM_FAST ? 'domcontentloaded' : 'load',
+    });
+  } catch (navErr) {
+    const msg = navErr instanceof Error ? navErr.message : String(navErr);
+    testSteps.push(`[clockInOut] Navigation failed: ${msg.slice(0, 80)} - skipping`);
+    return;
+  }
+  // Bail if redirected to Auth0 login
+  if (page.url().includes('auth0.com') || page.url().includes('/api/auth/login')) {
+    testSteps.push('[clockInOut] Redirected to auth - skipping');
+    return;
+  }
   await page.waitForTimeout(getSimWait(1000));
   await collectPageErrors(page);
 

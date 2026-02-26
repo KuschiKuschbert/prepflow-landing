@@ -31,14 +31,14 @@ export type ShowAlertFn = (opts: {
 export type ExecuteBulkActionFn = (
   actionName: string,
   action: () => Promise<void>,
-  context?: any,
+  context?: Record<string, unknown>,
 ) => Promise<void>;
 
 export function createBulkHandlers(
   selectedIngredients: Set<string>,
   selectedCount: number,
   onBulkDelete: (ids: string[]) => Promise<void>,
-  onBulkUpdate: (ids: string[], updates: Record<string, any>) => Promise<void>,
+  onBulkUpdate: (ids: string[], updates: Record<string, unknown>) => Promise<void>,
   showConfirm: ShowConfirmFn,
   showPrompt: ShowPromptFn,
   showAlert: ShowAlertFn,

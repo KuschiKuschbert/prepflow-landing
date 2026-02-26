@@ -13,7 +13,7 @@ interface EmployeeFormProps {
   formData?: EmployeeFormData;
   qualificationTypes: QualificationType[];
   onChange?: (data: EmployeeFormData) => void;
-  onSubmit?: (e: React.FormEvent) => void;
+  onSubmit?: (data: EmployeeFormData) => void;
   onUpdate?: (employee: Employee, updates: Partial<EmployeeFormData>) => void;
   onCancel: () => void;
 }
@@ -94,7 +94,7 @@ export function EmployeeForm({
     if (employee && onUpdate) {
       onUpdate(employee, formData);
     } else if (onSubmit) {
-      onSubmit(e);
+      onSubmit(formData);
     }
   };
 

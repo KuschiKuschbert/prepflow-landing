@@ -4,7 +4,7 @@
  */
 import type { Page } from '@playwright/test';
 import { waitForFormSubmission } from '../../helpers/form-helpers';
-import { getSimWait } from '../../helpers/sim-wait';
+import { getSimWait, safeGoto } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 const DISH_NAME = 'Sim Test Dish';

@@ -6,17 +6,28 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { DBCleaningTask } from './types';
 
+/** Supabase range query - minimal interface (Supabase .range() returns builder chain, which is PromiseLike) */
+interface RangableQuery {
+  range(
+    from: number,
+    to: number,
+  ): PromiseLike<{
+    data: unknown;
+    error: unknown;
+    count: number | null;
+  }>;
+}
+
 /**
  * Fetches paginated cleaning tasks
  *
- * @param {any} query - Pre-built Supabase query
- * @param {number} page - Page number (1-based)
- * @param {number} pageSize - Page size
- * @returns {Promise<{ data: DBCleaningTask[]; total: number }>} Paginated tasks and total count
+ * @param query - Pre-built Supabase query (PostgrestFilterBuilder with range)
+ * @param page - Page number (1-based)
+ * @param pageSize - Page size
+ * @returns Paginated tasks and total count
  */
 export async function fetchPaginatedTasks(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  query: any, // justified
+  query: RangableQuery,
   page: number,
   pageSize: number,
 ): Promise<{ data: DBCleaningTask[]; total: number }> {

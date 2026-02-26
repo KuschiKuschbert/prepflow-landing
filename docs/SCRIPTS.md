@@ -124,6 +124,24 @@ npm run audit:icons -- --json           # JSON output
 
 ---
 
+### TypeScript Any Audit
+
+**Script:** `scripts/audit-any.ts`
+**Command:** `npm run audit:any`
+**Referenced in:** `docs/TYPESCRIPT_ANY_MIGRATION.md`, `development.mdc`
+
+Scans the codebase for `any` type usage. Excludes: `app/curbos/`, `lib/rsi/`, `scripts/`, `**/*.test.*`, `**/*.spec.*`, `e2e/`. Use to track remaining unjustified `any` and enforce "strict typing, no `any` without justification" (development.mdc).
+
+**Usage:**
+
+```bash
+npm run audit:any
+```
+
+**Integration:** Run before major releases or when escalating `@typescript-eslint/no-explicit-any` to error. See `docs/TYPESCRIPT_ANY_MIGRATION.md` for fix patterns and phase status.
+
+---
+
 ### CHANGELOG Generation
 
 **Script:** `scripts/generate-changelog.js`

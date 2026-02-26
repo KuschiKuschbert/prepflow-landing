@@ -1,3 +1,4 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
@@ -12,15 +13,23 @@ export async function PATCH(
     const { id, itemId } = await params;
     const { userId, supabase } = await getAuthenticatedUser(req);
 
-    const { data: func } = await supabase
+    const { data: func, error: funcError } = await supabase
       .from('functions')
       .select('id')
       .eq('id', id)
       .eq('user_id', userId)
       .single();
 
+    if (funcError) {
+      logger.error('Error fetching function for runsheet PATCH', { error: funcError });
+      const apiError = ApiErrorHandler.fromSupabaseError(funcError, 500);
+      return NextResponse.json(apiError, { status: apiError.status ?? 500 });
+    }
     if (!func) {
-      return NextResponse.json({ error: 'Function not found' }, { status: 404 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Function not found', 'NOT_FOUND', 404),
+        { status: 404 },
+      );
     }
 
     const body = await req.json();
@@ -43,11 +52,15 @@ export async function PATCH(
 
     if (error) {
       logger.error('Error updating runsheet item:', { error });
-      return NextResponse.json({ error: 'Failed to update runsheet item' }, { status: 500 });
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status ?? 500 });
     }
 
     if (!updatedItem) {
-      return NextResponse.json({ error: 'Runsheet item not found' }, { status: 404 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Runsheet item not found', 'NOT_FOUND', 404),
+        { status: 404 },
+      );
     }
 
     return NextResponse.json(updatedItem);
@@ -72,15 +85,23 @@ export async function DELETE(
     const { id, itemId } = await params;
     const { userId, supabase } = await getAuthenticatedUser(req);
 
-    const { data: func } = await supabase
+    const { data: func, error: funcError } = await supabase
       .from('functions')
       .select('id')
       .eq('id', id)
       .eq('user_id', userId)
       .single();
 
+    if (funcError) {
+      logger.error('Error fetching function for runsheet DELETE', { error: funcError });
+      const apiError = ApiErrorHandler.fromSupabaseError(funcError, 500);
+      return NextResponse.json(apiError, { status: apiError.status ?? 500 });
+    }
     if (!func) {
-      return NextResponse.json({ error: 'Function not found' }, { status: 404 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Function not found', 'NOT_FOUND', 404),
+        { status: 404 },
+      );
     }
 
     const { error } = await supabase
@@ -91,7 +112,8 @@ export async function DELETE(
 
     if (error) {
       logger.error('Error deleting runsheet item:', { error });
-      return NextResponse.json({ error: 'Failed to delete runsheet item' }, { status: 500 });
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status ?? 500 });
     }
 
     return NextResponse.json({ success: true });

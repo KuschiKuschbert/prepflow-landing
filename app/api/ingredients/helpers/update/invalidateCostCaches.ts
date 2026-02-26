@@ -4,7 +4,7 @@ import { invalidateMenuItemsWithIngredient } from '@/lib/menu-pricing/cache-inva
 export function invalidateCostCaches(
   id: string,
   ingredientName: string,
-  changeDetails: any, // justified
+  changeDetails: Record<string, unknown>,
   userEmail?: string | null,
 ) {
   // Don't await - run in background

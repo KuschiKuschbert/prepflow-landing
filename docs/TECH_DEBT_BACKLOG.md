@@ -35,6 +35,16 @@ Track cleanup violations to reduce over time. These are advisory in pre-deploy (
 
 ---
 
+### TypeScript `any` Types
+
+**Status:** Phases 1–3 complete (~70 files fixed). Remaining: justified `any` (Auth0 SDK, Square SDK, Playwright types), Zod `z.any()` in AI routes, JSDoc `@param {any}`. Excluded: `app/curbos/`, `lib/rsi/`, `scripts/`, tests, e2e.
+
+**How to track:** `npm run audit:any`
+
+**See:** `docs/TYPESCRIPT_ANY_MIGRATION.md`
+
+---
+
 ### Other Cleanup Violations
 
 `npm run cleanup:check` reports additional categories:

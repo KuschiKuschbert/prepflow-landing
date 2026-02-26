@@ -10,7 +10,7 @@ export async function handleRecipeUpdates(
   dishName: string,
   recipes: DishRecipeInput[] | undefined,
   changes: string[],
-  changeDetails: any, // justified
+  changeDetails: Record<string, unknown>,
   userEmail: string,
 ): Promise<void> {
   if (!recipes) return;

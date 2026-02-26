@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { MousePointerClick } from 'lucide-react';
 import { useState } from 'react';

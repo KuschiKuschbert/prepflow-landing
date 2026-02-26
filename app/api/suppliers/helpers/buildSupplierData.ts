@@ -5,7 +5,7 @@
  * @returns {Object} Supplier data object
  */
 export function buildSupplierData(body: unknown) {
-  const data = body as Record<string, any>;
+  const data = body as Record<string, unknown>;
   return {
     supplier_name: data.supplier_name,
     contact_person: data.contact_person || null,
@@ -15,7 +15,8 @@ export function buildSupplierData(body: unknown) {
     website: data.website || null,
     payment_terms: data.payment_terms || null,
     delivery_schedule: data.delivery_schedule || null,
-    minimum_order_amount: data.minimum_order_amount ? parseFloat(data.minimum_order_amount) : null,
+    minimum_order_amount:
+      data.minimum_order_amount != null ? parseFloat(String(data.minimum_order_amount)) : null,
     notes: data.notes || null,
     is_active: data.is_active !== undefined ? data.is_active : true,
   };

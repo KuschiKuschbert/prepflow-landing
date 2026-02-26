@@ -3,7 +3,7 @@
  * Resilient: continues even if some steps fail.
  */
 import type { Page } from '@playwright/test';
-import { getSimWait } from '../../helpers/sim-wait';
+import { getSimWait, SIM_FAST } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 export async function createSupplierFlow(
@@ -12,8 +12,17 @@ export async function createSupplierFlow(
   testSteps: string[] = [],
 ): Promise<void> {
   testSteps.push('Navigate to Suppliers');
-  await page.goto('/webapp/suppliers');
-  await page.waitForLoadState('load');
+  try {
+    await page.goto('/webapp/suppliers', { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  } catch {
+    testSteps.push('[createSupplier] Navigation timed out - skipping');
+    return;
+  }
+  if (page.url().includes('auth0.com') || page.url().includes('/api/auth/login')) {
+    testSteps.push('[createSupplier] Redirected to auth - skipping');
+    return;
+  }
+  await page.waitForLoadState(SIM_FAST ? 'domcontentloaded' : 'load').catch(() => {});
   await page.waitForTimeout(getSimWait(500));
   await collectPageErrors(page);
 

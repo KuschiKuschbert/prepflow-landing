@@ -60,7 +60,16 @@ const TAB_CONFIGS: TabConfig[] = [
 ];
 
 async function switchTabsOnPage(page: Page, config: TabConfig, testSteps: string[]): Promise<void> {
-  await page.goto(config.route, { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  try {
+    await page.goto(config.route, { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  } catch {
+    testSteps.push(`[switchTabs] Navigation to ${config.route} failed - skipping`);
+    return;
+  }
+  if (page.url().includes('auth0.com') || page.url().includes('/api/auth/login')) {
+    testSteps.push(`[switchTabs] Redirected to auth on ${config.route} - skipping`);
+    return;
+  }
   await page.waitForTimeout(getSimWait(800));
   await collectPageErrors(page);
 

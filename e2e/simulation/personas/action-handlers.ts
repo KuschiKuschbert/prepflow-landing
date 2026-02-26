@@ -39,8 +39,13 @@ import { testSortAndViewTogglesFlow } from '../../workflows/helpers/testSortAndV
 import { testAIFeaturesFlow } from '../../workflows/helpers/testAIFeaturesFlow';
 import { testQRCodeFlow } from '../../workflows/helpers/testQRCodeFlow';
 import { testInlineEditingFlow } from '../../workflows/helpers/testInlineEditingFlow';
+import { staffOnboardingFlow } from '../../workflows/helpers/staffOnboardingFlow';
+import { testDeleteFlow } from '../../workflows/helpers/testDeleteFlow';
+import { testPaginationFlow } from '../../workflows/helpers/testPaginationFlow';
+import { editCustomerFlow } from '../../workflows/helpers/editCustomerFlow';
+import { createKitchenSectionFlow } from '../../workflows/helpers/createKitchenSectionFlow';
+import { interactSquareFlow } from '../../workflows/helpers/interactSquareFlow';
 import { viewPage, viewPageSimple } from './action-registry-helpers';
-import { getSimWait, SIM_FAST } from '../../helpers/sim-wait';
 import { logger } from '@/lib/logger';
 import type { RunActionContext } from './action-registry-types';
 import {
@@ -281,6 +286,24 @@ export async function executeActionHandler(
       break;
     case 'testInlineEditing':
       await testInlineEditingFlow(page, steps);
+      break;
+    case 'staffOnboarding':
+      await staffOnboardingFlow(page, steps);
+      break;
+    case 'testDeleteFlow':
+      await testDeleteFlow(page, steps);
+      break;
+    case 'testPagination':
+      await testPaginationFlow(page, steps);
+      break;
+    case 'editCustomer':
+      await editCustomerFlow(page, steps);
+      break;
+    case 'createKitchenSection':
+      await createKitchenSectionFlow(page, steps);
+      break;
+    case 'interactSquare':
+      await interactSquareFlow(page, steps);
       break;
     default: {
       const _exhaustive: never = action;

@@ -1,4 +1,6 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
+import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createCustomerSchema } from './helpers/schemas';
@@ -25,15 +27,21 @@ export async function GET(req: NextRequest) {
     const { data: customers, error } = await query;
 
     if (error) {
-      console.error('Error fetching customers:', error);
-      return NextResponse.json({ error: 'Failed to fetch customers' }, { status: 500 });
+      logger.error('[Customers] Error fetching customers:', { error });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to fetch customers', 'FETCH_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     return NextResponse.json(customers);
   } catch (error) {
     if (error instanceof NextResponse) return error;
-    console.error('Error in GET /api/customers:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    logger.error('[Customers] GET error:', { error });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal Server Error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }
 
@@ -56,8 +64,11 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (error) {
-      console.error('Error creating customer:', error);
-      return NextResponse.json({ error: 'Failed to create customer' }, { status: 500 });
+      logger.error('[Customers] Error creating customer:', { error });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to create customer', 'CREATE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     return NextResponse.json(customer, { status: 201 });
@@ -65,11 +76,19 @@ export async function POST(req: NextRequest) {
     if (error instanceof NextResponse) return error;
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid data', details: (error as z.ZodError).issues },
+        ApiErrorHandler.createError(
+          'Invalid data',
+          'VALIDATION_ERROR',
+          400,
+          (error as z.ZodError).issues,
+        ),
         { status: 400 },
       );
     }
-    console.error('Error in POST /api/customers:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    logger.error('[Customers] POST error:', { error });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal Server Error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }

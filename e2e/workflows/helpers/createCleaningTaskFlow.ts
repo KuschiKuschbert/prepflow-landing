@@ -5,15 +5,14 @@
  */
 import type { Page } from '@playwright/test';
 import { waitForFormSubmission } from '../../helpers/form-helpers';
-import { getSimWait } from '../../helpers/sim-wait';
+import { getSimWait, safeGoto } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 const TASK_NAME = 'Sim test clean';
 
 export async function createCleaningTaskFlow(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Navigate to Cleaning page');
-  await page.goto('/webapp/cleaning');
-  await page.waitForLoadState('load');
+  if (!(await safeGoto(page, '/webapp/cleaning'))) { return; }
   await page.waitForTimeout(getSimWait(1200));
   await collectPageErrors(page);
 

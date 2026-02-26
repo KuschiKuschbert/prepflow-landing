@@ -4,9 +4,11 @@
  * @param {Array} equipment - Equipment data array
  * @returns {Array} Equipment data with Queensland-compliant thresholds
  */
-export function applyQueenslandStandards(equipment: Record<string, any>[]): Record<string, any>[] {
+export function applyQueenslandStandards(
+  equipment: Record<string, unknown>[],
+): Record<string, unknown>[] {
   return equipment.map(eq => {
-    const name = eq.name.toLowerCase();
+    const name = String(eq.name ?? '').toLowerCase();
 
     // Apply Queensland thresholds based on equipment type
     if (name.includes('freezer') || name.includes('frozen')) {

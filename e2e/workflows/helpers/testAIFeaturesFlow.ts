@@ -7,12 +7,12 @@
  * Resilient: continues even if AI buttons are not found.
  */
 import type { Page } from '@playwright/test';
-import { getSimWait, SIM_FAST } from '../../helpers/sim-wait';
+import { getSimWait, safeGoto } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 async function testAIRecipeInstructions(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Test AI recipe instructions');
-  await page.goto('/webapp/recipes', { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  if (!(await safeGoto(page, '/webapp/recipes'))) { testSteps.push('[testAI] recipes nav failed - skipping'); return; }
   await page.waitForTimeout(getSimWait(1200));
 
   const firstRecipe = page.locator('table tbody tr, div[class*="group"][class*="rounded"]').first();
@@ -46,7 +46,7 @@ async function testAIRecipeInstructions(page: Page, testSteps: string[]): Promis
 
 async function testAISpecialsPage(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Test AI Specials page');
-  await page.goto('/webapp/specials', { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  if (!(await safeGoto(page, '/webapp/specials'))) { testSteps.push('[testAI] specials nav failed - skipping'); return; }
   await page.waitForTimeout(getSimWait(1000));
 
   const generateBtn = page
@@ -82,7 +82,7 @@ async function testAISpecialsPage(page: Page, testSteps: string[]): Promise<void
 
 async function testAIPrepDetails(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Test AI prep details');
-  await page.goto('/webapp/prep-lists', { waitUntil: SIM_FAST ? 'domcontentloaded' : 'load' });
+  if (!(await safeGoto(page, '/webapp/prep-lists'))) { testSteps.push('[testAI] prep-lists nav failed - skipping'); return; }
   await page.waitForTimeout(getSimWait(1000));
 
   const aiBtn = page

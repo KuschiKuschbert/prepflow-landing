@@ -5,6 +5,7 @@ import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer
 import { Suspense, useState } from 'react';
 import { Modal } from '../../../components/ui/Modal';
 import { EmployeeForm } from './components/EmployeeForm';
+import type { Employee } from '@/lib/types/roster';
 import { StaffHeader } from './components/StaffHeader';
 import { StaffList } from './components/StaffList';
 import { useStaff } from './hooks/useStaff';
@@ -49,9 +50,8 @@ export default function StaffPage() {
         <div className="p-1">
           <EmployeeForm
             qualificationTypes={qualificationTypes}
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            onSubmit={async (data: any) => {
-              const success = await addStaffMember(data);
+            onSubmit={async data => {
+              const success = await addStaffMember(data as Partial<Employee>);
               if (success) setIsAddModalOpen(false);
             }}
             onCancel={() => setIsAddModalOpen(false)}

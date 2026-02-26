@@ -4,13 +4,24 @@
  */
 import type { Page } from '@playwright/test';
 import { waitForFormSubmission } from '../../helpers/form-helpers';
-import { getSimWait } from '../../helpers/sim-wait';
+import { getSimWait, SIM_FAST } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 export async function createPrepListFlow(page: Page, testSteps: string[]): Promise<void> {
   testSteps.push('Navigate to Prep Lists page');
-  await page.goto('/webapp/prep-lists');
-  await page.waitForLoadState('load');
+  try {
+    await page.goto('/webapp/prep-lists', {
+      waitUntil: SIM_FAST ? 'domcontentloaded' : 'load',
+    });
+  } catch (navErr) {
+    const msg = navErr instanceof Error ? navErr.message : String(navErr);
+    testSteps.push(`[createPrepList] Navigation failed: ${msg.slice(0, 80)} - skipping`);
+    return;
+  }
+  if (page.url().includes('auth0.com') || page.url().includes('/api/auth/login')) {
+    testSteps.push('[createPrepList] Redirected to auth - skipping');
+    return;
+  }
   await page.waitForTimeout(getSimWait(800));
   await collectPageErrors(page);
 

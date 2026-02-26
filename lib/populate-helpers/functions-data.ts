@@ -365,7 +365,33 @@ export async function populateFunctions(
   customerIds: string[],
 ): Promise<void> {
   try {
-    const sampleFunctions = buildSampleFunctions(customerIds);
+    // Get a real user_id to satisfy the functions.user_id FK constraint
+    let userId: string | null = null;
+    try {
+      const { data: userData } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1 });
+      userId = userData?.users?.[0]?.id ?? null;
+    } catch {
+      // Fallback: try to get userId from users table
+      const { data: usersRow } = await supabaseAdmin
+        .from('users')
+        .select('id')
+        .limit(1)
+        .maybeSingle();
+      userId = (usersRow as { id?: string } | null)?.id ?? null;
+    }
+
+    if (!userId) {
+      results.errors.push({
+        table: 'functions',
+        error: 'No user_id available for functions insert',
+      });
+      return;
+    }
+
+    const sampleFunctions = buildSampleFunctions(customerIds).map(fn => ({
+      ...fn,
+      user_id: userId,
+    }));
 
     const { data: functions, error: funcError } = await supabaseAdmin
       .from('functions')

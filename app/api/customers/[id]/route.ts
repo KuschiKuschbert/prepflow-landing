@@ -1,4 +1,6 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
+import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { updateCustomerSchema } from '../helpers/schemas';
@@ -16,19 +18,28 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       .single();
 
     if (error) {
-      console.error('Error fetching customer:', error);
-      return NextResponse.json({ error: 'Failed to fetch customer' }, { status: 500 });
+      logger.error('[Customers] Error fetching customer:', { error });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to fetch customer', 'FETCH_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     if (!customer) {
-      return NextResponse.json({ error: 'Customer not found' }, { status: 404 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Customer not found', 'NOT_FOUND', 404),
+        { status: 404 },
+      );
     }
 
     return NextResponse.json(customer);
   } catch (error) {
     if (error instanceof NextResponse) return error;
-    console.error(`Error in GET /api/customers/[id]:`, error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    logger.error('[Customers] GET [id] error:', { error });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal Server Error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }
 
@@ -49,12 +60,18 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       .single();
 
     if (error) {
-      console.error('Error updating customer:', error);
-      return NextResponse.json({ error: 'Failed to update customer' }, { status: 500 });
+      logger.error('[Customers] Error updating customer:', { error });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to update customer', 'UPDATE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     if (!customer) {
-      return NextResponse.json({ error: 'Customer not found' }, { status: 404 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Customer not found', 'NOT_FOUND', 404),
+        { status: 404 },
+      );
     }
 
     return NextResponse.json(customer);
@@ -62,12 +79,20 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     if (error instanceof NextResponse) return error;
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid data', details: (error as z.ZodError).issues },
+        ApiErrorHandler.createError(
+          'Invalid data',
+          'VALIDATION_ERROR',
+          400,
+          (error as z.ZodError).issues,
+        ),
         { status: 400 },
       );
     }
-    console.error(`Error in PATCH /api/customers/[id]:`, error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    logger.error('[Customers] PATCH [id] error:', { error });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal Server Error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }
 
@@ -79,14 +104,20 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     const { error } = await supabase.from('customers').delete().eq('id', id).eq('user_id', userId);
 
     if (error) {
-      console.error('Error deleting customer:', error);
-      return NextResponse.json({ error: 'Failed to delete customer' }, { status: 500 });
+      logger.error('[Customers] Error deleting customer:', { error });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to delete customer', 'DELETE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
     if (error instanceof NextResponse) return error;
-    console.error(`Error in DELETE /api/customers/[id]:`, error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    logger.error('[Customers] DELETE [id] error:', { error });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal Server Error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }

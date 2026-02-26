@@ -41,5 +41,3 @@ export const updateCustomerSchema = z.object({
 // --- Inferred Types ---
 
 export type Customer = z.infer<typeof customerSchema>;
-export type CreateCustomerInput = z.infer<typeof createCustomerSchema>;
-export type UpdateCustomerInput = z.infer<typeof updateCustomerSchema>;

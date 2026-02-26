@@ -155,6 +155,9 @@ const CONSOLE_ERROR_ALLOWLIST: RegExp[] = [
   /hydration/i, // Next.js hydration mismatch - evaluate if acceptable for your app
   /square.*unauthorized/i, // Square Status Hook / Mappings - expected when not admin
   /feature.?flag.*unauthorized/i, // Feature Flags - expected when not admin or not authenticated
+  /SafeGradientOrbs/i, // Lazy-loaded landing component - chunk URL changes on hot-reload in dev
+  /ChunkLoadError/i, // Next.js chunk load failures during hot-reload in dev mode
+  /loading chunk.*failed/i, // General chunk load failures in dev mode
 ];
 
 /**

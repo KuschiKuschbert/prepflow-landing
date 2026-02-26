@@ -25,11 +25,9 @@ function getWeatherIcon(status: string) {
 
 function WeatherWidgetBase() {
   const { coords } = useGeolocation();
-  const [weather, setWeather] = useState<WeatherData | null>(() => {
-    if (typeof window === 'undefined') return null;
-    return getCachedData<WeatherData>(CACHE_KEY);
-  });
-  const [loading, setLoading] = useState(!weather);
+  // Always start with null/loading to match SSR (avoids hydration mismatch from sessionStorage)
+  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const cached = getCachedData<WeatherData>(CACHE_KEY);

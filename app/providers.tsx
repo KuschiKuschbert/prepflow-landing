@@ -32,8 +32,9 @@ function useGlobalErrorHandlers(): void {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    // Defer initialization to idle time
-    const deferInit = (window.requestIdleCallback || ((cb: any) => setTimeout(cb, 1000))) as any;
+    // Defer initialization to idle time (fallback for browsers without requestIdleCallback)
+    const deferInit: (cb: () => void) => void =
+      window.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 1000));
 
     deferInit(() => {
       initializeClientErrorHandlers();
@@ -58,8 +59,9 @@ function useDraftMigration(): void {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    // Defer migration to idle time - non-critical for initial render
-    const deferMigrate = (window.requestIdleCallback || ((cb: any) => setTimeout(cb, 2000))) as any;
+    // Defer migration to idle time - non-critical for initial render (fallback for browsers without requestIdleCallback)
+    const deferMigrate: (cb: () => void) => void =
+      window.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 2000));
 
     deferMigrate(() => {
       try {

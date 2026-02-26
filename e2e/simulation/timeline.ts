@@ -7,7 +7,7 @@ import type { PersonaConfig } from './personas/config';
 import { getActionsForDay } from './personas/day-profiles';
 import { runAction, type RunActionContext } from './personas/action-registry';
 import { collectPageErrors } from '../fixtures/global-error-listener';
-import { runWithHarness } from './telemetry/performance-harness';
+import { runWithHarness, recordActionFaultyPath } from './telemetry/performance-harness';
 
 const SIM_WEEKS = parseInt(process.env.SIM_WEEKS ?? '1', 10);
 /** Override total days for quick runs (e.g. SIM_DAYS=2). If set, caps days across all weeks. */
@@ -21,12 +21,19 @@ const SIM_RESILIENT = process.env.SIM_RESILIENT === 'true';
  */
 const SIM_FULL_SCOPE = process.env.SIM_FULL_SCOPE === 'true';
 
-const CONNECTION_REFUSED_RETRY_WAIT_MS = 25000;
-const CONNECTION_REFUSED_MAX_RETRIES = 2;
+const CONNECTION_REFUSED_RETRY_WAIT_MS = 40000;
+const CONNECTION_REFUSED_MAX_RETRIES = 3;
 
 function isConnectionRefused(err: unknown): boolean {
   const msg = err instanceof Error ? err.message : String(err);
-  return msg.includes('ERR_CONNECTION_REFUSED') || msg.includes('net::ERR_CONNECTION_REFUSED');
+  return (
+    msg.includes('ERR_CONNECTION_REFUSED') ||
+    msg.includes('net::ERR_CONNECTION_REFUSED') ||
+    // ERR_ABORTED can also happen during dev server hot-reloads/restarts
+    msg.includes('net::ERR_ABORTED') ||
+    // Connection reset also indicates server-side restart
+    msg.includes('net::ERR_CONNECTION_RESET')
+  );
 }
 
 function sleep(ms: number): Promise<void> {
@@ -85,6 +92,9 @@ export async function runSimulationWeek(
       await collectPageErrors(page);
 
       if (!result.ok && result.error) {
+        // Record faulty path here (after retries exhausted), not inside runWithHarness,
+        // so connection-refused retries don't prematurely mark an action as faulty.
+        recordActionFaultyPath(page, personaId, action, result.error);
         if (SIM_RESILIENT) {
           console.warn(
             `[SIM_RESILIENT] ${action} failed (day ${absoluteDayIndex}):`,

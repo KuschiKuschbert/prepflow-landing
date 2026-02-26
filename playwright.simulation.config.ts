@@ -16,6 +16,14 @@ loadEnvConfig(process.cwd());
 // rather than crashing the test, allowing all personas to complete.
 process.env.SIM_RESILIENT = 'true';
 
+// Run every action whose domain weight > 0, no stochastic skipping.
+// Guarantees full deterministic coverage across all personas.
+process.env.SIM_FULL_SCOPE = 'true';
+
+// Use domcontentloaded instead of load for navigation - faster in dev mode
+// (dev server compiles pages on demand; waiting for full load causes timeouts)
+process.env.SIM_FAST = 'true';
+
 export default defineConfig({
   ...baseConfig,
   testMatch: ['**/persona-*.spec.ts'],
@@ -29,7 +37,7 @@ export default defineConfig({
     ...baseConfig.use,
     storageState: 'e2e/simulation-auth.json',
     headless: true,
-    navigationTimeout: 60000, // 60s max for any single navigation (prevents infinite hangs)
+    navigationTimeout: 45000, // 45s max for any single navigation (try-catch handles timeouts gracefully)
     actionTimeout: 30000, // 30s max for any single action
   },
   webServer: {

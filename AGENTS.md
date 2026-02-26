@@ -19,6 +19,7 @@ PrepFlow is a unified restaurant profitability optimization platform that helps 
 4. **Custom breakpoints only** - Use `desktop:`, `tablet:`, NOT `sm:`, `md:`, `lg:`
 5. **Always use `RefObject<HTMLElement | null>`** for ref types in interfaces
 6. **Design source of truth** - design.mdc defines required patterns; VISUAL_HIERARCHY_STANDARDS.md provides hierarchy guidance (landing strict, webapp flexible)
+7. **No unjustified `any`** - Use proper types; run `npm run audit:any` to track. See `docs/TYPESCRIPT_ANY_MIGRATION.md`
 
 ## 📚 Documentation Index
 

@@ -11,8 +11,7 @@ export async function processRestoreRequest(
   request: NextRequest,
   backupFile: string | undefined,
   password?: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): Promise<{ success: true; data: any } | { success: false; response: NextResponse }> {
+): Promise<{ success: true; data: unknown } | { success: false; response: NextResponse }> {
   if (backupFile) {
     try {
       const encryptedData = Uint8Array.from(atob(backupFile), c => c.charCodeAt(0));

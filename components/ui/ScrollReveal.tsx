@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useInView, useReducedMotion } from 'framer-motion';
+import { type Variants, motion, useInView, useReducedMotion } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 
 interface ScrollRevealProps {
@@ -35,7 +35,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   // Gate animation until after mount so server and initial client render both use "hidden".
   useEffect(() => setHasMounted(true), []);
 
-  const variants: Record<string, any> = {
+  const variants: Record<string, Variants> = {
     'fade-up': {
       hidden: { opacity: 0, y: 40 },
       visible: { opacity: 1, y: 0 },
@@ -59,7 +59,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   };
 
   // Simplified variants for reduced motion
-  const reducedVariants: Record<string, any> = {
+  const reducedVariants: Record<string, Variants> = {
     'fade-up': {
       hidden: { opacity: 0 },
       visible: { opacity: 1 },

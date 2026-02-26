@@ -98,7 +98,13 @@ export async function GET(request: NextRequest, context: { params: Promise<{ cod
   }
 }
 
-async function fetchAllDishes(code: string): Promise<any[] | NextResponse> {
+interface DishRow {
+  id: string;
+  dish_name: string;
+  allergens?: string[] | null;
+}
+
+async function fetchAllDishes(code: string): Promise<DishRow[] | NextResponse> {
   // Check Supabase connection
   if (!supabaseAdmin) {
     return NextResponse.json(

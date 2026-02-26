@@ -6,6 +6,7 @@ import {
   sampleRecipesForPopulate,
 } from '@/lib/populate-recipes-data';
 import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(_request: NextRequest) {
@@ -82,8 +83,7 @@ export async function POST(_request: NextRequest) {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function insertAdditionalIngredients(supabaseAdmin: any) {
+async function insertAdditionalIngredients(supabaseAdmin: SupabaseClient) {
   for (const ingredient of additionalIngredientsForRecipes) {
     const { error } = await supabaseAdmin
       .from('ingredients')
@@ -95,8 +95,7 @@ async function insertAdditionalIngredients(supabaseAdmin: any) {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function insertSampleRecipes(supabaseAdmin: any) {
+async function insertSampleRecipes(supabaseAdmin: SupabaseClient) {
   for (const recipe of sampleRecipesForPopulate) {
     const { error } = await supabaseAdmin.from('recipes').upsert(recipe, { onConflict: 'id' });
 
@@ -106,8 +105,7 @@ async function insertSampleRecipes(supabaseAdmin: any) {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function deleteExistingIngredients(supabaseAdmin: any, recipeIds: string[]) {
+async function deleteExistingIngredients(supabaseAdmin: SupabaseClient, recipeIds: string[]) {
   for (const recipeId of recipeIds) {
     const { error: deleteError } = await supabaseAdmin
       .from('recipe_ingredients')
@@ -123,8 +121,10 @@ async function deleteExistingIngredients(supabaseAdmin: any, recipeIds: string[]
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function insertRecipeIngredients(supabaseAdmin: any, ingredientMap: Map<string, string>) {
+async function insertRecipeIngredients(
+  supabaseAdmin: SupabaseClient,
+  ingredientMap: Map<string, string>,
+) {
   let insertedCount = 0;
   let notFoundCount = 0;
   const seen = new Set<string>();

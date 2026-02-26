@@ -4,26 +4,32 @@
 
 import { logger } from '@/lib/logger';
 
-export function parseGroqResponse(result: Record<string, any>): string {
+interface GroqChoice {
+  message?: { content?: string };
+}
+
+export function parseGroqResponse(result: Record<string, unknown>): string {
   let content = '';
   if (result.choices && Array.isArray(result.choices) && result.choices.length > 0) {
-    content = result.choices[0].message?.content || '';
-  } else if (result.content) {
-    content = result.content;
+    const first = result.choices[0] as GroqChoice;
+    content = first?.message?.content || '';
+  } else if (result.content != null) {
+    content = String(result.content);
   }
 
   if (!content) {
     throw new Error('Empty response from Groq API');
   }
 
-  if (result.usage) {
+  const usage = result.usage as Record<string, unknown> | undefined;
+  if (usage) {
     logger.dev('[Groq] Token usage:', {
-      promptTokens: result.usage.prompt_tokens || 0,
-      completionTokens: result.usage.completion_tokens || 0,
-      totalTokens: result.usage.total_tokens || 0,
+      promptTokens: (usage.prompt_tokens as number) || 0,
+      completionTokens: (usage.completion_tokens as number) || 0,
+      totalTokens: (usage.total_tokens as number) || 0,
     });
 
-    const totalTokens = result.usage.total_tokens || 0;
+    const totalTokens = (usage.total_tokens as number) || 0;
     if (totalTokens > 100000) {
       logger.warn(
         '[Groq] High token usage detected. Monitor usage at https://console.groq.com/ ' +
@@ -34,7 +40,7 @@ export function parseGroqResponse(result: Record<string, any>): string {
 
   logger.dev('[Groq] Text generated successfully:', {
     contentLength: content.length,
-    model: result.model || 'unknown',
+    model: (result.model as string) || 'unknown',
   });
 
   return content;

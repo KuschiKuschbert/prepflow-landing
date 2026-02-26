@@ -52,7 +52,8 @@ export async function authenticateUser(page: Page): Promise<boolean> {
 
     // Navigate to webapp to trigger auth check
     await page.goto('/webapp');
-    await page.waitForLoadState('networkidle');
+    // Use 'load' not 'networkidle' - dashboard polling can prevent networkidle from firing
+    await page.waitForLoadState('load');
 
     // Check if redirected to signin
     const url = page.url();
@@ -66,7 +67,7 @@ export async function authenticateUser(page: Page): Promise<boolean> {
         // Auth should be bypassed in development, but if we're here, something's wrong
         // Try navigating again
         await page.goto('/webapp');
-        await page.waitForLoadState('networkidle');
+        await page.waitForLoadState('load');
         return await isAuthenticated(page);
       } else {
         // Production mode - need to handle Auth0 login
@@ -95,8 +96,8 @@ export async function ensureAuthenticated(page: Page): Promise<void> {
     throw new Error('Failed to authenticate user for test');
   }
 
-  // Wait for page to be fully loaded
-  await page.waitForLoadState('networkidle');
+  // Wait for page to be ready (load, not networkidle - avoids timeout with dashboard polling)
+  await page.waitForLoadState('load');
 }
 
 /**

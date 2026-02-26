@@ -25,7 +25,3 @@ export const createSpecialDaySchema = z.object({
 export const updateSpecialDaySchema = createSpecialDaySchema.partial();
 
 // --- Inferred Types ---
-
-export type SpecialDay = z.infer<typeof specialDaySchema>;
-export type CreateSpecialDayInput = z.infer<typeof createSpecialDaySchema>;
-export type UpdateSpecialDayInput = z.infer<typeof updateSpecialDaySchema>;

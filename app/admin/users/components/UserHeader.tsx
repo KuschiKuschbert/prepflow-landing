@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { ArrowLeft, Save, Trash2 } from 'lucide-react';
 import Link from 'next/link';

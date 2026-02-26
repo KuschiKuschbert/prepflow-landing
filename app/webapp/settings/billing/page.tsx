@@ -1,5 +1,6 @@
 'use client';
 
+import type { TierSlug } from '@/lib/tier-config';
 import { useConfirm } from '@/hooks/useConfirm';
 import { BillingActionsCard } from './components/BillingActionsCard';
 import { CurrentPlanCard } from './components/CurrentPlanCard';
@@ -15,6 +16,7 @@ import { useBillingPortal } from './hooks/useBillingPortal';
 import { useBillingReactivate } from './hooks/useBillingReactivate';
 import { useBillingUpgrade } from './hooks/useBillingUpgrade';
 import { useSubscriptionData } from './hooks/useSubscriptionData';
+import type { SubscriptionData } from './types';
 
 export default function BillingSettingsPage() {
   const { loading, subscriptionData, refreshSubscription } = useSubscriptionData();
@@ -82,6 +84,22 @@ export default function BillingSettingsPage() {
   );
 }
 
+interface SubscriptionDetailsProps {
+  subscriptionData: SubscriptionData;
+  isActive: boolean;
+  isCancelled: boolean;
+  cancelAtPeriodEnd: boolean;
+  extending: boolean;
+  cancelling: boolean;
+  reactivating: boolean;
+  openingPortal: boolean;
+  onUpgrade: (tier: TierSlug) => void;
+  onExtend: () => void;
+  onCancel: (immediate: boolean) => void;
+  onReactivate: () => void;
+  onOpenPortal: () => void;
+}
+
 function SubscriptionDetails({
   subscriptionData,
   isActive,
@@ -96,7 +114,7 @@ function SubscriptionDetails({
   onCancel,
   onReactivate,
   onOpenPortal,
-}: any) {
+}: SubscriptionDetailsProps) {
   return (
     <>
       <CurrentPlanCard subscriptionData={subscriptionData} />

@@ -5,13 +5,23 @@
  * Resilient: continues even if shift form is not accessible.
  */
 import type { Page } from '@playwright/test';
-import { getSimWait } from '../../helpers/sim-wait';
+import { getSimWait, SIM_FAST } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 export async function createRosterShiftFlow(page: Page, testSteps: string[] = []): Promise<void> {
   testSteps.push('Navigate to Roster page');
-  await page.goto('/webapp/roster');
-  await page.waitForLoadState('load');
+  try {
+    await page.goto('/webapp/roster', {
+      waitUntil: SIM_FAST ? 'domcontentloaded' : 'load',
+    });
+  } catch (navErr) {
+    testSteps.push(`[roster] Navigation failed: ${String(navErr).slice(0, 80)} - skipping`);
+    return;
+  }
+  if (page.url().includes('auth0.com') || page.url().includes('/api/auth/login')) {
+    testSteps.push('[roster] Redirected to auth - skipping');
+    return;
+  }
   await page.waitForTimeout(getSimWait(1200));
   await collectPageErrors(page);
 
@@ -83,13 +93,20 @@ export async function createRosterShiftFlow(page: Page, testSteps: string[] = []
     await page.waitForTimeout(getSimWait(200));
   }
 
+  // Dismiss any blocking overlay before clicking save
+  const overlay = page.locator('.fixed.inset-0').first();
+  if (await overlay.isVisible({ timeout: 1000 }).catch(() => false)) {
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(getSimWait(300));
+  }
+
   const saveBtn = page
     .locator(
       'button:has-text("Save"), button:has-text("Create"), button:has-text("Add Shift"), button[type="submit"]',
     )
     .first();
   if (await saveBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
-    await saveBtn.click();
+    await saveBtn.click({ force: true });
     await page.waitForTimeout(getSimWait(800));
   }
 

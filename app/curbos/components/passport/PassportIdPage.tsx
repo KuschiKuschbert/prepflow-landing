@@ -55,7 +55,7 @@ export default function PassportIdPage({ customer }: PassportIdPageProps) {
             setAvatarUrl(result.data.url);
             toast.success("Passport photo updated successfully!");
         } else {
-            console.error(result);
+            logger.error('[Passport] Upload failed', { result });
             toast.error("Upload failed. Please try again.");
         }
     } catch (error) {

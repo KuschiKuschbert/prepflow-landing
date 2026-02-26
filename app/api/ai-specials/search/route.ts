@@ -1,5 +1,6 @@
-import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 
 import { buildFtsQuery, shouldProceedWithSearch } from './helpers/buildFtsQuery';
@@ -26,11 +27,21 @@ export async function GET(request: Request) {
 
     const validation = validateSearchParams(params);
     if (!validation.valid) {
-      return NextResponse.json({ error: validation.error }, { status: 400 });
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validation.error ?? 'Invalid search params',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Supabase Admin not initialized' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Supabase Admin not initialized', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     const stock = params.useStock
@@ -98,13 +109,12 @@ export async function GET(request: Request) {
       },
     });
   } catch (error: unknown) {
-    logger.error('Search error:', error);
+    logger.error('[AI Specials Search] Search error:', {
+      error: error instanceof Error ? error.message : String(error),
+    });
     const message = error instanceof Error ? error.message : 'An unknown error occurred';
-    const stack = error instanceof Error ? error.stack : undefined;
-    const rawError = JSON.stringify(error, null, 2);
-    return NextResponse.json(
-      { error: message, debug_stack: stack, raw: rawError },
-      { status: 500 },
-    );
+    return NextResponse.json(ApiErrorHandler.createError(message, 'SEARCH_ERROR', 500), {
+      status: 500,
+    });
   }
 }

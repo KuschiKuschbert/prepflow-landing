@@ -1,6 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { sendLeadEmail } from './helpers/sendLeadEmail';
@@ -81,7 +82,7 @@ export async function POST(req: Request) {
   }
 }
 
-async function checkLeadsTable(supabase: any) {
+async function checkLeadsTable(supabase: SupabaseClient) {
   const { error: tableCheckError } = await supabase.from('leads').select('id').limit(1);
   if (tableCheckError) {
     logger.error('[Leads API] Table check error:', {
@@ -107,7 +108,10 @@ async function checkLeadsTable(supabase: any) {
   return { success: true };
 }
 
-async function upsertLead(supabase: any, data: { name: string; email: string; source: string }) {
+async function upsertLead(
+  supabase: SupabaseClient,
+  data: { name: string; email: string; source: string },
+) {
   const { name, email, source } = data;
   const { error: upsertError } = await supabase
     .from('leads')

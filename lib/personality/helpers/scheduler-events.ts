@@ -1,5 +1,6 @@
 import { adjustMessageProbability, getAdaptiveSettings } from '../adaptive-personality';
 import { generateRealMetricsMessage } from '../real-metrics';
+import type { PersonalitySettings } from '../schema';
 import { dispatchToast, dispatchVisual } from '../ui';
 import { getTimeBasedAdjustments } from '../utils';
 
@@ -8,7 +9,7 @@ const chance = (p: number): boolean => Math.random() < p;
 type MomentType = 'mindful' | 'metrics' | 'meta' | 'chaos';
 
 export interface SchedulerContext {
-  settings: any; // Using any for now to avoid circular deps or complex type imports, can refine later
+  settings: PersonalitySettings;
 }
 
 export function triggerMoment(type: MomentType, baseProb: number, context: SchedulerContext) {

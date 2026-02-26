@@ -2,13 +2,13 @@ import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
 import { useEffect } from 'react';
 import { useIngredientData } from '../../hooks/useIngredientData';
 import { useIngredientMigration } from '../../hooks/useIngredientMigration';
-import { useIngredientsQuery } from '../../hooks/useIngredientsQuery';
+import { type IngredientsQueryParams, useIngredientsQuery } from '../../hooks/useIngredientsQuery';
 import { useRegionalUnits } from '../../hooks/useRegionalUnits';
 import type { ExistingIngredient } from '../types';
 
 export function useIngredientDataSync(
   setIngredients: (ingredients: ExistingIngredient[]) => void,
-  queryParams: any, // Typed as IngredientsQueryParams in usage
+  queryParams: IngredientsQueryParams,
 ) {
   const { availableUnits } = useRegionalUnits();
   const { suppliers, loading, error, setError } = useIngredientData();

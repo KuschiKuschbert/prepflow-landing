@@ -1,5 +1,6 @@
 'use client'
 
+import { logger } from '@/lib/logger'
 import { Download, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
@@ -23,7 +24,7 @@ export default function LatestVersionBadge() {
         setLoading(false)
       })
       .catch(err => {
-        console.error('Failed to fetch version', err)
+        logger.error('[LatestVersionBadge] Failed to fetch version', { error: err })
         setLoading(false)
       })
   }, [])

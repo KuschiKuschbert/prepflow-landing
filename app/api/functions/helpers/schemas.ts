@@ -101,7 +101,3 @@ export const reorderRunsheetSchema = z.object({
 
 export type AppFunction = z.infer<typeof functionSchema>;
 export type RunsheetItem = z.infer<typeof runsheetItemSchema>;
-export type CreateFunctionInput = z.infer<typeof createFunctionSchema>;
-export type UpdateFunctionInput = z.infer<typeof updateFunctionSchema>;
-export type CreateRunsheetItemInput = z.infer<typeof createRunsheetItemSchema>;
-export type UpdateRunsheetItemInput = z.infer<typeof updateRunsheetItemSchema>;

@@ -1,13 +1,14 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createSpecialDaySchema } from './helpers/schemas';
 
 export async function GET(req: Request) {
   try {
-    const user = await requireAuth(req as any);
+    const user = await requireAuth(req as NextRequest);
     const supabaseUserId = user.sub;
 
     const { searchParams } = new URL(req.url);
@@ -31,20 +32,26 @@ export async function GET(req: Request) {
     const { data: specialDays, error } = await query;
 
     if (error) {
-      logger.error('Error fetching special days:', error);
-      return NextResponse.json({ error: 'Failed to fetch special days' }, { status: 500 });
+      logger.error('[Special Days] Error fetching:', { error });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to fetch special days', 'FETCH_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     return NextResponse.json(specialDays);
   } catch (error) {
-    logger.error('Error in GET /api/special-days:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    logger.error('[Special Days] GET error:', { error });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal Server Error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }
 
 export async function POST(req: Request) {
   try {
-    const user = await requireAuth(req as any);
+    const user = await requireAuth(req as NextRequest);
     const supabaseUserId = user.sub;
 
     const body = await req.json();
@@ -63,19 +70,30 @@ export async function POST(req: Request) {
       .single();
 
     if (error) {
-      logger.error('Error creating special day:', error);
-      return NextResponse.json({ error: 'Failed to create special day' }, { status: 500 });
+      logger.error('[Special Days] Error creating:', { error });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to create special day', 'CREATE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     return NextResponse.json(specialDay, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid data', details: (error as z.ZodError).issues },
+        ApiErrorHandler.createError(
+          'Invalid data',
+          'VALIDATION_ERROR',
+          400,
+          (error as z.ZodError).issues,
+        ),
         { status: 400 },
       );
     }
-    logger.error('Error in POST /api/special-days:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    logger.error('[Special Days] POST error:', { error });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal Server Error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }

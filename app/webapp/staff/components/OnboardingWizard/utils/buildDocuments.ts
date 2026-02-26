@@ -17,7 +17,7 @@ export function buildDocuments({
   bankBSB,
   bankAccount,
   taxFileNumber,
-}: BuildDocumentsParams): any[] {
+}: BuildDocumentsParams): Partial<OnboardingDocument>[] {
   const documents: Partial<OnboardingDocument>[] = [];
 
   if (idFileUrl) {

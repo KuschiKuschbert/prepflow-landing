@@ -9,6 +9,33 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
+const EXCLUDE_PATTERNS = [
+  /node_modules/,
+  /\.next/,
+  /out/,
+  /build/,
+  /dist/,
+  /\.test\.tsx?$/,
+  /\.spec\.tsx?$/,
+  /\.d\.ts$/,
+  /\/types\//,
+  /page\.tsx$/,
+  /layout\.tsx$/,
+  /loading\.tsx$/,
+  /error\.tsx$/,
+  /not-found\.tsx$/,
+  /route\.ts$/,
+  /proxy\.ts$/,
+  /next\.config\./,
+  /playwright\.config\./,
+  /curbos/,
+];
+
+function shouldExcludeFile(filePath) {
+  const normalized = filePath.replace(/\\/g, '/');
+  return EXCLUDE_PATTERNS.some(p => p.test(normalized));
+}
+
 /**
  * Read file content
  */
@@ -29,7 +56,9 @@ function writeFile(filePath, content) {
 }
 
 /**
- * Remove unused export from file
+ * Remove unused export from file.
+ * CONSERVATIVE: Only handles barrel file re-exports (export { X } from '...').
+ * Never removes multi-line exports (interfaces, types, functions) - too error-prone.
  */
 function removeUnusedExport(filePath, lineNum, exportName) {
   const content = readFile(filePath);
@@ -44,62 +73,54 @@ function removeUnusedExport(filePath, lineNum, exportName) {
     return false;
   }
 
-  // Handle different export patterns
-  let modified = false;
-  let newLines = [...lines];
-
-  // Never remove export function/async function - entry points, often multi-line
-  if (/export\s+(async\s+)?function\s+/i.test(targetLine)) {
+  // ONLY process barrel files (index.ts/tsx) - safest for re-export removal
+  const normalizedPath = filePath.replace(/\\/g, '/');
+  if (!/\/index\.tsx?$/.test(normalizedPath)) {
     return false;
   }
 
-  // Never remove export const X = when value spans multiple lines (z.object, template literal)
-  if (/export\s+const\s+\w+\s*=/.test(targetLine)) {
-    if (/\s*=\s*z\.object\s*\(\{/.test(targetLine) || /\s*=\s*`/.test(targetLine)) {
-      return false;
-    }
+  // Skip critical modules that ts-prune may misreport (used via API routes, demo-mode, etc.)
+  const skipPaths = [
+    'lib/populate-helpers/index',
+    'lib/qr-codes/index',
+    'hooks/utils/temperatureWarningChecks/index',
+  ];
+  if (skipPaths.some(p => normalizedPath.includes(p))) {
+    return false;
   }
 
-  // Pattern 1: export const/function/class/type/interface Name
-  if (targetLine.includes(`export `) && targetLine.includes(exportName)) {
-    // Check if it's a single-line export
-    if (targetLine.trim().startsWith('export ')) {
-      // Remove the line entirely
-      newLines.splice(lineNum - 1, 1);
-      modified = true;
-    } else {
-      // Multi-line export - more complex, skip for now
-      // Could be enhanced with AST parsing
-    }
+  // ONLY handle re-export lines: export { X } from '...' or export type { X } from '...'
+  const reExportMatch = targetLine.match(
+    /export\s+(?:type\s+)?\{([^}]+)\}\s+from\s+['"][^'"]+['"]/,
+  );
+  if (!reExportMatch || !targetLine.includes(exportName)) {
+    return false;
   }
 
-  // Pattern 2: export { name } from './file'
-  if (targetLine.includes(`export {`) && targetLine.includes(exportName)) {
-    // Check if it's the only export in the braces
-    const exportMatch = targetLine.match(/export\s*\{([^}]+)\}/);
-    if (exportMatch) {
-      const exports = exportMatch[1].split(',').map(e => e.trim());
-      if (exports.length === 1 && exports[0] === exportName) {
-        // Only export, remove entire line
-        newLines.splice(lineNum - 1, 1);
-        modified = true;
-      } else {
-        // Multiple exports, remove just this one
-        const newExports = exports.filter(e => e !== exportName);
-        if (newExports.length > 0) {
-          const newLine = targetLine.replace(
-            /export\s*\{[^}]+\}/,
-            `export { ${newExports.join(', ')} }`,
-          );
-          newLines[lineNum - 1] = newLine;
-          modified = true;
-        } else {
-          // All exports removed, remove entire line
-          newLines.splice(lineNum - 1, 1);
-          modified = true;
-        }
-      }
-    }
+  const exports = reExportMatch[1].split(',').map(e =>
+    e
+      .trim()
+      .split(/\s+as\s+/)[0]
+      .trim(),
+  );
+  const newExports = exports.filter(e => e !== exportName);
+
+  if (newExports.length === exports.length) {
+    return false; // exportName not in list
+  }
+
+  let modified = false;
+  const newLines = [...lines];
+
+  if (newExports.length === 0) {
+    newLines.splice(lineNum - 1, 1);
+    modified = true;
+  } else {
+    const prefix = targetLine.includes('export type') ? 'export type ' : 'export ';
+    const fromPart = targetLine.match(/\s+from\s+['"][^'"]+['"]/)?.[0] ?? '';
+    const newLine = `${prefix}{ ${newExports.join(', ')} }${fromPart}`;
+    newLines[lineNum - 1] = newLine;
+    modified = true;
   }
 
   if (modified) {
@@ -112,6 +133,7 @@ function removeUnusedExport(filePath, lineNum, exportName) {
 
 /**
  * Parse ts-prune output
+ * Format: filePath:line - exportName
  */
 function parseTsPruneOutput(output) {
   const lines = output.split('\n').filter(line => line.trim());
@@ -121,10 +143,18 @@ function parseTsPruneOutput(output) {
     if (!line.trim() || line.includes('Found') || line.includes('unused')) {
       continue;
     }
+    // Skip "used in module" - not dead code
+    if (line.includes('(used in module)')) {
+      continue;
+    }
 
-    const match = line.match(/^(.+?):(\d+):(.+)$/);
+    const match = line.match(/^(.+?):(\d+) - (.+)$/);
     if (match) {
       const [, filePath, lineNum, exportName] = match;
+      const fullPath = path.resolve(process.cwd(), filePath);
+      if (shouldExcludeFile(fullPath)) {
+        continue;
+      }
       unusedExports.push({
         file: filePath,
         line: parseInt(lineNum, 10),

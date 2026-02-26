@@ -1,3 +1,5 @@
+'use client';
+
 import type { UnifiedItemTypeFilter } from '@/app/webapp/recipes/components/hooks/useDishesClientPagination/helpers/useFilterState';
 import { Icon } from '@/components/ui/Icon';
 import { ChefHat, Layers, Search, UtensilsCrossed, X } from 'lucide-react';

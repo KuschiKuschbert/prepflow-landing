@@ -1,3 +1,5 @@
+'use client';
+
 import { useNavigationTracking } from '@/hooks/useNavigationTracking';
 import { prefetchRoute } from '@/lib/cache/prefetch-config';
 import Link from 'next/link';

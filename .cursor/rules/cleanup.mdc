@@ -19,7 +19,8 @@ alwaysApply: true
 **Automated Enforcement:**
 - Check: `npm run cleanup:check` - Validates all standards
 - Full check: `npm run check:full` - Combines cleanup with design audits, tests, deps, E2E (periodic health)
-- Fix: `npm run cleanup:fix` - Auto-fixes available issues
+- Fix: `npm run cleanup:fix` - Auto-fixes available issues (some codemods may fail on edge cases)
+- **Fix (safe):** `npm run cleanup:fix:safe` - Runs only safe fixes (unused-imports, prettier, dead-code, voice-consistency); skips breakpoints and console-logs codemods that can fail. Use when `cleanup:fix` hits parse errors.
 - Report: `npm run cleanup:report` - Generates detailed reports
 
 ---

@@ -2,6 +2,13 @@ import { logger } from '@/lib/logger';
 import chromium from '@sparticuz/chromium';
 import puppeteerCore, { Browser } from 'puppeteer-core';
 
+/** @sparticuz/chromium launch options (not fully typed in package) */
+interface ChromiumLaunchOptions {
+  args?: string[];
+  defaultViewport?: { width: number; height: number } | null;
+  headless?: boolean | 'shell';
+}
+
 /**
  * Generate PDF from HTML content using Puppeteer
  *
@@ -27,7 +34,8 @@ export async function generatePDF(html: string): Promise<Uint8Array> {
         );
       }
 
-      const chromiumArgs = (chromium as any).args;
+      const chromiumOpts = chromium as unknown as ChromiumLaunchOptions;
+      const chromiumArgs = chromiumOpts.args ?? [];
       logger.info('[generatePDF] Chromium Args:', chromiumArgs);
 
       // Log memory usage before launch
@@ -40,9 +48,9 @@ export async function generatePDF(html: string): Promise<Uint8Array> {
       try {
         browser = await puppeteerCore.launch({
           args: [...chromiumArgs, '--disable-dev-shm-usage', '--no-sandbox', '--disable-gpu'],
-          defaultViewport: (chromium as any).defaultViewport,
+          defaultViewport: chromiumOpts.defaultViewport,
           executablePath,
-          headless: (chromium as any).headless,
+          headless: chromiumOpts.headless,
         });
         logger.info('[generatePDF] Browser launched successfully');
       } catch (launchError) {

@@ -1,3 +1,4 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
@@ -32,7 +33,12 @@ export async function GET(req: NextRequest) {
       .lte('start_date', endDate)
       .order('start_date', { ascending: true });
 
-    if (error || !functions?.length) {
+    if (error) {
+      logger.error('[Weather Function Alerts] Failed to fetch functions', { error });
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status ?? 500 });
+    }
+    if (!functions?.length) {
       return NextResponse.json({ alerts: [] });
     }
 

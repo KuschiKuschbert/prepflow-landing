@@ -60,6 +60,20 @@ export async function fetchDishes(supabase: SupabaseClient) {
     }
   } catch {}
 
+  // Fallback: minimal columns only (kitchen_section_id may not exist)
+  try {
+    const { data: dwsMin, error: minError } = await supabase
+      .from('dishes')
+      .select('id, dish_name, description, selling_price');
+    if (!minError && dwsMin) {
+      return (dwsMin as unknown as Dish[]).map(d => ({
+        ...d,
+        category: 'Uncategorized',
+        kitchen_section_id: null,
+      }));
+    }
+  } catch {}
+
   // Fallback to menu_dishes with kitchen_section_id
   try {
     const { data: mdws, error: mdwsError } = await supabase

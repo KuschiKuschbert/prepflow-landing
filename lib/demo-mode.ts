@@ -74,7 +74,7 @@ export async function setupDemoAccount(email: string): Promise<void> {
       );
     }
     if (recipesData && !(await hasExistingData('menu_dishes'))) {
-      await populateMenuDishes(db, results, recipesData as any[]);
+      await populateMenuDishes(db, results, recipesData);
     }
     if (!(await hasExistingData('menus'))) {
       const { data: dishesData } = await db.from('dishes').select('id, dish_name');
@@ -100,7 +100,7 @@ export async function setupDemoAccount(email: string): Promise<void> {
     if (recipesData) {
       await runIfEmpty(
         'sales_data',
-        () => populateSalesData(db, results, recipesData as any[]),
+        () => populateSalesData(db, results, recipesData),
         'Sales data already exists, skipping.',
       );
     }

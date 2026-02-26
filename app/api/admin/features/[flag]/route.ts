@@ -1,6 +1,7 @@
 import { logAdminApiAction } from '@/lib/admin-audit';
 import { requireAdmin } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -43,6 +44,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ fla
       flag: flagData,
     });
   } catch (error) {
+    logger.error('[Admin Features] PUT error:', { error });
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         ApiErrorHandler.createError('Invalid request data', 'VALIDATION_ERROR', 400, error.issues),
@@ -75,6 +77,7 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
       message: 'Feature flag deleted successfully',
     });
   } catch (error) {
+    logger.error('[Admin Features] DELETE error:', { error });
     return handleRouteError(error, { endpoint: '/api/admin/features/[flag]', method: 'DELETE' });
   }
 }

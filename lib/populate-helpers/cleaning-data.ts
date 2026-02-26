@@ -38,8 +38,8 @@ export async function populateCleaningData(
     const tasksToInsert = cleanSampleCleaningTasks.map(task => ({
       task_name: task.task_name,
       description: task.description,
-      frequency: task.frequency,
-      estimated_duration_minutes: task.estimated_duration_minutes,
+      // Use frequency_type (DB column name), not estimated_duration_minutes (doesn't exist)
+      frequency_type: (task as Record<string, unknown>).frequency_type || task.frequency || 'Daily',
       area_id: areaMap.get('Kitchen Floor'),
     }));
 

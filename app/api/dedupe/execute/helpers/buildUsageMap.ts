@@ -11,9 +11,9 @@ export function buildUsageMap(
 ): Record<string, number> {
   const usageMap: Record<string, number> = {};
   rows.forEach(r => {
-    const row = r as Record<string, any>;
+    const row = r as Record<string, unknown>;
     const id = row[idField];
-    if (!id) return;
+    if (typeof id !== 'string') return;
     usageMap[id] = (usageMap[id] || 0) + 1;
   });
   return usageMap;
