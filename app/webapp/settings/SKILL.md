@@ -44,7 +44,7 @@ This file uses native `confirm()` dialog (line 50) which violates the dialog sta
 
 ## GOTCHAS
 
-- **`GoogleDriveConnection.tsx` has native `confirm()` call** — this is a known tech debt item. Replace with `useConfirm` when modifying this file.
+- **`GoogleDriveConnection.tsx`** — native `confirm()` was replaced with `useConfirm` hook in batch 6 retrofit
 - **Billing page** shows Stripe data — test with Stripe test mode keys in development
 
 ## REFERENCE FILES
@@ -53,6 +53,11 @@ This file uses native `confirm()` dialog (line 50) which violates the dialog sta
 - `app/webapp/settings/billing/page.tsx` — billing/subscription page
 
 ## RETROFIT LOG
+
+### 2025-02-26 — Batch 6 (secondary systems)
+
+- `GoogleDriveConnection.tsx`: replaced native `confirm()` with `useConfirm` hook (PrepFlow voice: "Disconnect Google Drive? You'll need to reconnect if you want to upload backups later.")
+- Removed unused `useRouter` import from `GoogleDriveConnection.tsx`
 
 ## LAST UPDATED
 

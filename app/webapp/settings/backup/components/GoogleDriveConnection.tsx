@@ -2,9 +2,9 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { useNotification } from '@/contexts/NotificationContext';
+import { useConfirm } from '@/hooks/useConfirm';
 import { logger } from '@/lib/logger';
 import { CheckCircle, Cloud, Loader2, LogOut } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface GoogleDriveConnectionProps {
@@ -17,8 +17,8 @@ export function GoogleDriveConnection({
   onConnectionChange,
 }: GoogleDriveConnectionProps) {
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
   const { showSuccess, showError } = useNotification();
+  const { showConfirm, ConfirmDialog } = useConfirm();
 
   const handleConnect = async () => {
     setLoading(true);
@@ -47,7 +47,14 @@ export function GoogleDriveConnection({
   };
 
   const handleDisconnect = async () => {
-    if (!confirm('Are you sure you want to disconnect Google Drive?')) return;
+    const confirmed = await showConfirm({
+      title: 'Disconnect Google Drive?',
+      message: "You'll need to reconnect if you want to upload backups later.",
+      variant: 'warning',
+      confirmLabel: 'Disconnect',
+      cancelLabel: 'Cancel',
+    });
+    if (!confirmed) return;
 
     setLoading(true);
     try {
@@ -71,62 +78,65 @@ export function GoogleDriveConnection({
   };
 
   return (
-    <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div
-            className={`rounded-xl p-3 ${connected ? 'bg-[var(--color-success)]/10 text-[var(--color-success)]' : 'bg-[var(--muted)] text-[var(--foreground-muted)]'}`}
-          >
-            <Icon icon={Cloud} size="lg" />
+    <>
+      <ConfirmDialog />
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div
+              className={`rounded-xl p-3 ${connected ? 'bg-[var(--color-success)]/10 text-[var(--color-success)]' : 'bg-[var(--muted)] text-[var(--foreground-muted)]'}`}
+            >
+              <Icon icon={Cloud} size="lg" />
+            </div>
+            <div>
+              <h3 className="flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
+                Google Drive
+                {connected && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-success)]/10 px-2 py-0.5 text-xs font-medium text-[var(--color-success)]">
+                    <Icon icon={CheckCircle} size="xs" />
+                    Connected
+                  </span>
+                )}
+              </h3>
+              <p className="text-sm text-[var(--foreground-muted)]">
+                {connected
+                  ? 'Your backups can be automatically uploaded to your Google Drive.'
+                  : 'Connect your Google Drive to enable automatic cloud backups.'}
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
-              Google Drive
-              {connected && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-success)]/10 px-2 py-0.5 text-xs font-medium text-[var(--color-success)]">
-                  <Icon icon={CheckCircle} size="xs" />
-                  Connected
-                </span>
-              )}
-            </h3>
-            <p className="text-sm text-[var(--foreground-muted)]">
-              {connected
-                ? 'Your backups can be automatically uploaded to your Google Drive.'
-                : 'Connect your Google Drive to enable automatic cloud backups.'}
-            </p>
-          </div>
-        </div>
 
-        <div>
-          {connected ? (
-            <button
-              onClick={handleDisconnect}
-              disabled={loading}
-              className="flex items-center gap-2 rounded-xl border border-[var(--color-danger)]/30 bg-[var(--color-danger)]/10 px-4 py-2 text-sm font-medium text-[var(--color-danger)] transition-colors hover:bg-[var(--color-danger)]/20 disabled:opacity-50"
-            >
-              {loading ? (
-                <Icon icon={Loader2} className="animate-spin" size="sm" />
-              ) : (
-                <Icon icon={LogOut} size="sm" />
-              )}
-              Disconnect
-            </button>
-          ) : (
-            <button
-              onClick={handleConnect}
-              disabled={loading}
-              className="flex items-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-2 text-sm font-medium text-white shadow-[var(--primary)]/20 shadow-lg transition-colors hover:bg-[var(--primary)]/90 disabled:opacity-50"
-            >
-              {loading ? (
-                <Icon icon={Loader2} className="animate-spin" size="sm" />
-              ) : (
-                <Icon icon={Cloud} size="sm" />
-              )}
-              Connect Drive
-            </button>
-          )}
+          <div>
+            {connected ? (
+              <button
+                onClick={handleDisconnect}
+                disabled={loading}
+                className="flex items-center gap-2 rounded-xl border border-[var(--color-danger)]/30 bg-[var(--color-danger)]/10 px-4 py-2 text-sm font-medium text-[var(--color-danger)] transition-colors hover:bg-[var(--color-danger)]/20 disabled:opacity-50"
+              >
+                {loading ? (
+                  <Icon icon={Loader2} className="animate-spin" size="sm" />
+                ) : (
+                  <Icon icon={LogOut} size="sm" />
+                )}
+                Disconnect
+              </button>
+            ) : (
+              <button
+                onClick={handleConnect}
+                disabled={loading}
+                className="flex items-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-2 text-sm font-medium text-white shadow-[var(--primary)]/20 shadow-lg transition-colors hover:bg-[var(--primary)]/90 disabled:opacity-50"
+              >
+                {loading ? (
+                  <Icon icon={Loader2} className="animate-spin" size="sm" />
+                ) : (
+                  <Icon icon={Cloud} size="sm" />
+                )}
+                Connect Drive
+              </button>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
