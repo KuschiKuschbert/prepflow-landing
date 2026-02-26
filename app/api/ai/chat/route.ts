@@ -9,7 +9,6 @@ import { generateAIResponse } from '@/lib/ai/ai-service';
 import type { AIChatMessage, AIRequestOptions } from '@/lib/ai/types';
 
 import { logger } from '@/lib/logger';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { parseAndValidate } from '@/lib/api/parse-request-body';
 import { z } from 'zod';
 

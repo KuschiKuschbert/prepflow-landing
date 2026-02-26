@@ -2,8 +2,6 @@
  * Bulk action handlers for ingredients. Extracted from useBulkActions.
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 export type ShowConfirmFn = (opts: {
   title: string;
   message: string;

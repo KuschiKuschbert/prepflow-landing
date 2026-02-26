@@ -10,7 +10,6 @@ import { buildRecipeInstructionsPrompt } from '@/lib/ai/prompts/recipe-instructi
 import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
 import { logger } from '@/lib/logger';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { parseAndValidate } from '@/lib/api/parse-request-body';
 import { z } from 'zod';
 
