@@ -48,4 +48,6 @@ async function main() {
   logger.dev('Use --stats or --search to query the local database.');
 }
 
-main().catch(console.error);
+main().catch(err =>
+  logger.error('CLI fatal error', { error: err instanceof Error ? err.message : String(err) }),
+);

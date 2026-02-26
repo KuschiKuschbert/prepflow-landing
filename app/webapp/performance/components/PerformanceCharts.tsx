@@ -62,7 +62,7 @@ export default function PerformanceCharts({
   }
 
   return (
-    <div ref={ref as React.RefObject<HTMLDivElement>}>
+    <div ref={ref as React.RefObject<HTMLDivElement | null>}>
       {isIntersecting && (
         <PerformanceChartsContent
           performanceItems={performanceItems}

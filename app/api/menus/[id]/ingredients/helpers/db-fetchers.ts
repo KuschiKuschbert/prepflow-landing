@@ -8,6 +8,13 @@ interface RecipeIdRow {
   recipe_id: string;
 }
 
+/**
+ * Fetch all direct ingredient IDs linked to the given dish IDs.
+ *
+ * @param {string[]} dishIds - Dish IDs to query
+ * @returns {Promise<IngredientIdRow[]>} Array of `{ ingredient_id }` rows
+ * @throws If the Supabase query returns an error
+ */
 export async function fetchDishIngredients(dishIds: string[]) {
   if (!supabaseAdmin || dishIds.length === 0) return [];
 
@@ -22,6 +29,13 @@ export async function fetchDishIngredients(dishIds: string[]) {
   return (data as IngredientIdRow[]) || [];
 }
 
+/**
+ * Fetch all recipe IDs linked to the given dish IDs.
+ *
+ * @param {string[]} dishIds - Dish IDs to query
+ * @returns {Promise<RecipeIdRow[]>} Array of `{ recipe_id }` rows
+ * @throws If the Supabase query returns an error
+ */
 export async function fetchDishRecipes(dishIds: string[]) {
   if (!supabaseAdmin || dishIds.length === 0) return [];
 
@@ -36,6 +50,13 @@ export async function fetchDishRecipes(dishIds: string[]) {
   return (data as RecipeIdRow[]) || [];
 }
 
+/**
+ * Fetch all ingredient IDs linked to the given recipe IDs.
+ *
+ * @param {string[]} recipeIds - Recipe IDs to query
+ * @returns {Promise<IngredientIdRow[]>} Array of `{ ingredient_id }` rows
+ * @throws If the Supabase query returns an error
+ */
 export async function fetchRecipeIngredients(recipeIds: string[]) {
   if (!supabaseAdmin || recipeIds.length === 0) return [];
 

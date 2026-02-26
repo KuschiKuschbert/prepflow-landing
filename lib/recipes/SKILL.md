@@ -63,6 +63,10 @@ Load when working on recipe management: CRUD, recipe ingredients, cost calculati
 
 ## RETROFIT LOG
 
+### 2025-02-26 — Batch 2 (primary business domains)
+
+- `lib/recipes/cli.ts`: replaced `main().catch(console.error)` with `logger.error` call
+
 ## LAST UPDATED
 
 2025-02-26

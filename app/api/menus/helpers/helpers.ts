@@ -2,6 +2,13 @@ import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Menu } from './schemas';
 
+/**
+ * Enrich a list of menus with their item counts via parallel Supabase queries.
+ *
+ * @param {SupabaseClient} supabase - Authenticated Supabase client
+ * @param {{ id: string }[]} menus - Menus to enrich
+ * @returns {Promise<Menu[]>} Menus with `items_count` populated
+ */
 export async function fetchMenuCounts(
   supabase: SupabaseClient,
   menus: { id: string }[],
@@ -28,6 +35,19 @@ export async function fetchMenuCounts(
   );
 }
 
+/**
+ * Insert a new menu record and return the created row.
+ *
+ * @param {SupabaseClient} supabase - Authenticated Supabase client
+ * @param {string} menuName - Display name for the menu
+ * @param {string} userId - Owner user ID
+ * @param {string} [description] - Optional menu description
+ * @param {string} [menuType] - Menu type (default: `'a_la_carte'`)
+ * @param {number} [foodPerPersonKg] - Food weight per person in kg
+ * @param {number | null} [expectedGuests] - Expected guest count
+ * @returns {Promise<Menu>} Newly created menu record
+ * @throws If the Supabase insert fails
+ */
 export async function createNewMenu(
   supabase: SupabaseClient,
   menuName: string,

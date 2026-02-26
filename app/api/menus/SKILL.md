@@ -66,6 +66,11 @@ Cost = sum of (ingredient.cost_per_unit × recipe_ingredient.quantity × waste_f
 
 ## RETROFIT LOG
 
+### 2025-02-26 — Batch 2 (primary business domains)
+
+- `app/api/menus/helpers/helpers.ts`: added JSDoc to `fetchMenuCounts` and `createNewMenu`
+- `app/api/menus/[id]/ingredients/helpers/db-fetchers.ts`: added JSDoc to `fetchDishIngredients`, `fetchDishRecipes`, `fetchRecipeIngredients`
+
 ## LAST UPDATED
 
 2025-02-26

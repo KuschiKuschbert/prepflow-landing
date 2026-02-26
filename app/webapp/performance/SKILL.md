@@ -59,6 +59,10 @@ Load when working on the performance analysis page, COGS dashboard, dish profita
 
 ## RETROFIT LOG
 
+### 2025-02-26 — Batch 2 (primary business domains)
+
+- `app/webapp/performance/components/PerformanceCharts.tsx`: fixed `RefObject<HTMLDivElement>` cast → `RefObject<HTMLDivElement | null>` per project ref type standard
+
 ## LAST UPDATED
 
 2025-02-26
