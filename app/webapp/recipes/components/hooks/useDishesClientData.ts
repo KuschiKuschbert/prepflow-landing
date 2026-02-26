@@ -14,16 +14,16 @@ export function useDishesClientData({
   initialDishes = [],
   initialRecipes = [],
 }: UseDishesClientDataProps = {}) {
-  // Query 1: Fetch Dishes
+  // Query 1: Fetch Dishes via lightweight catalog (id, dish_name, category, selling_price, cost_price)
   const {
     data: dishes = [],
     isLoading: dishesLoading,
     error: dishesError,
     refetch: refetchDishes,
   } = useQuery({
-    queryKey: ['dishes', 'all'],
+    queryKey: ['dishes', 'catalog'],
     queryFn: async () => {
-      const res = await fetch('/api/dishes?pageSize=1000', { cache: 'no-store' });
+      const res = await fetch('/api/dishes/catalog', { cache: 'no-store' });
       if (!res.ok) {
         const result = await res.json();
         throw new Error(result.error || 'Failed to fetch dishes');
@@ -35,16 +35,16 @@ export function useDishesClientData({
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
-  // Query 2: Fetch Recipes
+  // Query 2: Fetch Recipes via lightweight catalog (id, recipe_name, category, selling_price, yield, yield_unit)
   const {
     data: recipes = [],
     isLoading: recipesLoading,
     error: recipesError,
     refetch: refetchRecipes,
   } = useQuery({
-    queryKey: ['recipes', 'all'],
+    queryKey: ['recipes', 'catalog'],
     queryFn: async () => {
-      const res = await fetch('/api/recipes?pageSize=1000', { cache: 'no-store' });
+      const res = await fetch('/api/recipes/catalog', { cache: 'no-store' });
       if (!res.ok) {
         const result = await res.json();
         throw new Error(result.error || 'Failed to fetch recipes');

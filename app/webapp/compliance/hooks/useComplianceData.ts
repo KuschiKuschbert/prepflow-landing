@@ -7,10 +7,17 @@ import { logger } from '@/lib/logger';
 import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 import type { ComplianceRecord, ComplianceType } from '../types';
 
-export function useComplianceData(selectedType: string, selectedStatus: string) {
+export function useComplianceData(
+  selectedType: string,
+  selectedStatus: string,
+  page: number = 1,
+  pageSize: number = 50,
+) {
   const [types, setTypes] = useState<ComplianceType[]>([]);
   const [records, setRecords] = useState<ComplianceRecord[]>([]);
   const [loading, setLoading] = useState(false);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   // Prefetch APIs on mount
   useEffect(() => {
@@ -32,18 +39,21 @@ export function useComplianceData(selectedType: string, selectedStatus: string) 
 
   const fetchRecords = useCallback(async () => {
     try {
-      let url = '/api/compliance-records';
       const params = new URLSearchParams();
       if (selectedType !== 'all') params.append('type_id', selectedType);
       if (selectedStatus !== 'all') params.append('status', selectedStatus);
-      if (params.toString()) url += `?${params.toString()}`;
+      params.append('page', String(page));
+      params.append('pageSize', String(pageSize));
+      const url = `/api/compliance-records?${params.toString()}`;
 
       const response = await fetch(url);
       const data = await response.json();
       if (data.success) {
         setRecords(data.data);
+        setTotal(data.total ?? 0);
+        setTotalPages(data.totalPages ?? 0);
         // Cache records (only cache when no filters applied for instant display)
-        if (selectedType === 'all' && selectedStatus === 'all') {
+        if (selectedType === 'all' && selectedStatus === 'all' && page === 1) {
           cacheData('compliance_records', data.data);
         }
       }
@@ -52,7 +62,7 @@ export function useComplianceData(selectedType: string, selectedStatus: string) 
     } finally {
       setLoading(false);
     }
-  }, [selectedType, selectedStatus]);
+  }, [selectedType, selectedStatus, page, pageSize]);
 
   useEffect(() => {
     // Load cached data for instant display (client-only)
@@ -75,6 +85,8 @@ export function useComplianceData(selectedType: string, selectedStatus: string) 
     types,
     records,
     loading,
+    total,
+    totalPages,
     setTypes,
     setRecords,
     setLoading,

@@ -40,6 +40,7 @@ export function EquipmentDetailDrawer({ equipment, isOpen, onClose }: EquipmentD
   const { logs, isLoading } = useEquipmentLogs({
     equipmentName: equipment?.name || null,
     equipmentLocation: equipment?.location || null,
+    equipmentId: equipment?.id || null,
     timeFilter,
   });
 

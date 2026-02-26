@@ -21,10 +21,14 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const typeId = searchParams.get('type_id');
     const status = searchParams.get('status');
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
+    const pageSize = Math.min(200, Math.max(1, parseInt(searchParams.get('pageSize') || '50', 10)));
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize - 1;
 
     let query = supabaseAdmin
       .from('compliance_records')
-      .select('*')
+      .select('*', { count: 'exact' })
       .order('expiry_date', { ascending: true });
 
     if (typeId) {
@@ -34,7 +38,7 @@ export async function GET(request: NextRequest) {
       query = query.eq('status', status);
     }
 
-    const { data: records, error } = await query;
+    const { data: records, error, count } = await query.range(start, end);
 
     if (error) {
       const errorCode = error.code;
@@ -45,6 +49,10 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
           success: true,
           data: [],
+          total: 0,
+          page,
+          pageSize,
+          totalPages: 0,
         });
       }
 
@@ -63,6 +71,8 @@ export async function GET(request: NextRequest) {
     }
 
     const items = records || [];
+    const total = count ?? 0;
+    const totalPages = Math.ceil(total / pageSize);
 
     // Enrich with compliance_types if we have records (avoids PGRST200 join when FK not exposed)
     if (items.length > 0) {
@@ -78,10 +88,17 @@ export async function GET(request: NextRequest) {
         compliance_types: r.compliance_type_id ? (typeMap.get(r.compliance_type_id) ?? null) : null,
       }));
 
-      return NextResponse.json({ success: true, data: enriched });
+      return NextResponse.json({
+        success: true,
+        data: enriched,
+        total,
+        page,
+        pageSize,
+        totalPages,
+      });
     }
 
-    return NextResponse.json({ success: true, data: [] });
+    return NextResponse.json({ success: true, data: [], total, page, pageSize, totalPages });
   } catch (err: unknown) {
     if (err instanceof z.ZodError) {
       return NextResponse.json(

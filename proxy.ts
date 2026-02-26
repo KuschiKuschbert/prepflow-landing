@@ -15,9 +15,9 @@ export default async function proxy(req: NextRequest) {
   const isDevelopment = process.env.NODE_ENV === 'development';
   const authBypassDev = process.env.AUTH0_BYPASS_DEV === 'true';
 
-  // 0. V5-ROBUST BYPASS
+  // 0. V5-ROBUST BYPASS (dev/staging only — disabled in production for security)
   const rawUrl = req.url || '';
-  const isPerfTest = rawUrl.includes('performance-test-token=perf-test-secret');
+  const isPerfTest = !isProduction && rawUrl.includes('performance-test-token=perf-test-secret');
 
   logger.dev(`[Proxy V5] Path: ${pathname} | isPerfTest: ${isPerfTest} | URL: ${rawUrl}`);
 
@@ -170,6 +170,7 @@ export default async function proxy(req: NextRequest) {
 
   // Always allow selected public APIs
   if (
+    pathname.startsWith('/api/health') ||
     pathname.startsWith('/api/leads') ||
     pathname.startsWith('/api/debug') ||
     pathname.startsWith('/api/test') ||

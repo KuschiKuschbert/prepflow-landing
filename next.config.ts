@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+import { withSentryConfig } from '@sentry/nextjs';
 
 // Bundle analyzer (optional - only if package is installed)
 let withBundleAnalyzer = (config: NextConfig) => config;
@@ -460,4 +461,27 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withBundleAnalyzer(nextConfig);
+const baseConfig = withBundleAnalyzer(nextConfig);
+
+export default withSentryConfig(baseConfig, {
+  // Sentry organization and project (set via SENTRY_ORG and SENTRY_PROJECT env vars or here)
+  silent: !process.env.CI,
+
+  // Upload source maps to Sentry for readable stack traces in production
+  // Requires SENTRY_AUTH_TOKEN env var in Vercel
+  widenClientFileUpload: true,
+
+  // Tree-shake Sentry logger statements in production
+  disableLogger: true,
+
+  // Automatically instrument Next.js data fetching methods with Sentry
+  autoInstrumentServerFunctions: true,
+  autoInstrumentMiddleware: true,
+  autoInstrumentAppDirectory: true,
+
+  // Only upload source maps when SENTRY_AUTH_TOKEN is configured
+  // Falls back gracefully if not configured (no build failure)
+  sourcemaps: {
+    disable: !process.env.SENTRY_AUTH_TOKEN,
+  },
+});

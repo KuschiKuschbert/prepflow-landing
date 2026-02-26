@@ -18,10 +18,10 @@ export function useCOGSDataFetching() {
       setLoading(true);
       setError(null);
 
-      // Fetch ingredients and recipes in parallel
+      // Fetch ingredients and recipes in parallel via lightweight catalog endpoints
       const [ingredientsResponse, recipesResponse] = await Promise.all([
-        fetch('/api/ingredients?pageSize=1000', { cache: 'no-store' }),
-        fetch('/api/recipes?pageSize=1000', { cache: 'no-store' }),
+        fetch('/api/ingredients/catalog', { cache: 'no-store' }),
+        fetch('/api/recipes/catalog', { cache: 'no-store' }),
       ]);
       const [ingredientsResult, recipesResult] = await Promise.all([
         ingredientsResponse.json(),
@@ -33,7 +33,7 @@ export function useCOGSDataFetching() {
         setError(`Failed to load ingredients: ${ingredientsResult.error || 'Unknown error'}`);
         setIngredients([]);
       } else {
-        const ingredientsData = ingredientsResult.data?.items || [];
+        const ingredientsData = ingredientsResult.ingredients || [];
         logger.dev('🔍 DEBUG useCOGSDataFetching: Ingredients fetched', {
           ingredientsCount: ingredientsData.length,
         });
