@@ -1,490 +1,820 @@
 {
   "summary": {
     "personaCount": 1,
-    "totalErrors": 0,
-    "totalBottlenecks": 34,
-    "totalFaultyPaths": 17
+    "totalErrors": 5,
+    "totalBottlenecks": 83,
+    "totalFaultyPaths": 2
   },
-  "errors": [],
+  "errors": [
+    {
+      "type": "uncaught",
+      "url": "http://localhost:3000/webapp/functions",
+      "message": "Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\nhttps://react.dev/link/hydration-mismatch\n\n  ...\n    <RedirectErrorBoundary router={{...}}>\n      <InnerLayoutRouter url=\"/webapp/fu...\" tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} ...>\n        <SegmentViewNode type=\"page\" pagePath=\"webapp/fun...\">\n          <SegmentTrieNode>\n          <ClientPageRoot Component={function FunctionsPage} serverProvidedParams={{...}}>\n            <FunctionsPage params={Promise} searchParams={Promise}>\n              <ConfirmDialogComponent>\n              <div className=\"desktop:p-...\">\n                <div className=\"desktop:bl...\">\n                  <div className=\"sticky ove...\" style={{top:\"calc(...\", ...}}>\n                    <MiniCalendarPanel events={[...]} selectedDate={null} onDateSelect={function bound dispatchSetState} ...>\n                      <div className=\"overflow-h...\">\n                        <div>\n                        <div className=\"px-2 pb-2\">\n                          <div>\n                          <div className=\"grid grid-...\">\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button\n                              onClick={function onClick}\n+                             className=\"relative flex h-7 flex-col items-center justify-center rounded-md text-[10px]...\"\n-                             className=\"relative flex h-7 flex-col items-center justify-center rounded-md text-[10px]...\"\n+                             aria-label=\"February 26, 2 events\"\n-                             aria-label=\"February 26\"\n                            >\n                              <span>\n+                             <div className=\"absolute bottom-0.5 flex gap-px\">\n                            ...\n                        ...\n                ...\n              ...\n        ...\n      ...\n",
+      "stack": "Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\nhttps://react.dev/link/hydration-mismatch\n\n  ...\n    <RedirectErrorBoundary router={{...}}>\n      <InnerLayoutRouter url=\"/webapp/fu...\" tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} ...>\n        <SegmentViewNode type=\"page\" pagePath=\"webapp/fun...\">\n          <SegmentTrieNode>\n          <ClientPageRoot Component={function FunctionsPage} serverProvidedParams={{...}}>\n            <FunctionsPage params={Promise} searchParams={Promise}>\n              <ConfirmDialogComponent>\n              <div className=\"desktop:p-...\">\n                <div className=\"desktop:bl...\">\n                  <div className=\"sticky ove...\" style={{top:\"calc(...\", ...}}>\n                    <MiniCalendarPanel events={[...]} selectedDate={null} onDateSelect={function bound dispatchSetState} ...>\n                      <div className=\"overflow-h...\">\n                        <div>\n                        <div className=\"px-2 pb-2\">\n                          <div>\n                          <div className=\"grid grid-...\">\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button\n                              onClick={function onClick}\n+                             className=\"relative flex h-7 flex-col items-center justify-center rounded-md text-[10px]...\"\n-                             className=\"relative flex h-7 flex-col items-center justify-center rounded-md text-[10px]...\"\n+                             aria-label=\"February 26, 2 events\"\n-                             aria-label=\"February 26\"\n                            >\n                              <span>\n+                             <div className=\"absolute bottom-0.5 flex gap-px\">\n                            ...\n                        ...\n                ...\n              ...\n        ...\n      ...\n\n    at throwOnHydrationMismatch (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:5531:11)\n    at beginWork (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:12386:17)\n    at runWithFiberInDEV (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:987:30)\n    at performUnitOfWork (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:18998:22)\n    at workLoopConcurrentByScheduler (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:18992:9)\n    at renderRootConcurrent (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:18974:15)\n    at performWorkOnRoot (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:17835:11)\n    at performWorkOnRootViaSchedulerTask (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:20385:7)\n    at MessagePort.performWorkUntilDeadline (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/scheduler/cjs/scheduler.development.js:45:48)",
+      "timestamp": "2026-02-26T06:42:10.762Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "uncaught",
+      "url": "http://localhost:3000/webapp/functions",
+      "message": "Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\nhttps://react.dev/link/hydration-mismatch\n\n  ...\n    <RedirectErrorBoundary router={{...}}>\n      <InnerLayoutRouter url=\"/webapp/fu...\" tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} ...>\n        <SegmentViewNode type=\"page\" pagePath=\"webapp/fun...\">\n          <SegmentTrieNode>\n          <ClientPageRoot Component={function FunctionsPage} serverProvidedParams={{...}}>\n            <FunctionsPage params={Promise} searchParams={Promise}>\n              <ConfirmDialogComponent>\n              <div className=\"desktop:p-...\">\n                <div className=\"desktop:bl...\">\n                  <div className=\"sticky ove...\" style={{top:\"calc(...\", ...}}>\n                    <MiniCalendarPanel events={[...]} selectedDate={null} onDateSelect={function bound dispatchSetState} ...>\n                      <div className=\"overflow-h...\">\n                        <div>\n                        <div className=\"px-2 pb-2\">\n                          <div>\n                          <div className=\"grid grid-...\">\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button\n                              onClick={function onClick}\n+                             className=\"relative flex h-7 flex-col items-center justify-center rounded-md text-[10px]...\"\n-                             className=\"relative flex h-7 flex-col items-center justify-center rounded-md text-[10px]...\"\n+                             aria-label=\"February 26, 2 events\"\n-                             aria-label=\"February 26\"\n                            >\n                              <span>\n+                             <div className=\"absolute bottom-0.5 flex gap-px\">\n                            ...\n                        ...\n                ...\n              ...\n        ...\n      ...\n",
+      "stack": "Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\nhttps://react.dev/link/hydration-mismatch\n\n  ...\n    <RedirectErrorBoundary router={{...}}>\n      <InnerLayoutRouter url=\"/webapp/fu...\" tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} ...>\n        <SegmentViewNode type=\"page\" pagePath=\"webapp/fun...\">\n          <SegmentTrieNode>\n          <ClientPageRoot Component={function FunctionsPage} serverProvidedParams={{...}}>\n            <FunctionsPage params={Promise} searchParams={Promise}>\n              <ConfirmDialogComponent>\n              <div className=\"desktop:p-...\">\n                <div className=\"desktop:bl...\">\n                  <div className=\"sticky ove...\" style={{top:\"calc(...\", ...}}>\n                    <MiniCalendarPanel events={[...]} selectedDate={null} onDateSelect={function bound dispatchSetState} ...>\n                      <div className=\"overflow-h...\">\n                        <div>\n                        <div className=\"px-2 pb-2\">\n                          <div>\n                          <div className=\"grid grid-...\">\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button>\n                            <button\n                              onClick={function onClick}\n+                             className=\"relative flex h-7 flex-col items-center justify-center rounded-md text-[10px]...\"\n-                             className=\"relative flex h-7 flex-col items-center justify-center rounded-md text-[10px]...\"\n+                             aria-label=\"February 26, 2 events\"\n-                             aria-label=\"February 26\"\n                            >\n                              <span>\n+                             <div className=\"absolute bottom-0.5 flex gap-px\">\n                            ...\n                        ...\n                ...\n              ...\n        ...\n      ...\n\n    at throwOnHydrationMismatch (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:5531:11)\n    at beginWork (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:12386:17)\n    at runWithFiberInDEV (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:987:30)\n    at performUnitOfWork (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:18998:22)\n    at workLoopConcurrentByScheduler (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:18992:9)\n    at renderRootConcurrent (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:18974:15)\n    at performWorkOnRoot (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:17835:11)\n    at performWorkOnRootViaSchedulerTask (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:20385:7)\n    at MessagePort.performWorkUntilDeadline (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/scheduler/cjs/scheduler.development.js:45:48)",
+      "timestamp": "2026-02-26T06:42:19.292Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "console.warn",
+      "url": "http://localhost:3000/webapp/recipes",
+      "message": "Image with src \"/images/prepflow-logo.png\" has \"fill\" and parent element with invalid \"position\". Provided \"static\" should be one of absolute,fixed,relative.",
+      "timestamp": "2026-02-26T06:51:18.728Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "network",
+      "url": "https://dulkrqgjfohsuxhsmofo.supabase.co/rest/v1/temperature_equipment?columns=%22name%22%2C%22equipmentType%22%2C%22location%22%2C%22minTemp%22%2C%22maxTemp%22&select=*",
+      "message": "HTTP 400 ",
+      "statusCode": 400,
+      "timestamp": "2026-02-26T06:52:05.443Z",
+      "personaId": "restaurant"
+    },
+    {
+      "type": "console.warn",
+      "url": "http://localhost:3000/webapp/temperature",
+      "message": "[WARN] {\n  \"level\": \"warn\",\n  \"message\": \"⚠️ No logs found for equipment \\\"Bain Marie Hot\\\"\",\n  \"timestamp\": \"2026-02-26T06:52:11.469Z\",\n  \"data\": {\n    \"queriedLocations\": [\n      \"Service Area\",\n      \"Bain Marie Hot\"\n    ]\n  }\n}",
+      "timestamp": "2026-02-26T06:52:11.470Z",
+      "personaId": "restaurant"
+    }
+  ],
   "bottlenecks": [
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createPrepList",
+      "durationMs": 6441,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/prep-lists",
+      "timestamp": "2026-02-26T06:00:45.677Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createIngredient",
+      "durationMs": 12152,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/recipes",
+      "timestamp": "2026-02-26T06:00:57.833Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "viewDashboard",
+      "durationMs": 19316,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp",
+      "timestamp": "2026-02-26T06:01:17.165Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "viewGuide",
+      "durationMs": 20425,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/guide",
+      "timestamp": "2026-02-26T06:01:38.370Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "switchTabs",
+      "durationMs": 53098,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/settings#security",
+      "timestamp": "2026-02-26T06:02:31.478Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createTemperatureLog",
+      "durationMs": 21974,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T06:02:53.453Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "viewSetup",
+      "durationMs": 10385,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/setup",
+      "timestamp": "2026-02-26T06:03:16.839Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "testSearchAndFilters",
+      "durationMs": 39603,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/recipes#ingredients",
+      "timestamp": "2026-02-26T06:03:57.206Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createTemperatureLog",
+      "durationMs": 8203,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T06:04:06.632Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "testSortAndViewToggles",
+      "durationMs": 11155,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T06:04:36.438Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createTemperatureLog",
+      "durationMs": 17752,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T06:04:54.191Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "bulkOperations",
+      "durationMs": 5790,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/recipes",
+      "timestamp": "2026-02-26T06:05:07.109Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createOrderList",
+      "durationMs": 11046,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/order-lists",
+      "timestamp": "2026-02-26T06:05:22.063Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "testImportExport",
+      "durationMs": 41014,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/recipes#dishes",
+      "timestamp": "2026-02-26T06:06:03.717Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "testQRCode",
+      "durationMs": 8027,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T06:06:11.749Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "staffOnboarding",
+      "durationMs": 5802,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/staff",
+      "timestamp": "2026-02-26T06:06:17.551Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createTemperatureLog",
+      "durationMs": 36426,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T06:06:53.979Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "viewRoster",
+      "durationMs": 6640,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/roster",
+      "timestamp": "2026-02-26T06:07:01.610Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createStaffMember",
+      "durationMs": 5081,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/staff",
+      "timestamp": "2026-02-26T06:07:06.696Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "clockInOut",
+      "durationMs": 6939,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/time-attendance",
+      "timestamp": "2026-02-26T06:07:13.636Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "testInlineEditing",
+      "durationMs": 15638,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/menu-builder",
+      "timestamp": "2026-02-26T06:07:29.277Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "viewDashboard",
+      "durationMs": 5617,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp",
+      "timestamp": "2026-02-26T06:07:35.536Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "viewSections",
+      "durationMs": 18928,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/sections",
+      "timestamp": "2026-02-26T06:07:58.826Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "testFormValidation",
+      "durationMs": 30683,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T06:08:33.925Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "interactSettings",
+      "durationMs": 22571,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/settings/billing",
+      "timestamp": "2026-02-26T06:08:56.521Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "cafe",
+      "action": "createCustomer",
+      "durationMs": 30010,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/settings/billing",
+      "timestamp": "2026-02-26T06:09:26.532Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "viewParLevels",
+      "durationMs": 17856,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/par-levels",
+      "timestamp": "2026-02-26T06:10:42.957Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "createOrderList",
+      "durationMs": 18352,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/order-lists",
+      "timestamp": "2026-02-26T06:11:01.317Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "viewDashboard",
+      "durationMs": 11948,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp",
+      "timestamp": "2026-02-26T06:11:15.032Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "switchTabs",
+      "durationMs": 193756,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/settings#security",
+      "timestamp": "2026-02-26T06:14:28.795Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "createIngredient",
+      "durationMs": 40796,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/recipes",
+      "timestamp": "2026-02-26T06:15:09.592Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "createTemperatureLog",
+      "durationMs": 30009,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/suppliers",
+      "timestamp": "2026-02-26T06:15:40.047Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "createSupplier",
+      "durationMs": 6569,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/suppliers",
+      "timestamp": "2026-02-26T06:15:50.201Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "viewSections",
+      "durationMs": 23681,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/sections",
+      "timestamp": "2026-02-26T06:16:13.886Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "testSearchAndFilters",
+      "durationMs": 153393,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/recipes#ingredients",
+      "timestamp": "2026-02-26T06:18:47.976Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "createKitchenSection",
+      "durationMs": 19933,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/sections",
+      "timestamp": "2026-02-26T06:19:07.916Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "createOrderList",
+      "durationMs": 25303,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/order-lists",
+      "timestamp": "2026-02-26T06:19:33.222Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "createPrepList",
+      "durationMs": 20307,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/prep-lists",
+      "timestamp": "2026-02-26T06:19:53.531Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "viewParLevels",
+      "durationMs": 8895,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/par-levels",
+      "timestamp": "2026-02-26T06:20:02.432Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "createTemperatureEquipment",
+      "durationMs": 45006,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/par-levels",
+      "timestamp": "2026-02-26T06:20:47.442Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "viewSettingsBilling",
+      "durationMs": 25979,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/settings/billing",
+      "timestamp": "2026-02-26T06:21:14.554Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "testImportExport",
+      "durationMs": 316824,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/cleaning",
+      "timestamp": "2026-02-26T06:26:31.384Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "testInlineEditing",
+      "durationMs": 48179,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/par-levels",
+      "timestamp": "2026-02-26T06:34:05.581Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "createTemperatureLog",
+      "durationMs": 30023,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/menu-builder",
+      "timestamp": "2026-02-26T06:36:11.356Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "food-truck",
+      "action": "viewCompliance",
+      "durationMs": 45006,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/recipes",
+      "timestamp": "2026-02-26T06:37:06.433Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "restaurant",
+      "action": "createRecipe",
+      "durationMs": 9816,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/recipes#dishes",
+      "timestamp": "2026-02-26T06:37:23.085Z"
+    },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "addIngredientToRecipe",
-      "durationMs": 40343,
+      "durationMs": 10280,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/recipes#dishes",
-      "timestamp": "2026-02-26T03:15:07.530Z"
-    },
-    {
-      "type": "bottleneck",
-      "personaId": "restaurant",
-      "action": "assignDishToMenu",
-      "durationMs": 23451,
-      "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/recipes#menu-builder",
-      "timestamp": "2026-02-26T03:15:30.983Z"
-    },
-    {
-      "type": "bottleneck",
-      "personaId": "restaurant",
-      "action": "viewCOGS",
-      "durationMs": 7166,
-      "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/recipes#dishes",
-      "timestamp": "2026-02-26T03:15:38.152Z"
-    },
-    {
-      "type": "bottleneck",
-      "personaId": "restaurant",
-      "action": "createDetailedRecipe",
-      "durationMs": 41846,
-      "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/recipes#dishes",
-      "timestamp": "2026-02-26T03:16:20.934Z"
+      "timestamp": "2026-02-26T06:37:33.367Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "testSearchAndFilters",
-      "durationMs": 108137,
+      "durationMs": 23504,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/recipes#ingredients",
-      "timestamp": "2026-02-26T03:18:09.077Z"
+      "timestamp": "2026-02-26T06:38:12.240Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "testPagination",
-      "durationMs": 70556,
+      "durationMs": 59003,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/temperature",
-      "timestamp": "2026-02-26T03:19:19.637Z"
+      "timestamp": "2026-02-26T06:39:11.250Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "viewPerformance",
-      "durationMs": 14079,
+      "durationMs": 10171,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/performance",
-      "timestamp": "2026-02-26T03:19:33.721Z"
-    },
-    {
-      "type": "bottleneck",
-      "personaId": "restaurant",
-      "action": "createMenu",
-      "durationMs": 8160,
-      "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/menu-builder",
-      "timestamp": "2026-02-26T03:19:41.885Z"
+      "timestamp": "2026-02-26T06:39:21.422Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "createIngredient",
-      "durationMs": 36979,
+      "durationMs": 33207,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/recipes",
-      "timestamp": "2026-02-26T03:20:18.877Z"
-    },
-    {
-      "type": "bottleneck",
-      "personaId": "restaurant",
-      "action": "createFunction",
-      "durationMs": 7258,
-      "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/functions",
-      "timestamp": "2026-02-26T03:20:26.141Z"
+      "timestamp": "2026-02-26T06:39:55.944Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "viewRecipeSharing",
-      "durationMs": 84330,
+      "durationMs": 6737,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/recipe-sharing",
-      "timestamp": "2026-02-26T03:21:50.481Z"
+      "timestamp": "2026-02-26T06:40:03.711Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "viewSquare",
-      "durationMs": 40644,
+      "durationMs": 7212,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/square",
-      "timestamp": "2026-02-26T03:22:31.126Z"
+      "timestamp": "2026-02-26T06:40:10.929Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
-      "action": "createDishWithAllergens",
-      "durationMs": 18543,
+      "action": "interactSquare",
+      "durationMs": 7046,
       "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/recipes#dishes",
-      "timestamp": "2026-02-26T03:22:53.682Z"
+      "url": "http://localhost:3000/webapp/square#webhooks",
+      "timestamp": "2026-02-26T06:40:17.976Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "switchTabs",
-      "durationMs": 277108,
+      "durationMs": 73470,
       "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/settings#security",
-      "timestamp": "2026-02-26T03:27:30.796Z"
+      "url": "http://localhost:3000/webapp/settings#profile",
+      "timestamp": "2026-02-26T06:41:35.376Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "createKitchenSection",
-      "durationMs": 30031,
+      "durationMs": 12985,
       "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/settings#security",
-      "timestamp": "2026-02-26T03:28:00.832Z"
+      "url": "http://localhost:3000/webapp/sections",
+      "timestamp": "2026-02-26T06:41:48.363Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
-      "action": "createTemperatureLog",
-      "durationMs": 8115,
+      "action": "createRecipe",
+      "durationMs": 9012,
       "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/temperature",
-      "timestamp": "2026-02-26T03:28:37.016Z"
-    },
-    {
-      "type": "bottleneck",
-      "personaId": "restaurant",
-      "action": "viewCompliance",
-      "durationMs": 34178,
-      "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/compliance",
-      "timestamp": "2026-02-26T03:29:11.196Z"
+      "url": "http://localhost:3000/webapp/recipes#dishes",
+      "timestamp": "2026-02-26T06:41:57.377Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "viewFunctions",
-      "durationMs": 17944,
+      "durationMs": 6972,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/functions",
-      "timestamp": "2026-02-26T03:29:29.141Z"
+      "timestamp": "2026-02-26T06:42:10.686Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "viewRoster",
-      "durationMs": 33727,
+      "durationMs": 8037,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/roster",
-      "timestamp": "2026-02-26T03:30:02.870Z"
-    },
-    {
-      "type": "bottleneck",
-      "personaId": "restaurant",
-      "action": "createDetailedFunction",
-      "durationMs": 53851,
-      "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/functions",
-      "timestamp": "2026-02-26T03:30:56.725Z"
+      "timestamp": "2026-02-26T06:42:18.732Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "createRosterShift",
-      "durationMs": 18526,
+      "durationMs": 8586,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/roster",
-      "timestamp": "2026-02-26T03:31:15.252Z"
+      "timestamp": "2026-02-26T06:42:29.996Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "testAIFeatures",
-      "durationMs": 79548,
+      "durationMs": 22687,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/prep-lists",
-      "timestamp": "2026-02-26T03:32:34.803Z"
+      "timestamp": "2026-02-26T06:42:52.684Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "assignDishToMenu",
-      "durationMs": 85824,
+      "durationMs": 10958,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/recipes#menu-builder",
-      "timestamp": "2026-02-26T03:34:00.631Z"
+      "timestamp": "2026-02-26T06:43:03.652Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "createEquipmentMaintenance",
-      "durationMs": 37818,
+      "durationMs": 8860,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/compliance",
-      "timestamp": "2026-02-26T03:34:38.456Z"
+      "timestamp": "2026-02-26T06:43:12.530Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "viewSuppliers",
-      "durationMs": 59801,
+      "durationMs": 5566,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/suppliers",
-      "timestamp": "2026-02-26T03:35:38.261Z"
+      "timestamp": "2026-02-26T06:43:18.097Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
-      "action": "createSupplier",
-      "durationMs": 27351,
+      "action": "viewTimeAttendance",
+      "durationMs": 12023,
       "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/suppliers",
-      "timestamp": "2026-02-26T03:36:05.614Z"
+      "url": "http://localhost:3000/webapp/time-attendance",
+      "timestamp": "2026-02-26T06:43:30.660Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "createStaffMember",
-      "durationMs": 35834,
+      "durationMs": 5873,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/staff",
-      "timestamp": "2026-02-26T03:38:49.886Z"
+      "timestamp": "2026-02-26T06:43:36.540Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "createCustomer",
-      "durationMs": 30008,
+      "durationMs": 20116,
       "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/staff",
-      "timestamp": "2026-02-26T03:39:19.897Z"
+      "url": "http://localhost:3000/webapp/customers",
+      "timestamp": "2026-02-26T06:43:56.659Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
-      "action": "staffOnboarding",
-      "durationMs": 30045,
+      "action": "clockInOut",
+      "durationMs": 45040,
       "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/time-attendance",
-      "timestamp": "2026-02-26T03:40:30.486Z"
+      "url": "http://localhost:3000/webapp/customers",
+      "timestamp": "2026-02-26T06:44:41.701Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "viewPerformance",
-      "durationMs": 30182,
+      "durationMs": 28922,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/performance",
-      "timestamp": "2026-02-26T03:41:06.544Z"
+      "timestamp": "2026-02-26T06:45:25.289Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
-      "action": "createPrepList",
-      "durationMs": 31407,
+      "action": "viewDashboard",
+      "durationMs": 13624,
       "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/prep-lists",
-      "timestamp": "2026-02-26T03:41:37.952Z"
+      "url": "http://localhost:3000/webapp",
+      "timestamp": "2026-02-26T06:45:42.888Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "printMenu",
-      "durationMs": 18247,
+      "durationMs": 10662,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/menu-builder",
-      "timestamp": "2026-02-26T03:41:56.988Z"
+      "timestamp": "2026-02-26T06:45:53.551Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "testImportExport",
-      "durationMs": 706174,
+      "durationMs": 207294,
       "thresholdMs": 5000,
       "url": "http://localhost:3000/webapp/recipes#dishes",
-      "timestamp": "2026-02-26T03:56:10.830Z"
+      "timestamp": "2026-02-26T06:49:21.671Z"
     },
     {
       "type": "bottleneck",
       "personaId": "restaurant",
       "action": "testDeleteFlow",
-      "durationMs": 10618,
+      "durationMs": 5762,
       "thresholdMs": 5000,
-      "url": "http://localhost:3000/webapp/recipes#ingredients",
-      "timestamp": "2026-02-26T04:02:22.138Z"
+      "url": "http://localhost:3000/webapp/compliance",
+      "timestamp": "2026-02-26T06:49:29.272Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "restaurant",
+      "action": "createMenu",
+      "durationMs": 24988,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/menu-builder",
+      "timestamp": "2026-02-26T06:49:54.261Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "restaurant",
+      "action": "createTemperatureLog",
+      "durationMs": 31328,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T06:50:28.887Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "restaurant",
+      "action": "viewAISpecials",
+      "durationMs": 18519,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/specials",
+      "timestamp": "2026-02-26T06:51:04.898Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "restaurant",
+      "action": "testSortAndViewToggles",
+      "durationMs": 14587,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T06:51:20.115Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "restaurant",
+      "action": "testInlineEditing",
+      "durationMs": 15235,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/menu-builder",
+      "timestamp": "2026-02-26T06:51:39.313Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "restaurant",
+      "action": "viewFunctions",
+      "durationMs": 10400,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/functions",
+      "timestamp": "2026-02-26T06:51:50.648Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "restaurant",
+      "action": "createTemperatureEquipment",
+      "durationMs": 12732,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/temperature",
+      "timestamp": "2026-02-26T06:52:03.404Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "restaurant",
+      "action": "viewStaff",
+      "durationMs": 6642,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/staff",
+      "timestamp": "2026-02-26T06:52:10.047Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "restaurant",
+      "action": "navigateAllModules",
+      "durationMs": 226728,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/recipe-sharing",
+      "timestamp": "2026-02-26T06:55:58.993Z"
+    },
+    {
+      "type": "bottleneck",
+      "personaId": "restaurant",
+      "action": "interactSettings",
+      "durationMs": 54252,
+      "thresholdMs": 5000,
+      "url": "http://localhost:3000/webapp/settings/billing",
+      "timestamp": "2026-02-26T06:57:38.989Z"
     }
   ],
   "faultyPaths": [
     {
       "type": "faulty-path",
-      "personaId": "restaurant",
-      "action": "viewTimeAttendance",
-      "url": "http://localhost:3000/webapp/suppliers",
+      "personaId": "cafe",
+      "action": "createParLevel",
+      "url": "http://localhost:3000/webapp/par-levels",
       "expected": "Action completes successfully",
       "actual": "selector-timeout",
-      "errorMessage": "[viewTimeAttendance] page.goto: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/webapp/time-attendance\", waiting until \"domcontentloaded\"\u001b[22m\n",
-      "timestamp": "2026-02-26T03:38:14.046Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "restaurant",
-      "action": "viewPerformanceCharts",
-      "url": "http://localhost:3000/webapp/menu-builder",
-      "expected": "Action completes successfully",
-      "actual": "selector-timeout",
-      "errorMessage": "[viewPerformanceCharts] page.goto: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/webapp/performance\", waiting until \"domcontentloaded\"\u001b[22m\n",
-      "timestamp": "2026-02-26T03:44:24.655Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "restaurant",
-      "action": "bulkOperations",
-      "url": "http://localhost:3000/webapp/recipes#dishes",
-      "expected": "Action completes successfully",
-      "actual": "selector-timeout",
-      "errorMessage": "[bulkOperations] page.goto: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/webapp/ingredients\", waiting until \"domcontentloaded\"\u001b[22m\n",
-      "timestamp": "2026-02-26T04:02:11.515Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "restaurant",
-      "action": "createRecipe",
-      "url": "http://localhost:3000/webapp/recipes#ingredients",
-      "expected": "Action completes successfully",
-      "actual": "unknown",
-      "errorMessage": "[createRecipe] page.goto: Target page, context or browser has been closed",
-      "timestamp": "2026-02-26T04:02:22.275Z"
+      "errorMessage": "[createParLevel] locator.click: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /Add Par Level/i }).first()\u001b[22m\n",
+      "timestamp": "2026-02-26T06:04:24.466Z"
     },
     {
       "type": "faulty-path",
       "personaId": "restaurant",
       "action": "createParLevel",
-      "url": "http://localhost:3000/webapp/recipes#ingredients",
+      "url": "http://localhost:3000/webapp/par-levels",
       "expected": "Action completes successfully",
-      "actual": "unknown",
-      "errorMessage": "[createParLevel] page.goto: Target page, context or browser has been closed",
-      "timestamp": "2026-02-26T04:02:22.316Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "restaurant",
-      "action": "viewAISpecials",
-      "url": "http://localhost:3000/webapp/recipes#ingredients",
-      "expected": "Action completes successfully",
-      "actual": "unknown",
-      "errorMessage": "[viewAISpecials] page.goto: Target page, context or browser has been closed",
-      "timestamp": "2026-02-26T04:02:22.320Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "restaurant",
-      "action": "viewIngredientDetail",
-      "url": "http://localhost:3000/webapp/recipes#ingredients",
-      "expected": "Action completes successfully",
-      "actual": "unknown",
-      "errorMessage": "[viewIngredientDetail] page.goto: Target page, context or browser has been closed",
-      "timestamp": "2026-02-26T04:02:22.325Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "restaurant",
-      "action": "testSortAndViewToggles",
-      "url": "http://localhost:3000/webapp/recipes#ingredients",
-      "expected": "Action completes successfully",
-      "actual": "unknown",
-      "errorMessage": "[testSortAndViewToggles] page.goto: Target page, context or browser has been closed",
-      "timestamp": "2026-02-26T04:02:22.330Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "restaurant",
-      "action": "testQRCode",
-      "url": "http://localhost:3000/webapp/recipes#ingredients",
-      "expected": "Action completes successfully",
-      "actual": "unknown",
-      "errorMessage": "[testQRCode] page.goto: Target page, context or browser has been closed",
-      "timestamp": "2026-02-26T04:02:22.334Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "restaurant",
-      "action": "testInlineEditing",
-      "url": "http://localhost:3000/webapp/recipes#ingredients",
-      "expected": "Action completes successfully",
-      "actual": "unknown",
-      "errorMessage": "[testInlineEditing] page.goto: Target page, context or browser has been closed",
-      "timestamp": "2026-02-26T04:02:22.459Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "restaurant",
-      "action": "viewPerformance",
-      "url": "http://localhost:3000/webapp/recipes#ingredients",
-      "expected": "Action completes successfully",
-      "actual": "form-timeout",
-      "errorMessage": "[viewPerformance] page.goto: Target page, context or browser has been closed",
-      "timestamp": "2026-02-26T04:02:22.524Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "restaurant",
-      "action": "viewCompliance",
-      "url": "http://localhost:3000/webapp/recipes#ingredients",
-      "expected": "Action completes successfully",
-      "actual": "unknown",
-      "errorMessage": "[viewCompliance] page.goto: Target page, context or browser has been closed",
-      "timestamp": "2026-02-26T04:02:22.528Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "restaurant",
-      "action": "viewFunctions",
-      "url": "http://localhost:3000/webapp/recipes#ingredients",
-      "expected": "Action completes successfully",
-      "actual": "unknown",
-      "errorMessage": "[viewFunctions] page.goto: Target page, context or browser has been closed",
-      "timestamp": "2026-02-26T04:02:22.536Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "restaurant",
-      "action": "createTemperatureEquipment",
-      "url": "http://localhost:3000/webapp/recipes#ingredients",
-      "expected": "Action completes successfully",
-      "actual": "unknown",
-      "errorMessage": "[createTemperatureEquipment] page.goto: Target page, context or browser has been closed",
-      "timestamp": "2026-02-26T04:02:22.543Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "restaurant",
-      "action": "viewStaff",
-      "url": "http://localhost:3000/webapp/recipes#ingredients",
-      "expected": "Action completes successfully",
-      "actual": "unknown",
-      "errorMessage": "[viewStaff] page.goto: Target page, context or browser has been closed",
-      "timestamp": "2026-02-26T04:02:22.614Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "restaurant",
-      "action": "viewEquipmentDetail",
-      "url": "http://localhost:3000/webapp/recipes#ingredients",
-      "expected": "Action completes successfully",
-      "actual": "unknown",
-      "errorMessage": "[viewEquipmentDetail] page.goto: Target page, context or browser has been closed",
-      "timestamp": "2026-02-26T04:02:22.621Z"
-    },
-    {
-      "type": "faulty-path",
-      "personaId": "restaurant",
-      "action": "viewFunctionDetail",
-      "url": "http://localhost:3000/webapp/recipes#ingredients",
-      "expected": "Action completes successfully",
-      "actual": "unknown",
-      "errorMessage": "[viewFunctionDetail] page.goto: Target page, context or browser has been closed",
-      "timestamp": "2026-02-26T04:02:22.622Z"
+      "actual": "selector-timeout",
+      "errorMessage": "[createParLevel] locator.click: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /Add Par Level/i }).first()\u001b[22m\n",
+      "timestamp": "2026-02-26T06:50:46.378Z"
     }
   ],
-  "generatedAt": "2026-02-26T04:02:22.900Z"
+  "generatedAt": "2026-02-26T06:57:39.651Z"
 }
