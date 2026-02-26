@@ -464,7 +464,8 @@ const nextConfig: NextConfig = {
 const baseConfig = withBundleAnalyzer(nextConfig);
 
 export default withSentryConfig(baseConfig, {
-  // Sentry organization and project (set via SENTRY_ORG and SENTRY_PROJECT env vars or here)
+  org: 'kuschmierz',
+  project: process.env.SENTRY_PROJECT || 'prepflow-web',
   silent: !process.env.CI,
 
   // Upload source maps to Sentry for readable stack traces in production

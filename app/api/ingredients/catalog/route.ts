@@ -17,13 +17,12 @@ export interface IngredientCatalogItem {
   id: string;
   ingredient_name: string;
   unit: string | null;
-  pack_cost: number | null;
+  pack_price: number | null;
   pack_size: number | null;
-  standard_unit: string | null;
   cost_per_unit: number | null;
   category: string | null;
-  supplier_id: string | null;
-  wastage_percentage: number | null;
+  supplier: string | null;
+  trim_peel_waste_percentage: number | null;
 }
 
 export async function GET(request: NextRequest) {
@@ -38,7 +37,7 @@ export async function GET(request: NextRequest) {
     let query = supabase
       .from('ingredients')
       .select(
-        'id, ingredient_name, unit, pack_cost, pack_size, standard_unit, cost_per_unit, category, supplier_id, wastage_percentage',
+        'id, ingredient_name, unit, pack_price, pack_size, cost_per_unit, category, supplier, trim_peel_waste_percentage',
       )
       .eq('user_id', userId)
       .order('ingredient_name');
@@ -50,7 +49,7 @@ export async function GET(request: NextRequest) {
       query = query.eq('category', category);
     }
     if (supplier) {
-      query = query.eq('supplier_id', supplier);
+      query = query.eq('supplier', supplier);
     }
 
     const { data, error } = await query;

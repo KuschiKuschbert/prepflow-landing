@@ -100,6 +100,16 @@ async function batchInsert(
 // ---------------------------------------------------------------------------
 
 async function resolveUserId(): Promise<string | null> {
+  // Use auth.admin.listUsers() — returns real auth.users entries which satisfy FK constraints
+  const { data: authData, error: authError } = await supabase.auth.admin.listUsers({
+    page: 1,
+    perPage: 1,
+  });
+  if (!authError && authData?.users?.length > 0) {
+    return authData.users[0].id;
+  }
+
+  // Fall back to users table (may be orphaned pre-FK rows)
   const { data, error } = await supabase.from('users').select('id').limit(1);
   if (error || !data || data.length === 0) return null;
   return data[0].id as string;
@@ -332,18 +342,17 @@ async function seedIngredients(userId: string, count = 3000): Promise<string[]> 
   const rows: Record<string, unknown>[] = [];
   for (let i = 0; i < count; i++) {
     const unit = pick(UNITS);
-    const packCost = randomFloat(2, 150);
+    const packPrice = randomFloat(2, 150);
     const packSize = randomFloat(0.5, 50);
     rows.push({
       user_id: userId,
       ingredient_name: ingredientName(i),
       category: pick(INGREDIENT_CATEGORIES),
       unit,
-      standard_unit: unit,
-      pack_cost: packCost,
+      pack_price: packPrice,
       pack_size: packSize,
-      cost_per_unit: parseFloat((packCost / packSize).toFixed(4)),
-      wastage_percentage: randomBetween(0, 20),
+      cost_per_unit: parseFloat((packPrice / packSize).toFixed(4)),
+      trim_peel_waste_percentage: randomBetween(0, 20),
       created_at: new Date(Date.now() - randomBetween(0, 5 * 365) * 86400000).toISOString(),
     });
   }
@@ -376,9 +385,8 @@ async function seedRecipes(userId: string, count = 2000): Promise<string[]> {
       user_id: userId,
       recipe_name: recipeName(i),
       category: pick(RECIPE_CATEGORIES),
-      yield: randomFloat(1, 20, 1),
+      yield: randomBetween(1, 20),
       yield_unit: pick(['serves', 'portions', 'pieces', 'L', 'kg']),
-      selling_price: randomFloat(8, 65),
       description: `House-made recipe developed over ${randomBetween(1, 5)} years.`,
       created_at: new Date(Date.now() - randomBetween(0, 5 * 365) * 86400000).toISOString(),
     });
@@ -445,15 +453,11 @@ async function seedRecipeIngredients(recipeIds: string[], ingredientIds: string[
     // Rotate for variety
     shuffledIngredients.push(shuffledIngredients.shift()!);
     for (const ingredientId of pickedIngredients) {
-      const qty = randomFloat(0.05, 2, 3);
-      const unit = pick(['kg', 'g', 'L', 'mL', 'each']);
       rows.push({
         recipe_id: recipeId,
         ingredient_id: ingredientId,
-        quantity: qty,
-        unit,
-        cost_per_unit: randomFloat(0.5, 30),
-        total_cost: randomFloat(0.1, 60),
+        quantity: randomFloat(0.05, 2, 3),
+        unit: pick(['kg', 'g', 'L', 'mL', 'each']),
       });
     }
   }
@@ -486,7 +490,7 @@ async function seedComplianceRecords(userId: string, count = 5000): Promise<void
     const expiryDate = daysFromNow(randomBetween(-180, 730)); // -6 months to +2 years
     const status = pick(COMPLIANCE_STATUSES);
     rows.push({
-      user_id: userId,
+      // compliance_records has no user_id column — it's a shared table
       compliance_type_id: pick(typeIds),
       document_name: `${pick(COMPLIANCE_TYPES_SEED)} - ${new Date(issueDate).getFullYear()}`,
       issue_date: issueDate,
@@ -516,7 +520,7 @@ async function verifyCatalogPerformance(userId: string): Promise<void> {
         const t0 = Date.now();
         const { data, error } = await supabase
           .from('recipes')
-          .select('id, recipe_name, category, selling_price, yield, yield_unit')
+          .select('id, recipe_name, category, yield, yield_unit')
           .eq('user_id', userId)
           .order('recipe_name');
         const ms = Date.now() - t0;
@@ -533,7 +537,7 @@ async function verifyCatalogPerformance(userId: string): Promise<void> {
         const { data, error } = await supabase
           .from('ingredients')
           .select(
-            'id, ingredient_name, unit, pack_cost, pack_size, standard_unit, cost_per_unit, category, supplier_id, wastage_percentage',
+            'id, ingredient_name, unit, pack_price, pack_size, cost_per_unit, category, trim_peel_waste_percentage',
           )
           .eq('user_id', userId)
           .order('ingredient_name');
@@ -567,7 +571,7 @@ async function verifyCatalogPerformance(userId: string): Promise<void> {
         const { data, count, error } = await supabase
           .from('compliance_records')
           .select('*', { count: 'exact' })
-          .eq('user_id', userId)
+          // compliance_records has no user_id — query all
           .order('expiry_date', { ascending: true })
           .range(0, 49);
         const ms = Date.now() - t0;
@@ -595,7 +599,7 @@ async function verifyCatalogPerformance(userId: string): Promise<void> {
         const t0 = Date.now();
         const { data, error } = await supabase
           .from('recipe_ingredients')
-          .select('recipe_id, ingredient_id, quantity, unit, cost_per_unit')
+          .select('recipe_id, ingredient_id, quantity, unit')
           .in('recipe_id', ids);
         const ms = Date.now() - t0;
         if (error) throw new Error(error.message);

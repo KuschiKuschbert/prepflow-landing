@@ -283,6 +283,35 @@ Co-authored-by: Cursor <cursoragent@cursor.com>
   - Updated `ExportDayButton` to pass `theme` via `getSavedExportTheme()` and support optional `dayNumber` (undefined = full runsheet).
   - Added "Export full runsheet" button in `RunsheetPanel` when `totalDays > 1` (alongside per-day export).
 
+## 2026-02-26
+
+### Production Readiness & Infrastructure
+
+- **CLIs authenticated**: Vercel CLI (prepflow-landing), Supabase CLI (dulkrqgjfohsuxhsmofo / Sydney), GitHub CLI (KuschiKuschbert), Stripe CLI (live mode).
+- **Migrations pushed**: `20260226000000_temperature_performance_indexes` and `20260226000001_catalog_performance_indexes` applied to production DB.
+- **Sentry integration**: All 5 Sentry env vars added to Vercel (`NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_DSN`, `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT=prepflow-web`). `sentry.client.config.ts`, `sentry.server.config.ts`, `sentry.edge.config.ts` created. `next.config.ts` wrapped with `withSentryConfig`.
+- **Stripe webhook**: Live-mode webhook registered at `https://www.prepflow.org/api/webhook/stripe` (ID: `we_1T55OkIO9rOgEAAGf85xIr3X`). Vercel `STRIPE_WEBHOOK_SECRET` and `STRIPE_WEBHOOK_SECRET_PROD` updated with new live secret.
+- **Vercel env vars added**: `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_PRICE_STARTER_MONTHLY` (price_1Sc7O9), `STRIPE_PRICE_PRO_MONTHLY` (price_1Sc7PS), `STRIPE_PRICE_BUSINESS_MONTHLY` (price_1Sc7Px), `RESEND_API_KEY`, `FROM_EMAIL`, `FROM_NAME`.
+- **Health check endpoint**: `app/api/health/route.ts` created with Supabase connectivity check. `/api/health` added to public routes in `proxy.ts`.
+- **Env validation**: `lib/env.ts` created with Zod schema for startup validation.
+
+### Deferred / Needs Action Later
+
+- **`AUTH0_M2M_CLIENT_ID` + `AUTH0_M2M_CLIENT_SECRET`**: Not yet added to Vercel (blocked by MFA). Required for role management via Auth0 Management API. Add via `vercel env add AUTH0_M2M_CLIENT_ID production` once M2M credentials are retrieved from Auth0 dashboard → Applications → Machine to Machine apps.
+
+### Roadmap: Multi-User Per Tenant
+
+- **Goal**: Multiple staff users per restaurant/business sharing one tenant's data (ingredients, recipes, etc.) with role-based access (owner, manager, staff).
+- **Current state**: Shared workspace — all authenticated users see the same data (`user_id` scoping not enforced on most tables).
+- **What's needed**:
+  1. `tenants` table + `user_tenants` junction (user ↔ tenant membership + role)
+  2. RLS policies scoped to `tenant_id` instead of `user_id`
+  3. Tenant invite flow (email invite → accept → join tenant)
+  4. Auth0 roles/metadata to carry `tenant_id` in JWT
+  5. Middleware to inject `tenant_id` on all API requests
+  6. `AUTH0_M2M_CLIENT_ID` / `AUTH0_M2M_CLIENT_SECRET` for programmatic role assignment
+- **Estimated scope**: Large (2–3 week feature). Should be planned as a separate branch `feature/multi-tenant`.
+
 ## 2026-02-22
 
 - **Theme-aware readability**: Replaced hardcoded `bg-[#0a0a0a]` base background in webapp layout with `bg-[var(--background)]` so the background correctly switches between dark (#000000) and light (#ffffff) when the user toggles theme in Settings > Preferences.

@@ -38,9 +38,9 @@ CREATE INDEX IF NOT EXISTS idx_recipe_ingredients_recipe
 CREATE INDEX IF NOT EXISTS idx_recipe_ingredients_ingredient
   ON recipe_ingredients(ingredient_id);
 
--- COMPLIANCE_RECORDS: list sorted by expiry_date (primary display order)
-CREATE INDEX IF NOT EXISTS idx_compliance_records_user_expiry
-  ON compliance_records(user_id, expiry_date DESC);
+-- COMPLIANCE_RECORDS: list sorted by expiry_date (shared table — no user_id)
+CREATE INDEX IF NOT EXISTS idx_compliance_records_expiry_desc
+  ON compliance_records(expiry_date DESC);
 
 -- COMPLIANCE_RECORDS: filter by type + expiry
 CREATE INDEX IF NOT EXISTS idx_compliance_records_type_expiry

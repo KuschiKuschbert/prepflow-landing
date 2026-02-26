@@ -2,11 +2,7 @@
  * Helpers for useDishFormData. Extracted to stay under 120-line hook limit.
  */
 import type { DishWithDetails, Ingredient, Recipe } from '@/lib/types/recipes';
-import type {
-  APIResponse,
-  SelectedRecipe,
-  SelectedIngredient,
-} from '../../components/DishEditDrawerTypes';
+import type { SelectedRecipe, SelectedIngredient } from '../../components/DishEditDrawerTypes';
 
 export async function fetchResourcesForDishForm(): Promise<{
   recipes: Recipe[];

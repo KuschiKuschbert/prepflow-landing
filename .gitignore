@@ -156,3 +156,5 @@ scripts/guide-screenshot-regions.json
 e2e/auth.json
 performance-reports/
 .lighthouseci/
+.vercel
+.env*.local
