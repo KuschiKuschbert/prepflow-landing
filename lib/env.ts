@@ -25,14 +25,28 @@ const envSchema = z.object({
     z.string().min(1).optional(),
   ),
 
-  // Auth0 (required for authentication)
-  AUTH0_SECRET: z.string().min(32, {
-    message: 'AUTH0_SECRET must be at least 32 characters (run: openssl rand -hex 32)',
-  }),
-  AUTH0_BASE_URL: z.string().url({ message: 'AUTH0_BASE_URL must be a valid URL' }),
-  AUTH0_ISSUER_BASE_URL: z.string().url({ message: 'AUTH0_ISSUER_BASE_URL must be a valid URL' }),
-  AUTH0_CLIENT_ID: z.string().min(1, { message: 'AUTH0_CLIENT_ID is required' }),
-  AUTH0_CLIENT_SECRET: z.string().min(1, { message: 'AUTH0_CLIENT_SECRET is required' }),
+  // Auth0 (optional at build - validated at runtime by Auth0 SDK on first auth request)
+  // Empty string treated as missing so builds succeed in CI without full secrets configured
+  AUTH0_SECRET: z.preprocess(
+    val => (val === '' || val === undefined ? undefined : val),
+    z.string().min(32).optional(),
+  ),
+  AUTH0_BASE_URL: z.preprocess(
+    val => (val === '' || val === undefined ? undefined : val),
+    z.string().url().optional(),
+  ),
+  AUTH0_ISSUER_BASE_URL: z.preprocess(
+    val => (val === '' || val === undefined ? undefined : val),
+    z.string().url().optional(),
+  ),
+  AUTH0_CLIENT_ID: z.preprocess(
+    val => (val === '' || val === undefined ? undefined : val),
+    z.string().min(1).optional(),
+  ),
+  AUTH0_CLIENT_SECRET: z.preprocess(
+    val => (val === '' || val === undefined ? undefined : val),
+    z.string().min(1).optional(),
+  ),
 
   // Stripe (required for billing — optional fields default to empty)
   STRIPE_SECRET_KEY: z.string().optional(),
