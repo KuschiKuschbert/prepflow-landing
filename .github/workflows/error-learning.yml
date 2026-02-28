@@ -10,10 +10,11 @@ on:
   workflow_dispatch:
 
 jobs:
+  # Runs only when the CI pipeline FAILED — captures what broke
   capture-build-errors:
     name: Capture Build Errors
     runs-on: ubuntu-latest
-    if: failure() # Only run if CI workflow failed
+    if: github.event.workflow_run.conclusion == 'failure'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -42,10 +43,14 @@ jobs:
           fi
         continue-on-error: true
 
+  # Runs when the CI pipeline SUCCEEDED (or on schedule/dispatch) — detects what was fixed
   detect-fixes:
     name: Detect Fixes
     runs-on: ubuntu-latest
-    if: success() # Only run if CI workflow succeeded (errors were fixed)
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'schedule' ||
+      github.event.workflow_run.conclusion == 'success'
     permissions:
       contents: write
     steps:
@@ -75,7 +80,7 @@ jobs:
           npm run troubleshooting:apply || true
         continue-on-error: true
       - name: Commit and push learned docs
-        if: github.event.workflow_run && github.event.workflow_run.head_branch == 'main'
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.head_branch == 'main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -87,10 +92,20 @@ jobs:
             git push origin HEAD:main
           fi
 
+  # Runs after detect-fixes (on every CI success) and also on schedule/dispatch
+  # This ensures a fresh report is always generated and uploaded as an artifact
   learning-report:
     name: Generate Learning Report
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    needs: [detect-fixes]
+    if: |
+      always() &&
+      needs.detect-fixes.result != 'skipped' &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'schedule' ||
+        github.event.workflow_run.conclusion == 'success'
+      )
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -98,7 +113,7 @@ jobs:
           node-version: '22'
           cache: 'npm'
       - run: npm ci
-      - name: Generate weekly learning report
+      - name: Generate learning report
         run: |
           node scripts/error-learning/generate-learning-report.js 7
         continue-on-error: true
