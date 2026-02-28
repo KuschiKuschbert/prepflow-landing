@@ -10,11 +10,17 @@ on:
   workflow_dispatch:
 
 jobs:
-  # Runs only when the CI pipeline FAILED — captures what broke
+  # Runs whenever CI completes (success OR failure) — re-runs checks to capture
+  # any TypeScript errors, lint issues, or build warnings that exist in the codebase.
+  # Skipped only when CI was cancelled or the workflow was triggered without a CI run.
   capture-build-errors:
     name: Capture Build Errors
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.conclusion == 'failure'
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'schedule' ||
+      github.event.workflow_run.conclusion == 'failure' ||
+      github.event.workflow_run.conclusion == 'success'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -92,20 +98,16 @@ jobs:
             git push origin HEAD:main
           fi
 
-  # Runs after detect-fixes (on every CI success) and also on schedule/dispatch
-  # This ensures a fresh report is always generated and uploaded as an artifact
+  # Runs after both capture-build-errors and detect-fixes complete.
+  # Always generates a report when either of those jobs ran (success or failure outcome),
+  # so a learning artifact is always uploaded on every CI completion.
   learning-report:
     name: Generate Learning Report
     runs-on: ubuntu-latest
-    needs: [detect-fixes]
+    needs: [capture-build-errors, detect-fixes]
     if: |
       always() &&
-      needs.detect-fixes.result != 'skipped' &&
-      (
-        github.event_name == 'workflow_dispatch' ||
-        github.event_name == 'schedule' ||
-        github.event.workflow_run.conclusion == 'success'
-      )
+      (needs.capture-build-errors.result == 'success' || needs.detect-fixes.result == 'success')
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
