@@ -226,53 +226,12 @@ jobs:
       - name: 📦 Install dependencies
         run: npm ci
 
-      - name: Check Vercel Secrets
-        id: check_secrets
-        run: |
-          if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then
-            echo "Secrets missing. Skipping deploy."
-            echo "deploy=false" >> $GITHUB_OUTPUT
-          else
-            echo "deploy=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: 🔗 Link Vercel project
-        if: steps.check_secrets.outputs.deploy == 'true'
-        run: |
-          mkdir -p .vercel
-          echo '{"projectId":"prj_TC0avSF066KXEO4CrrBpmVvhlDXL","orgId":"team_AeOXMVxTP36kyvOjwBa2pMZ0","projectName":"prepflow-web"}' > .vercel/project.json
-
-      - name: 🚀 Deploy to Vercel
-        id: deploy
-        if: steps.check_secrets.outputs.deploy == 'true'
-        uses: amondnet/vercel-action@v25
-        # actionlint: disable=expr
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
-        continue-on-error: true
-
       - name: 📊 Deployment Status
         if: always()
         run: |
-          if [ "${{ steps.deploy.outcome }}" == "success" ]; then
-            echo "✅ Deployment successful!"
-            echo "🚀 PrepFlow deployed to production"
-          elif [ "${{ steps.deploy.outcome }}" == "failure" ]; then
-            echo "❌ Deployment failed!"
-            echo "🔧 Check the logs above for details"
-            echo ""
-            echo "Common issues:"
-            echo "1. Verify VERCEL_TOKEN, VERCEL_ORG_ID, and VERCEL_PROJECT_ID secrets are configured"
-            echo "2. Check Vercel dashboard for project settings"
-            echo "3. Ensure Vercel project is connected to GitHub repo"
-            echo "4. See docs/VERCEL_DEPLOYMENT_DIAGNOSTICS.md for troubleshooting"
-            exit 1
-          else
-            echo "⚠️ Deployment status: ${{ steps.deploy.outcome }}"
-          fi
+          echo "✅ Vercel deployment is handled automatically via the GitHub integration."
+          echo "🚀 PrepFlow is deploying to production via Vercel's GitHub App."
+          echo "   Check https://vercel.com/derkusch-gmailcoms-projects/prepflow-web for live status."
 
   # 📈 Notify on Success/Failure
   notify:
