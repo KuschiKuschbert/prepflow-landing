@@ -240,7 +240,7 @@ jobs:
         if: steps.check_secrets.outputs.deploy == 'true'
         run: |
           mkdir -p .vercel
-          echo '{"projectId":"${{ secrets.VERCEL_PROJECT_ID }}","orgId":"${{ secrets.VERCEL_ORG_ID }}"}' > .vercel/project.json
+          echo '{"projectId":"prj_TC0avSF066KXEO4CrrBpmVvhlDXL","orgId":"team_AeOXMVxTP36kyvOjwBa2pMZ0","projectName":"prepflow-web"}' > .vercel/project.json
 
       - name: 🚀 Deploy to Vercel
         id: deploy
