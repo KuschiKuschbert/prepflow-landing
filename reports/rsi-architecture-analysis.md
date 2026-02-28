@@ -1,9 +1,9 @@
 # 🏗️ RSI Architecture Analysis Report
 
-**Date:** 2/27/2026, 3:41:56 PM
+**Date:** 2/28/2026, 3:27:49 PM
 
 **Detected Design Patterns:** 6
-**Detected Anti-Patterns:** 477
+**Detected Anti-Patterns:** 475
 
 ## ⚠️ Anti-Patterns Detected
 
@@ -315,12 +315,6 @@
 
 ### Magic Numbers (MEDIUM)
 
-**File:** `app/api/employees/[id]/qualifications/route.ts`
-**Description:** Found 13 magic numbers
-**Suggestion:** Extract magic numbers to named constants
-
-### Magic Numbers (MEDIUM)
-
 **File:** `app/api/employees/route.ts`
 **Description:** Found 12 magic numbers
 **Suggestion:** Extract magic numbers to named constants
@@ -564,12 +558,6 @@
 **File:** `app/api/prep-lists/generate-from-menu/helpers/processMenuItem.ts`
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
-
-### Magic Numbers (MEDIUM)
-
-**File:** `app/api/prep-lists/route.ts`
-**Description:** Found 12 magic numbers
-**Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
 
