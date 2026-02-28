@@ -45,6 +45,10 @@ function analyzeAPIPatterns(content, filePath) {
   const isTestEndpoint = /\/test\/|\/debug\//.test(filePath);
   if (isTestEndpoint) return violations; // Test endpoints have different response patterns
 
+  // Skip health endpoint - uses custom { status, timestamp, checks } format for LB compatibility
+  const isHealthEndpoint = /\/api\/health\/route\.(ts|js)$/.test(filePath);
+  if (isHealthEndpoint) return violations;
+
   // Check for exported HTTP method handlers
   const hasGET = /export\s+(async\s+)?function\s+GET/.test(content);
   const hasPOST = /export\s+(async\s+)?function\s+POST/.test(content);

@@ -4,7 +4,7 @@
  * Resilient: continues even if form fields are not found.
  */
 import type { Page } from '@playwright/test';
-import { getSimWait, safeGoto } from '../../helpers/sim-wait';
+import { getSimWait } from '../../helpers/sim-wait';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 export async function createCustomerFlow(

@@ -47,7 +47,3 @@
  */
 
 // Notification primitives
-export { Toast } from './Toast';
-export type { ToastProps, ToastType } from './Toast';
-export { NotificationContainer } from './NotificationContainer';
-export type { Notification } from './NotificationContainer';

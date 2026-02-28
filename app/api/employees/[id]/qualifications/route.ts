@@ -1,4 +1,5 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { parseAndValidate } from '@/lib/api/parse-request-body';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
@@ -108,32 +109,14 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     const { id } = await context.params;
     const { userId, supabase } = await getAuthenticatedUser(request);
 
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Employee Qualifications API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const parsed = await parseAndValidate(
+      request,
+      createQualificationSchema,
+      '[Employee Qualifications API]',
+    );
+    if (!parsed.ok) return parsed.response;
 
-    const validationResult = createQualificationSchema.safeParse(body);
-    if (!validationResult.success) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validationResult.error.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    const result = await createQualificationWithUser(supabase, id, validationResult.data, userId);
+    const result = await createQualificationWithUser(supabase, id, parsed.data, userId);
     if ('error' in result) {
       return NextResponse.json(result.error, { status: result.status });
     }

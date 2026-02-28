@@ -129,6 +129,7 @@
     "audit:scripts": "eslint scripts/",
     "check:coverage": "tsx scripts/coverage-scanner.ts",
     "check:bundle": "tsx scripts/bundle-budget.ts",
+    "update:bundle-baseline": "npm run build && tsx scripts/bundle-budget.ts --save",
     "audit:unused": "tsx scripts/audit-dependencies.ts",
     "backfill:tags": "tsx scripts/backfill-ingredient-tags.ts",
     "backfill:fts": "tsx scripts/fix-fts.ts",

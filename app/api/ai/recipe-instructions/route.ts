@@ -9,6 +9,7 @@ import { generateAIResponse } from '@/lib/ai/ai-service';
 import { buildRecipeInstructionsPrompt } from '@/lib/ai/prompts/recipe-instructions';
 import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { parseAndValidate } from '@/lib/api/parse-request-body';
 import { z } from 'zod';
@@ -90,10 +91,12 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     logger.error('Recipe instructions error:', error);
     return NextResponse.json(
-      {
-        error: 'Failed to generate recipe instructions',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        'Failed to generate recipe instructions',
+        'RECIPE_INSTRUCTIONS_ERROR',
+        500,
+        error instanceof Error ? error.message : 'Unknown error',
+      ),
       { status: 500 },
     );
   }

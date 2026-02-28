@@ -1,3 +1,5 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 
@@ -15,8 +17,12 @@ export async function GET() {
     const supabase = createSupabaseAdmin();
     const { error } = await supabase.from('users').select('id').limit(1).maybeSingle();
     checks.database = !error;
-  } catch {
+  } catch (err) {
     checks.database = false;
+    logger.error('[Health] Database check failed', {
+      error: err instanceof Error ? err : new Error(String(err)),
+    });
+    void ApiErrorHandler.fromException(err instanceof Error ? err : new Error(String(err)));
   }
 
   const allHealthy = Object.values(checks).every(Boolean);

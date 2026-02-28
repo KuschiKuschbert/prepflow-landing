@@ -1,7 +1,6 @@
 /**
  * Helper function for creating an ingredient in the chef workflow test.
  */
-import { safeGoto } from '../../helpers/sim-wait';
 import type { Page } from '@playwright/test';
 import { fillIngredientForm, waitForFormSubmission } from '../../helpers/form-helpers';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
