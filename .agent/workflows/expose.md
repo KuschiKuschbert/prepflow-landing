@@ -40,7 +40,7 @@ Log in to your [Auth0 Dashboard](https://manage.auth0.com/), find your applicati
 
 ## 4. Update Environment Variables
 
-In `prepflow-landing/.env.local`, update:
+In `prepflow-web/.env.local`, update:
 
 ```env
 AUTH0_BASE_URL=https://YOUR_NGROK_URL

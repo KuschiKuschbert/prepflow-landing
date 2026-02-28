@@ -10,11 +10,11 @@ If Vercel deployments aren't being triggered, follow this diagnostic checklist.
 
 1. **Go to Vercel Dashboard**
    - Navigate to: https://vercel.com/dashboard
-   - Select your project: `prepflow-landing`
+   - Select your project: `prepflow-web`
 
 2. **Check Project Settings → Git**
    - Path: Project Settings → Git
-   - Verify repository is connected: `KuschiKuschbert/prepflow-landing`
+   - Verify repository is connected: `KuschiKuschbert/prepflow-web`
    - Check if "Auto-deploy" is **enabled**
    - Verify production branch is set to `main`
 
@@ -27,7 +27,7 @@ If Vercel deployments aren't being triggered, follow this diagnostic checklist.
 1. Click "Connect Git Repository"
 2. Select GitHub
 3. Authorize Vercel to access your repositories
-4. Select `KuschiKuschbert/prepflow-landing`
+4. Select `KuschiKuschbert/prepflow-web`
 5. Enable "Auto-deploy" for production branch
 6. Set production branch to `main`
 
@@ -36,7 +36,7 @@ If Vercel deployments aren't being triggered, follow this diagnostic checklist.
 ### Check GitHub Repository Secrets
 
 1. **Go to GitHub Repository**
-   - Navigate to: https://github.com/KuschiKuschbert/prepflow-landing
+   - Navigate to: https://github.com/KuschiKuschbert/prepflow-web
    - Go to: Settings → Secrets and variables → Actions
 
 2. **Verify Required Secrets Exist**
@@ -96,7 +96,7 @@ If any secrets are missing:
 ### Verify Workflow is Running
 
 1. **Go to GitHub Actions Tab**
-   - Navigate to: https://github.com/KuschiKuschbert/prepflow-landing/actions
+   - Navigate to: https://github.com/KuschiKuschbert/prepflow-web/actions
    - Check if workflows are running on push to `main`
 
 2. **Check Workflow Logs**
@@ -179,7 +179,7 @@ This gives you:
    ```
 
 2. **Monitor Deployment**
-   - Check GitHub Actions: https://github.com/KuschiKuschbert/prepflow-landing/actions
+   - Check GitHub Actions: https://github.com/KuschiKuschbert/prepflow-web/actions
    - Check Vercel Dashboard: https://vercel.com/dashboard
    - Both should show new deployment
 

@@ -6,7 +6,7 @@ If deployments aren't triggering, check these in order:
 
 ### 1. Check GitHub Actions (2 minutes)
 
-Go to: https://github.com/KuschiKuschbert/prepflow-landing/actions
+Go to: https://github.com/KuschiKuschbert/prepflow-web/actions
 
 - [ ] Are workflows running when you push to `main`?
 - [ ] Is the "Deploy to Vercel" step executing?
@@ -19,7 +19,7 @@ Go to: https://github.com/KuschiKuschbert/prepflow-landing/actions
 
 ### 2. Check GitHub Secrets (3 minutes)
 
-Go to: https://github.com/KuschiKuschbert/prepflow-landing/settings/secrets/actions
+Go to: https://github.com/KuschiKuschbert/prepflow-web/settings/secrets/actions
 
 - [ ] `VERCEL_TOKEN` exists
 - [ ] `VERCEL_ORG_ID` exists
@@ -43,7 +43,7 @@ Go to: https://github.com/KuschiKuschbert/prepflow-landing/settings/secrets/acti
 
 Go to: https://vercel.com/dashboard → Your Project → Settings → Git
 
-- [ ] Repository connected: `KuschiKuschbert/prepflow-landing`
+- [ ] Repository connected: `KuschiKuschbert/prepflow-web`
 - [ ] Auto-deploy enabled: **ON**
 - [ ] Production branch: `main`
 

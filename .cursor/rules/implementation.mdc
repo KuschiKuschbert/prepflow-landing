@@ -198,7 +198,7 @@ const performCreate = async (newItem: Partial<Item>) => {
 **Note:** This is the detailed project structure. For a high-level overview, see the **"File Structure"** section in `core.mdc`.
 
 ```
-prepflow-landing/
+prepflow-web/
 ├── app/
 │   ├── page.tsx                    # Landing page
 │   ├── layout.tsx                  # Root layout with analytics

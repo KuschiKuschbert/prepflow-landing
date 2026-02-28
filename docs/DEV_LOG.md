@@ -287,7 +287,7 @@ Co-authored-by: Cursor <cursoragent@cursor.com>
 
 ### Production Readiness & Infrastructure
 
-- **CLIs authenticated**: Vercel CLI (prepflow-landing), Supabase CLI (dulkrqgjfohsuxhsmofo / Sydney), GitHub CLI (KuschiKuschbert), Stripe CLI (live mode).
+- **CLIs authenticated**: Vercel CLI (prepflow-web), Supabase CLI (dulkrqgjfohsuxhsmofo / Sydney), GitHub CLI (KuschiKuschbert), Stripe CLI (live mode).
 - **Migrations pushed**: `20260226000000_temperature_performance_indexes` and `20260226000001_catalog_performance_indexes` applied to production DB.
 - **Sentry integration**: All 5 Sentry env vars added to Vercel (`NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_DSN`, `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT=prepflow-web`). `sentry.client.config.ts`, `sentry.server.config.ts`, `sentry.edge.config.ts` created. `next.config.ts` wrapped with `withSentryConfig`.
 - **Stripe webhook**: Live-mode webhook registered at `https://www.prepflow.org/api/webhook/stripe` (ID: `we_1T55OkIO9rOgEAAGf85xIr3X`). Vercel `STRIPE_WEBHOOK_SECRET` and `STRIPE_WEBHOOK_SECRET_PROD` updated with new live secret.

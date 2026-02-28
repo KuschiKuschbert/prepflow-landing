@@ -79,7 +79,7 @@
 **How to Access:**
 
 1. Go to: https://vercel.com/dashboard
-2. Select project: **prepflow-landing**
+2. Select project: **prepflow-web**
 3. Go to: **Deployments** → **Latest Deployment** → **Functions** → **View Logs**
 
 **What to Look For:**

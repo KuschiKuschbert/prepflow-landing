@@ -143,7 +143,7 @@ Run `npm run supabase:link` to link your project.
 ## Project Structure
 
 ```
-prepflow-landing/
+prepflow-web/
 ├── migrations/              # Migration SQL files (source)
 │   └── fix-cleaning-tasks-schema.sql
 ├── supabase/                # Supabase CLI directory (auto-generated)

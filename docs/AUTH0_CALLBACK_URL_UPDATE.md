@@ -7,7 +7,7 @@
 
 ```
 unauthorized_client: Callback URL mismatch.
-http://prepflow-landing-n2tnkbc1y-derkusch-gmailcom-projects.vercel.app/api/auth/callback
+http://prepflow-web-n2tnkbc1y-derkusch-gmailcom-projects.vercel.app/api/auth/callback
 is not in the list of allowed callback URLs
 ```
 

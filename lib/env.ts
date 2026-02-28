@@ -10,16 +10,20 @@ const envSchema = z.object({
   // Node environment
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 
-  // Supabase (required for all database operations)
-  NEXT_PUBLIC_SUPABASE_URL: z
-    .string()
-    .url({ message: 'NEXT_PUBLIC_SUPABASE_URL must be a valid URL' }),
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: z
-    .string()
-    .min(1, { message: 'NEXT_PUBLIC_SUPABASE_ANON_KEY is required' }),
-  SUPABASE_SERVICE_ROLE_KEY: z
-    .string()
-    .min(1, { message: 'SUPABASE_SERVICE_ROLE_KEY is required' }),
+  // Supabase (optional at build - validated at first DB use via lib/supabase.ts)
+  // Empty string treated as missing so Vercel build succeeds before env vars are added
+  NEXT_PUBLIC_SUPABASE_URL: z.preprocess(
+    val => (val === '' || val === undefined ? undefined : val),
+    z.string().url().optional(),
+  ),
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.preprocess(
+    val => (val === '' || val === undefined ? undefined : val),
+    z.string().min(1).optional(),
+  ),
+  SUPABASE_SERVICE_ROLE_KEY: z.preprocess(
+    val => (val === '' || val === undefined ? undefined : val),
+    z.string().min(1).optional(),
+  ),
 
   // Auth0 (required for authentication)
   AUTH0_SECRET: z.string().min(32, {

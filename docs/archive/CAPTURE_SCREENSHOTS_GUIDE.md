@@ -65,7 +65,7 @@ Install a full-page screenshot extension like:
 Save all screenshots to:
 
 ```
-/Users/danielkuschmierz/prepflow-landing/public/images/
+/Users/danielkuschmierz/prepflow-web/public/images/
 ```
 
 With these exact names:

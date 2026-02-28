@@ -1,10 +1,6 @@
 import { logger } from '@/lib/logger';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
 import CustomerCard from './CustomerCard';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 export const revalidate = 0; // Dynamic
 
