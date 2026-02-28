@@ -183,7 +183,7 @@ The project is configured for automatic deployment to Vercel via GitHub Actions:
    - `VERCEL_PROJECT_ID` - Vercel project ID
 
 3. **Vercel Dashboard Setup**:
-   - Connect GitHub repository: `KuschiKuschbert/prepflow-landing`
+   - Connect GitHub repository: `KuschiKuschbert/prepflow-web`
    - Enable "Auto-deploy" for production branch
    - Set production branch to `main`
 

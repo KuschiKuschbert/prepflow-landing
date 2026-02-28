@@ -177,9 +177,10 @@ async function main() {
       // Try to find prepflow project
       const prepflowProject = projects.find(
         p =>
+          p.name === 'prepflow-web' ||
+          p.name === 'prepflow-landing' || // legacy fallback
           p.name.includes('prepflow') ||
-          p.name.includes('PrepFlow') ||
-          p.name === 'prepflow-landing',
+          p.name.includes('PrepFlow'),
       );
 
       if (prepflowProject) {

@@ -20,7 +20,7 @@ Based on browser testing and code review:
 **Go to Vercel Dashboard:**
 
 1. Navigate to: https://vercel.com/dashboard
-2. Select your project: **prepflow-landing**
+2. Select your project: **prepflow-web**
 3. Go to: **Settings** → **Environment Variables**
 4. **CRITICAL:** Select **Production** environment (not Preview or Development)
 

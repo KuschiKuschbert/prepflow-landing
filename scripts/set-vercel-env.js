@@ -279,7 +279,7 @@ async function listVercelProjects(vercelToken, teamId) {
   return result.data.projects || [];
 }
 
-async function findVercelProject(vercelToken, teamId, projectName = 'prepflow') {
+async function findVercelProject(vercelToken, teamId, projectName = 'prepflow-web') {
   log(`\n🔍 Searching for Vercel project matching "${projectName}"...`, 'info');
 
   try {
@@ -287,10 +287,7 @@ async function findVercelProject(vercelToken, teamId, projectName = 'prepflow') 
 
     // Try exact match first
     let project = projects.find(
-      p =>
-        p.name === projectName ||
-        p.name === `${projectName}-landing` ||
-        p.name === `prepflow-landing`,
+      p => p.name === projectName || p.name === 'prepflow-web' || p.name === 'prepflow-landing', // legacy fallback
     );
 
     // Try partial match
