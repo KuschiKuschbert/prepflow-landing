@@ -131,6 +131,13 @@ export class FixOrchestrator {
   }
 
   private async commitChange(suggestion: FixSuggestion) {
+    // Set CI-safe git identity defaults if not already configured
+    const hasEmail = await execAsync('git config user.email').catch(() => null);
+    if (!hasEmail)
+      await execAsync('git config user.email "github-actions[bot]@users.noreply.github.com"');
+    const hasName = await execAsync('git config user.name').catch(() => null);
+    if (!hasName) await execAsync('git config user.name "github-actions[bot]"');
+
     const message = `fix(rsi): ${suggestion.description}\n\n[RSI Auto-Fix] Type: ${suggestion.type}`;
     await execAsync(`git add ${suggestion.file}`);
     await execAsync(`git commit -m "${message}" --no-verify`);

@@ -32,6 +32,11 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
+      - name: Configure Git Identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Run RSI Cycle (Orchestrator)
         # using --full mode for nightly runs to include refactoring/heavy tasks if needed
         run: npm run rsi:run -- --full
@@ -41,10 +46,11 @@ jobs:
       - name: Verify Resulting Health & Stability
         id: verify
         run: |
+          set -eo pipefail
           echo "🔍 Running comprehensive health check on RSI output..."
 
           # 1. Check Technical Debt (DEBT.md)
-          if grep -q "\[ \]" docs/DEBT.md; then
+          if grep -q "\[ \]" docs/DEBT.md 2>/dev/null; then
             echo "DEBT_CLEAN=false" >> $GITHUB_OUTPUT
             echo "🛑 DEBT.md still has pending tasks."
           else
@@ -53,7 +59,8 @@ jobs:
           fi
 
           # 2. Run architecture, security, and health checks
-          # We check if these pass before allowing auto-merge
+          # continue-on-error on the step means job won't fail,
+          # but set -e means CHECKS_PASSED=true is only reached if all pass
           npm run check:architecture
           npm run check:security
           npm run check:health
@@ -61,7 +68,9 @@ jobs:
           # 3. Run type-check (strict stability check)
           npm run type-check
 
+          # Only reached if all of the above succeeded
           echo "CHECKS_PASSED=true" >> $GITHUB_OUTPUT
+          echo "✅ All health checks passed."
         continue-on-error: true
 
       - name: Check for Changes
