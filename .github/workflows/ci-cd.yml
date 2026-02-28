@@ -236,6 +236,12 @@ jobs:
             echo "deploy=true" >> $GITHUB_OUTPUT
           fi
 
+      - name: 🔗 Link Vercel project
+        if: steps.check_secrets.outputs.deploy == 'true'
+        run: |
+          mkdir -p .vercel
+          echo '{"projectId":"${{ secrets.VERCEL_PROJECT_ID }}","orgId":"${{ secrets.VERCEL_ORG_ID }}"}' > .vercel/project.json
+
       - name: 🚀 Deploy to Vercel
         id: deploy
         if: steps.check_secrets.outputs.deploy == 'true'
