@@ -1,5 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getAuthenticatedUserByEmail } from '@/lib/api-helpers/getAuthenticatedUserByEmail';
+import { logger } from '@/lib/logger';
+import { parseAndValidate } from '@/lib/api/parse-request-body';
 import { NextRequest, NextResponse } from 'next/server';
 import { createPrepList } from './helpers/createPrepList';
 import { deletePrepList } from './helpers/deletePrepList';
@@ -43,6 +45,7 @@ export async function GET(request: NextRequest) {
       data,
     });
   } catch (err) {
+    logger.error('[Prep Lists API] GET failed', { error: err });
     return catchPrepListHandler(err, 'GET');
   }
 }
@@ -51,29 +54,10 @@ export async function POST(request: NextRequest) {
   try {
     const { userId: authUserId } = await getAuthenticatedUserByEmail(request);
 
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (_err) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid JSON body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const parsed = await parseAndValidate(request, createPrepListSchema, '[Prep Lists API]');
+    if (!parsed.ok) return parsed.response;
 
-    const validation = createPrepListSchema.safeParse(body);
-    if (!validation.success) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validation.error.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    const { kitchenSectionId, name, notes, items } = validation.data;
+    const { kitchenSectionId, name, notes, items } = parsed.data;
 
     // Overwrite userId with authenticated user ID
     const prepList = await createPrepList({
@@ -98,29 +82,10 @@ export async function PUT(request: NextRequest) {
   try {
     const { userId: authUserId } = await getAuthenticatedUserByEmail(request);
 
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (_err) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid JSON body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const parsed = await parseAndValidate(request, updatePrepListSchema, '[Prep Lists API]');
+    if (!parsed.ok) return parsed.response;
 
-    const validation = updatePrepListSchema.safeParse(body);
-    if (!validation.success) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validation.error.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    const data = await updatePrepList(validation.data, authUserId);
+    const data = await updatePrepList(parsed.data, authUserId);
 
     return NextResponse.json({
       success: true,

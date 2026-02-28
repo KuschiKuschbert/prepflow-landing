@@ -8,8 +8,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateAIResponse } from '@/lib/ai/ai-service';
 import type { AIChatMessage, AIRequestOptions } from '@/lib/ai/types';
 
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { parseAndValidate } from '@/lib/api/parse-request-body';
 import { z } from 'zod';
 
@@ -55,10 +55,12 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     logger.error('AI chat error:', error);
     return NextResponse.json(
-      {
-        error: 'Failed to generate AI response',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        'Failed to generate AI response',
+        'AI_CHAT_ERROR',
+        500,
+        error instanceof Error ? error.message : 'Unknown error',
+      ),
       { status: 500 },
     );
   }

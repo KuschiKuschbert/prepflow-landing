@@ -7,11 +7,21 @@
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getAuthenticatedUserByEmail } from '@/lib/api-helpers/getAuthenticatedUserByEmail';
+import { parseAndValidate } from '@/lib/api/parse-request-body';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { catchTemplateShiftsHandler } from './helpers/catchHandler';
 import { fetchTemplateShifts } from './helpers/fetchShifts';
 import { verifyTemplateAndCreateShift } from './helpers/validateAndCreate';
+
+const createTemplateShiftSchema = z.object({
+  day_of_week: z.number().int().min(0).max(6),
+  start_time: z.string().min(1, 'Start time is required'),
+  end_time: z.string().min(1, 'End time is required'),
+  role_required: z.string().nullable().optional(),
+  min_employees: z.number().int().min(0).optional(),
+});
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -33,22 +43,14 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     const { userId, supabaseAdmin } = await getAuthenticatedUserByEmail(request);
     const { id } = await context.params;
 
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid JSON body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    const result = await verifyTemplateAndCreateShift(
-      supabaseAdmin,
-      id,
-      userId,
-      body as Parameters<typeof verifyTemplateAndCreateShift>[3],
+    const parsed = await parseAndValidate(
+      request,
+      createTemplateShiftSchema,
+      '[Roster Template Shifts API]',
     );
+    if (!parsed.ok) return parsed.response;
+
+    const result = await verifyTemplateAndCreateShift(supabaseAdmin, id, userId, parsed.data);
 
     if (result instanceof NextResponse) return result;
 
