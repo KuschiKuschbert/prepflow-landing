@@ -1,14 +1,25 @@
 import { logger } from '@/lib/logger';
-import { createClient } from '@supabase/supabase-js';
+import { createSupabaseAdmin } from '@/lib/supabase';
 
-// Initialize Supabase Client (Service Role for admin checks)
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseServiceKey =
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+// Lazy client - defer to first use so build succeeds without env vars
+let _supabase: ReturnType<typeof createSupabaseAdmin> | null = null;
+function getSupabase() {
+  if (!_supabase) {
+    try {
+      _supabase = createSupabaseAdmin();
+    } catch {
+      return null;
+    }
+  }
+  return _supabase;
+}
 
 export async function checkSubscription(email: string): Promise<boolean> {
+  const supabase = getSupabase();
+  if (!supabase) {
+    logger.error('[CurbOS] Supabase not configured for subscription check');
+    return false;
+  }
   try {
     const { data, error } = await supabase
       .from('users')

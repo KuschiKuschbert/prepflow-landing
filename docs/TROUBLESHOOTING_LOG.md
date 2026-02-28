@@ -4,6 +4,21 @@ Format: **Symptom** | **Root Cause** | **Fix** | **Derived Rule**
 
 ---
 
+## Vercel build fails: Missing Supabase environment variables / supabaseUrl is required
+
+**Symptom:** Build fails during "Collecting page data" with `Missing Supabase environment variables` or `supabaseUrl is required`. Error references `/api/account/delete` or `/_not-found` or `/curbos/customers`.
+
+**Root Cause:** Supabase client was created at module load time. When env vars are not set in Vercel (or during build), the validation/clients throw immediately when the module loads.
+
+**Fix:**
+
+1. **Add env vars to Vercel:** In Project Settings → Environment Variables, add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` for Production/Preview.
+2. **Code changes (build resilience):** Lazy initialization defers validation to first use: `lib/supabase.ts` (getSupabaseConfig, supabaseAdmin proxy), `lib/env.ts` (Supabase vars optional), `app/curbos-import/lib/check-subscription.ts` (lazy getSupabase), `app/curbos/customers/page.tsx` (use shared supabase).
+
+**Derived Rule:** Supabase clients must use lazy initialization so builds can succeed before env vars are configured. Runtime will fail fast on first DB access if vars are missing.
+
+---
+
 ## TS2304: Cannot find name 'logger' (roster/templates route)
 
 **Symptom:** `error TS2304: Cannot find name 'logger'` in `app/api/roster/templates/route.ts` at lines 58, 76, 133, 151.
