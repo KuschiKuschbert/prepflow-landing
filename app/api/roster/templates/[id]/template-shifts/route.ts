@@ -5,7 +5,6 @@
  * @module api/roster/templates/[id]/template-shifts
  */
 
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getAuthenticatedUserByEmail } from '@/lib/api-helpers/getAuthenticatedUserByEmail';
 import { parseAndValidate } from '@/lib/api/parse-request-body';
 import { logger } from '@/lib/logger';
